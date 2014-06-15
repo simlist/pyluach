@@ -1,6 +1,8 @@
 from datetime import date
 from numbers import Number
 
+from luachcal import hebrewcal
+
 
 class BaseDate(object):
     
@@ -76,7 +78,7 @@ class BaseDate(object):
     
     def __ge__(self, other):
         try:
-            if self > other or self == jd:
+            if self > other or self == other:
                 return True
             return False
         except AttributeError:
@@ -135,20 +137,20 @@ class JulianDay(BaseDate):
         jd = int(self.day + .5)  # Try to account for half day
         jd -= 347997
         year = int(jd/365) + 2  ## try that to debug early years
-        first_day = HebrewDate.elapsed_days(year)
+        first_day = hebrewcal.elapsed_days(year)
     
         while first_day > jd:
             year -= 1
-            first_day = HebrewDate.elapsed_days(year)
+            first_day = hebrewcal.elapsed_days(year)
         
         months = [7, 8, 9, 10 , 11 , 12 , 13, 1, 2, 3, 4, 5, 6]
-        if not HebrewDate.is_leap(year):
+        if not hebrewcal.is_leap(year):
             months.remove(13)
         
         days_remaining = jd - first_day
         for month in months:
-            if days_remaining >= HebrewDate.month_length(year, month):
-                days_remaining -= HebrewDate.month_length(year, month)
+            if days_remaining >= hebrewcal.month_length(year, month):
+                days_remaining -= hebrewcal.month_length(year, month)
             else:
                 return HebrewDate(year, month, days_remaining + 1, self.day)
 
@@ -237,13 +239,13 @@ class HebrewDate(BaseDate, BaseFullDate):
     def jd(self):
         if self._jd is None:
             months = [7, 8, 9, 10 , 11 , 12 , 13, 1, 2, 3, 4, 5, 6]
-            if not self.is_leap(self.year):
+            if not hebrewcal.is_leap(self.year):
                 months.remove(13)
     
-            jd = self.elapsed_days(self.year)
+            jd = hebrewcal.elapsed_days(self.year)
             for m in months:
                 if m != self.month:
-                    jd += self.month_length(self.year, m)
+                    jd += hebrewcal.month_length(self.year, m)
                 else:
                     self._jd = jd + (self.day-1) + 347997
                     
@@ -254,73 +256,6 @@ class HebrewDate(BaseDate, BaseFullDate):
     def today():
         return GregorianDate.today().to_heb()
      
-    @staticmethod
-    def is_leap(year):
-        if (( (7*year) + 1) % 19) < 7:
-            return True
-        return False
-    
-    @classmethod
-    def elapsed_days(cls, year):
-        months_elapsed = (
-                      (235 * ((year-1) / 19)) + (12 * ((year-1) % 19)) + 
-                      (7 * ((year-1) % 19) + 1) / 19
-                      )
-        parts_elapsed = 204 + 793*(months_elapsed%1080)
-        hours_elapsed = 5 + 12*months_elapsed + 793*(months_elapsed/1080) + parts_elapsed/1080
-        conjunction_day = 1 + 29*months_elapsed + hours_elapsed/24
-        conjunction_parts = 1080 * (hours_elapsed%24) + parts_elapsed%1080
-    
-        if (
-            (conjunction_parts >= 19440) or
-            (
-               (conjunction_day % 7 == 2) and (conjunction_parts >= 9924) and 
-               (not cls.is_leap(year))
-             ) or
-            (
-             (conjunction_day % 7 == 1) and
-             conjunction_parts >= 16789 and cls.is_leap(year - 1)
-             )
-            ):
-            alt_day = conjunction_day + 1
-    
-        else:
-            alt_day = conjunction_day
-        
-        if (alt_day % 7) in (0, 3, 5):
-            alt_day += 1
-    
-        return alt_day
-
-    @classmethod
-    def days_in_year(cls, year):
-        return cls.elapsed_days(year + 1) - cls.elapsed_days(year)
-
-    @classmethod
-    def long_cheshvan(cls, year):
-        """Returns True if Cheshvan has 30 days"""
-        return cls.days_in_year(year) % 10 == 5
-
-    @classmethod
-    def short_kislev(cls, year):
-        """Returns True if Kislev has 29 days"""
-        return cls.days_in_year(year) % 10 == 3
-
-    @classmethod
-    def month_length(cls, year, month):
-        """Months start with Nissan (Nissan is 1 and Tishrei is 7"""
-        
-        if month in (1, 3, 5, 7, 11):
-            return 30
-        elif month in (2, 4, 6, 10, 13):
-            return 29
-        elif month == 12:
-            return 30 if cls.is_leap(year) else 29
-        elif month == 8:   # if long Cheshvan return 30, else return 29
-            return 30 if cls.long_cheshvan(year) else 29
-        elif month == 9:   # if short Kislev return 29, else return 30
-            return 29 if cls.short_kislev(year) else 30
-    ###todo add exception for out of range (maybe decorator to validate date range   
     
     def to_jd(self):
         """Return an instance of JulianDay"""
