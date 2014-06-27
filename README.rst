@@ -20,7 +20,7 @@ Typical use
 --------------------
 ::
 
-    from luachcal import dates hebrewcal
+    from luachcal import dates, hebrewcal
     
     today = dates.HebrewDate.today()
     lastweek_gregorian = (today - 7).to_greg()
