@@ -1,3 +1,5 @@
+#  from __future__ import division
+
 from datetime import date
 from numbers import Number
 
@@ -33,7 +35,7 @@ class BaseDate(object):
                 return abs(self.jd - other.jd)
         except AttributeError:
             raise TypeError("""You can only subtract a number or another date
-#                               that has a "jd" attribute from a date""")
+                              that has a "jd" attribute from a date""")
         
     def __eq__(self, other):
         try:
@@ -88,12 +90,18 @@ class BaseDate(object):
 class BaseFullDate(object):
     """Mixin for Hebrew and Gregorian but not jd"""
     
-    def to_tuple(self):
+    @property
+    def weekday(self):
+        """Return integer with Sunday as 1 and Saturday as 7."""
+        return int(self.jd+.5+1) % 7 + 1
+    
+    def tuple(self):
         return (self.year, self.month, self.day)
     
-    def to_dict(self):
+    def dict(self):
         return {'year': self.year, 'month': self.month,'day': self.day}
     
+
 class JulianDay(BaseDate):
     
     def __init__(self, day):
@@ -105,6 +113,10 @@ class JulianDay(BaseDate):
         
     def __str__(self):
         return str(self.day)
+    
+    def weekday(self):
+        """Return weekday as integer with Sunday as 1 and Saturday as 7."""
+        return (int(self.day+.5) + 1) % 7 + 1
     
     
     @staticmethod
@@ -137,20 +149,20 @@ class JulianDay(BaseDate):
         jd = int(self.day + .5)  # Try to account for half day
         jd -= 347997
         year = int(jd/365) + 2  ## try that to debug early years
-        first_day = hebrewcal.elapsed_days(year)
+        first_day = hebrewcal._elapsed_days(year)
     
         while first_day > jd:
             year -= 1
-            first_day = hebrewcal.elapsed_days(year)
+            first_day = hebrewcal._elapsed_days(year)
         
         months = [7, 8, 9, 10 , 11 , 12 , 13, 1, 2, 3, 4, 5, 6]
-        if not hebrewcal.is_leap(year):
+        if not hebrewcal._is_leap(year):
             months.remove(13)
         
         days_remaining = jd - first_day
         for month in months:
-            if days_remaining >= hebrewcal.month_length(year, month):
-                days_remaining -= hebrewcal.month_length(year, month)
+            if days_remaining >= hebrewcal._month_length(year, month):
+                days_remaining -= hebrewcal._month_length(year, month)
             else:
                 return HebrewDate(year, month, days_remaining + 1, self.day)
 
@@ -162,8 +174,6 @@ class JulianDay(BaseDate):
         elif isinstance(cls, JulianDay):
             return self
     
-    def to_tuple(self):
-        raise NotImplementedError
 #  Work in progress past here
         
         
@@ -221,7 +231,7 @@ class GregorianDate(BaseDate, BaseFullDate):
     
 class HebrewDate(BaseDate, BaseFullDate):
     """
-    A class for working with Hebrew dates.
+    A class for manipulating Hebrew dates.
     
     The month is an integer starting with 1 for Nissan and ending
     with 13 for the second Adar of a leap year.
@@ -239,13 +249,13 @@ class HebrewDate(BaseDate, BaseFullDate):
     def jd(self):
         if self._jd is None:
             months = [7, 8, 9, 10 , 11 , 12 , 13, 1, 2, 3, 4, 5, 6]
-            if not hebrewcal.is_leap(self.year):
+            if not hebrewcal._is_leap(self.year):
                 months.remove(13)
     
-            jd = hebrewcal.elapsed_days(self.year)
+            jd = hebrewcal._elapsed_days(self.year)
             for m in months:
                 if m != self.month:
-                    jd += hebrewcal.month_length(self.year, m)
+                    jd += hebrewcal._month_length(self.year, m)
                 else:
                     self._jd = jd + (self.day-1) + 347997
                     
@@ -254,6 +264,11 @@ class HebrewDate(BaseDate, BaseFullDate):
     
     @staticmethod
     def today():
+        """Return HebrewDate object from timestamp.
+        
+        This is a static factory method that wraps the built in 
+        datetime.date.today method converting it to a Hebrew date.
+        """
         return GregorianDate.today().to_heb()
      
     
@@ -264,5 +279,7 @@ class HebrewDate(BaseDate, BaseFullDate):
     def to_greg(self):
         """Return instance of GregorianDate"""
         return self.to_jd().to_greg()
- 
- 
+
+# debug
+birth = GregorianDate(1986, 3, 21)
+print birth.to_heb()    
