@@ -86,6 +86,7 @@ class Year(object):
         return _days_in_year(self.year)
     
     def __iter__(self):
+        """Return generator of integers of months of year."""
         months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
         if not self.leap:
             months.remove(13)
@@ -93,8 +94,9 @@ class Year(object):
             yield month
             
     def iter_days(self):
-        for day in xrange(len(self)):
-            yield day + 1
+        """Return generator of integers of days in year"""
+        for day in xrange(1, len(self) + 1):
+            yield day
 
 
 class Month(object):
@@ -107,6 +109,7 @@ class Month(object):
         self.year = year
         self.month = month
         self.monthnames[12] = 'Adar Rishon' if _is_leap(self.year) else ' Adar' 
+        self.name = self.monthnames[self.month]
         
     def __repr__(self):
         return 'Month({0}, {1})'.format(self.year, self.month)
@@ -115,8 +118,8 @@ class Month(object):
         return _month_length(self.year, self.month) 
     
     def __iter__(self):
-        for day in range(len(self)):
-            yield day + 1
+        for day in xrange(1, len(self) + 1):
+            yield day
             
     def __add__(self, other):
         yearmonths = list(Year(self.year))
