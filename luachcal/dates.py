@@ -87,7 +87,7 @@ class BaseDate(object):
             return NotImplemented
     
 
-class BaseFullDate(object):
+class CalendarDateMixin(object):
     """Mixin for Hebrew and Gregorian but not jd"""
     
     @property
@@ -96,9 +96,11 @@ class BaseFullDate(object):
         return int(self.jd+.5+1) % 7 + 1
     
     def tuple(self):
+        """Return tuple of date in the form (year, month, day)."""
         return (self.year, self.month, self.day)
     
     def dict(self):
+        """Return dictionary of date with keys year, date, and month."""
         return {'year': self.year, 'month': self.month,'day': self.day}
     
 
@@ -118,7 +120,6 @@ class JulianDay(BaseDate):
         """Return weekday as integer with Sunday as 1 and Saturday as 7."""
         return (int(self.day+.5) + 1) % 7 + 1
     
-    
     @staticmethod
     def today():
         """Return instance of current Julian day"""
@@ -128,13 +129,13 @@ class JulianDay(BaseDate):
         """Return instance of GregorianDate calculated from Julian day"""
         jd = int(self.day + .5)
         L = jd + 68569
-        n = 4*L / 146097
-        L = L - (146097*n + 3) / 4
-        i = (4000 * (L+1)) / 1461001
-        L = L - ((1461*i) / 4) + 31
-        j = (80*L) / 2447
-        day = L - 2447*j / 80
-        L = j / 11
+        n = 4*L // 146097
+        L = L - (146097*n + 3) // 4
+        i = (4000 * (L+1)) // 1461001
+        L = L - ((1461*i) // 4) + 31
+        j = (80*L) // 2447
+        day = L - 2447*j // 80
+        L = j // 11
         month = j + 2 - 12*L
         year = 100 * (n-49) + i + L
     
@@ -148,7 +149,7 @@ class JulianDay(BaseDate):
     
         jd = int(self.day + .5)  # Try to account for half day
         jd -= 347997
-        year = int(jd/365) + 2  ## try that to debug early years
+        year = int(jd//365) + 2  ## try that to debug early years
         first_day = hebrewcal._elapsed_days(year)
     
         while first_day > jd:
@@ -166,18 +167,21 @@ class JulianDay(BaseDate):
             else:
                 return HebrewDate(year, month, days_remaining + 1, self.day)
 
-    def to_x(self, cls):
-        if isinstance(cls, GregorianDate):
+    def to_x(self, type_):
+        """Return a date object of the given type."""
+        
+        if isinstance(type_, GregorianDate):
             return self.to_greg()
-        elif isinstance(cls, HebrewDate):
+        elif isinstance(type_, HebrewDate):
             return self.to_heb()
-        elif isinstance(cls, JulianDay):
+        elif isinstance(type_, JulianDay):
             return self
-    
-#  Work in progress past here
         
-        
-class GregorianDate(BaseDate, BaseFullDate):
+    def to_pydate(self):
+        """Return instance of datetime.date"""
+        return self.to_greg().to_pydate()
+           
+class GregorianDate(BaseDate, CalendarDateMixin):
 
     def __iter__(self):
         yield self.year
@@ -187,6 +191,13 @@ class GregorianDate(BaseDate, BaseFullDate):
     
     @property
     def jd(self):
+        """Return the corresponding Julian Day.
+        
+        This property retrieves the corresponding Julian Day as an int
+        if it was passed into the init method or already calculated, and
+        if it wasn't, it calculates it and saves it for later retrievals
+        and returns it. 
+        """
         if self._jd is None:
             a = (
              1721424.5 +     # Gregorian epoch - 1
@@ -211,9 +222,15 @@ class GregorianDate(BaseDate, BaseFullDate):
             
     @staticmethod
     def today():
+        """Return a GregorianDate object for the current day.
+        
+        This static method wraps the Python library's date.today() method
+        to get the date from the timestamp.
+        """
         return GregorianDate(*date.today().timetuple()[:3])
     
     def is_leap(self):
+        """Return True if year of date is a leap year, otherwise False."""
         if(
             (self.year % 4 == 0) and not
             (self.year % 100 == 0 and self.year % 400 != 0)
@@ -221,29 +238,34 @@ class GregorianDate(BaseDate, BaseFullDate):
                 return True
         return False
             
-        
     def to_jd(self):
+        """Return instance of JulianDay."""
         return JulianDay(self.jd)
     
     def to_heb(self):
+        """Return instance of HebrewDate."""
         return self.to_jd().to_heb()
+    
+    def to_pydate(self):
+        """Return instance of datetime.date."""
+        return date(*self.tuple())
             
     
-class HebrewDate(BaseDate, BaseFullDate):
+class HebrewDate(BaseDate, CalendarDateMixin):
     """
     A class for manipulating Hebrew dates.
     
     The month is an integer starting with 1 for Nissan and ending
     with 13 for the second Adar of a leap year.
     """
-
+    
+    def __init__(self, year, month, day, jd=None):
+        if year < 1:
+            raise ValueError('Date supplied is before creation.')
+        BaseDate.__init__(self, year, month, day, jd)
+        
     def __str__(self):
         return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
-    
-    def __iter__(self):
-        yield self.year
-        yield self.month
-        yield self.day
     
     @property
     def jd(self):
@@ -261,7 +283,6 @@ class HebrewDate(BaseDate, BaseFullDate):
                     
         return self._jd
             
-    
     @staticmethod
     def today():
         """Return HebrewDate object from timestamp.
@@ -271,7 +292,6 @@ class HebrewDate(BaseDate, BaseFullDate):
         """
         return GregorianDate.today().to_heb()
      
-    
     def to_jd(self):
         """Return an instance of JulianDay"""
         return JulianDay(self.jd)
@@ -280,6 +300,6 @@ class HebrewDate(BaseDate, BaseFullDate):
         """Return instance of GregorianDate"""
         return self.to_jd().to_greg()
 
-# debug
-birth = GregorianDate(1986, 3, 21)
-print birth.to_heb()    
+    def to_pydate(self):
+        return self.to_greg().to_pydate()
+    
