@@ -35,14 +35,46 @@ class ClassesSanityTest(unittest.TestCase):
 class ClassesConversionTest(unittest.TestCase):
     def test_from_greg(self):
         for date in KNOWN_VALUES:
-            heb = dates.GregorianDate(*date).to_heb().to_tuple()
+            heb = dates.GregorianDate(*date).to_heb().tuple()
             self.assertEqual(KNOWN_VALUES[date], heb)
             
     def test_from_heb(self):
         for date in KNOWN_VALUES:
-            greg = dates.HebrewDate(*KNOWN_VALUES[date]).to_greg().to_tuple()
+            greg = dates.HebrewDate(*KNOWN_VALUES[date]).to_greg().tuple()
             self.assertEqual(date, greg)
-                              
+            
+
+class OperatorsTest(unittest.TestCase):
+    
+    caltype = (dates.GregorianDate, dates.HebrewDate, dates.JulianDay)
+    
+    def test_add(self):
+        for cal in self.caltype:
+            date = cal.today()
+            date2 = date + 17
+            self.assertEqual(date.jd + 17, date2.jd)
+        
+    def test_min_int(self):
+        '''Test subtracting a number from a date'''
+        for cal in self.caltype:
+            date = cal.today()
+            date2 = date - 17
+            self.assertEqual(date.jd - 17, date2.jd)
+            
+    def test_min_delta(self):
+        '''Test subtracting one date from another'''
+        for i in range(2):
+            today = self.caltype[i].today()
+            delta = today - (today - 17)
+            self.assertEqual(delta, 17)
+            
+
+class OperatorTests(unittest.TestCase):
+    
+    def test_gt(self):
+        pass
+            
+
    
 if __name__ == '__main__':
     unittest.main()
