@@ -44,27 +44,27 @@ class ClassesConversionTest(unittest.TestCase):
             self.assertEqual(date, greg)
             
 
+caltype = (dates.GregorianDate, dates.HebrewDate, dates.JulianDay)
+
 class OperatorsTest(unittest.TestCase):
     
-    caltype = (dates.GregorianDate, dates.HebrewDate, dates.JulianDay)
-    
     def test_add(self):
-        for cal in self.caltype:
+        for cal in caltype:
             date = cal.today()
             date2 = date + 17
             self.assertEqual(date.jd + 17, date2.jd)
         
     def test_min_int(self):
         '''Test subtracting a number from a date'''
-        for cal in self.caltype:
+        for cal in caltype:
             date = cal.today()
             date2 = date - 17
             self.assertEqual(date.jd - 17, date2.jd)
             
     def test_min_delta(self):
         '''Test subtracting one date from another'''
-        for i in range(2):
-            today = self.caltype[i].today()
+        for cal in caltype:
+            today = cal.today()
             delta = today - (today - 17)
             self.assertEqual(delta, 17)
             
@@ -72,8 +72,33 @@ class OperatorsTest(unittest.TestCase):
 class OperatorTests(unittest.TestCase):
     
     def test_gt(self):
-        pass
+        for cal in caltype:
+            today = cal.today()
+            result = today > today-1
+            self.assertTrue(result,
+                            '{0} is not greater than{1}'.format(
+                                                            today,today - 1))
+            self. assertTrue(today >= today-1)
+            self.assertFalse(today == today-1)
+            self.assertFalse(today < today-1)
+            self.assertFalse(today <= today-1)
             
+    def test_lt(self):
+        for cal in caltype:
+            today = cal.today()
+            self.assertLess(today, today+1)
+            self.assertLessEqual(today, today + 1)
+            for operator in (today.__gt__, today.__ge__, today.__eq__):
+                self.assertFalse(operator(today + 1))            
+    
+    def test_eq(self):
+        for cal in caltype:
+            today = cal.today()
+            for operator in (today.__eq__, today.__ge__, today.__le__):
+                self.assertTrue(operator(today))
+            for operator in (today.__gt__, today.__lt__):
+                self.assertFalse(operator(today) or operator(today))
+                
 
    
 if __name__ == '__main__':
