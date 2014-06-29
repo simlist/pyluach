@@ -1,4 +1,5 @@
 from distutils.core import setup
+import io
 
 setup(name='luachcal',
       version='0.1.0dev',
@@ -9,5 +10,5 @@ setup(name='luachcal',
       license='MIT',
       description =("""package for manipulating Hebrew dates and
       Gregorian-Hebrew conversion"""),
-      long_description=''  # add external file as in open('filename').read()
+      long_description= io.open('README.rst').read()  # add external file as in open('filename').read()
        )
