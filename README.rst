@@ -30,8 +30,8 @@ Typical use
     heb = HebrewDate(5746, 13, 10)
     greg == heb  # True
     
-    for months in hebrewcal.Year(5774):
-        print month.name  # 'Tishrei' 'Cheshvan' ...
+    for month in hebrewcal.Year(5774):
+        print Month(month, 5774).name  # 'Tishrei' 'Cheshvan' ...
 
 Contact
 ----------------
