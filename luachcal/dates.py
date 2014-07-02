@@ -8,12 +8,16 @@ from luachcal import hebrewcal
 
 class BaseDate(object):
     
+    
     def __init__(self, year, month, day, jd=None):
         self.year = year
         self.month = month
         self.day = day
         self._jd = jd
-        
+        self. error_string = ('''Only a date with a "jd" attribute can
+                              be compared to a {0}'''.format(
+                                                self.__class__.__name__)
+                              )
         
     def __repr__(self):
         return '{0}({1}, {2}, {3})'.format(self.__class__.__name__,
@@ -28,11 +32,10 @@ class BaseDate(object):
             raise TypeError('You can only add a number to a date.') 
     
     def __sub__(self, other):
+        if isinstance(other, Number): 
+            return JulianDay(self.jd - other).to_x(self)
         try:
-            if isinstance(other, Number): 
-                return JulianDay(self.jd - other).to_x(self)
-            else:
-                return abs(self.jd - other.jd)
+            return abs(self.jd - other.jd)
         except AttributeError:
             raise TypeError("""You can only subtract a number or another date
                               that has a "jd" attribute from a date""")
@@ -43,15 +46,15 @@ class BaseDate(object):
                 return True
             return False
         except AttributeError:
-            return NotImplemented
+            raise TypeError(self.error_string)
     
     def __ne__(self, other):
         try:
-            if not self == other:
+            if self.jd != other.jd:
                 return True
             return False
         except AttributeError:
-            return NotImplemented
+            raise TypeError(self.error_string)
     
     def __lt__(self, other):
         try:
@@ -59,7 +62,7 @@ class BaseDate(object):
                 return True
             return False
         except AttributeError:
-            return NotImplemented
+            raise TypeError(self.error_string)
     
     def __gt__(self, other):
         try:
@@ -67,24 +70,24 @@ class BaseDate(object):
                 return True
             return False
         except AttributeError:
-            return NotImplemented
+            raise TypeError(self.error_string)
 
     
     def __le__(self, other):
         try:
-            if self < other or self == other:
+            if self.jd <= other.jd:
                 return True
             return False
         except AttributeError:
-            return NotImplemented
+            raise TypeError(self.error_string)
     
     def __ge__(self, other):
         try:
-            if self > other or self == other:
+            if self.jd >= other.jd:
                 return True
             return False
         except AttributeError:
-            return NotImplemented
+            raise TypeError(self.error_string)
     
 
 class CalendarDateMixin(object):
