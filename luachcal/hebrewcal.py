@@ -86,18 +86,28 @@ class Year(object):
         return _days_in_year(self.year)
     
     def __iter__(self):
-        """Return generator of integers of months of year."""
+        """Yield integer for each month in year."""
         months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
         if not self.leap:
             months.remove(13)
         for month in months:
             yield month
             
-    def iter_days(self):
-        """Return generator of integers of days in year"""
+    def itermonths(self):
+        """Yield Month instance for each month of the year."""
+        for month in self:
+            yield Month(self.year, month)
+    def iterdays(self):
+        """Yield integer for each day of the year."""
         for day in xrange(1, len(self) + 1):
             yield day
-
+            
+    def iterdates(self):
+        """Yield HebrewDate instance for each day of the year."""
+        for month in self:
+            for day in month:
+                yield luachcal.dates.HebrewDate(self.year, month, day)
+        
 
 class Month(object):
     
@@ -118,7 +128,7 @@ class Month(object):
         return _month_length(self.year, self.month) 
     
     def __iter__(self):
-        for day in xrange(1, len(self) + 1):
+        for day in range(1, len(self) + 1):
             yield day
             
     def __add__(self, other):
@@ -163,3 +173,9 @@ class Month(object):
                       yearmonths.index(self.month)
                       )
         return months_elapsed
+    
+    def iterdates(self):
+        """Return iterator that yields an instance of HebrewDate."""
+        for day in self:
+            yield luachcal.dates.HebrewDate(self.year, self.month, day)
+            
