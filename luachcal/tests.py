@@ -1,9 +1,9 @@
 #!usr/bin/env python
 
 import unittest
-from operator import gt, lt, eq, ne, ge, le, add, sub
+from operator import gt, lt, eq, ne, ge, le
 
-import dates
+from luachcal import dates
 
 KNOWN_VALUES = {(2009, 8, 21): (5769, 6, 1),
                 (2009, 9, 30): (5770, 7, 12),
