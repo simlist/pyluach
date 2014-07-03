@@ -82,7 +82,7 @@ class OperatorsTest(unittest.TestCase):
              
  
 class ComparisonTests(unittest.TestCase):
-    """In ComparisonTests, comparisons are tested.are tested.
+    """In ComparisonTests, comparisons are tested.
     
     Every function tests one test case comparing a date from each
     calendar type to another date from each calendar type.
