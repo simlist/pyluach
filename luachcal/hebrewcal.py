@@ -4,7 +4,7 @@ from __future__ import division
 from collections import deque
 from numbers import Number
 
-import luachcal
+import luachcal.dates
 from luachcal.utils import memoize
 
 
@@ -82,6 +82,9 @@ class Year(object):
         self. year = year
         self.leap = _is_leap(year)
         
+    def __repr__(self):
+        return 'Year({0})'.format(self.year)
+
     def __len__(self):
         return _days_in_year(self.year)
     
@@ -99,14 +102,14 @@ class Year(object):
             yield Month(self.year, month)
     def iterdays(self):
         """Yield integer for each day of the year."""
-        for day in xrange(1, len(self) + 1):
+        for day in range(1, len(self) + 1):
             yield day
             
     def iterdates(self):
         """Yield HebrewDate instance for each day of the year."""
-        for month in self:
+        for month in self.itermonths():
             for day in month:
-                yield luachcal.dates.HebrewDate(self.year, month, day)
+                yield luachcal.dates.HebrewDate(self.year, month.month, day)
         
 
 class Month(object):
@@ -178,4 +181,3 @@ class Month(object):
         """Return iterator that yields an instance of HebrewDate."""
         for day in self:
             yield luachcal.dates.HebrewDate(self.year, self.month, day)
-            
