@@ -93,6 +93,9 @@ class BaseDate(object):
 class CalendarDateMixin(object):
     """Mixin for Hebrew and Gregorian but not jd"""
     
+    def __str__(self):
+        return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
+    
     @property
     def weekday(self):
         """Return integer with Sunday as 1 and Saturday as 7."""
@@ -221,7 +224,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         
             self._jd = a + int(b)  
 
-        return self._jd            
+        return self._jd
             
     @staticmethod
     def today():
@@ -266,9 +269,6 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         if year < 1:
             raise ValueError('Date supplied is before creation.')
         BaseDate.__init__(self, year, month, day, jd)
-        
-    def __str__(self):
-        return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
     
     @property
     def jd(self):
