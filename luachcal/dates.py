@@ -10,6 +10,8 @@ class BaseDate(object):
     
     
     def __init__(self, year, month, day, jd=None):
+		if year < 1:
+			raise ValueError('Date is before creation')
         self.year = year
         self.month = month
         self.day = day
