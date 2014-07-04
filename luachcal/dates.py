@@ -3,15 +3,13 @@
 from datetime import date
 from numbers import Number
 
-from luachcal import hebrewcal
+import luachcal.hebrewcal
 
 
 class BaseDate(object):
     
     
     def __init__(self, year, month, day, jd=None):
-		if year < 1:
-			raise ValueError('Date is before creation')
         self.year = year
         self.month = month
         self.day = day
@@ -158,20 +156,20 @@ class JulianDay(BaseDate):
         jd = int(self.day + .5)  # Try to account for half day
         jd -= 347997
         year = int(jd//365) + 2  ## try that to debug early years
-        first_day = hebrewcal._elapsed_days(year)
+        first_day = luachcal.hebrewcal._elapsed_days(year)
     
         while first_day > jd:
             year -= 1
-            first_day = hebrewcal._elapsed_days(year)
+            first_day = luachcal.hebrewcal._elapsed_days(year)
         
         months = [7, 8, 9, 10 , 11 , 12 , 13, 1, 2, 3, 4, 5, 6]
-        if not hebrewcal._is_leap(year):
+        if not luachcal.hebrewcal._is_leap(year):
             months.remove(13)
         
         days_remaining = jd - first_day
         for month in months:
-            if days_remaining >= hebrewcal._month_length(year, month):
-                days_remaining -= hebrewcal._month_length(year, month)
+            if days_remaining >= luachcal.hebrewcal._month_length(year, month):
+                days_remaining -= luachcal.hebrewcal._month_length(year, month)
             else:
                 return HebrewDate(year, month, days_remaining + 1, self.day)
 
@@ -276,13 +274,13 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     def jd(self):
         if self._jd is None:
             months = [7, 8, 9, 10 , 11 , 12 , 13, 1, 2, 3, 4, 5, 6]
-            if not hebrewcal._is_leap(self.year):
+            if not luachcal.hebrewcal._is_leap(self.year):
                 months.remove(13)
     
-            jd = hebrewcal._elapsed_days(self.year)
+            jd = luachcal.hebrewcal._elapsed_days(self.year)
             for m in months:
                 if m != self.month:
-                    jd += hebrewcal._month_length(self.year, m)
+                    jd += luachcal.hebrewcal._month_length(self.year, m)
                 else:
                     self._jd = jd + (self.day-1) + 347997
                     
