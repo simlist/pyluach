@@ -4,7 +4,7 @@ from __future__ import division
 from collections import deque
 from numbers import Number
 
-import luachcal.dates
+from luachcal.dates import HebrewDate
 
 
 
@@ -14,13 +14,13 @@ class Year(object):
     
     def __init__(self, year):
         self. year = year
-        self.leap = luachcal.dates.HebrewDate._is_leap(year)
+        self.leap = HebrewDate._is_leap(year)
         
     def __repr__(self):
         return 'Year({0})'.format(self.year)
 
     def __len__(self):
-        return luachcal.dates.HebrewDate._days_in_year(self.year)
+        return HebrewDate._days_in_year(self.year)
     
     def __iter__(self):
         """Yield integer for each month in year."""
@@ -43,7 +43,7 @@ class Year(object):
         """Yield HebrewDate instance for each day of the year."""
         for month in self.itermonths():
             for day in month:
-                yield luachcal.dates.HebrewDate(self.year, month.month, day)
+                yield HebrewDate(self.year, month.month, day)
         
 
 class Month(object):
@@ -55,9 +55,9 @@ class Month(object):
     def __init__(self, year, month):
         self.year = year
         self.month = month
-        self.monthnames[12] = ('Adar Rishon' if
-                               luachcal.dates.HebrewDate._is_leap(self.year)
-                               else ' Adar'
+        self.monthnames[12] = ('Adar Rishon' if 
+                               HebrewDate._is_leap(self.year) else 
+                               ' Adar'
                                ) 
         self.name = self.monthnames[self.month]
         
@@ -65,7 +65,7 @@ class Month(object):
         return 'Month({0}, {1})'.format(self.year, self.month)
             
     def __len__(self):
-        return luachcal.dates.HebrewDate._month_length(self.year, self.month) 
+        return HebrewDate._month_length(self.year, self.month) 
     
     def __iter__(self):
         for day in range(1, len(self) + 1):
@@ -101,7 +101,7 @@ class Month(object):
             
     @property
     def starting_weekday(self):
-        return luachcal.dates.HebrewDate(self.year, self.month, 1).weekday
+        return HebrewDate(self.year, self.month, 1).weekday
     
     def _elapsed_months(self):
         '''Return number of months elapsed from beginning of calendar'''
@@ -117,4 +117,4 @@ class Month(object):
     def iterdates(self):
         """Return iterator that yields an instance of HebrewDate."""
         for day in self:
-            yield luachcal.dates.HebrewDate(self.year, self.month, day)
+            yield HebrewDate(self.year, self.month, day)
