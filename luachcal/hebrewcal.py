@@ -101,7 +101,7 @@ class Month(object):
             
     @property
     def starting_weekday(self):
-        return HebrewDate(self.year, self.month, 1).weekday
+        return HebrewDate(self.year, self.month, 1).weekday()
     
     def _elapsed_months(self):
         '''Return number of months elapsed from beginning of calendar'''

@@ -4,8 +4,17 @@ from datetime import date
 from numbers import Number
 
 from utils import memoize
-import luachcal.hebrewcal
 
+"""This module implements classes for representing and
+manipulating several date types.
+
+It contains the following classes:
+  
+  * JulianDay
+  * GregorianDate
+  * HebrewDate
+
+"""
 
 class BaseDate(object):
     
@@ -28,13 +37,13 @@ class BaseDate(object):
         
     def __add__(self, other):
         try:
-            return JulianDay(self.jd + other).to_x(self)
+            return JulianDay(self.jd + other)._to_x(self)
         except AttributeError:
             raise TypeError('You can only add a number to a date.') 
     
     def __sub__(self, other):
         if isinstance(other, Number): 
-            return JulianDay(self.jd - other).to_x(self)
+            return JulianDay(self.jd - other)._to_x(self)
         try:
             return abs(self.jd - other.jd)
         except AttributeError:
@@ -97,7 +106,6 @@ class CalendarDateMixin(object):
     def __str__(self):
         return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
     
-    @property
     def weekday(self):
         """Return integer with Sunday as 1 and Saturday as 7."""
         return int(self.jd+.5+1) % 7 + 1
@@ -112,10 +120,47 @@ class CalendarDateMixin(object):
     
 
 class JulianDay(BaseDate):
+
+    """A JulianDay object represents a Julian Day at midnight.
+       
+    All attributes should be treated as read only.
     
+    Instance attribute:
+      
+    JulianDay. **day**
+      A Julian Day at midnight (as ``n.5``) 
+        
+    Class method:
+    
+    JulianDay. **today()**
+      Return the current local date. This extends the built-in
+      datetime.date.today(), converting it into a JulianDay instance.
+          
+    Instance methods:
+    
+    JulianDay.**to_greg()**
+      Return a GregorianDate instance.
+      
+    JulianDay.**to_heb()**
+      Return a HebrewDate instance.
+      
+    JulianDay.**to_pydate()**
+      Return a datetime.date instance.
+    
+    JulianDate.**weekday()**
+      Return the weekday as an integer with 1 for Sunday 
+      through 7 for Saturday.  
+    """
     def __init__(self, day):
+        """Initialize a JulianDay instance.
+        
+        Requires one argument *day*, which is a Julian day as an 
+        int or float.
+        """
         self.day = day
-        self.jd = day
+        if day - int(day) == 0:
+            self.day -= .5
+        self.jd = self.day
         
     def __repr__(self):
         return 'JulianDay({0})'.format(self.day)
@@ -129,7 +174,10 @@ class JulianDay(BaseDate):
     
     @staticmethod
     def today():
-        """Return instance of current Julian day"""
+        """Return instance of current Julian day from timestamp.
+        
+        Extends the built-in datetime.date.today(). 
+        """
         return GregorianDate.today().to_jd()
     
     def to_greg(self):
@@ -174,7 +222,7 @@ class JulianDay(BaseDate):
             else:
                 return HebrewDate(year, month, days_remaining + 1, self.day)
 
-    def to_x(self, type_):
+    def _to_x(self, type_):
         """Return a date object of the given type."""
         
         if isinstance(type_, GregorianDate):
@@ -189,7 +237,20 @@ class JulianDay(BaseDate):
         return self.to_greg().to_pydate()
            
 class GregorianDate(BaseDate, CalendarDateMixin):
-
+    
+    """A GregorianDate object represents a Gregorian date (year, month, day).
+    
+    This is an idealized date with the current Gregorian calendar
+    indefinitely extended in both directions.
+    
+    It inherits from *BaseDate* and *CalendarDateMixin*.
+    
+    From BaseDate it inherits:
+    
+    GregorianDate.**__init__(year, month, day)**
+       All 
+    """
+    
     def __iter__(self):
         yield self.year
         yield self.month
@@ -376,4 +437,4 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             return 30 if cls._long_cheshvan(year) else 29
         elif month == 9:   # if short Kislev return 29, else return 30
             return 29 if cls._short_kislev(year) else 30
-    
+
