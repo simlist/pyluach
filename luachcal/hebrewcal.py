@@ -13,6 +13,8 @@ from luachcal.dates import HebrewDate
 class Year(object):
     
     def __init__(self, year):
+        if year < 1:
+            raise ValueError('Year {0} is before creation.'.format(year))
         self. year = year
         self.leap = HebrewDate._is_leap(year)
         
@@ -53,12 +55,16 @@ class Month(object):
                   3: 'Sivan', 4: 'Tamuz', 5: 'Av', 6: 'Elul'}
     
     def __init__(self, year, month):
+        if year < 1:
+            raise ValueError('Year is before creation.')
         self.year = year
+        self.leap = HebrewDate._is_leap(self.year)
+        yearlength = 13 if self.leap else 12
+        if month < 1 or month > yearlength:
+            raise ValueError('''Month must be between 1 and 12 for a normal
+            year and 13 for a leap year.''')
         self.month = month
-        self.monthnames[12] = ('Adar Rishon' if 
-                               HebrewDate._is_leap(self.year) else 
-                               ' Adar'
-                               ) 
+        self.monthnames[12] = 'Adar Rishon' if self.leap else 'Adar' 
         self.name = self.monthnames[self.month]
         
     def __repr__(self):
