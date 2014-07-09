@@ -250,7 +250,15 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     GregorianDate.**__init__(year, month, day)**
        All 
     """
-    
+ 
+    def __init__(self, year, month, day, jd=None):
+        if month < 1 or month > 12:
+            raise ValueError('{0} is an invalid month.'.format(str(month)))
+        monthlength = self._monthlength(year, month)
+        if day < 1 or day > monthlength:
+            raise ValueError('Given month has {0} days.'.format(monthlength))
+        super(GregorianDate, self).__init__(year, month, day, jd)
+           
     def __iter__(self):
         yield self.year
         yield self.month
@@ -297,14 +305,28 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         """
         return GregorianDate(*date.today().timetuple()[:3])
     
-    def is_leap(self):
+    @staticmethod
+    def _is_leap(year):
         """Return True if year of date is a leap year, otherwise False."""
         if(
-            (self.year % 4 == 0) and not
-            (self.year % 100 == 0 and self.year % 400 != 0)
+            (year % 4 == 0) and not
+            (year % 100 == 0 and year % 400 != 0)
           ):
                 return True
         return False
+    
+    def is_leap(self):
+        """Wraps static method _is_leap()"""
+        return self._is_leap(self.year)
+    
+    @classmethod
+    def _monthlength(cls, year, month):
+        if month in [1, 3, 5, 7, 8, 10, 12]:
+            return 31
+        elif month != 2:
+            return 30
+        else:
+            return 29 if cls._is_leap(year) else 28
             
     def to_jd(self):
         """Return instance of JulianDay."""
@@ -330,7 +352,11 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     def __init__(self, year, month, day, jd=None):
         if year < 1:
             raise ValueError('Date supplied is before creation.')
-        BaseDate.__init__(self, year, month, day, jd)
+        if month < 1 or month > 13:
+            raise ValueError('{0} is an invalid month.'.format(str(month)))
+        if (not self._is_leap(year)) and month == 13:
+            raise ValueError('{0} is not a leap year'.format(year)) 
+        super(HebrewDate, self).__init__(year, month, day, jd)
     
     @property
     def jd(self):
