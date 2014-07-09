@@ -123,6 +123,14 @@ class ComparisonTests(unittest.TestCase):
                     self.assertTrue(comp(today, today2))
                 for comp in [gt, lt, ne]:
                     self.assertFalse(comp(today, today2))
+                    
+                    
+class TestErrors(unittest.TestCase):
+    
+    def test_too_low_heb(self):
+        self.assertRaises(ValueError, dates.HebrewDate, 0, 7, 1)
+        self.assertRaises(ValueError, dates.HebrewDate, -1, 7, 1)
+        
                  
 
    
