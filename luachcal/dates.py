@@ -1,3 +1,12 @@
+"""The dates module implements classes for representing and
+manipulating several date types.
+
+classes
+-------
+* JulianDay
+* GregorianDate
+* HebrewDate
+"""
 #  from __future__ import division
 
 from datetime import date
@@ -5,16 +14,7 @@ from numbers import Number
 
 from utils import memoize
 
-"""This module implements classes for representing and
-manipulating several date types.
 
-It contains the following classes:
-  
-  * JulianDay
-  * GregorianDate
-  * HebrewDate
-
-"""
 
 class BaseDate(object):
     
@@ -355,7 +355,10 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         if month < 1 or month > 13:
             raise ValueError('{0} is an invalid month.'.format(str(month)))
         if (not self._is_leap(year)) and month == 13:
-            raise ValueError('{0} is not a leap year'.format(year)) 
+            raise ValueError('{0} is not a leap year'.format(year))
+        monthlength = self._month_length(year, month)
+        if day < 1 or day > monthlength:
+            raise ValueError('Given month has {0} days.'.format(monthlength)) 
         super(HebrewDate, self).__init__(year, month, day, jd)
     
     @property
@@ -453,9 +456,9 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     def _month_length(cls, year, month):
         """Months start with Nissan (Nissan is 1 and Tishrei is 7"""
         
-        if month in (1, 3, 5, 7, 11):
+        if month in [1, 3, 5, 7, 11]:
             return 30
-        elif month in (2, 4, 6, 10, 13):
+        elif month in [2, 4, 6, 10, 13]:
             return 29
         elif month == 12:
             return 30 if cls._is_leap(year) else 29
