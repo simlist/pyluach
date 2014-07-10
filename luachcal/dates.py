@@ -18,16 +18,12 @@ from utils import memoize
 
 class BaseDate(object):
     
+    """BaseDate is a base class for all date types.
     
-    def __init__(self, year, month, day, jd=None):
-        self.year = year
-        self.month = month
-        self.day = day
-        self._jd = jd
-        self. error_string = ('''Only a date with a "jd" attribute can
-                              be compared to a {0}'''.format(
-                                                self.__class__.__name__)
-                              )
+    It mostly provides arithmetic and comparison operators for
+    operations common to all child date types.
+     
+    """ 
         
     def __repr__(self):
         return '{0}({1}, {2}, {3})'.format(self.__class__.__name__,
@@ -102,6 +98,16 @@ class BaseDate(object):
 
 class CalendarDateMixin(object):
     """Mixin for Hebrew and Gregorian but not jd"""
+    
+    def __init__(self, year, month, day, jd=None):
+        self.year = year
+        self.month = month
+        self.day = day
+        self._jd = jd
+        self. error_string = ('''Only a date with a "jd" attribute can
+                              be compared to a {0}'''.format(
+                                                self.__class__.__name__)
+                              )
     
     def __str__(self):
         return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
