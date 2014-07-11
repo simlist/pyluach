@@ -25,12 +25,6 @@ class BaseDate(object):
      
     """ 
         
-    def __repr__(self):
-        return '{0}({1}, {2}, {3})'.format(self.__class__.__name__,
-                                           self.year,
-                                           self.month,
-                                           self.day)
-        
     def __add__(self, other):
         try:
             return JulianDay(self.jd + other)._to_x(self)
@@ -108,6 +102,12 @@ class CalendarDateMixin(object):
                               be compared to a {0}'''.format(
                                                 self.__class__.__name__)
                               )
+        
+    def __repr__(self):
+        return '{0}({1}, {2}, {3})'.format(self.__class__.__name__,
+                                           self.year,
+                                           self.month,
+                                           self.day)
     
     def __str__(self):
         return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
@@ -131,19 +131,18 @@ class JulianDay(BaseDate):
        
     All attributes should be treated as read only.
     
-    Instance attribute:
-      
-    JulianDay. **day**
+    Instance attribute
+    ------------------
+    JulianDay.**day** : float
       A Julian Day at midnight (as ``n.5``) 
         
-    Class method:
-    
-    JulianDay. **today()**
-      Return the current local date. This extends the built-in
-      datetime.date.today(), converting it into a JulianDay instance.
+    Class method
+    ------------
+    JulianDay.**today()**
+      Return the current local date as JulianDay.
           
-    Instance methods:
-    
+    Instance methods
+    ----------------
     JulianDay.**to_greg()**
       Return a GregorianDate instance.
       
@@ -157,11 +156,15 @@ class JulianDay(BaseDate):
       Return the weekday as an integer with 1 for Sunday 
       through 7 for Saturday.  
     """
+    
     def __init__(self, day):
         """Initialize a JulianDay instance.
         
-        Requires one argument *day*, which is a Julian day as an 
-        int or float.
+        Parameters
+        ----------
+        day : float or int
+          The julian day. Note that Julian days start at noon so day 
+          number 10 is represented as 9.5 which is day 10 at midnight.
         """
         self.day = day
         if day - int(day) == 0:
@@ -187,7 +190,13 @@ class JulianDay(BaseDate):
         return GregorianDate.today().to_jd()
     
     def to_greg(self):
-        """Return instance of GregorianDate calculated from Julian day"""
+        """Convert JulianDay to a Gregorian Date.
+        
+        Returns
+        -------
+        GregorianDate
+          The equivalent Gregorian date object.
+        """
         jd = int(self.day + .5)
         L = jd + 68569
         n = 4*L // 146097
@@ -203,7 +212,13 @@ class JulianDay(BaseDate):
         return GregorianDate(year, month, day, self.day)
     
     def to_heb(self):
-        """ Return an instance of HebrewDate calculated from Julian day."""
+        """ Convert to a Hebrew date.
+        
+        Returns
+        -------
+        HebrewDate
+          The equivalent Hebrew date object.
+        """
     
         if self.day <= 347997:
             raise ValueError('Date is before creation')
@@ -239,7 +254,13 @@ class JulianDay(BaseDate):
             return self
         
     def to_pydate(self):
-        """Return instance of datetime.date"""
+        """Convert to a datetime.date object.
+        
+        Returns
+        -------
+        datetime.date
+          A standard library datetime.date instance.
+        """
         return self.to_greg().to_pydate()
            
 class GregorianDate(BaseDate, CalendarDateMixin):
@@ -258,6 +279,17 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     """
  
     def __init__(self, year, month, day, jd=None):
+        """Initialize a GregorianDate.
+        
+        This initializer extends the CalendarDateMixin initializer
+        adding in date validation specific to Gregorian dates.
+        
+        Parameters
+        ----------
+        * year : int
+        * month : int
+        * day : int
+        """
         if month < 1 or month > 12:
             raise ValueError('{0} is an invalid month.'.format(str(month)))
         monthlength = self._monthlength(year, month)
@@ -304,10 +336,15 @@ class GregorianDate(BaseDate, CalendarDateMixin):
             
     @staticmethod
     def today():
-        """Return a GregorianDate object for the current day.
+        """Return a GregorianDate instance for the current day.
         
-        This static method wraps the Python library's date.today() method
-        to get the date from the timestamp.
+        This static method wraps the Python standard library's
+        date.today() method to get the date from the timestamp.
+        
+        Returns
+        -------
+        GregorianDate
+          The current Gregorian date from the computer's timestamp.
         """
         return GregorianDate(*date.today().timetuple()[:3])
     
@@ -322,7 +359,13 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         return False
     
     def is_leap(self):
-        """Wraps static method _is_leap()"""
+        """Return if the date is in a leap year
+        
+        Returns
+        -------
+        bool
+          True if the date is in a leap year, False otherwise.
+        """
         return self._is_leap(self.year)
     
     @classmethod
@@ -335,15 +378,33 @@ class GregorianDate(BaseDate, CalendarDateMixin):
             return 29 if cls._is_leap(year) else 28
             
     def to_jd(self):
-        """Return instance of JulianDay."""
+        """Convert to a Julian day.
+        
+        Returns
+        -------
+        JulianDay
+          The equivalent JulianDay instance.
+        """
         return JulianDay(self.jd)
     
     def to_heb(self):
-        """Return instance of HebrewDate."""
+        """Convert to Hebrew date
+        
+        Returns
+        -------
+        HebrewDate
+          The equivalent Hebrew date instance.
+        """
         return self.to_jd().to_heb()
     
     def to_pydate(self):
-        """Return instance of datetime.date."""
+        """Convert to a standard library date.
+        
+        Returns
+        -------
+        datetime.date
+          The equivalent datetime.date instance.
+        """
         return date(*self.tuple())
             
     
@@ -356,6 +417,27 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     """
     
     def __init__(self, year, month, day, jd=None):
+        
+        """Initialize a HebrewDate instance.
+        
+        This initializer extends the CalendarDateMixin adding validation
+        specific to hebrew dates.
+        
+        Parameters
+        ----------
+        year : int
+          The Hebrew year. If the year is less than 1 it will raise a 
+          ValueError.
+          
+        month : int
+          The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
+          If there is a second Adar in the year it is represented as 13.
+          A month below 1 or above the last date will raise a ValueError.
+          
+        day : int
+          The Hebrew day of the month. An invalid day will raise a 
+          ValueError.
+        """
         if year < 1:
             raise ValueError('Date supplied is before creation.')
         if month < 1 or month > 13:
