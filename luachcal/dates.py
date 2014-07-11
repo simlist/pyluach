@@ -91,9 +91,17 @@ class BaseDate(object):
     
 
 class CalendarDateMixin(object):
-    """Mixin for Hebrew and Gregorian but not jd"""
+    """Mixin for Hebrew and Gregorian dates"""
     
     def __init__(self, year, month, day, jd=None):
+        """Initialize a calendar date.
+        
+        Parameters
+        ----------
+        * year : int
+        * month : int
+        * day : int
+        """
         self.year = year
         self.month = month
         self.day = day
@@ -113,15 +121,34 @@ class CalendarDateMixin(object):
         return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
     
     def weekday(self):
-        """Return integer with Sunday as 1 and Saturday as 7."""
+        """Return day of week as an integer.
+        
+        Returns
+        -------
+        int
+          An integer representing the day of the week with Sunday as 1
+          through Saturday as 7.
+        """
         return int(self.jd+.5+1) % 7 + 1
     
     def tuple(self):
-        """Return tuple of date in the form (year, month, day)."""
+        """Return date as tuple.
+        
+        Returns
+        -------
+        tuple
+          A tuple in the form (year, month, day).
+        """
         return (self.year, self.month, self.day)
     
     def dict(self):
-        """Return dictionary of date with keys year, date, and month."""
+        """Return the date as a dictionary.
+        
+        Returns
+        -------
+        dict
+          A dictionary in the form {year: int, month: int, day: int}
+        """
         return {'year': self.year, 'month': self.month,'day': self.day}
     
 
@@ -467,22 +494,46 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             
     @staticmethod
     def today():
-        """Return HebrewDate object from timestamp.
+        """Return HebrewDate instance for the current day.
         
-        This is a static factory method that wraps the built in 
-        datetime.date.today method converting it to a Hebrew date.
+        This static method wraps the Python standard library's
+        date.today() method to get the date from the timestamp.
+        
+        Returns
+        -------
+        HebrewDate
+          The current Hebrew date from the computer's timestamp.
         """
         return GregorianDate.today().to_heb()
      
     def to_jd(self):
-        """Return an instance of JulianDay"""
+        """Convert to a Julian day.
+        
+        Returns
+        -------
+        JulianDay
+          The equivalent JulianDay instance.
+        """
         return JulianDay(self.jd)
             
     def to_greg(self):
-        """Return instance of GregorianDate"""
+        """Convert to a Gregorian date.
+        
+        Returns
+        -------
+        GregorianDate
+          The equivalent GregorianDate instance.
+        """
         return self.to_jd().to_greg()
 
     def to_pydate(self):
+        """Convert to a standard library date.
+        
+        Returns
+        -------
+        datetime.date
+          The equivalent datetime.date instance.
+        """
         return self.to_greg().to_pydate()
     
     
