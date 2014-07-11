@@ -30,7 +30,7 @@ Typical use
     heb = HebrewDate(5746, 13, 10)
     greg == heb  # True
     
-    for months in hebrewcal.Year(5774):
+    for month in hebrewcal.Year(5774).itermonths():
         print month.name  # 'Tishrei' 'Cheshvan' ...
 
 Contact
