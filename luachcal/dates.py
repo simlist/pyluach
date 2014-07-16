@@ -147,7 +147,8 @@ class CalendarDateMixin(object):
         Returns
         -------
         dict
-          A dictionary in the form {year: int, month: int, day: int}
+          A dictionary in the form 
+          {'year': int, 'month': int, 'day': int}.
         """
         return {'year': self.year, 'month': self.month,'day': self.day}
     
@@ -193,9 +194,10 @@ class JulianDay(BaseDate):
           The julian day. Note that Julian days start at noon so day 
           number 10 is represented as 9.5 which is day 10 at midnight.
         """
-        self.day = day
-        if day - int(day) == 0:
-            self.day -= .5
+        if day-int(day) < .5:
+            self.day = int(day) - .5
+        else:
+            self.day = int(day) + .5
         self.jd = self.day
         
     def __repr__(self):
