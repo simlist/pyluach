@@ -21,8 +21,13 @@ class BaseDate(object):
     """BaseDate is a base class for all date types.
     
     It mostly provides arithmetic and comparison operators for
-    operations common to all child date types.
-     
+    operations common to all child date types. All subclasses
+    must implement a jd attribute representing the Julian Day for the
+    arithmetic and comparison operators to work.
+    
+    Supported Operations
+    --------------------
+       
     """ 
         
     def __add__(self, other):
@@ -214,7 +219,13 @@ class JulianDay(BaseDate):
     def today():
         """Return instance of current Julian day from timestamp.
         
-        Extends the built-in datetime.date.today(). 
+        Extends the built-in datetime.date.today().
+        
+        Returns
+        -------
+        JulianDay
+          A JulianDay instance representing the current Julian day from
+          the timestamp.
         """
         return GregorianDate.today().to_jd()
     
@@ -224,7 +235,7 @@ class JulianDay(BaseDate):
         Returns
         -------
         GregorianDate
-          The equivalent Gregorian date object.
+          The equivalent Gregorian date instance.
         """
         jd = int(self.day + .5)
         L = jd + 68569
@@ -246,7 +257,7 @@ class JulianDay(BaseDate):
         Returns
         -------
         HebrewDate
-          The equivalent Hebrew date object.
+          The equivalent Hebrew date instance\.
         """
     
         if self.day <= 347997:
@@ -301,10 +312,12 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     
     It inherits from *BaseDate* and *CalendarDateMixin*.
     
-    From BaseDate it inherits:
-    
+    Inherited Methods
+    -----------------
     GregorianDate.**__init__(year, month, day)**
-       All 
+      Initializer for a Gregorian date instance.
+      
+     
     """
  
     def __init__(self, year, month, day, jd=None):
