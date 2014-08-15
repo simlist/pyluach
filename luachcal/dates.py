@@ -38,6 +38,10 @@ class BaseDate(object):
     date1 != date2       True if ``date1 == date2`` is False
     date1 >=, <= date2   True if both are True
     ===================  =============================================
+    
+    Any child of BaseDate that implements a ``jd`` attribute
+    representing the Julian Day of that date can be compared to and
+    diffed with any other valid date type.      
     """ 
         
     def __add__(self, other):
@@ -106,7 +110,27 @@ class BaseDate(object):
     
 
 class CalendarDateMixin(object):
-    """Mixin for Hebrew and Gregorian dates"""
+    """CalendarDateMixin is a mixin for Hebrew and Gregorian dates
+    
+    Instance Methods
+    ----------------
+    CalendarDateMixin.__repr__()
+      Return string representation of date in the form 
+      ``class(year, month, day)``.
+    
+    CalendarDateMixin.__str__()
+      Return date as a string in the form ``'(year, month, day)'``.
+      
+    CalendarDateMixin.weekday()
+      Return the weekday of the date.
+      
+    CalendarDateMixin.tuple()
+      Return the date as a tuple in the form ``(year, month, day)``.
+      
+    CalendarDateMixin.dict()
+      Return the date as a dictionary in the form
+      ``{year: int, month: int, day: int}``.
+    """
     
     def __init__(self, year, month, day, jd=None):
         """Initialize a calendar date.
