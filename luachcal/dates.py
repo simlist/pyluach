@@ -20,9 +20,24 @@ class BaseDate(object):
     
     """BaseDate is a base class for all date types.
     
-    It mostly provides arithmetic and comparison operators for
+    It mainly provides arithmetic and comparison operators for
     operations common to all child date types.
-     
+    
+    Supported Operations
+    --------------------
+    ===================  =============================================
+    Operation            Result
+    ===================  =============================================
+    d2 = date1 + int     New date ``int`` days after date1
+    d2 = date1 - int     New date ``int`` days before date1
+    int = date1 - date2  Integer equal to the absolute value of the
+                         difference between date1 and date2
+    date1 > date2        True if date1 occurs later than date2
+    date1 < date2        True if date1 occurs earlier than date2
+    date1 == date2       True if date1 occurs on the same day as date2
+    date1 != date2       True if ``date1 == date2`` is False
+    date1 >=, <= date2   True if both are True
+    ===================  =============================================
     """ 
         
     def __add__(self, other):
