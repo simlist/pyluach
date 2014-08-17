@@ -338,10 +338,26 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     
     It inherits from *BaseDate* and *CalendarDateMixin*.
     
-    From BaseDate it inherits:
+    From BaseDate it inherits its arithmetic and comparison operators.
+    From CalendarDateMixin it extends its initializer and inherits
+    the following instance methods:
     
-    GregorianDate.**__init__(year, month, day)**
-       All 
+    * GregorianDate.__repr__()
+    * GregorianDate.__str__()
+    * GregorianDate.weekday()
+    * GregorianDate.tuple()
+    * GregorianDate.dict()
+    
+    Instance attribute
+    ------------------
+    GregorianDate.jd : float
+      The corresponding Julian Day Number.
+      
+    Instance Methods
+    ----------------
+    
+      
+    
     """
  
     def __init__(self, year, month, day, jd=None):
