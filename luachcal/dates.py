@@ -355,7 +355,20 @@ class GregorianDate(BaseDate, CalendarDateMixin):
       
     Instance Methods
     ----------------
-    
+    GregorianDate.today()
+      Return the current Gregorian date.
+      
+    GregorianDate.isleap()
+      Return if date is in a leap year.
+      
+    GregorianDate.to_jd()
+      Convert to JulianDate.
+      
+    GregorianDate.to_heb()
+      Convert to HebrewDate.
+      
+    GregorianDate.to_pydate()
+      Convert to standard library datetime.date.    
       
     
     """
