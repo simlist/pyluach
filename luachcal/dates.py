@@ -20,14 +20,30 @@ class BaseDate(object):
     
     """BaseDate is a base class for all date types.
     
-    It mostly provides arithmetic and comparison operators for
-    operations common to all child date types. All subclasses
-    must implement a jd attribute representing the Julian Day for the
-    arithmetic and comparison operators to work.
+
+    It mainly provides arithmetic and comparison operators for
+    operations common to all child date types.
     
     Supported Operations
     --------------------
-       
+    
+    ===================  =============================================
+    Operation            Result
+    ===================  =============================================
+    d2 = date1 + int     New date ``int`` days after date1
+    d2 = date1 - int     New date ``int`` days before date1
+    int = date1 - date2  Integer equal to the absolute value of the
+                         difference between date1 and date2
+    date1 > date2        True if date1 occurs later than date2
+    date1 < date2        True if date1 occurs earlier than date2
+    date1 == date2       True if date1 occurs on the same day as date2
+    date1 != date2       True if ``date1 == date2`` is False
+    date1 >=, <= date2   True if both are True
+    ===================  =============================================
+    
+    Any child of BaseDate that implements a ``jd`` attribute
+    representing the Julian Day of that date can be compared to and
+    diffed with any other valid date type.
     """ 
         
     def __add__(self, other):
@@ -96,7 +112,27 @@ class BaseDate(object):
     
 
 class CalendarDateMixin(object):
-    """Mixin for Hebrew and Gregorian dates"""
+    """CalendarDateMixin is a mixin for Hebrew and Gregorian dates
+    
+    Instance Methods
+    ----------------
+    CalendarDateMixin.__repr__()
+      Return string representation of date in the form 
+      ``class(year, month, day)``.
+    
+    CalendarDateMixin.__str__()
+      Return date as a string in the form ``'(year, month, day)'``.
+      
+    CalendarDateMixin.weekday()
+      Return the weekday of the date.
+      
+    CalendarDateMixin.tuple()
+      Return the date as a tuple in the form ``(year, month, day)``.
+      
+    CalendarDateMixin.dict()
+      Return the date as a dictionary in the form
+      ``{year: int, month: int, day: int}``.
+    """
     
     def __init__(self, year, month, day, jd=None):
         """Initialize a calendar date.
@@ -314,10 +350,37 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     
     Inherited Methods
     -----------------
-    GregorianDate.**__init__(year, month, day)**
-      Initializer for a Gregorian date instance.
+    From BaseDate it inherits its arithmetic and comparison operators.
+    From CalendarDateMixin it extends its initializer and inherits
+    the following instance methods:
+    
+    * GregorianDate.__repr__()
+    * GregorianDate.__str__()
+    * GregorianDate.weekday()
+    * GregorianDate.tuple()
+    * GregorianDate.dict()
+    
+    Instance attribute
+    ------------------
+    GregorianDate.jd : float
+      The corresponding Julian Day Number.
       
-     
+    Instance Methods
+    ----------------
+    GregorianDate.today()
+      Return the current Gregorian date.
+      
+    GregorianDate.isleap()
+      Return if date is in a leap year.
+      
+    GregorianDate.to_jd()
+      Convert to JulianDate.
+      
+    GregorianDate.to_heb()
+      Convert to HebrewDate.
+      
+    GregorianDate.to_pydate()
+      Convert to standard library datetime.date.    
     """
  
     def __init__(self, year, month, day, jd=None):
