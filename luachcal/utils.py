@@ -9,12 +9,12 @@ class Cache(OrderedDict):
     oldest first by extending __setitem__.
     '''
     def __init__(self, *args, **kwargs):
-        self.maxlength = kwargs.pop('maxlength', None)
+        self.maxlen = kwargs.pop('maxlen', None)
         super(Cache, self).__init__(*args, **kwargs)
         
     def __setitem__(self, key, value, dict_setitem=dict.__setitem__):
-        if self.maxlength is not None:
-            while len(self) >= self.maxlength:
+        if self.maxlen is not None:
+            while len(self) >= self.maxlen:
                 self.popitem(False)
         return OrderedDict.__setitem__(self, key, value, dict_setitem=dict_setitem)
     
@@ -31,8 +31,8 @@ class memoize(object):
     on must be hashable.
     """
     
-    def __init__(self, maxlength=None):
-        self.cache = Cache(maxlength=maxlength)
+    def __init__(self, maxlen=None):
+        self.cache = Cache(maxlen=maxlen)
         
         
     def __call__(self, func):
