@@ -1,4 +1,4 @@
-from collections import deque
+from collections import deque, OrderedDict
 
 from luachcal.dates import HebrewDate
 from luachcal.hebrewcal import Year
@@ -37,7 +37,7 @@ def _parshaless(date, israel=False):
 @memoize(maxlen=50)
 def gentable(year, israel=False):
     parshalist = deque(parshios)
-    table = []
+    table = OrderedDict()
     cal = Year(year)
     pesachday = HebrewDate(year, 1, 15).weekday()
     
