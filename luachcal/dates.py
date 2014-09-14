@@ -24,6 +24,11 @@ class BaseDate(object):
     It mainly provides arithmetic and comparison operators for
     operations common to all child date types.
     
+    Instance Method
+    ---------------
+    BaseDate.shabbos()
+      Return the Shabbos date occurs in.
+    
     Supported Operations
     --------------------
     
@@ -109,6 +114,17 @@ class BaseDate(object):
             return False
         except AttributeError:
             raise TypeError(self.error_string)
+        
+    def shabbos(self):
+        """Return the Shabbos on or following the date.
+        
+        Returns
+        -------
+        Date
+          Self if it's Shabbos or else the following Shabbos as
+          the same date type as operated on.
+        """
+        return self + (7 - self.weekday()) 
     
 
 class CalendarDateMixin(object):
