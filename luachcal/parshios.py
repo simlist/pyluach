@@ -1,5 +1,4 @@
 from collections import deque, OrderedDict
-from timeit import timeit
 
 from luachcal.dates import HebrewDate
 from luachcal.utils import memoize
@@ -58,7 +57,11 @@ def _gentable(year, israel=False):
                (parsha == 41 and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2)  or
                (parsha == 50 and HebrewDate(year+1, 7, 1).weekday() > 4)
                ):  #  If any of that then it's a double parsha.
-                table[shabbos.tuple()] += ' ' + PARSHIOS[parshalist.popleft()]
+                key = shabbos.tuple()
+                table[key] = ' '.join(
+                                      table[key],
+                                      PARSHIOS[parshalist.popleft()]
+                                      )
         shabbos += 7
     return table    
         
