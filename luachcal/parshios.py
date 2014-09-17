@@ -58,10 +58,10 @@ def _gentable(year, israel=False):
                (parsha == 50 and HebrewDate(year+1, 7, 1).weekday() > 4)
                ):  #  If any of that then it's a double parsha.
                 key = shabbos.tuple()
-                table[key] = ' '.join(
+                table[key] = ' '.join([
                                       table[key],
                                       PARSHIOS[parshalist.popleft()]
-                                      )
+                                      ])
         shabbos += 7
     return table    
         
@@ -77,6 +77,5 @@ def iterparshios(year, israel=False):
     """Generate all the parshios in the year."""
     table = _gentable(year, israel)
     for shabbos in table:
-        yield table[shabbos]
-        
-            
+        yield table[shabbos]        
+
