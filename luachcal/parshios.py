@@ -3,7 +3,7 @@ from collections import deque, OrderedDict
 from luachcal.dates import HebrewDate
 from luachcal.utils import memoize
 
-PARSHIOS = dict(zip(range(54), [
+PARSHIOS = [
             'Beraishis', 'Noach', "Lech L'cha", 'Vayera', 'Chayei Sarah',
             'Toldos', 'Vayetzei', 'Vayishlach', 'Vayeshev', 'Miketz',
             'Vayigash', 'Vayechi', 'Shemos',  "Va'era", 'Bo', 'Beshalach',
@@ -13,7 +13,9 @@ PARSHIOS = dict(zip(range(54), [
             'Naso',"Baha'aloscha", "Shelach", 'Korach', 'Chukas', 'Balak',
             'Pinchas','Matos', "Ma'sei", 'Devarim', "Va'eschanan", 'Eikev',
             "R'ey", 'Shoftim', 'Ki Setzei', 'Ki Savo', 'Netzavim', 'Vayelech',
-            'Haazinu', "Vezos Habrocho"]))
+            'Haazinu', "Vezos Habrocho"
+            ]
+
 
 def _parshaless(date, israel=False):
     if israel and date.tuple()[1:] in [(7,23), (1,22), (3,7)]:
