@@ -3,6 +3,11 @@ from collections import deque, OrderedDict
 from luachcal.dates import HebrewDate
 from luachcal.utils import memoize
 
+"""This module has functions to find the weekly parasha for a given Shabbos.
+The algorithm comes from Dr. Irv Bromberg, University of Toronto at 
+http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
+"""  
+
 PARSHIOS = [
             'Beraishis', 'Noach', "Lech L'cha", 'Vayera', 'Chayei Sarah',
             'Toldos', 'Vayetzei', 'Vayishlach', 'Vayeshev', 'Miketz',
