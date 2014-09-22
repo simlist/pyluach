@@ -18,7 +18,7 @@ PARSHIOS = [
             'Naso',"Baha'aloscha", "Shelach", 'Korach', 'Chukas', 'Balak',
             'Pinchas','Matos', "Ma'sei", 'Devarim', "Va'eschanan", 'Eikev',
             "R'ey", 'Shoftim', 'Ki Setzei', 'Ki Savo', 'Netzavim', 'Vayelech',
-            'Haazinu', "Vezos Habrocho"
+            'Haazinu'
             ]
 
 
@@ -36,7 +36,7 @@ def _parshaless(date, israel=False):
 
 @memoize(maxlen=50)
 def _gentable(year, israel=False):
-    parshalist = deque([51, 52, 53] + range(52))
+    parshalist = deque([51, 52] + range(52))
     table = OrderedDict()
     leap = HebrewDate._is_leap(year)
     pesachday = HebrewDate(year, 1, 15).weekday()
@@ -50,9 +50,6 @@ def _gentable(year, israel=False):
             table[shabbos.tuple()] = None
         else:
             parsha = parshalist.popleft()
-            if parsha == 53:  # Vezos Habrocha
-                table[(year, 7, 22 if israel else 23)] = PARSHIOS[parsha]
-                parsha = parshalist.popleft()
             table[shabbos.tuple()] = PARSHIOS[parsha]
             if(
                (parsha == 21 and (HebrewDate(year, 1, 14)-shabbos) / 7 < 3) or
@@ -85,4 +82,3 @@ def iterparshios(year, israel=False):
     table = _gentable(year, israel)
     for shabbos in table:
         yield table[shabbos]        
-
