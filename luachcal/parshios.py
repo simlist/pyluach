@@ -71,14 +71,72 @@ def _gentable(year, israel=False):
         
 
 def getparsha(date, israel=False):
-    """Return the parsha for a given date."""
+    """Return the parsha for a given date.
+    
+    Returns the parsha for the Shabbos on or following the given 
+    date.
+    
+    Parameters
+    ----------
+    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+      This date does not have to be a Shabbos.
+      
+    israel : bool, optional
+      ``True`` if you want the parsha according to the Israel schedule
+      (with only one day of Yom Tov). Defaults to ``False``.
+      
+    Returns
+    -------
+    str
+      The name of the parsha transliterated into American Ashkenazic 
+      pronunciation, or ``None`` if the Shabbos doesn't have a
+      parsha (i.e. it's on Yom Tov).
+    """
     shabbos = JulianDay(date.jd).to_heb().shabbos()
     table = _gentable(shabbos.year, israel)
     return table[shabbos.tuple()]
 
 
 def iterparshios(year, israel=False):
-    """Generate all the parshios in the year."""
+    """Generate all the parshios in the year.
+    
+    Parameters
+    ----------
+    year : int
+      The Hebrew year to get the parshios for.
+    
+    israel : bool, optional
+      ``True`` if you want the parsha according to the Israel schedule
+      (with only one day of Yom Tov). Defaults to ``False``
+      
+    Yields
+    ------
+    str
+      The name of the parsha for the next Shabbos in the given year.
+      Yields ``None`` for a Shabbos that doesn't have its own parsha
+      (i.e. it occurs on a yom tov). 
+    """
     table = _gentable(year, israel)
     for shabbos in table:
-        yield table[shabbos]        
+        yield table[shabbos]    
+
+def parshatable(year, israel=False):
+    """Return a table of all the Shabbosos in the year
+    
+    Parameters
+    ----------
+    year : int
+      The Hebrew year to get the parshios for.
+    
+    israel : bool, optional
+      ``True`` if you want the parshios according to the Israel
+      schedule (with only one day of Yom Tov). Defaults to ``False``.
+      
+    Returns
+    -------
+    OrderedDict
+      An ordered dictionary with the date of each Shabbos as a tuple
+      as the key mapped to the parsha as a string, or ``None`` for a
+      Shabbos with no parsha.
+    """
+    return _gentable(year, israel)
