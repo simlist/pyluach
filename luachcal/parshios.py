@@ -62,7 +62,7 @@ def _gentable(year, israel=False):
                (parsha == 50 and HebrewDate(year+1, 7, 1).weekday() > 4)
                ):  #  If any of that then it's a double parsha.
                 key = shabbos.tuple()
-                table[key] = ' '.join([
+                table[key] = ', '.join([
                                       table[key],
                                       PARSHIOS[parshalist.popleft()]
                                       ])
