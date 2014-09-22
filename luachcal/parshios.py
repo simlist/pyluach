@@ -1,6 +1,6 @@
 from collections import deque, OrderedDict
 
-from luachcal.dates import HebrewDate
+from luachcal.dates import HebrewDate, JulianDay
 from luachcal.utils import memoize
 
 """This module has functions to find the weekly parasha for a given Shabbos.
@@ -18,7 +18,7 @@ PARSHIOS = [
             'Naso',"Baha'aloscha", "Shelach", 'Korach', 'Chukas', 'Balak',
             'Pinchas','Matos', "Ma'sei", 'Devarim', "Va'eschanan", 'Eikev',
             "R'ey", 'Shoftim', 'Ki Setzei', 'Ki Savo', 'Netzavim', 'Vayelech',
-            'Haazinu'
+            'Haazinu', "V'zos Habrocha" 
             ]
 
 
@@ -70,9 +70,9 @@ def _gentable(year, israel=False):
     return table    
         
 
-def getparsha(shabbos, israel=False):
+def getparsha(date, israel=False):
     """Return the parsha for a given date."""
-    shabbos = shabbos.shabbos()
+    shabbos = JulianDay(date.jd).to_heb().shabbos()
     table = _gentable(shabbos.year, israel)
     return table[shabbos.tuple()]
 
