@@ -50,6 +50,9 @@ class BaseDate(object):
     representing the Julian Day of that date can be compared to and
     diffed with any other valid date type.
     """ 
+    
+    def __hash__(self):
+        return hash(self.jd)
         
     def __add__(self, other):
         try:
