@@ -47,10 +47,10 @@ def _gentable(year, israel=False):
                 
     while shabbos.year == year:
         if _parshaless(shabbos, israel):
-            table[shabbos.tuple()] = None
+            table[shabbos] = None
         else:
             parsha = parshalist.popleft()
-            table[shabbos.tuple()] = PARSHIOS[parsha]
+            table[shabbos] = PARSHIOS[parsha]
             if(
                (parsha == 21 and (HebrewDate(year, 1, 14)-shabbos) / 7 < 3) or
                (parsha in [26, 28] and not leap) or
@@ -61,9 +61,8 @@ def _gentable(year, israel=False):
                (parsha == 41 and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2)  or
                (parsha == 50 and HebrewDate(year+1, 7, 1).weekday() > 4)
                ):  #  If any of that then it's a double parsha.
-                key = shabbos.tuple()
-                table[key] = ', '.join([
-                                      table[key],
+                table[shabbos] = ', '.join([
+                                      table[shabbos],
                                       PARSHIOS[parshalist.popleft()]
                                       ])
         shabbos += 7
@@ -94,7 +93,7 @@ def getparsha(date, israel=False):
     """
     shabbos = JulianDay(date.jd).to_heb().shabbos()
     table = _gentable(shabbos.year, israel)
-    return table[shabbos.tuple()]
+    return table[shabbos]
 
 
 def iterparshios(year, israel=False):
