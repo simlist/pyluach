@@ -312,7 +312,7 @@ class JulianDay(BaseDate):
         Returns
         -------
         HebrewDate
-          The equivalent Hebrew date instance\.
+          The equivalent Hebrew date instance.
         """
     
         if self.day <= 347997:
@@ -431,7 +431,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     def jd(self):
         """Return the corresponding Julian Day.
         
-        This property retrieves the corresponding Julian Day as an int
+        This property retrieves the corresponding Julian Day as a float
         if it was passed into the init method or already calculated, and
         if it wasn't, it calculates it and saves it for later retrievals
         and returns it. 
@@ -632,6 +632,9 @@ class HebrewDate(BaseDate, CalendarDateMixin):
           The equivalent datetime.date instance.
         """
         return self.to_greg().to_pydate()
+    
+    def to_heb(self):
+        return self
     
     
     @staticmethod

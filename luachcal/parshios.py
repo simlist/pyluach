@@ -91,7 +91,7 @@ def getparsha(date, israel=False):
       pronunciation, or ``None`` if the Shabbos doesn't have a
       parsha (i.e. it's on Yom Tov).
     """
-    shabbos = JulianDay(date.jd).to_heb().shabbos()
+    shabbos = date.to_heb().shabbos()
     table = _gentable(shabbos.year, israel)
     return table[shabbos]
 
