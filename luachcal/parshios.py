@@ -134,7 +134,7 @@ def parshatable(year, israel=False):
     Returns
     -------
     OrderedDict
-      An ordered dictionary with the date of each Shabbos as a tuple
+      An ordered dictionary with the date of each Shabbos
       as the key mapped to the parsha as a string, or ``None`` for a
       Shabbos with no parsha.
     """
