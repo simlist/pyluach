@@ -585,7 +585,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
                 if m != self.month:
                     jd += HebrewDate._month_length(self.year, m)
                 else:
-                    self._jd = jd + (self.day-1) + 347997
+                    self._jd = jd + (self.day-1) + 347996.5
+                    
                     
         return self._jd
             
@@ -705,4 +706,3 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             return 30 if cls._long_cheshvan(year) else 29
         elif month == 9:   # if short Kislev return 29, else return 30
             return 29 if cls._short_kislev(year) else 30
-
