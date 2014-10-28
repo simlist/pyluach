@@ -5,9 +5,88 @@ from collections import deque
 from numbers import Number
 
 from luachcal.dates import HebrewDate
+from luachcal.utils import memoize
 
+def _adjust_postponed(date):
+    """Return actual date of fast day.
+    
+    For usual date of a fast day returns fast day adjusted for any
+    postponements. 
+    """
+    if date.weekday() == 7:
+        if date.month in (12, 13):
+            date -= 2
+        else:
+            date += 1
+    return date
+        
 
+@memoize(maxlen=50)
+def _fast_day_table(year):
+    table = dict()
+    workingdate = _adjust_postponed(HebrewDate(year, 7, 3))
+    table[workingdate] = 'Tzom Gedalia'
+    
+    workingdate = _adjust_postponed(HebrewDate(year, 10, 10))
+    table[workingdate] = '10 of Teves'
+    
+    month = 13 if Year(year).leap else 12
+    workingdate = _adjust_postponed(HebrewDate(year, month, 13))
+    table[workingdate] = 'Taanis Esther'
+    
+    workingdate = _adjust_postponed(HebrewDate(year, 4, 17))
+    table[workingdate] = '17 of Tamuz'
+    
+    workingdate = _adjust_postponed(HebrewDate(year, 5, 9))
+    table[workingdate] = '9 of Av'
+    
+    return table
 
+def holiday(date, israel=False):
+    date = date.to_heb()
+    year = date.year
+    month = date.month
+    day = date.day
+    table = _fast_day_table(year)
+    if date in table:
+        return table[date]
+    if month == 7:
+        if day in range(1, 3):
+            return 'Rosh Hashana'
+        elif day == 10:
+            return 'Yom Kippur'
+        elif day in range(15, 22):
+            return 'Succos'
+        elif day == 22:
+            return 'Shmini Atzeres'
+        elif day == 23 and israel == False:
+            return 'Simchas Torah'
+    elif(
+         (month == 9 and day in range(25, 30)) or 
+         date in [(HebrewDate(year, 9, 29) + n) for n in range(1, 4)]
+         ):
+        return 'Chanuka'
+    elif month == 11 and day == 15:
+        return "Tu B'shvat"
+    elif month == 12:
+        leap = HebrewDate._is_leap(year)
+        if day == 14:
+            return 'Purim Katan' if leap else 'Purim'
+        if day == 15 and not leap:
+            return 'Shushan Purim'
+    elif month == 13:
+        if day == 14:
+                return 'Purim'
+        elif day == 15:
+            return 'Shushan Purim'
+    elif month == 1 and day in range(15, 22 if israel else 23):
+        return 'Pesach'
+    elif month == 2 and day == 18:
+        return "Lag Ba'omer"
+    elif month == 3 and (day == 6 if israel else day in (6, 7)):
+        return 'Shavuos'
+    elif month == 5 and day == 15:
+        return "Tu B'av" 
 
 
 class Year(object):
