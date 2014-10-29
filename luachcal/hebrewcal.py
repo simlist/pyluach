@@ -116,6 +116,13 @@ class Year(object):
     """
     A Year object represents a Hebrew calendar year.
     
+    Instance Attributes
+    -------------------
+    year : int
+      The hebrew year.
+    leap : bool
+      True if the year is a leap year else false.
+    
     Instance Methods
     ----------------
     * itermonths()
@@ -159,7 +166,8 @@ class Year(object):
         ------
         Month
           The next month in the Hebrew calendar year as a
-          ``luachcal.hebrewcal.Month`` instance.
+          ``luachcal.hebrewcal.Month`` instance beginning with
+          Tishrei and ending with Elul.
         """
         for month in self:
             yield Month(self.year, month)
@@ -170,9 +178,8 @@ class Year(object):
         Yields
         ------
         int
-          An integer beginning with 1 representing the next month of
-          the year ending with 12 for a non leap year and 13 on a
-          leap year.
+          An integer beginning with 1 representing the next day of
+          the year.
         """
         for day in range(1, len(self) + 1):
             yield day
@@ -183,7 +190,8 @@ class Year(object):
         Yields
         ------
         ``HebrewDate``
-            The next date of the Hebrew calendar year. 
+            The next date of the Hebrew calendar year starting with
+            the first of Tishrei. 
         """
         for month in self.itermonths():
             for day in month:
@@ -192,7 +200,21 @@ class Year(object):
 
 class Month(object):
     
-    monthnames = {7: 'Tishrei', 8: 'Cheshvan', 9: 'Kislev', 10: 'Teves', 
+    """
+    A Month object represents a month of the Hebrew calendar.
+    
+    Instance Attributes
+    -------------------
+    year : int
+      The Hebrew year.
+    month : int
+      The month as an integer starting with 7 for Tishrei through 13
+      if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
+    name : str
+      The name of the month. 
+    """
+    
+    _monthnames = {7: 'Tishrei', 8: 'Cheshvan', 9: 'Kislev', 10: 'Teves', 
                   11: 'Shvat', 13:'Adar Sheni', 1: 'Nissan', 2: 'Iyar',
                   3: 'Sivan', 4: 'Tamuz', 5: 'Av', 6: 'Elul'}
     
@@ -200,14 +222,14 @@ class Month(object):
         if year < 1:
             raise ValueError('Year is before creation.')
         self.year = year
-        self.leap = HebrewDate._is_leap(self.year)
-        yearlength = 13 if self.leap else 12
+        leap = HebrewDate._is_leap(self.year)
+        yearlength = 13 if leap else 12
         if month < 1 or month > yearlength:
             raise ValueError('''Month must be between 1 and 12 for a normal
             year and 13 for a leap year.''')
         self.month = month
-        self.monthnames[12] = 'Adar Rishon' if self.leap else 'Adar' 
-        self.name = self.monthnames[self.month]
+        self._monthnames[12] = 'Adar Rishon' if leap else 'Adar' 
+        self.name = self._monthnames[self.month]
         
     def __repr__(self):
         return 'Month({0}, {1})'.format(self.year, self.month)
