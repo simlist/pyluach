@@ -46,7 +46,7 @@ def holiday(date, israel=False):
     """
     Return Jewish holiday of given date.
     
-    The holiday include the major and minor religious Jewish
+    The holidays include the major and minor religious Jewish
     holidays including fast days.
     
     Parameters
@@ -113,7 +113,26 @@ def holiday(date, israel=False):
 
 class Year(object):
     
+    """
+    A Year object represents a Hebrew calendar year.
+    
+    Instance Methods
+    ----------------
+    * itermonths()
+    * iterdays()
+    * iterdates()
+    """
+    
     def __init__(self, year):
+        
+        """
+        The initializer for a Year object.
+        
+        Parameter
+        ---------
+        year : int
+          A Hebrew year.
+        """
         if year < 1:
             raise ValueError('Year {0} is before creation.'.format(year))
         self. year = year
@@ -134,16 +153,38 @@ class Year(object):
             yield month
             
     def itermonths(self):
-        """Yield Month instance for each month of the year."""
+        """Yield Month instance for each month of the year.
+        
+        Yields
+        ------
+        Month
+          The next month in the Hebrew calendar year as a
+          ``luachcal.hebrewcal.Month`` instance.
+        """
         for month in self:
             yield Month(self.year, month)
+    
     def iterdays(self):
-        """Yield integer for each day of the year."""
+        """Yield integer for each day of the year.
+        
+        Yields
+        ------
+        int
+          An integer beginning with 1 representing the next month of
+          the year ending with 12 for a non leap year and 13 on a
+          leap year.
+        """
         for day in range(1, len(self) + 1):
             yield day
             
     def iterdates(self):
-        """Yield HebrewDate instance for each day of the year."""
+        """Yield HebrewDate instance for each day of the year.
+        
+        Yields
+        ------
+        ``HebrewDate``
+            The next date of the Hebrew calendar year. 
+        """
         for month in self.itermonths():
             for day in month:
                 yield HebrewDate(self.year, month.month, day)
