@@ -43,7 +43,7 @@ def _gentable(year, israel=False):
     rosh_hashana = HebrewDate(year, 7, 1)
     shabbos = (rosh_hashana + 2).shabbos()
     if rosh_hashana.weekday > 4:
-                parshalist.popleft()
+        parshalist.popleft()
                 
     while shabbos.year == year:
         if _parshaless(shabbos, israel):
