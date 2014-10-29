@@ -1,6 +1,6 @@
 from collections import deque, OrderedDict
 
-from luachcal.dates import HebrewDate, JulianDay
+from luachcal.dates import HebrewDate
 from luachcal.utils import memoize
 
 """This module has functions to find the weekly parasha for a given Shabbos.
