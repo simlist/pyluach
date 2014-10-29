@@ -9,6 +9,6 @@ setup(name='luachcal',
       url='https://github.com/simlist/luachcal',
       license='MIT',
       description =("""package for manipulating Hebrew dates and
-      Gregorian-Hebrew conversion"""),
-      long_description= io.open('README.rst').read()  # add external file as in open('filename').read()
+                    Gregorian-Hebrew conversion"""),
+      long_description= io.open('README.rst').read()
        )
