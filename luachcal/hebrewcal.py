@@ -43,6 +43,28 @@ def _fast_day_table(year):
     return table
 
 def holiday(date, israel=False):
+    """
+    Return Jewish holiday of given date.
+    
+    The holiday include the major and minor religious Jewish
+    holidays including fast days.
+    
+    Parameters
+    ----------
+    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+      Any date that implements a to_heb method which returns a
+      ``HebrewDate`` can be used.
+      
+    israel : boolian, optional
+      True if you want the holidays according to the israel schedule.
+      Defaults to ``False``.
+    
+    Returns
+    -------
+    str or ``None``
+      The name of the holiday or ``None`` if the given date is not
+      a Jewish holiday.
+    """
     date = date.to_heb()
     year = date.year
     month = date.month

@@ -86,7 +86,7 @@ def getparsha(date, israel=False):
       
     Returns
     -------
-    str
+    str or ``None``
       The name of the parsha transliterated into American Ashkenazic 
       pronunciation, or ``None`` if the Shabbos doesn't have a
       parsha (i.e. it's on Yom Tov).
