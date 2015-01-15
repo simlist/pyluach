@@ -14,7 +14,7 @@ def _adjust_postponed(date):
     postponements. 
     """
     if date.weekday() == 7:
-        if date.month in (12, 13):
+        if date.month in [12, 13]:
             date -= 2
         else:
             date += 1
