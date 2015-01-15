@@ -52,7 +52,7 @@ def holiday(date, israel=False):
     Parameters
     ----------
     date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
-      Any date that implements a to_heb method which returns a
+      Any date that implements a ``to_heb()`` method which returns a
       ``HebrewDate`` can be used.
       
     israel : boolian, optional
@@ -285,6 +285,13 @@ class Month(object):
         return months_elapsed
     
     def iterdates(self):
-        """Return iterator that yields an instance of HebrewDate."""
+        """Return iterator that yields an instance of HebrewDate.
+        
+        Yields
+        -------
+        ``HebrewDate``
+          The next Hebrew Date of the year starting the first day of
+          Tishrei through the last day of Ellul.
+        """
         for day in self:
             yield HebrewDate(self.year, self.month, day)
