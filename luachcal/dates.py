@@ -267,7 +267,13 @@ class JulianDay(BaseDate):
         return str(self.day)
     
     def weekday(self):
-        """Return weekday as integer with Sunday as 1 and Saturday as 7."""
+        """Return weekday of date.
+        
+        Returns
+        -------
+        int
+          The weekday with Sunday as 1 through Saturday as 7.
+        """
         return (int(self.day+.5) + 1) % 7 + 1
     
     @staticmethod
@@ -369,7 +375,11 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     
     Inherited Methods
     -----------------
-    From BaseDate it inherits its arithmetic and comparison operators.
+    From BaseDate it inherits its arithmetic and comparison operators
+    and the following method:
+
+    *GregorianDate.shabbos()
+
     From CalendarDateMixin it extends its initializer and inherits
     the following instance methods:
     
@@ -556,7 +566,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         month : int
           The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
           If there is a second Adar in the year it is represented as 13.
-          A month below 1 or above the last date will raise a ValueError.
+          A month below 1 or above the last month will raise a ValueError.
           
         day : int
           The Hebrew day of the month. An invalid day will raise a 
