@@ -6,6 +6,8 @@ from luachcal.utils import memoize
 """This module has functions to find the weekly parasha for a given Shabbos.
 The algorithm comes from Dr. Irv Bromberg, University of Toronto at 
 http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
+
+All parsha names are transliterated into the American Ashkenazik pronunciation.
 """  
 
 PARSHIOS = [
@@ -87,9 +89,8 @@ def getparsha(date, israel=False):
     Returns
     -------
     str or ``None``
-      The name of the parsha transliterated into American Ashkenazic 
-      pronunciation, or ``None`` if the Shabbos doesn't have a
-      parsha (i.e. it's on Yom Tov).
+      The name of the parsha, or ``None`` if the Shabbos doesn't have
+      a parsha (i.e. it's on Yom Tov).
     """
     shabbos = date.to_heb().shabbos()
     table = _gentable(shabbos.year, israel)
