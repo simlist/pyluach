@@ -58,10 +58,10 @@ class BaseDate(object):
         try:
             return JulianDay(self.jd + other)._to_x(self)
         except AttributeError:
-            raise TypeError('You can only add a number to a date.') 
+            raise TypeError('You can only add a number to a date.')
     
     def __sub__(self, other):
-        if isinstance(other, Number): 
+        if isinstance(other, Number):
             return JulianDay(self.jd - other)._to_x(self)
         try:
             return abs(self.jd - other.jd)
@@ -210,7 +210,7 @@ class CalendarDateMixin(object):
           A dictionary in the form 
           {'year': int, 'month': int, 'day': int}.
         """
-        return {'year': self.year, 'month': self.month,'day': self.day}
+        return {'year': self.year, 'month': self.month, 'day': self.day}
     
 
 class JulianDay(BaseDate):
@@ -251,7 +251,7 @@ class JulianDay(BaseDate):
         Parameters
         ----------
         day : float or int
-          The julian day. Note that Julian days start at noon so day 
+          The julian day. Note that Julian days start at noon so day
           number 10 is represented as 9.5 which is day 10 at midnight.
         """
         if day-int(day) < .5:
@@ -333,7 +333,7 @@ class JulianDay(BaseDate):
             year -= 1
             first_day = HebrewDate._elapsed_days(year)
         
-        months = [7, 8, 9, 10 , 11 , 12 , 13, 1, 2, 3, 4, 5, 6]
+        months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
         if not HebrewDate._is_leap(year):
             months.remove(13)
         
@@ -409,7 +409,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
       Convert to HebrewDate.
       
     GregorianDate.to_pydate()
-      Convert to standard library datetime.date.    
+      Convert to standard library datetime.date.
     """
  
     def __init__(self, year, month, day, jd=None):
@@ -444,7 +444,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         This property retrieves the corresponding Julian Day as a float
         if it was passed into the init method or already calculated, and
         if it wasn't, it calculates it and saves it for later retrievals
-        and returns it. 
+        and returns it.
         """
         if self._jd is None:
             a = (
@@ -464,7 +464,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
               
             b += self.day
         
-            self._jd = a + int(b)  
+            self._jd = a + int(b)
 
         return self._jd
             
@@ -540,8 +540,8 @@ class GregorianDate(BaseDate, CalendarDateMixin):
           The equivalent datetime.date instance.
         """
         return date(*self.tuple())
-            
-    
+
+
 class HebrewDate(BaseDate, CalendarDateMixin):
     """
     A class for manipulating Hebrew dates.
@@ -560,7 +560,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         Parameters
         ----------
         year : int
-          The Hebrew year. If the year is less than 1 it will raise a 
+          The Hebrew year. If the year is less than 1 it will raise a
           ValueError.
           
         month : int
@@ -569,7 +569,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
           A month below 1 or above the last month will raise a ValueError.
           
         day : int
-          The Hebrew day of the month. An invalid day will raise a 
+          The Hebrew day of the month. An invalid day will raise a
           ValueError.
         """
         if year < 1:
@@ -580,13 +580,13 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             raise ValueError('{0} is not a leap year'.format(year))
         monthlength = self._month_length(year, month)
         if day < 1 or day > monthlength:
-            raise ValueError('Given month has {0} days.'.format(monthlength)) 
+            raise ValueError('Given month has {0} days.'.format(monthlength))
         super(HebrewDate, self).__init__(year, month, day, jd)
     
     @property
     def jd(self):
         if self._jd is None:
-            months = [7, 8, 9, 10 , 11 , 12 , 13, 1, 2, 3, 4, 5, 6]
+            months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
             if not HebrewDate._is_leap(self.year):
                 months.remove(13)
     
@@ -596,7 +596,6 @@ class HebrewDate(BaseDate, CalendarDateMixin):
                     jd += HebrewDate._month_length(self.year, m)
                 else:
                     self._jd = jd + (self.day-1) + 347996.5
-                    
                     
         return self._jd
             
@@ -650,12 +649,12 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     
     @staticmethod
     def _is_leap(year):
-        if (( (7*year) + 1) % 19) < 7:
+        if (((7*year) + 1) % 19) < 7:
             return True
         return False
     
     @classmethod
-    @memoize(maxlen=100)    
+    @memoize(maxlen=100)
     def _elapsed_days(cls, year):
         months_elapsed = (
                       (235 * ((year-1) // 19)) + (12 * ((year-1) % 19)) + 
@@ -670,7 +669,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         if (
             (conjunction_parts >= 19440) or
             (
-                (conjunction_day % 7 == 2) and (conjunction_parts >= 9924) and 
+                (conjunction_day % 7 == 2) and (conjunction_parts >= 9924) and
                (not cls._is_leap(year))
               ) or
              (
