@@ -20,18 +20,9 @@ class BaseDate(object):
     
     """BaseDate is a base class for all date types.
     
+    It provides the following arithmetic and comparison operators
+    common to all child date types. 
 
-    It mainly provides arithmetic and comparison operators for
-    operations common to all child date types.
-    
-    Instance Method
-    ---------------
-    BaseDate.shabbos()
-      Return the Shabbos date occurs in.
-    
-    Supported Operations
-    --------------------
-    
     ===================  =============================================
     Operation            Result
     ===================  =============================================
@@ -132,25 +123,6 @@ class BaseDate(object):
 
 class CalendarDateMixin(object):
     """CalendarDateMixin is a mixin for Hebrew and Gregorian dates
-    
-    Instance Methods
-    ----------------
-    CalendarDateMixin.__repr__()
-      Return string representation of date in the form 
-      ``class(year, month, day)``.
-    
-    CalendarDateMixin.__str__()
-      Return date as a string in the form ``'(year, month, day)'``.
-      
-    CalendarDateMixin.weekday()
-      Return the weekday of the date.
-      
-    CalendarDateMixin.tuple()
-      Return the date as a tuple in the form ``(year, month, day)``.
-      
-    CalendarDateMixin.dict()
-      Return the date as a dictionary in the form
-      ``{year: int, month: int, day: int}``.
     """
     
     def __init__(self, year, month, day, jd=None):
@@ -158,9 +130,9 @@ class CalendarDateMixin(object):
         
         Parameters
         ----------
-        * year : int
-        * month : int
-        * day : int
+        year : int
+        month : int
+        day : int
         """
         self.year = year
         self.month = month
@@ -197,7 +169,7 @@ class CalendarDateMixin(object):
         Returns
         -------
         tuple
-          A tuple in the form (year, month, day).
+          A tuple of ints in the form ``(year, month, day)``.
         """
         return (self.year, self.month, self.day)
     
@@ -208,7 +180,7 @@ class CalendarDateMixin(object):
         -------
         dict
           A dictionary in the form 
-          {'year': int, 'month': int, 'day': int}.
+          ``{'year': int, 'month': int, 'day': int}``.
         """
         return {'year': self.year, 'month': self.month, 'day': self.day}
     
@@ -216,33 +188,12 @@ class CalendarDateMixin(object):
 class JulianDay(BaseDate):
 
     """A JulianDay object represents a Julian Day at midnight.
-       
-    All attributes should be treated as read only.
-    
-    Instance attribute
-    ------------------
-    JulianDay.**day** : float
-      A Julian Day at midnight (as ``n.5``) 
-        
-    Class method
-    ------------
-    JulianDay.**today()**
-      Return the current local date as JulianDay.
-          
-    Instance methods
-    ----------------
-    JulianDay.**to_greg()**
-      Return a GregorianDate instance.
-      
-    JulianDay.**to_heb()**
-      Return a HebrewDate instance.
-      
-    JulianDay.**to_pydate()**
-      Return a datetime.date instance.
-    
-    JulianDate.**weekday()**
-      Return the weekday as an integer with 1 for Sunday 
-      through 7 for Saturday.  
+
+    Attributes
+    ----------
+    day : float
+      The Julian Day Number at midnight (as *n*.5) 
+ 
     """
     
     def __init__(self, day):
@@ -280,7 +231,7 @@ class JulianDay(BaseDate):
     def today():
         """Return instance of current Julian day from timestamp.
         
-        Extends the built-in datetime.date.today().
+        Extends the built-in ``datetime.date.today()``.
         
         Returns
         -------
@@ -369,47 +320,15 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     """A GregorianDate object represents a Gregorian date (year, month, day).
     
     This is an idealized date with the current Gregorian calendar
-    indefinitely extended in both directions.
+    infinitely extended in both directions.
     
-    It inherits from *BaseDate* and *CalendarDateMixin*.
-    
-    Inherited Methods
-    -----------------
-    From BaseDate it inherits its arithmetic and comparison operators
-    and the following method:
-
-    *GregorianDate.shabbos()
-
-    From CalendarDateMixin it extends its initializer and inherits
-    the following instance methods:
-    
-    * GregorianDate.__repr__()
-    * GregorianDate.__str__()
-    * GregorianDate.weekday()
-    * GregorianDate.tuple()
-    * GregorianDate.dict()
-    
-    Instance attribute
-    ------------------
-    GregorianDate.jd : float
-      The corresponding Julian Day Number.
-      
-    Instance Methods
-    ----------------
-    GregorianDate.today()
-      Return the current Gregorian date.
-      
-    GregorianDate.isleap()
-      Return if date is in a leap year.
-      
-    GregorianDate.to_jd()
-      Convert to JulianDate.
-      
-    GregorianDate.to_heb()
-      Convert to HebrewDate.
-      
-    GregorianDate.to_pydate()
-      Convert to standard library datetime.date.
+    Attributes
+    ----------
+    year : int
+    month : int
+    day : int
+    jd : float
+      The corresponding Julian Day Number at midnight (as *n*.5).
     """
  
     def __init__(self, year, month, day, jd=None):
@@ -420,9 +339,9 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         
         Parameters
         ----------
-        * year : int
-        * month : int
-        * day : int
+        year : int
+        month : int
+        day : int
         """
         if month < 1 or month > 12:
             raise ValueError('{0} is an invalid month.'.format(str(month)))
@@ -522,7 +441,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         return JulianDay(self.jd)
     
     def to_heb(self):
-        """Convert to Hebrew date
+        """Convert to Hebrew date.
         
         Returns
         -------
@@ -543,11 +462,17 @@ class GregorianDate(BaseDate, CalendarDateMixin):
 
 
 class HebrewDate(BaseDate, CalendarDateMixin):
-    """
-    A class for manipulating Hebrew dates.
     
-    The month is an integer starting with 1 for Nissan and ending
-    with 13 for the second Adar of a leap year.
+    """A class for manipulating Hebrew dates.
+
+    Attributes
+    ----------
+    year : int
+    month : int
+      The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
+      If there is a second Adar it is represented as 13.
+    day : int
+      The day of the month.
     """
     
     def __init__(self, year, month, day, jd=None):

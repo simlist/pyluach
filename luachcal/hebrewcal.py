@@ -116,15 +116,15 @@ class Year(object):
     """
     A Year object represents a Hebrew calendar year.
     
-    Instance Attributes
-    -------------------
+    Attributes
+    ----------
     year : int
       The hebrew year.
     leap : bool
       True if the year is a leap year else false.
     
-    Instance Methods
-    ----------------
+    Methods
+    -------
     * itermonths()
     * iterdays()
     * iterdates()
@@ -203,8 +203,8 @@ class Month(object):
     """
     A Month object represents a month of the Hebrew calendar.
     
-    Instance Attributes
-    -------------------
+    Attributes
+    ----------
     year : int
       The Hebrew year.
     month : int
@@ -288,7 +288,7 @@ class Month(object):
         """Return iterator that yields an instance of HebrewDate.
         
         Yields
-        -------
+        ------
         ``HebrewDate``
           The next Hebrew Date of the year starting the first day of
           Tishrei through the last day of Ellul.
