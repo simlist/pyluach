@@ -189,22 +189,20 @@ class JulianDay(BaseDate):
 
     """A JulianDay object represents a Julian Day at midnight.
 
+    Parameters
+    ----------
+    day : float or int
+      The julian day. Note that Julian days start at noon so day
+      number 10 is represented as 9.5 which is day 10 at midnight.
+
     Attributes
     ----------
     day : float
-      The Julian Day Number at midnight (as *n*.5) 
- 
+      The Julian Day Number at midnight (as *n*.5)
     """
     
     def __init__(self, day):
-        """Initialize a JulianDay instance.
-        
-        Parameters
-        ----------
-        day : float or int
-          The julian day. Note that Julian days start at noon so day
-          number 10 is represented as 9.5 which is day 10 at midnight.
-        """
+        """Initialize a JulianDay instance."""
         if day-int(day) < .5:
             self.day = int(day) - .5
         else:
@@ -322,6 +320,13 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     This is an idealized date with the current Gregorian calendar
     infinitely extended in both directions.
     
+    Parameters
+    ----------
+    year : int
+    month : int
+    day : int
+    jd : float, optional
+
     Attributes
     ----------
     year : int
@@ -336,12 +341,6 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         
         This initializer extends the CalendarDateMixin initializer
         adding in date validation specific to Gregorian dates.
-        
-        Parameters
-        ----------
-        year : int
-        month : int
-        day : int
         """
         if month < 1 or month > 12:
             raise ValueError('{0} is an invalid month.'.format(str(month)))
@@ -465,6 +464,21 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     
     """A class for manipulating Hebrew dates.
 
+    Parameters
+    ----------
+    year : int
+      The Hebrew year. If the year is less than 1 it will raise a
+      ValueError.
+          
+    month : int
+      The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
+      If there is a second Adar in the year it is represented as 13.
+      A month below 1 or above the last month will raise a ValueError.
+          
+    day : int
+      The Hebrew day of the month. An invalid day will raise a
+      ValueError.
+
     Attributes
     ----------
     year : int
@@ -481,21 +495,6 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         
         This initializer extends the CalendarDateMixin adding validation
         specific to hebrew dates.
-        
-        Parameters
-        ----------
-        year : int
-          The Hebrew year. If the year is less than 1 it will raise a
-          ValueError.
-          
-        month : int
-          The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
-          If there is a second Adar in the year it is represented as 13.
-          A month below 1 or above the last month will raise a ValueError.
-          
-        day : int
-          The Hebrew day of the month. An invalid day will raise a
-          ValueError.
         """
         if year < 1:
             raise ValueError('Date supplied is before creation.')

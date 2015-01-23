@@ -43,8 +43,7 @@ def _fast_day_table(year):
     return table
 
 def holiday(date, israel=False):
-    """
-    Return Jewish holiday of given date.
+    """Return Jewish holiday of given date.
     
     The holidays include the major and minor religious Jewish
     holidays including fast days.
@@ -116,29 +115,23 @@ class Year(object):
     """
     A Year object represents a Hebrew calendar year.
     
+    Parameter
+    ---------
+    year : int
+      A Hebrew year.
+
     Attributes
     ----------
     year : int
       The hebrew year.
     leap : bool
       True if the year is a leap year else false.
-    
-    Methods
-    -------
-    * itermonths()
-    * iterdays()
-    * iterdates()
     """
     
     def __init__(self, year):
         
         """
         The initializer for a Year object.
-        
-        Parameter
-        ---------
-        year : int
-          A Hebrew year.
         """
         if year < 1:
             raise ValueError('Year {0} is before creation.'.format(year))
@@ -203,6 +196,13 @@ class Month(object):
     """
     A Month object represents a month of the Hebrew calendar.
     
+    Parameters
+    ----------
+    year : int
+    month : int
+      The month as an integer starting with 7 for Tishrei through 13
+      if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
+
     Attributes
     ----------
     year : int
