@@ -22,16 +22,20 @@ Typical use
 
     from luachcal import dates, hebrewcal
     
-    today = dates.HebrewDate.today()
-    lastweek_gregorian = (today - 7).to_greg()
-    lastweek_gregorian < today   # True
-    today - lastweek_gregorian  # 7
-    greg = GregorianDate(1986, 3, 21)
-    heb = HebrewDate(5746, 13, 10)
-    greg == heb  # True
+    >>> today = dates.HebrewDate.today()
+    >>> lastweek_gregorian = (today - 7).to_greg()
+    >>> lastweek_gregorian < today
+	True
+    >>> today - lastweek_gregorian
+	7
+    >>> greg = GregorianDate(1986, 3, 21)
+    >>> heb = HebrewDate(5746, 13, 10)
+    >>> greg == heb
+	True
     
-    for month in hebrewcal.Year(5774).itermonths():
-        print month.name  # 'Tishrei' 'Cheshvan' ...
+    >>> for month in hebrewcal.Year(5774).itermonths():
+            print month.name
+	'Tishrei' 'Cheshvan' ...
 
 Contact
 ----------------
