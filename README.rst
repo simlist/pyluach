@@ -34,8 +34,8 @@ Typical use
 	True
     
     >>> for month in hebrewcal.Year(5774).itermonths():
-            print month.name
-	'Tishrei' 'Cheshvan' ...
+    ...     print month.name
+	Tishrei Cheshvan ...
 
 Contact
 ----------------

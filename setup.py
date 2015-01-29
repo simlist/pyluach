@@ -5,10 +5,10 @@ setup(name='luachcal',
       version='0.1.0dev',
       author='MS List',
       author_email='simlist@gmail.com',
-      packages ='luachcal',
+      packages='luachcal',
       url='https://github.com/simlist/luachcal',
       license='MIT',
-      description =("""package for manipulating Hebrew dates and
-                    Gregorian-Hebrew conversion"""),
-      long_description= io.open('README.rst').read()
-       )
+      description=('''Package for manipulating Hebrew dates and
+                    Gregorian-Hebrew conversion'''),
+      long_description=io.open('README.rst').read()
+      )

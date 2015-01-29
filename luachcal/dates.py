@@ -395,10 +395,8 @@ class GregorianDate(BaseDate, CalendarDateMixin):
                 month += 12
             a = year // 100
             b = 2 - a + a//4
-            self._jd = (
-                int(365.25*year) + 
-                int(30.6001*month) + b + day + 1720994.5
-                )
+            self._jd = (int(365.25*year) + 
+                        int(30.6001*month) + b + day + 1720994.5)
         return self._jd
     @staticmethod
     def today():
@@ -608,16 +606,16 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         conjunction_parts = 1080 * (hours_elapsed%24) + parts_elapsed%1080
     
         if (
-            (conjunction_parts >= 19440) or
-            (
-                (conjunction_day % 7 == 2) and (conjunction_parts >= 9924) and
+              (conjunction_parts >= 19440) or
+              (
+               (conjunction_day % 7 == 2) and
+               (conjunction_parts >= 9924) and
                (not cls._is_leap(year))
               ) or
-             (
-                (conjunction_day % 7 == 1) and
-            conjunction_parts >= 16789 and cls._is_leap(year - 1)
-             )
-             ):
+              (
+               (conjunction_day % 7 == 1) and
+               conjunction_parts >= 16789 and cls._is_leap(year - 1))):
+            # if all that
             alt_day = conjunction_day + 1
     
         else:

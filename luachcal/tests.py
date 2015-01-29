@@ -131,8 +131,6 @@ class TestErrors(unittest.TestCase):
         self.assertRaises(ValueError, dates.HebrewDate, 0, 7, 1)
         self.assertRaises(ValueError, dates.HebrewDate, -1, 7, 1)
         
-                 
-
-   
+ 
 if __name__ == '__main__':
     unittest.main()
