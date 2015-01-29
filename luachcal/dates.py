@@ -1,12 +1,20 @@
 """The dates module implements classes for representing and
 manipulating several date types.
 
-classes
+Classes
 -------
+* BaseDate
+* CalendarDateMixin
 * JulianDay
 * GregorianDate
 * HebrewDate
+
+Note
+----
+All instances of the classes in this module should be treated as read
+only. No attributes should be changed once they're created.
 """
+
 #  from __future__ import division
 
 from datetime import date
@@ -122,18 +130,25 @@ class BaseDate(object):
     
 
 class CalendarDateMixin(object):
-    """CalendarDateMixin is a mixin for Hebrew and Gregorian dates
+    """CalendarDateMixin is a mixin for Hebrew and Gregorian dates.
+
+    Parameters
+    ----------
+    Year : int
+    Month : int
+    day : int
+
+    Attributes
+    ----------
+    year : int
+    month : int
+    day : int
+    jd : float
+      The equivelant Julian day at midnight.
     """
     
     def __init__(self, year, month, day, jd=None):
-        """Initialize a calendar date.
-        
-        Parameters
-        ----------
-        year : int
-        month : int
-        day : int
-        """
+        """Initialize a calendar date."""
         self.year = year
         self.month = month
         self.day = day
@@ -168,7 +183,7 @@ class CalendarDateMixin(object):
         
         Returns
         -------
-        tuple
+        tuple of ints
           A tuple of ints in the form ``(year, month, day)``.
         """
         return (self.year, self.month, self.day)
@@ -199,6 +214,8 @@ class JulianDay(BaseDate):
     ----------
     day : float
       The Julian Day Number at midnight (as *n*.5)
+    jd : float
+      Alias for day.
     """
     
     def __init__(self, day):
@@ -326,13 +343,14 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     month : int
     day : int
     jd : float, optional
+      This parameter should not be assigned manually.
 
     Attributes
     ----------
     year : int
     month : int
     day : int
-    jd : float
+    jd : float(property)
       The corresponding Julian Day Number at midnight (as *n*.5).
     """
  
@@ -474,10 +492,13 @@ class HebrewDate(BaseDate, CalendarDateMixin):
       The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
       If there is a second Adar in the year it is represented as 13.
       A month below 1 or above the last month will raise a ValueError.
-          
+
     day : int
       The Hebrew day of the month. An invalid day will raise a
       ValueError.
+
+    jd : float, optional
+      This parameter should not be assigned manually.
 
     Attributes
     ----------
