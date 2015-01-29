@@ -15,7 +15,7 @@ All instances of the classes in this module should be treated as read
 only. No attributes should be changed once they're created.
 """
 
-#  from __future__ import division
+from __future__ import division
 
 from datetime import date
 from numbers import Number
@@ -263,6 +263,10 @@ class JulianDay(BaseDate):
         -------
         GregorianDate
           The equivalent Gregorian date instance.
+
+        Note
+        ----
+        This method uses the Fliegel-Van Flandern algorithm.
         """
         jd = int(self.day + .5)
         L = jd + 68569
@@ -383,27 +387,19 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         and returns it.
         """
         if self._jd is None:
-            a = (
-             1721424.5 +     # Gregorian epoch - 1
-             (365 * (self.year-1)) +
-             ((self.year-1) / 4 ) -
-             ((self.year-1) / 100) +
-             ((self.year-1) / 400) 
-            )
-            b = (((367*self.month) - 362) / 12)
-      
-            if self.month > 2:
-                if self.is_leap():
-                    b -= 1
-                else:
-                    b -= 2
-              
-            b += self.day
-        
-            self._jd = a + int(b)
-
+            year = self.year
+            month = self.month + 1
+            day = self.day
+            if month in [1, 2]:
+                year -= 1
+                month += 12
+            a = year // 100
+            b = 2 - a + a//4
+            self._jd = (
+                int(365.25*year) + 
+                int(30.6001*month) + b + day + 1720994.5
+                )
         return self._jd
-            
     @staticmethod
     def today():
         """Return a GregorianDate instance for the current day.
