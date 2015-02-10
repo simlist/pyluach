@@ -390,7 +390,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
             year = self.year
             month = self.month + 1
             day = self.day
-            if month in [1, 2]:
+            if month < 3:
                 year -= 1
                 month += 12
             a = year // 100
