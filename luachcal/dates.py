@@ -23,7 +23,6 @@ from numbers import Number
 from utils import memoize
 
 
-
 class BaseDate(object):
     
     """BaseDate is a base class for all date types.
@@ -127,7 +126,7 @@ class BaseDate(object):
           the same date type as operated on.
         """
         return self + (7 - self.weekday()) 
-    
+
 
 class CalendarDateMixin(object):
     """CalendarDateMixin is a mixin for Hebrew and Gregorian dates.
@@ -279,7 +278,8 @@ class JulianDay(BaseDate):
         L = j // 11
         month = j + 2 - 12*L
         year = 100 * (n-49) + i + L
-    
+        if year < 1:
+            year -= 1
         return GregorianDate(year, month, day, self.day)
     
     def to_heb(self):
@@ -390,6 +390,8 @@ class GregorianDate(BaseDate, CalendarDateMixin):
             year = self.year
             month = self.month + 1
             day = self.day
+            if year < 0:
+                year += 1 
             if month < 3:
                 year -= 1
                 month += 12
@@ -415,6 +417,8 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     @staticmethod
     def _is_leap(year):
         """Return True if year of date is a leap year, otherwise False."""
+        if year < 0:
+            year += 1
         if(
             (year % 4 == 0) and not
             (year % 100 == 0 and year % 400 != 0)
