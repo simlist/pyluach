@@ -357,7 +357,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     jd : float(property)
       The corresponding Julian Day Number at midnight (as *n*.5).
     """
- 
+
     def __init__(self, year, month, day, jd=None):
         """Initialize a GregorianDate.
         

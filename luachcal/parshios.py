@@ -38,13 +38,14 @@ def _parshaless(date, israel=False):
 
 @memoize(maxlen=50)
 def _gentable(year, israel=False):
+    """Return OrderedDict mapping date of Shabbos to parsha name."""
     parshalist = deque([51, 52] + range(52))
     table = OrderedDict()
     leap = HebrewDate._is_leap(year)
     pesachday = HebrewDate(year, 1, 15).weekday()
     rosh_hashana = HebrewDate(year, 7, 1)
     shabbos = (rosh_hashana + 2).shabbos()
-    if rosh_hashana.weekday > 4:
+    if rosh_hashana.weekday() > 4:
         parshalist.popleft()
                 
     while shabbos.year == year:
