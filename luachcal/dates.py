@@ -263,8 +263,8 @@ class JulianDay(BaseDate):
         GregorianDate
           The equivalent Gregorian date instance.
 
-        Note
-        ----
+        Notes
+        -----
         This method uses the Fliegel-Van Flandern algorithm.
         """
         jd = int(self.day + .5)

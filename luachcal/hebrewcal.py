@@ -115,8 +115,8 @@ class Year(object):
     """
     A Year object represents a Hebrew calendar year.
     
-    Parameter
-    ---------
+    Parameters
+    ----------
     year : int
       A Hebrew year.
 
