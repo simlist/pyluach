@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>luachcal.parshios &mdash; luachcal  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="luachcal  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">luachcal  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for luachcal.parshios</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span><span class="p">,</span> <span class="n">OrderedDict</span>
+
+<span class="kn">from</span> <span class="nn">luachcal.dates</span> <span class="kn">import</span> <span class="n">HebrewDate</span>
+<span class="kn">from</span> <span class="nn">luachcal.utils</span> <span class="kn">import</span> <span class="n">memoize</span>
+
+<span class="sd">&quot;&quot;&quot;This module has functions to find the weekly parasha for a given Shabbos.</span>
+<span class="sd">The algorithm comes from Dr. Irv Bromberg, University of Toronto at </span>
+<span class="sd">http://individual.utoronto.ca/kalendis/hebrew/parshah.htm</span>
+
+<span class="sd">All parsha names are transliterated into the American Ashkenazik pronunciation.</span>
+<span class="sd">&quot;&quot;&quot;</span>  
+
+<span class="n">PARSHIOS</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">&#39;Beraishis&#39;</span><span class="p">,</span> <span class="s">&#39;Noach&#39;</span><span class="p">,</span> <span class="s">&quot;Lech L&#39;cha&quot;</span><span class="p">,</span> <span class="s">&#39;Vayera&#39;</span><span class="p">,</span> <span class="s">&#39;Chayei Sarah&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Toldos&#39;</span><span class="p">,</span> <span class="s">&#39;Vayetzei&#39;</span><span class="p">,</span> <span class="s">&#39;Vayishlach&#39;</span><span class="p">,</span> <span class="s">&#39;Vayeshev&#39;</span><span class="p">,</span> <span class="s">&#39;Miketz&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Vayigash&#39;</span><span class="p">,</span> <span class="s">&#39;Vayechi&#39;</span><span class="p">,</span> <span class="s">&#39;Shemos&#39;</span><span class="p">,</span>  <span class="s">&quot;Va&#39;era&quot;</span><span class="p">,</span> <span class="s">&#39;Bo&#39;</span><span class="p">,</span> <span class="s">&#39;Beshalach&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Yisro&#39;</span><span class="p">,</span>  <span class="s">&#39;Mishpatim&#39;</span><span class="p">,</span> <span class="s">&#39;Teruma&#39;</span><span class="p">,</span> <span class="s">&#39;Tetzave&#39;</span><span class="p">,</span> <span class="s">&#39;Ki Sisa&#39;</span><span class="p">,</span> <span class="s">&#39;Vayakhel&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Pekudei&#39;</span><span class="p">,</span> <span class="s">&#39;Vayikra&#39;</span><span class="p">,</span> <span class="s">&#39;Tzav&#39;</span><span class="p">,</span><span class="s">&#39;Shemini&#39;</span><span class="p">,</span> <span class="s">&#39;Tazria&#39;</span><span class="p">,</span> <span class="s">&#39;Metzora&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Acharei Mos&#39;</span><span class="p">,</span><span class="s">&#39;Kedoshim&#39;</span><span class="p">,</span> <span class="s">&#39;Emor&#39;</span><span class="p">,</span> <span class="s">&quot;Behar&quot;</span><span class="p">,</span> <span class="s">&#39;Bechukosai&#39;</span><span class="p">,</span> <span class="s">&#39;Bamidbar&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Naso&#39;</span><span class="p">,</span><span class="s">&quot;Baha&#39;aloscha&quot;</span><span class="p">,</span> <span class="s">&quot;Shelach&quot;</span><span class="p">,</span> <span class="s">&#39;Korach&#39;</span><span class="p">,</span> <span class="s">&#39;Chukas&#39;</span><span class="p">,</span> <span class="s">&#39;Balak&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Pinchas&#39;</span><span class="p">,</span><span class="s">&#39;Matos&#39;</span><span class="p">,</span> <span class="s">&quot;Ma&#39;sei&quot;</span><span class="p">,</span> <span class="s">&#39;Devarim&#39;</span><span class="p">,</span> <span class="s">&quot;Va&#39;eschanan&quot;</span><span class="p">,</span> <span class="s">&#39;Eikev&#39;</span><span class="p">,</span>
+            <span class="s">&quot;R&#39;ey&quot;</span><span class="p">,</span> <span class="s">&#39;Shoftim&#39;</span><span class="p">,</span> <span class="s">&#39;Ki Setzei&#39;</span><span class="p">,</span> <span class="s">&#39;Ki Savo&#39;</span><span class="p">,</span> <span class="s">&#39;Netzavim&#39;</span><span class="p">,</span> <span class="s">&#39;Vayelech&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Haazinu&#39;</span><span class="p">,</span> <span class="s">&quot;V&#39;zos Habrocha&quot;</span> 
+            <span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_parshaless</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">israel</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">israel</span> <span class="ow">and</span> <span class="n">date</span><span class="o">.</span><span class="n">tuple</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">7</span><span class="p">,</span><span class="mi">23</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">22</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">)]:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">date</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="mi">7</span> <span class="ow">and</span> <span class="n">date</span><span class="o">.</span><span class="n">day</span> <span class="ow">in</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span> <span class="o">+</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">24</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">date</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">date</span><span class="o">.</span><span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">23</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">date</span><span class="o">.</span><span class="n">month</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">date</span><span class="o">.</span><span class="n">day</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
+
+<span class="nd">@memoize</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_gentable</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">israel</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return OrderedDict mapping date of Shabbos to parsha name.&quot;&quot;&quot;</span>
+    <span class="n">parshalist</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="mi">51</span><span class="p">,</span> <span class="mi">52</span><span class="p">]</span> <span class="o">+</span> <span class="nb">range</span><span class="p">(</span><span class="mi">52</span><span class="p">))</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+    <span class="n">leap</span> <span class="o">=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+    <span class="n">pesachday</span> <span class="o">=</span> <span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+    <span class="n">rosh_hashana</span> <span class="o">=</span> <span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">shabbos</span> <span class="o">=</span> <span class="p">(</span><span class="n">rosh_hashana</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">shabbos</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">rosh_hashana</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">parshalist</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+                
+    <span class="k">while</span> <span class="n">shabbos</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">year</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_parshaless</span><span class="p">(</span><span class="n">shabbos</span><span class="p">,</span> <span class="n">israel</span><span class="p">):</span>
+            <span class="n">table</span><span class="p">[</span><span class="n">shabbos</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parsha</span> <span class="o">=</span> <span class="n">parshalist</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+            <span class="n">table</span><span class="p">[</span><span class="n">shabbos</span><span class="p">]</span> <span class="o">=</span> <span class="n">PARSHIOS</span><span class="p">[</span><span class="n">parsha</span><span class="p">]</span>
+            <span class="k">if</span><span class="p">(</span>
+               <span class="p">(</span><span class="n">parsha</span> <span class="o">==</span> <span class="mi">21</span> <span class="ow">and</span> <span class="p">(</span><span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span><span class="o">-</span><span class="n">shabbos</span><span class="p">)</span> <span class="o">/</span> <span class="mi">7</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">or</span>
+               <span class="p">(</span><span class="n">parsha</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">leap</span><span class="p">)</span> <span class="ow">or</span>
+               <span class="p">(</span><span class="n">parsha</span> <span class="o">==</span> <span class="mi">31</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">leap</span> <span class="ow">and</span> <span class="p">(</span>
+                                               <span class="ow">not</span> <span class="n">israel</span> <span class="ow">or</span> <span class="n">pesachday</span> <span class="o">!=</span> <span class="mi">7</span>
+                                               <span class="p">))</span> <span class="ow">or</span>
+               <span class="p">(</span><span class="n">parsha</span> <span class="o">==</span> <span class="mi">38</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">israel</span> <span class="ow">and</span> <span class="n">pesachday</span> <span class="o">==</span> <span class="mi">5</span><span class="p">)</span> <span class="ow">or</span>
+               <span class="p">(</span><span class="n">parsha</span> <span class="o">==</span> <span class="mi">41</span> <span class="ow">and</span> <span class="p">(</span><span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span><span class="o">-</span><span class="n">shabbos</span><span class="p">)</span> <span class="o">//</span> <span class="mi">7</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>  <span class="ow">or</span>
+               <span class="p">(</span><span class="n">parsha</span> <span class="o">==</span> <span class="mi">50</span> <span class="ow">and</span> <span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">)</span>
+               <span class="p">):</span>  <span class="c">#  If any of that then it&#39;s a double parsha.</span>
+                <span class="n">table</span><span class="p">[</span><span class="n">shabbos</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+                                      <span class="n">table</span><span class="p">[</span><span class="n">shabbos</span><span class="p">],</span>
+                                      <span class="n">PARSHIOS</span><span class="p">[</span><span class="n">parshalist</span><span class="o">.</span><span class="n">popleft</span><span class="p">()]</span>
+                                      <span class="p">])</span>
+        <span class="n">shabbos</span> <span class="o">+=</span> <span class="mi">7</span>
+    <span class="k">return</span> <span class="n">table</span>    
+        
+
+<div class="viewcode-block" id="getparsha"><a class="viewcode-back" href="../../luachcal.html#luachcal.parshios.getparsha">[docs]</a><span class="k">def</span> <span class="nf">getparsha</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">israel</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the parsha for a given date.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns the parsha for the Shabbos on or following the given </span>
+<span class="sd">    date.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``</span>
+<span class="sd">      This date does not have to be a Shabbos.</span>
+<span class="sd">      </span>
+<span class="sd">    israel : bool, optional</span>
+<span class="sd">      ``True`` if you want the parsha according to the Israel schedule</span>
+<span class="sd">      (with only one day of Yom Tov). Defaults to ``False``.</span>
+<span class="sd">      </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str or ``None``</span>
+<span class="sd">      The name of the parsha, or ``None`` if the Shabbos doesn&#39;t have</span>
+<span class="sd">      a parsha (i.e. it&#39;s on Yom Tov).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shabbos</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">to_heb</span><span class="p">()</span><span class="o">.</span><span class="n">shabbos</span><span class="p">()</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">_gentable</span><span class="p">(</span><span class="n">shabbos</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">israel</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table</span><span class="p">[</span><span class="n">shabbos</span><span class="p">]</span>
+
+</div>
+<div class="viewcode-block" id="iterparshios"><a class="viewcode-back" href="../../luachcal.html#luachcal.parshios.iterparshios">[docs]</a><span class="k">def</span> <span class="nf">iterparshios</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">israel</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate all the parshios in the year.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">      The Hebrew year to get the parshios for.</span>
+<span class="sd">    </span>
+<span class="sd">    israel : bool, optional</span>
+<span class="sd">      ``True`` if you want the parsha according to the Israel schedule</span>
+<span class="sd">      (with only one day of Yom Tov). Defaults to ``False``</span>
+<span class="sd">      </span>
+<span class="sd">    Yields</span>
+<span class="sd">    ------</span>
+<span class="sd">    str</span>
+<span class="sd">      The name of the parsha for the next Shabbos in the given year.</span>
+<span class="sd">      Yields ``None`` for a Shabbos that doesn&#39;t have its own parsha</span>
+<span class="sd">      (i.e. it occurs on a yom tov). </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">_gentable</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">israel</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">shabbos</span> <span class="ow">in</span> <span class="n">table</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">table</span><span class="p">[</span><span class="n">shabbos</span><span class="p">]</span>    
+</div>
+<div class="viewcode-block" id="parshatable"><a class="viewcode-back" href="../../luachcal.html#luachcal.parshios.parshatable">[docs]</a><span class="k">def</span> <span class="nf">parshatable</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">israel</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a table of all the Shabbosos in the year</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">      The Hebrew year to get the parshios for.</span>
+<span class="sd">    </span>
+<span class="sd">    israel : bool, optional</span>
+<span class="sd">      ``True`` if you want the parshios according to the Israel</span>
+<span class="sd">      schedule (with only one day of Yom Tov). Defaults to ``False``.</span>
+<span class="sd">      </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    OrderedDict</span>
+<span class="sd">      An ordered dictionary with the date of each Shabbos</span>
+<span class="sd">      as the key mapped to the parsha as a string, or ``None`` for a</span>
+<span class="sd">      Shabbos with no parsha.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_gentable</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">israel</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">luachcal  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
