@@ -388,13 +388,14 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         """
         if self._jd is None:
             year = self.year
-            month = self.month + 1
+            month = self.month
             day = self.day
             if year < 0:
                 year += 1 
             if month < 3:
                 year -= 1
                 month += 12
+            month += 1
             a = year // 100
             b = 2 - a + a//4
             self._jd = (int(365.25*year) + 
