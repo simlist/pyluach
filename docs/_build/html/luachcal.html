@@ -52,8 +52,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-luachcal.__init__">
-<span id="luachcal-package"></span><h1>luachcal package<a class="headerlink" href="#module-luachcal.__init__" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-luachcal">
+<span id="luachcal-package"></span><h1>luachcal package<a class="headerlink" href="#module-luachcal" title="Permalink to this headline">¶</a></h1>
 <p>Luachcal is a Python package for manipulating Hebrew calendar dates and Hebrew-Gregorian conversions.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
@@ -346,15 +346,19 @@ the same date type as operated on.</td>
 
 <dl class="method">
 <dt id="luachcal.dates.GregorianDate.to_heb">
-<code class="descname">to_heb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#GregorianDate.to_heb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.GregorianDate.to_heb" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_heb</code><span class="sig-paren">(</span><em>night=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#GregorianDate.to_heb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.GregorianDate.to_heb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to Hebrew date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent Hebrew date instance.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>night</strong> (<em>bool, optional</em>) &#8211; True if it is after nightfall of the secular date but before
+midnight else False (as a Hebrew date begins at nightfall).
+Defaults to false.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.HebrewDate" title="luachcal.dates.HebrewDate">HebrewDate</a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The equivalent Hebrew date instance.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.HebrewDate" title="luachcal.dates.HebrewDate">HebrewDate</a></td>
 </tr>
 </tbody>
 </table>
@@ -1025,10 +1029,6 @@ Shabbos with no parsha.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-luachcal">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-luachcal" title="Permalink to this headline">¶</a></h2>
-<p>Luachcal is a Python package for manipulating Hebrew calendar dates and Hebrew-Gregorian conversions.</p>
-</div>
 </div>
 
 
@@ -1047,7 +1047,6 @@ Shabbos with no parsha.</p>
 </li>
 <li><a class="reference internal" href="#module-luachcal.hebrewcal">luachcal.hebrewcal module</a></li>
 <li><a class="reference internal" href="#module-luachcal.parshios">luachcal.parshios module</a></li>
-<li><a class="reference internal" href="#module-luachcal">Module contents</a></li>
 </ul>
 </li>
 </ul>
