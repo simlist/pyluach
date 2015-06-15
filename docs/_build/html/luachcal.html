@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>luachcal package &mdash; luachcal  documentation</title>
+    <title>luachcal package &mdash; luachcal 0.1.0dev documentation</title>
     
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '',
+        VERSION:     '0.1.0dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,8 +23,12 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="luachcal  documentation" href="index.html" />
-    <link rel="prev" title="Welcome to luachcal’s documentation!" href="index.html" /> 
+    <link rel="top" title="luachcal 0.1.0dev documentation" href="index.html" />
+    <link rel="prev" title="Welcome to luachcal’s documentation!" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -39,7 +43,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to luachcal’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">luachcal  documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">luachcal 0.1.0dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -48,8 +52,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="luachcal-package">
-<h1>luachcal package<a class="headerlink" href="#luachcal-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-luachcal.__init__">
+<span id="luachcal-package"></span><h1>luachcal package<a class="headerlink" href="#module-luachcal.__init__" title="Permalink to this headline">¶</a></h1>
+<p>Luachcal is a Python package for manipulating Hebrew calendar dates and Hebrew-Gregorian conversions.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -66,11 +71,11 @@ manipulating several date types.</p>
 <li>GregorianDate</li>
 <li>HebrewDate</li>
 </ul>
-</div>
-<div class="section" id="note">
-<h3>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h3>
-<p>All instances of the classes in this module should be treated as read
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All instances of the classes in this module should be treated as read
 only. No attributes should be changed once they&#8217;re created.</p>
+</div>
 <dl class="class">
 <dt id="luachcal.dates.BaseDate">
 <em class="property">class </em><code class="descclassname">luachcal.dates.</code><code class="descname">BaseDate</code><a class="reference internal" href="_modules/luachcal/dates.html#BaseDate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.BaseDate" title="Permalink to this definition">¶</a></dt>
@@ -119,18 +124,6 @@ difference between date1 and date2</td>
 <p>Any child of BaseDate that implements a <code class="docutils literal"><span class="pre">jd</span></code> attribute
 representing the Julian Day of that date can be compared to and
 diffed with any other valid date type.</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.BaseDate.shabbos" title="luachcal.dates.BaseDate.shabbos"><code class="xref py py-obj docutils literal"><span class="pre">shabbos</span></code></a>()</td>
-<td>Return the Shabbos on or following the date.</td>
-</tr>
-</tbody>
-</table>
 <dl class="method">
 <dt id="luachcal.dates.BaseDate.shabbos">
 <code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#BaseDate.shabbos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.BaseDate.shabbos" title="Permalink to this definition">¶</a></dt>
@@ -139,12 +132,10 @@ diffed with any other valid date type.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Date</p>
-<blockquote class="last">
-<div><p>Self if it&#8217;s Shabbos or else the following Shabbos as
-the same date type as operated on.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Self if it&#8217;s Shabbos or else the following Shabbos as
+the same date type as operated on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Date</td>
 </tr>
 </tbody>
 </table>
@@ -161,52 +152,40 @@ the same date type as operated on.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Year</strong> : int</p>
-<p><strong>Month</strong> : int</p>
-<p class="last"><strong>day</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Year</strong> (<em>int</em>) &#8211; </li>
+<li><strong>Month</strong> (<em>int</em>) &#8211; </li>
+<li><strong>day</strong> (<em>int</em>) &#8211; </li>
+</ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>year</td>
-<td>(int)</td>
-</tr>
-<tr class="row-even"><td>month</td>
-<td>(int)</td>
-</tr>
-<tr class="row-odd"><td>day</td>
-<td>(int)</td>
-</tr>
-<tr class="row-even"><td>jd</td>
-<td>(float) The equivelant Julian day at midnight.</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.CalendarDateMixin.dict" title="luachcal.dates.CalendarDateMixin.dict"><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code></a>()</td>
-<td>Return the date as a dictionary.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.dates.CalendarDateMixin.tuple" title="luachcal.dates.CalendarDateMixin.tuple"><code class="xref py py-obj docutils literal"><span class="pre">tuple</span></code></a>()</td>
-<td>Return date as tuple.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.CalendarDateMixin.weekday" title="luachcal.dates.CalendarDateMixin.weekday"><code class="xref py py-obj docutils literal"><span class="pre">weekday</span></code></a>()</td>
-<td>Return day of week as an integer.</td>
-</tr>
-</tbody>
-</table>
+<dl class="attribute">
+<dt id="luachcal.dates.CalendarDateMixin.year">
+<code class="descname">year</code><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.year" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.dates.CalendarDateMixin.month">
+<code class="descname">month</code><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.month" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.dates.CalendarDateMixin.day">
+<code class="descname">day</code><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.day" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.dates.CalendarDateMixin.jd">
+<code class="descname">jd</code><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.jd" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em></p>
+<p>The equivelant Julian day at midnight.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="luachcal.dates.CalendarDateMixin.dict">
 <code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#CalendarDateMixin.dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.dict" title="Permalink to this definition">¶</a></dt>
@@ -215,12 +194,10 @@ the same date type as operated on.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dict</p>
-<blockquote class="last">
-<div><p>A dictionary in the form 
-<code class="docutils literal"><span class="pre">{'year':</span> <span class="pre">int,</span> <span class="pre">'month':</span> <span class="pre">int,</span> <span class="pre">'day':</span> <span class="pre">int}</span></code>.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary in the form
+<code class="docutils literal"><span class="pre">{'year':</span> <span class="pre">int,</span> <span class="pre">'month':</span> <span class="pre">int,</span> <span class="pre">'day':</span> <span class="pre">int}</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.CalendarDateMixin.dict" title="luachcal.dates.CalendarDateMixin.dict">dict</a></td>
 </tr>
 </tbody>
 </table>
@@ -234,11 +211,9 @@ the same date type as operated on.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple of ints</p>
-<blockquote class="last">
-<div><p>A tuple of ints in the form <code class="docutils literal"><span class="pre">(year,</span> <span class="pre">month,</span> <span class="pre">day)</span></code>.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple of ints in the form <code class="docutils literal"><span class="pre">(year,</span> <span class="pre">month,</span> <span class="pre">day)</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple of ints</td>
 </tr>
 </tbody>
 </table>
@@ -252,12 +227,10 @@ the same date type as operated on.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
-<blockquote class="last">
-<div><p>An integer representing the day of the week with Sunday as 1
-through Saturday as 7.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An integer representing the day of the week with Sunday as 1
+through Saturday as 7.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
@@ -276,82 +249,58 @@ infinitely extended in both directions.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>year</strong> : int</p>
-<p><strong>month</strong> : int</p>
-<p><strong>day</strong> : int</p>
-<p><strong>jd</strong> : float, optional</p>
-<blockquote class="last">
-<div><p>This parameter should not be assigned manually.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>year</strong> (<em>int</em>) &#8211; </li>
+<li><strong>month</strong> (<em>int</em>) &#8211; </li>
+<li><strong>day</strong> (<em>int</em>) &#8211; </li>
+<li><strong>jd</strong> (<em>float, optional</em>) &#8211; This parameter should not be assigned manually.</li>
+</ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Attributes</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
+<dl class="attribute">
+<dt id="luachcal.dates.GregorianDate.year">
+<code class="descname">year</code><a class="headerlink" href="#luachcal.dates.GregorianDate.year" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.dates.GregorianDate.month">
+<code class="descname">month</code><a class="headerlink" href="#luachcal.dates.GregorianDate.month" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.dates.GregorianDate.day">
+<code class="descname">day</code><a class="headerlink" href="#luachcal.dates.GregorianDate.day" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.dates.GregorianDate.jd">
+<code class="descname">jd</code><a class="headerlink" href="#luachcal.dates.GregorianDate.jd" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float(property)</em></p>
+<p>The corresponding Julian Day Number at midnight (as <em>n</em>.5).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luachcal.dates.GregorianDate.dict">
+<code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.GregorianDate.dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the date as a dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.GregorianDate.jd" title="luachcal.dates.GregorianDate.jd"><code class="xref py py-obj docutils literal"><span class="pre">jd</span></code></a></td>
-<td>Return the corresponding Julian Day.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary in the form
+<code class="docutils literal"><span class="pre">{'year':</span> <span class="pre">int,</span> <span class="pre">'month':</span> <span class="pre">int,</span> <span class="pre">'day':</span> <span class="pre">int}</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.CalendarDateMixin.dict" title="luachcal.dates.CalendarDateMixin.dict">dict</a></td>
 </tr>
 </tbody>
 </table>
-<table border="1" class="docutils">
-<colgroup>
-<col width="33%" />
-<col width="67%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>year</td>
-<td>(int)</td>
-</tr>
-<tr class="row-even"><td>month</td>
-<td>(int)</td>
-</tr>
-<tr class="row-odd"><td>day</td>
-<td>(int)</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code>()</td>
-<td>Return the date as a dictionary.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.dates.GregorianDate.is_leap" title="luachcal.dates.GregorianDate.is_leap"><code class="xref py py-obj docutils literal"><span class="pre">is_leap</span></code></a>()</td>
-<td>Return if the date is in a leap year</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">shabbos</span></code>()</td>
-<td>Return the Shabbos on or following the date.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.dates.GregorianDate.to_heb" title="luachcal.dates.GregorianDate.to_heb"><code class="xref py py-obj docutils literal"><span class="pre">to_heb</span></code></a>()</td>
-<td>Convert to Hebrew date.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.GregorianDate.to_jd" title="luachcal.dates.GregorianDate.to_jd"><code class="xref py py-obj docutils literal"><span class="pre">to_jd</span></code></a>()</td>
-<td>Convert to a Julian day.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.dates.GregorianDate.to_pydate" title="luachcal.dates.GregorianDate.to_pydate"><code class="xref py py-obj docutils literal"><span class="pre">to_pydate</span></code></a>()</td>
-<td>Convert to a standard library date.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.GregorianDate.today" title="luachcal.dates.GregorianDate.today"><code class="xref py py-obj docutils literal"><span class="pre">today</span></code></a>()</td>
-<td>Return a GregorianDate instance for the current day.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">tuple</span></code>()</td>
-<td>Return date as tuple.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">weekday</span></code>()</td>
-<td>Return day of week as an integer.</td>
-</tr>
-</tbody>
-</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="luachcal.dates.GregorianDate.is_leap">
 <code class="descname">is_leap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#GregorianDate.is_leap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.GregorianDate.is_leap" title="Permalink to this definition">¶</a></dt>
@@ -360,24 +309,39 @@ infinitely extended in both directions.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
-<blockquote class="last">
-<div><p>True if the date is in a leap year, False otherwise.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the date is in a leap year, False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.GregorianDate.jd">
-<code class="descname">jd</code><a class="headerlink" href="#luachcal.dates.GregorianDate.jd" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">jd</code></dt>
 <dd><p>Return the corresponding Julian Day.</p>
 <p>This property retrieves the corresponding Julian Day as a float
 if it was passed into the init method or already calculated, and
 if it wasn&#8217;t, it calculates it and saves it for later retrievals
 and returns it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luachcal.dates.GregorianDate.shabbos">
+<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.GregorianDate.shabbos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Shabbos on or following the date.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Self if it&#8217;s Shabbos or else the following Shabbos as
+the same date type as operated on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Date</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -388,11 +352,9 @@ and returns it.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">HebrewDate</p>
-<blockquote class="last">
-<div><p>The equivalent Hebrew date instance.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent Hebrew date instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.HebrewDate" title="luachcal.dates.HebrewDate">HebrewDate</a></td>
 </tr>
 </tbody>
 </table>
@@ -406,11 +368,9 @@ and returns it.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">JulianDay</p>
-<blockquote class="last">
-<div><p>The equivalent JulianDay instance.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent JulianDay instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.JulianDay" title="luachcal.dates.JulianDay">JulianDay</a></td>
 </tr>
 </tbody>
 </table>
@@ -424,11 +384,9 @@ and returns it.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">datetime.date</p>
-<blockquote class="last">
-<div><p>The equivalent datetime.date instance.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent datetime.date instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">datetime.date</td>
 </tr>
 </tbody>
 </table>
@@ -444,11 +402,42 @@ date.today() method to get the date from the timestamp.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">GregorianDate</p>
-<blockquote class="last">
-<div><p>The current Gregorian date from the computer&#8217;s timestamp.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The current Gregorian date from the computer&#8217;s timestamp.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.GregorianDate" title="luachcal.dates.GregorianDate">GregorianDate</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luachcal.dates.GregorianDate.tuple">
+<code class="descname">tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.GregorianDate.tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return date as tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple of ints in the form <code class="docutils literal"><span class="pre">(year,</span> <span class="pre">month,</span> <span class="pre">day)</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple of ints</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luachcal.dates.GregorianDate.weekday">
+<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.GregorianDate.weekday" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return day of week as an integer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An integer representing the day of the week with Sunday as 1
+through Saturday as 7.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
@@ -465,84 +454,75 @@ date.today() method to get the date from the timestamp.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>year</strong> : int</p>
-<blockquote>
-<div><p>The Hebrew year. If the year is less than 1 it will raise a
-ValueError.</p>
-</div></blockquote>
-<p><strong>month</strong> : int</p>
-<blockquote>
-<div><p>The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>year</strong> (<em>int</em>) &#8211; The Hebrew year. If the year is less than 1 it will raise a
+ValueError.</li>
+<li><strong>month</strong> (<em>int</em>) &#8211; The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
 If there is a second Adar in the year it is represented as 13.
-A month below 1 or above the last month will raise a ValueError.</p>
-</div></blockquote>
-<p><strong>day</strong> : int</p>
-<blockquote>
-<div><p>The Hebrew day of the month. An invalid day will raise a
-ValueError.</p>
-</div></blockquote>
-<p><strong>jd</strong> : float, optional</p>
-<blockquote class="last">
-<div><p>This parameter should not be assigned manually.</p>
-</div></blockquote>
+A month below 1 or above the last month will raise a ValueError.</li>
+<li><strong>day</strong> (<em>int</em>) &#8211; The Hebrew day of the month. An invalid day will raise a
+ValueError.</li>
+<li><strong>jd</strong> (<em>float, optional</em>) &#8211; This parameter should not be assigned manually.</li>
+</ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="4%" />
-<col width="96%" />
-</colgroup>
+<dl class="attribute">
+<dt id="luachcal.dates.HebrewDate.year">
+<code class="descname">year</code><a class="headerlink" href="#luachcal.dates.HebrewDate.year" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.dates.HebrewDate.month">
+<code class="descname">month</code><a class="headerlink" href="#luachcal.dates.HebrewDate.month" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+<p>The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
+If there is a second Adar it is represented as 13.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.dates.HebrewDate.day">
+<code class="descname">day</code><a class="headerlink" href="#luachcal.dates.HebrewDate.day" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+<p>The day of the month.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luachcal.dates.HebrewDate.dict">
+<code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.HebrewDate.dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the date as a dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>year</td>
-<td>(int)</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary in the form
+<code class="docutils literal"><span class="pre">{'year':</span> <span class="pre">int,</span> <span class="pre">'month':</span> <span class="pre">int,</span> <span class="pre">'day':</span> <span class="pre">int}</span></code>.</td>
 </tr>
-<tr class="row-even"><td>month</td>
-<td>(int) The Hebrew month starting with Nissan as 1 (and Tishrei as 7). If there is a second Adar it is represented as 13.</td>
-</tr>
-<tr class="row-odd"><td>day</td>
-<td>(int) The day of the month.</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.CalendarDateMixin.dict" title="luachcal.dates.CalendarDateMixin.dict">dict</a></td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
+</dd></dl>
+
+<dl class="method">
+<dt id="luachcal.dates.HebrewDate.shabbos">
+<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.HebrewDate.shabbos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Shabbos on or following the date.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">dict</span></code>()</td>
-<td>Return the date as a dictionary.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Self if it&#8217;s Shabbos or else the following Shabbos as
+the same date type as operated on.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">shabbos</span></code>()</td>
-<td>Return the Shabbos on or following the date.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.HebrewDate.to_greg" title="luachcal.dates.HebrewDate.to_greg"><code class="xref py py-obj docutils literal"><span class="pre">to_greg</span></code></a>()</td>
-<td>Convert to a Gregorian date.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">to_heb</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.HebrewDate.to_jd" title="luachcal.dates.HebrewDate.to_jd"><code class="xref py py-obj docutils literal"><span class="pre">to_jd</span></code></a>()</td>
-<td>Convert to a Julian day.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.dates.HebrewDate.to_pydate" title="luachcal.dates.HebrewDate.to_pydate"><code class="xref py py-obj docutils literal"><span class="pre">to_pydate</span></code></a>()</td>
-<td>Convert to a standard library date.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.HebrewDate.today" title="luachcal.dates.HebrewDate.today"><code class="xref py py-obj docutils literal"><span class="pre">today</span></code></a>()</td>
-<td>Return HebrewDate instance for the current day.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">tuple</span></code>()</td>
-<td>Return date as tuple.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">weekday</span></code>()</td>
-<td>Return day of week as an integer.</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Date</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
 <dl class="method">
 <dt id="luachcal.dates.HebrewDate.to_greg">
 <code class="descname">to_greg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#HebrewDate.to_greg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.HebrewDate.to_greg" title="Permalink to this definition">¶</a></dt>
@@ -551,11 +531,9 @@ ValueError.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">GregorianDate</p>
-<blockquote class="last">
-<div><p>The equivalent GregorianDate instance.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent GregorianDate instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.GregorianDate" title="luachcal.dates.GregorianDate">GregorianDate</a></td>
 </tr>
 </tbody>
 </table>
@@ -569,11 +547,9 @@ ValueError.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">JulianDay</p>
-<blockquote class="last">
-<div><p>The equivalent JulianDay instance.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent JulianDay instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.JulianDay" title="luachcal.dates.JulianDay">JulianDay</a></td>
 </tr>
 </tbody>
 </table>
@@ -587,11 +563,9 @@ ValueError.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">datetime.date</p>
-<blockquote class="last">
-<div><p>The equivalent datetime.date instance.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent datetime.date instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">datetime.date</td>
 </tr>
 </tbody>
 </table>
@@ -607,11 +581,42 @@ date.today() method to get the date from the timestamp.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">HebrewDate</p>
-<blockquote class="last">
-<div><p>The current Hebrew date from the computer&#8217;s timestamp.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The current Hebrew date from the computer&#8217;s timestamp.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.HebrewDate" title="luachcal.dates.HebrewDate">HebrewDate</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luachcal.dates.HebrewDate.tuple">
+<code class="descname">tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.HebrewDate.tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return date as tuple.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple of ints in the form <code class="docutils literal"><span class="pre">(year,</span> <span class="pre">month,</span> <span class="pre">day)</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple of ints</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luachcal.dates.HebrewDate.weekday">
+<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.HebrewDate.weekday" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return day of week as an integer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An integer representing the day of the week with Sunday as 1
+through Saturday as 7.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
@@ -628,57 +633,42 @@ date.today() method to get the date from the timestamp.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>day</strong> : float or int</p>
-<blockquote class="last">
-<div><p>The julian day. Note that Julian days start at noon so day
-number 10 is represented as 9.5 which is day 10 at midnight.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>day</strong> (<em>float or int</em>) &#8211; The julian day. Note that Julian days start at noon so day
+number 10 is represented as 9.5 which is day 10 at midnight.</td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="5%" />
-<col width="95%" />
-</colgroup>
+<dl class="attribute">
+<dt id="luachcal.dates.JulianDay.day">
+<code class="descname">day</code><a class="headerlink" href="#luachcal.dates.JulianDay.day" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em></p>
+<p>The Julian Day Number at midnight (as <em>n</em>.5)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.dates.JulianDay.jd">
+<code class="descname">jd</code><a class="headerlink" href="#luachcal.dates.JulianDay.jd" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em></p>
+<p>Alias for day.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luachcal.dates.JulianDay.shabbos">
+<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.JulianDay.shabbos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Shabbos on or following the date.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td>day</td>
-<td>(float) The Julian Day Number at midnight (as <em>n</em>.5)</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Self if it&#8217;s Shabbos or else the following Shabbos as
+the same date type as operated on.</td>
 </tr>
-<tr class="row-even"><td>jd</td>
-<td>(float) Alias for day.</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">shabbos</span></code>()</td>
-<td>Return the Shabbos on or following the date.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.dates.JulianDay.to_greg" title="luachcal.dates.JulianDay.to_greg"><code class="xref py py-obj docutils literal"><span class="pre">to_greg</span></code></a>()</td>
-<td>Convert JulianDay to a Gregorian Date.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.JulianDay.to_heb" title="luachcal.dates.JulianDay.to_heb"><code class="xref py py-obj docutils literal"><span class="pre">to_heb</span></code></a>()</td>
-<td>Convert to a Hebrew date.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.dates.JulianDay.to_pydate" title="luachcal.dates.JulianDay.to_pydate"><code class="xref py py-obj docutils literal"><span class="pre">to_pydate</span></code></a>()</td>
-<td>Convert to a datetime.date object.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.dates.JulianDay.today" title="luachcal.dates.JulianDay.today"><code class="xref py py-obj docutils literal"><span class="pre">today</span></code></a>()</td>
-<td>Return instance of current Julian day from timestamp.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.dates.JulianDay.weekday" title="luachcal.dates.JulianDay.weekday"><code class="xref py py-obj docutils literal"><span class="pre">weekday</span></code></a>()</td>
-<td>Return weekday of date.</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Date</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
 <dl class="method">
 <dt id="luachcal.dates.JulianDay.to_greg">
 <code class="descname">to_greg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#JulianDay.to_greg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.JulianDay.to_greg" title="Permalink to this definition">¶</a></dt>
@@ -687,11 +677,9 @@ number 10 is represented as 9.5 which is day 10 at midnight.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">GregorianDate</p>
-<blockquote class="last">
-<div><p>The equivalent Gregorian date instance.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent Gregorian date instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.GregorianDate" title="luachcal.dates.GregorianDate">GregorianDate</a></td>
 </tr>
 </tbody>
 </table>
@@ -707,11 +695,9 @@ number 10 is represented as 9.5 which is day 10 at midnight.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">HebrewDate</p>
-<blockquote class="last">
-<div><p>The equivalent Hebrew date instance.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent Hebrew date instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.HebrewDate" title="luachcal.dates.HebrewDate">HebrewDate</a></td>
 </tr>
 </tbody>
 </table>
@@ -725,11 +711,9 @@ number 10 is represented as 9.5 which is day 10 at midnight.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">datetime.date</p>
-<blockquote class="last">
-<div><p>A standard library datetime.date instance.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A standard library datetime.date instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">datetime.date</td>
 </tr>
 </tbody>
 </table>
@@ -744,12 +728,10 @@ number 10 is represented as 9.5 which is day 10 at midnight.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">JulianDay</p>
-<blockquote class="last">
-<div><p>A JulianDay instance representing the current Julian day from
-the timestamp.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A JulianDay instance representing the current Julian day from
+the timestamp.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.JulianDay" title="luachcal.dates.JulianDay">JulianDay</a></td>
 </tr>
 </tbody>
 </table>
@@ -763,11 +745,9 @@ the timestamp.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
-<blockquote class="last">
-<div><p>The weekday with Sunday as 1 through Saturday as 7.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The weekday with Sunday as 1 through Saturday as 7.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
@@ -788,53 +768,51 @@ the timestamp.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>year</strong> : int</p>
-<p><strong>month</strong> : int</p>
-<blockquote class="last">
-<div><p>The month as an integer starting with 7 for Tishrei through 13
-if necessary for Adar Sheni and then 1-6 for Nissan - Elul.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>year</strong> (<em>int</em>) &#8211; </li>
+<li><strong>month</strong> (<em>int</em>) &#8211; The month as an integer starting with 7 for Tishrei through 13
+if necessary for Adar Sheni and then 1-6 for Nissan - Elul.</li>
+</ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="4%" />
-<col width="96%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>year</td>
-<td>(int) The Hebrew year.</td>
-</tr>
-<tr class="row-even"><td>month</td>
-<td>(int) The month as an integer starting with 7 for Tishrei through 13 if necessary for Adar Sheni and then 1-6 for Nissan - Elul.</td>
-</tr>
-<tr class="row-odd"><td>name</td>
-<td>(str) The name of the month.</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.hebrewcal.Month.iterdates" title="luachcal.hebrewcal.Month.iterdates"><code class="xref py py-obj docutils literal"><span class="pre">iterdates</span></code></a>()</td>
-<td>Return iterator that yields an instance of HebrewDate.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.hebrewcal.Month.starting_weekday" title="luachcal.hebrewcal.Month.starting_weekday"><code class="xref py py-obj docutils literal"><span class="pre">starting_weekday</span></code></a>()</td>
-<td>Return first weekday of the month.</td>
-</tr>
-</tbody>
-</table>
+<dl class="attribute">
+<dt id="luachcal.hebrewcal.Month.year">
+<code class="descname">year</code><a class="headerlink" href="#luachcal.hebrewcal.Month.year" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+<p>The Hebrew year.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.hebrewcal.Month.month">
+<code class="descname">month</code><a class="headerlink" href="#luachcal.hebrewcal.Month.month" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+<p>The month as an integer starting with 7 for Tishrei through 13
+if necessary for Adar Sheni and then 1-6 for Nissan - Elul.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.hebrewcal.Month.name">
+<code class="descname">name</code><a class="headerlink" href="#luachcal.hebrewcal.Month.name" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em></p>
+<p>The name of the month.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="luachcal.hebrewcal.Month.iterdates">
 <code class="descname">iterdates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Month.iterdates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Month.iterdates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return iterator that yields an instance of HebrewDate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><code class="docutils literal"><span class="pre">HebrewDate</span></code> &#8211;
+The next Hebrew Date of the year starting the first day of
+Tishrei through the last day of Ellul.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -845,12 +823,10 @@ if necessary for Adar Sheni and then 1-6 for Nissan - Elul.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
-<blockquote class="last">
-<div><p>The weekday of the first day of the month starting with Sunday as 1
-through Saturday as 7.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The weekday of the first day of the month starting with Sunday as 1
+through Saturday as 7.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
@@ -867,63 +843,71 @@ through Saturday as 7.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>year</strong> : int</p>
-<blockquote class="last">
-<div><p>A Hebrew year.</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>year</strong> (<em>int</em>) &#8211; A Hebrew year.</td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="7%" />
-<col width="93%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>year</td>
-<td>(int) The hebrew year.</td>
-</tr>
-<tr class="row-even"><td>leap</td>
-<td>(bool) True if the year is a leap year else false.</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.hebrewcal.Year.iterdates" title="luachcal.hebrewcal.Year.iterdates"><code class="xref py py-obj docutils literal"><span class="pre">iterdates</span></code></a>()</td>
-<td>Yield HebrewDate instance for each day of the year.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#luachcal.hebrewcal.Year.iterdays" title="luachcal.hebrewcal.Year.iterdays"><code class="xref py py-obj docutils literal"><span class="pre">iterdays</span></code></a>()</td>
-<td>Yield integer for each day of the year.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#luachcal.hebrewcal.Year.itermonths" title="luachcal.hebrewcal.Year.itermonths"><code class="xref py py-obj docutils literal"><span class="pre">itermonths</span></code></a>()</td>
-<td>Yield Month instance for each month of the year.</td>
-</tr>
-</tbody>
-</table>
+<dl class="attribute">
+<dt id="luachcal.hebrewcal.Year.year">
+<code class="descname">year</code><a class="headerlink" href="#luachcal.hebrewcal.Year.year" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em></p>
+<p>The hebrew year.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luachcal.hebrewcal.Year.leap">
+<code class="descname">leap</code><a class="headerlink" href="#luachcal.hebrewcal.Year.leap" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool</em></p>
+<p>True if the year is a leap year else false.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="luachcal.hebrewcal.Year.iterdates">
 <code class="descname">iterdates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Year.iterdates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Year.iterdates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield HebrewDate instance for each day of the year.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><code class="docutils literal"><span class="pre">HebrewDate</span></code> &#8211;
+The next date of the Hebrew calendar year starting with
+the first of Tishrei.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="luachcal.hebrewcal.Year.iterdays">
 <code class="descname">iterdays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Year.iterdays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Year.iterdays" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield integer for each day of the year.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><em>int</em> &#8211;
+An integer beginning with 1 representing the next day of
+the year.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="luachcal.hebrewcal.Year.itermonths">
 <code class="descname">itermonths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Year.itermonths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Year.itermonths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield Month instance for each month of the year.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yields:</th><td class="field-body"><em>Month</em> &#8211;
+The next month in the Hebrew calendar year as a
+<code class="docutils literal"><span class="pre">luachcal.hebrewcal.Month</span></code> instance beginning with
+Tishrei and ending with Elul.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -938,23 +922,19 @@ holidays including fast days.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>date</strong> : <code class="docutils literal"><span class="pre">HebrewDate</span></code>, <code class="docutils literal"><span class="pre">GregorianDate</span></code>, or <code class="docutils literal"><span class="pre">JulianDay</span></code></p>
-<blockquote>
-<div><p>Any date that implements a <code class="docutils literal"><span class="pre">to_heb()</span></code> method which returns a
-<code class="docutils literal"><span class="pre">HebrewDate</span></code> can be used.</p>
-</div></blockquote>
-<p><strong>israel</strong> : boolian, optional</p>
-<blockquote>
-<div><p>True if you want the holidays according to the israel schedule.
-Defaults to <code class="docutils literal"><span class="pre">False</span></code>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>date</strong> (<code class="docutils literal"><span class="pre">HebrewDate</span></code>, <code class="docutils literal"><span class="pre">GregorianDate</span></code>, or <code class="docutils literal"><span class="pre">JulianDay</span></code>) &#8211; Any date that implements a <code class="docutils literal"><span class="pre">to_heb()</span></code> method which returns a
+<code class="docutils literal"><span class="pre">HebrewDate</span></code> can be used.</li>
+<li><strong>israel</strong> (<em>boolian, optional</em>) &#8211; True if you want the holidays according to the israel schedule.
+Defaults to <code class="docutils literal"><span class="pre">False</span></code>.</li>
+</ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str or <code class="docutils literal"><span class="pre">None</span></code></p>
-<blockquote class="last">
-<div><p>The name of the holiday or <code class="docutils literal"><span class="pre">None</span></code> if the given date is not
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The name of the holiday or <code class="docutils literal"><span class="pre">None</span></code> if the given date is not
 a Jewish holiday.</p>
-</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str or <code class="docutils literal"><span class="pre">None</span></code></p>
 </td>
 </tr>
 </tbody>
@@ -968,28 +948,24 @@ a Jewish holiday.</p>
 <dt id="luachcal.parshios.getparsha">
 <code class="descclassname">luachcal.parshios.</code><code class="descname">getparsha</code><span class="sig-paren">(</span><em>date</em>, <em>israel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/parshios.html#getparsha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.parshios.getparsha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the parsha for a given date.</p>
-<p>Returns the parsha for the Shabbos on or following the given 
+<p>Returns the parsha for the Shabbos on or following the given
 date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>date</strong> : <code class="docutils literal"><span class="pre">HebrewDate</span></code>, <code class="docutils literal"><span class="pre">GregorianDate</span></code>, or <code class="docutils literal"><span class="pre">JulianDay</span></code></p>
-<blockquote>
-<div><p>This date does not have to be a Shabbos.</p>
-</div></blockquote>
-<p><strong>israel</strong> : bool, optional</p>
-<blockquote>
-<div><p><code class="docutils literal"><span class="pre">True</span></code> if you want the parsha according to the Israel schedule
-(with only one day of Yom Tov). Defaults to <code class="docutils literal"><span class="pre">False</span></code>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>date</strong> (<code class="docutils literal"><span class="pre">HebrewDate</span></code>, <code class="docutils literal"><span class="pre">GregorianDate</span></code>, or <code class="docutils literal"><span class="pre">JulianDay</span></code>) &#8211; This date does not have to be a Shabbos.</li>
+<li><strong>israel</strong> (<em>bool, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> if you want the parsha according to the Israel schedule
+(with only one day of Yom Tov). Defaults to <code class="docutils literal"><span class="pre">False</span></code>.</li>
+</ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">str or <code class="docutils literal"><span class="pre">None</span></code></p>
-<blockquote class="last">
-<div><p>The name of the parsha, or <code class="docutils literal"><span class="pre">None</span></code> if the Shabbos doesn&#8217;t have
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The name of the parsha, or <code class="docutils literal"><span class="pre">None</span></code> if the Shabbos doesn&#8217;t have
 a parsha (i.e. it&#8217;s on Yom Tov).</p>
-</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str or <code class="docutils literal"><span class="pre">None</span></code></p>
 </td>
 </tr>
 </tbody>
@@ -1004,15 +980,17 @@ a parsha (i.e. it&#8217;s on Yom Tov).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>year</strong> : int</p>
-<blockquote>
-<div><p>The Hebrew year to get the parshios for.</p>
-</div></blockquote>
-<p><strong>israel</strong> : bool, optional</p>
-<blockquote class="last">
-<div><p><code class="docutils literal"><span class="pre">True</span></code> if you want the parsha according to the Israel schedule
-(with only one day of Yom Tov). Defaults to <code class="docutils literal"><span class="pre">False</span></code></p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>year</strong> (<em>int</em>) &#8211; The Hebrew year to get the parshios for.</li>
+<li><strong>israel</strong> (<em>bool, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> if you want the parsha according to the Israel schedule
+(with only one day of Yom Tov). Defaults to <code class="docutils literal"><span class="pre">False</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Yields:</th><td class="field-body"><p class="first last"><em>str</em> &#8211;
+The name of the parsha for the next Shabbos in the given year.
+Yields <code class="docutils literal"><span class="pre">None</span></code> for a Shabbos that doesn&#8217;t have its own parsha
+(i.e. it occurs on a yom tov).</p>
 </td>
 </tr>
 </tbody>
@@ -1027,23 +1005,19 @@ a parsha (i.e. it&#8217;s on Yom Tov).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>year</strong> : int</p>
-<blockquote>
-<div><p>The Hebrew year to get the parshios for.</p>
-</div></blockquote>
-<p><strong>israel</strong> : bool, optional</p>
-<blockquote>
-<div><p><code class="docutils literal"><span class="pre">True</span></code> if you want the parshios according to the Israel
-schedule (with only one day of Yom Tov). Defaults to <code class="docutils literal"><span class="pre">False</span></code>.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>year</strong> (<em>int</em>) &#8211; The Hebrew year to get the parshios for.</li>
+<li><strong>israel</strong> (<em>bool, optional</em>) &#8211; <code class="docutils literal"><span class="pre">True</span></code> if you want the parshios according to the Israel
+schedule (with only one day of Yom Tov). Defaults to <code class="docutils literal"><span class="pre">False</span></code>.</li>
+</ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">OrderedDict</p>
-<blockquote class="last">
-<div><p>An ordered dictionary with the date of each Shabbos
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An ordered dictionary with the date of each Shabbos
 as the key mapped to the parsha as a string, or <code class="docutils literal"><span class="pre">None</span></code> for a
 Shabbos with no parsha.</p>
-</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">OrderedDict</p>
 </td>
 </tr>
 </tbody>
@@ -1069,7 +1043,6 @@ Shabbos with no parsha.</p>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-luachcal.dates">luachcal.dates module</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
-<li><a class="reference internal" href="#note">Note</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-luachcal.hebrewcal">luachcal.hebrewcal module</a></li>
@@ -1106,24 +1079,20 @@ Shabbos with no parsha.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Welcome to luachcal’s documentation!"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">luachcal  documentation</a> &raquo;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2015, Simlist.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
+      |
+      <a href="_sources/luachcal.txt"
+          rel="nofollow">Page source</a></li>
     </div>
-    <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
-    </div>
+
+    
+
+    
   </body>
 </html>

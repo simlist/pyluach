@@ -1,5 +1,7 @@
 luachcal package
 ================
+.. automodule:: luachcal
+    :members:
 
 Submodules
 ----------
@@ -9,7 +11,7 @@ luachcal.dates module
 
 .. automodule:: luachcal.dates
     :members:
-    :show-inheritance:
+	:show-inheritance:
 
 luachcal.hebrewcal module
 -------------------------
@@ -22,13 +24,5 @@ luachcal.parshios module
 ------------------------
 
 .. automodule:: luachcal.parshios
-    :members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: luachcal
     :members:
     :show-inheritance:
