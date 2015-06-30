@@ -192,7 +192,7 @@ class CalendarDateMixin(object):
         
         Returns
         -------
-        dict
+        Dict
           A dictionary in the form 
           ``{'year': int, 'month': int, 'day': int}``.
         """
@@ -379,12 +379,17 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     
     @property
     def jd(self):
-        """Return the corresponding Julian Day.
+        """Return the corresponding Julian day number.
         
         This property retrieves the corresponding Julian Day as a float
         if it was passed into the init method or already calculated, and
         if it wasn't, it calculates it and saves it for later retrievals
         and returns it.
+
+        Returns
+        -------
+        float
+          The Julian day number at midnight.
         """
         if self._jd is None:
             year = self.year
@@ -539,6 +544,19 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     
     @property
     def jd(self):
+        """Return the corresponding Julian day number.
+        
+        This property retrieves the corresponding Julian Day as a float
+        if it was passed into the init method or already calculated, and
+        if it wasn't, it calculates it, saves it for later retrievals,
+        and returns it.
+
+        Returns
+        -------
+        float
+          The Julian day number at midnight.
+
+        """
         if self._jd is None:
             months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
             if not HebrewDate._is_leap(self.year):
