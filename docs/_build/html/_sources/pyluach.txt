@@ -1,28 +1,28 @@
-luachcal package
+pyluach package
 ================
-.. automodule:: luachcal
+.. automodule:: pyluach
     :members:
 
 Submodules
 ----------
 
-luachcal.dates module
+pyluach.dates module
 ---------------------
 
-.. automodule:: luachcal.dates
+.. automodule:: pyluach.dates
     :members:
 	:show-inheritance:
 
-luachcal.hebrewcal module
+pyluach.hebrewcal module
 -------------------------
 
-.. automodule:: luachcal.hebrewcal
+.. automodule:: pyluach.hebrewcal
     :members:
     :show-inheritance:
 
-luachcal.parshios module
+pyluach.parshios module
 ------------------------
 
-.. automodule:: luachcal.parshios
+.. automodule:: pyluach.parshios
     :members:
     :show-inheritance:

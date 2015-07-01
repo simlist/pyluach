@@ -3,7 +3,7 @@
 import unittest
 from operator import gt, lt, eq, ne, ge, le
 
-from luachcal import dates
+from pyluach import dates
 
 
 KNOWN_VALUES = {(2009, 8, 21): (5769, 6, 1),

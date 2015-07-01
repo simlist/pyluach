@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>luachcal package &mdash; luachcal 0.1.0dev documentation</title>
+    <title>pyluach package &mdash; pyluach 0.2.0dev documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.0dev',
+        VERSION:     '0.2.0dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="luachcal 0.1.0dev documentation" href="index.html" />
+    <link rel="top" title="pyluach 0.2.0dev documentation" href="index.html" />
     <link rel="prev" title="Welcome to luachcal’s documentation!" href="index.html" />
    
   
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to luachcal’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">luachcal 0.1.0dev documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyluach 0.2.0dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,14 +52,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-luachcal">
-<span id="luachcal-package"></span><h1>luachcal package<a class="headerlink" href="#module-luachcal" title="Permalink to this headline">¶</a></h1>
-<p>Luachcal is a Python package for manipulating Hebrew calendar dates and Hebrew-Gregorian conversions.</p>
+  <div class="section" id="module-pyluach">
+<span id="pyluach-package"></span><h1>pyluach package<a class="headerlink" href="#module-pyluach" title="Permalink to this headline">¶</a></h1>
+<p>Pyluach is a Python package for manipulating Hebrew calendar dates and Hebrew-Gregorian conversions.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-luachcal.dates">
-<span id="luachcal-dates-module"></span><h2>luachcal.dates module<a class="headerlink" href="#module-luachcal.dates" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-pyluach.dates">
+<span id="pyluach-dates-module"></span><h2>pyluach.dates module<a class="headerlink" href="#module-pyluach.dates" title="Permalink to this headline">¶</a></h2>
 <p>The dates module implements classes for representing and
 manipulating several date types.</p>
 <div class="section" id="classes">
@@ -77,8 +77,8 @@ manipulating several date types.</p>
 only. No attributes should be changed once they&#8217;re created.</p>
 </div>
 <dl class="class">
-<dt id="luachcal.dates.BaseDate">
-<em class="property">class </em><code class="descclassname">luachcal.dates.</code><code class="descname">BaseDate</code><a class="reference internal" href="_modules/luachcal/dates.html#BaseDate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.BaseDate" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.BaseDate">
+<em class="property">class </em><code class="descclassname">pyluach.dates.</code><code class="descname">BaseDate</code><a class="reference internal" href="_modules/pyluach/dates.html#BaseDate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.BaseDate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>BaseDate is a base class for all date types.</p>
 <p>It provides the following arithmetic and comparison operators
@@ -125,8 +125,8 @@ difference between date1 and date2</td>
 representing the Julian Day of that date can be compared to and
 diffed with any other valid date type.</p>
 <dl class="method">
-<dt id="luachcal.dates.BaseDate.shabbos">
-<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#BaseDate.shabbos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.BaseDate.shabbos" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.BaseDate.shabbos">
+<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#BaseDate.shabbos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.BaseDate.shabbos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the Shabbos on or following the date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -144,8 +144,8 @@ the same date type as operated on.</td>
 </dd></dl>
 
 <dl class="class">
-<dt id="luachcal.dates.CalendarDateMixin">
-<em class="property">class </em><code class="descclassname">luachcal.dates.</code><code class="descname">CalendarDateMixin</code><span class="sig-paren">(</span><em>year</em>, <em>month</em>, <em>day</em>, <em>jd=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#CalendarDateMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.CalendarDateMixin" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.CalendarDateMixin">
+<em class="property">class </em><code class="descclassname">pyluach.dates.</code><code class="descname">CalendarDateMixin</code><span class="sig-paren">(</span><em>year</em>, <em>month</em>, <em>day</em>, <em>jd=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#CalendarDateMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.CalendarDateMixin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>CalendarDateMixin is a mixin for Hebrew and Gregorian dates.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -162,33 +162,33 @@ the same date type as operated on.</td>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="luachcal.dates.CalendarDateMixin.year">
-<code class="descname">year</code><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.year" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.CalendarDateMixin.year">
+<code class="descname">year</code><a class="headerlink" href="#pyluach.dates.CalendarDateMixin.year" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.CalendarDateMixin.month">
-<code class="descname">month</code><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.month" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.CalendarDateMixin.month">
+<code class="descname">month</code><a class="headerlink" href="#pyluach.dates.CalendarDateMixin.month" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.CalendarDateMixin.day">
-<code class="descname">day</code><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.day" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.CalendarDateMixin.day">
+<code class="descname">day</code><a class="headerlink" href="#pyluach.dates.CalendarDateMixin.day" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.CalendarDateMixin.jd">
-<code class="descname">jd</code><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.jd" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.CalendarDateMixin.jd">
+<code class="descname">jd</code><a class="headerlink" href="#pyluach.dates.CalendarDateMixin.jd" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>float</em></p>
 <p>The equivelant Julian day at midnight.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.CalendarDateMixin.dict">
-<code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#CalendarDateMixin.dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.dict" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.CalendarDateMixin.dict">
+<code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#CalendarDateMixin.dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.CalendarDateMixin.dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the date as a dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -204,8 +204,8 @@ the same date type as operated on.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.CalendarDateMixin.tuple">
-<code class="descname">tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#CalendarDateMixin.tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.tuple" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.CalendarDateMixin.tuple">
+<code class="descname">tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#CalendarDateMixin.tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.CalendarDateMixin.tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return date as tuple.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -220,8 +220,8 @@ the same date type as operated on.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.CalendarDateMixin.weekday">
-<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#CalendarDateMixin.weekday"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.CalendarDateMixin.weekday" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.CalendarDateMixin.weekday">
+<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#CalendarDateMixin.weekday"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.CalendarDateMixin.weekday" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return day of week as an integer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -239,9 +239,9 @@ through Saturday as 7.</td>
 </dd></dl>
 
 <dl class="class">
-<dt id="luachcal.dates.GregorianDate">
-<em class="property">class </em><code class="descclassname">luachcal.dates.</code><code class="descname">GregorianDate</code><span class="sig-paren">(</span><em>year</em>, <em>month</em>, <em>day</em>, <em>jd=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#GregorianDate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.GregorianDate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#luachcal.dates.BaseDate" title="luachcal.dates.BaseDate"><code class="xref py py-class docutils literal"><span class="pre">luachcal.dates.BaseDate</span></code></a>, <a class="reference internal" href="#luachcal.dates.CalendarDateMixin" title="luachcal.dates.CalendarDateMixin"><code class="xref py py-class docutils literal"><span class="pre">luachcal.dates.CalendarDateMixin</span></code></a></p>
+<dt id="pyluach.dates.GregorianDate">
+<em class="property">class </em><code class="descclassname">pyluach.dates.</code><code class="descname">GregorianDate</code><span class="sig-paren">(</span><em>year</em>, <em>month</em>, <em>day</em>, <em>jd=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#GregorianDate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.GregorianDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyluach.dates.BaseDate" title="pyluach.dates.BaseDate"><code class="xref py py-class docutils literal"><span class="pre">pyluach.dates.BaseDate</span></code></a>, <a class="reference internal" href="#pyluach.dates.CalendarDateMixin" title="pyluach.dates.CalendarDateMixin"><code class="xref py py-class docutils literal"><span class="pre">pyluach.dates.CalendarDateMixin</span></code></a></p>
 <p>A GregorianDate object represents a Gregorian date (year, month, day).</p>
 <p>This is an idealized date with the current Gregorian calendar
 infinitely extended in both directions.</p>
@@ -260,33 +260,33 @@ infinitely extended in both directions.</p>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="luachcal.dates.GregorianDate.year">
-<code class="descname">year</code><a class="headerlink" href="#luachcal.dates.GregorianDate.year" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.year">
+<code class="descname">year</code><a class="headerlink" href="#pyluach.dates.GregorianDate.year" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.GregorianDate.month">
-<code class="descname">month</code><a class="headerlink" href="#luachcal.dates.GregorianDate.month" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.month">
+<code class="descname">month</code><a class="headerlink" href="#pyluach.dates.GregorianDate.month" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.GregorianDate.day">
-<code class="descname">day</code><a class="headerlink" href="#luachcal.dates.GregorianDate.day" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.day">
+<code class="descname">day</code><a class="headerlink" href="#pyluach.dates.GregorianDate.day" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.GregorianDate.jd">
-<code class="descname">jd</code><a class="headerlink" href="#luachcal.dates.GregorianDate.jd" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.jd">
+<code class="descname">jd</code><a class="headerlink" href="#pyluach.dates.GregorianDate.jd" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>float(property)</em></p>
 <p>The corresponding Julian Day Number at midnight (as <em>n</em>.5).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.GregorianDate.dict">
-<code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.GregorianDate.dict" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.dict">
+<code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyluach.dates.GregorianDate.dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the date as a dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -302,8 +302,8 @@ infinitely extended in both directions.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.GregorianDate.is_leap">
-<code class="descname">is_leap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#GregorianDate.is_leap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.GregorianDate.is_leap" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.is_leap">
+<code class="descname">is_leap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#GregorianDate.is_leap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.GregorianDate.is_leap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return if the date is in a leap year</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -320,16 +320,26 @@ infinitely extended in both directions.</p>
 <dl class="attribute">
 <dt>
 <code class="descname">jd</code></dt>
-<dd><p>Return the corresponding Julian Day.</p>
+<dd><p>Return the corresponding Julian day number.</p>
 <p>This property retrieves the corresponding Julian Day as a float
 if it was passed into the init method or already calculated, and
 if it wasn&#8217;t, it calculates it and saves it for later retrievals
 and returns it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The Julian day number at midnight.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.GregorianDate.shabbos">
-<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.GregorianDate.shabbos" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.shabbos">
+<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyluach.dates.GregorianDate.shabbos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the Shabbos on or following the date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -345,8 +355,8 @@ the same date type as operated on.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.GregorianDate.to_heb">
-<code class="descname">to_heb</code><span class="sig-paren">(</span><em>night=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#GregorianDate.to_heb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.GregorianDate.to_heb" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.to_heb">
+<code class="descname">to_heb</code><span class="sig-paren">(</span><em>night=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#GregorianDate.to_heb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.GregorianDate.to_heb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to Hebrew date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -358,15 +368,15 @@ Defaults to false.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The equivalent Hebrew date instance.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.HebrewDate" title="luachcal.dates.HebrewDate">HebrewDate</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyluach.dates.HebrewDate" title="pyluach.dates.HebrewDate">HebrewDate</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.GregorianDate.to_jd">
-<code class="descname">to_jd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#GregorianDate.to_jd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.GregorianDate.to_jd" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.to_jd">
+<code class="descname">to_jd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#GregorianDate.to_jd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.GregorianDate.to_jd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to a Julian day.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -374,15 +384,15 @@ Defaults to false.</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent JulianDay instance.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.JulianDay" title="luachcal.dates.JulianDay">JulianDay</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyluach.dates.JulianDay" title="pyluach.dates.JulianDay">JulianDay</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.GregorianDate.to_pydate">
-<code class="descname">to_pydate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#GregorianDate.to_pydate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.GregorianDate.to_pydate" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.to_pydate">
+<code class="descname">to_pydate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#GregorianDate.to_pydate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.GregorianDate.to_pydate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to a standard library date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -397,8 +407,8 @@ Defaults to false.</td>
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="luachcal.dates.GregorianDate.today">
-<em class="property">static </em><code class="descname">today</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#GregorianDate.today"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.GregorianDate.today" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.today">
+<em class="property">static </em><code class="descname">today</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#GregorianDate.today"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.GregorianDate.today" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a GregorianDate instance for the current day.</p>
 <p>This static method wraps the Python standard library&#8217;s
 date.today() method to get the date from the timestamp.</p>
@@ -408,15 +418,15 @@ date.today() method to get the date from the timestamp.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The current Gregorian date from the computer&#8217;s timestamp.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.GregorianDate" title="luachcal.dates.GregorianDate">GregorianDate</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyluach.dates.GregorianDate" title="pyluach.dates.GregorianDate">GregorianDate</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.GregorianDate.tuple">
-<code class="descname">tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.GregorianDate.tuple" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.tuple">
+<code class="descname">tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyluach.dates.GregorianDate.tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return date as tuple.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -431,8 +441,8 @@ date.today() method to get the date from the timestamp.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.GregorianDate.weekday">
-<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.GregorianDate.weekday" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.GregorianDate.weekday">
+<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyluach.dates.GregorianDate.weekday" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return day of week as an integer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -450,9 +460,9 @@ through Saturday as 7.</td>
 </dd></dl>
 
 <dl class="class">
-<dt id="luachcal.dates.HebrewDate">
-<em class="property">class </em><code class="descclassname">luachcal.dates.</code><code class="descname">HebrewDate</code><span class="sig-paren">(</span><em>year</em>, <em>month</em>, <em>day</em>, <em>jd=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#HebrewDate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.HebrewDate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#luachcal.dates.BaseDate" title="luachcal.dates.BaseDate"><code class="xref py py-class docutils literal"><span class="pre">luachcal.dates.BaseDate</span></code></a>, <a class="reference internal" href="#luachcal.dates.CalendarDateMixin" title="luachcal.dates.CalendarDateMixin"><code class="xref py py-class docutils literal"><span class="pre">luachcal.dates.CalendarDateMixin</span></code></a></p>
+<dt id="pyluach.dates.HebrewDate">
+<em class="property">class </em><code class="descclassname">pyluach.dates.</code><code class="descname">HebrewDate</code><span class="sig-paren">(</span><em>year</em>, <em>month</em>, <em>day</em>, <em>jd=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#HebrewDate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.HebrewDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyluach.dates.BaseDate" title="pyluach.dates.BaseDate"><code class="xref py py-class docutils literal"><span class="pre">pyluach.dates.BaseDate</span></code></a>, <a class="reference internal" href="#pyluach.dates.CalendarDateMixin" title="pyluach.dates.CalendarDateMixin"><code class="xref py py-class docutils literal"><span class="pre">pyluach.dates.CalendarDateMixin</span></code></a></p>
 <p>A class for manipulating Hebrew dates.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -473,29 +483,29 @@ ValueError.</li>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="luachcal.dates.HebrewDate.year">
-<code class="descname">year</code><a class="headerlink" href="#luachcal.dates.HebrewDate.year" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.year">
+<code class="descname">year</code><a class="headerlink" href="#pyluach.dates.HebrewDate.year" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.HebrewDate.month">
-<code class="descname">month</code><a class="headerlink" href="#luachcal.dates.HebrewDate.month" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.month">
+<code class="descname">month</code><a class="headerlink" href="#pyluach.dates.HebrewDate.month" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 <p>The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
 If there is a second Adar it is represented as 13.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.HebrewDate.day">
-<code class="descname">day</code><a class="headerlink" href="#luachcal.dates.HebrewDate.day" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.day">
+<code class="descname">day</code><a class="headerlink" href="#pyluach.dates.HebrewDate.day" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 <p>The day of the month.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.HebrewDate.dict">
-<code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.HebrewDate.dict" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.dict">
+<code class="descname">dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyluach.dates.HebrewDate.dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the date as a dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -510,9 +520,29 @@ If there is a second Adar it is represented as 13.</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="pyluach.dates.HebrewDate.jd">
+<code class="descname">jd</code><a class="headerlink" href="#pyluach.dates.HebrewDate.jd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the corresponding Julian day number.</p>
+<p>This property retrieves the corresponding Julian Day as a float
+if it was passed into the init method or already calculated, and
+if it wasn&#8217;t, it calculates it, saves it for later retrievals,
+and returns it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The Julian day number at midnight.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
-<dt id="luachcal.dates.HebrewDate.shabbos">
-<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.HebrewDate.shabbos" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.shabbos">
+<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyluach.dates.HebrewDate.shabbos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the Shabbos on or following the date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -528,8 +558,8 @@ the same date type as operated on.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.HebrewDate.to_greg">
-<code class="descname">to_greg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#HebrewDate.to_greg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.HebrewDate.to_greg" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.to_greg">
+<code class="descname">to_greg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#HebrewDate.to_greg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.HebrewDate.to_greg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to a Gregorian date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -537,15 +567,15 @@ the same date type as operated on.</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent GregorianDate instance.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.GregorianDate" title="luachcal.dates.GregorianDate">GregorianDate</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyluach.dates.GregorianDate" title="pyluach.dates.GregorianDate">GregorianDate</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.HebrewDate.to_jd">
-<code class="descname">to_jd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#HebrewDate.to_jd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.HebrewDate.to_jd" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.to_jd">
+<code class="descname">to_jd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#HebrewDate.to_jd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.HebrewDate.to_jd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to a Julian day.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -553,15 +583,15 @@ the same date type as operated on.</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent JulianDay instance.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.JulianDay" title="luachcal.dates.JulianDay">JulianDay</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyluach.dates.JulianDay" title="pyluach.dates.JulianDay">JulianDay</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.HebrewDate.to_pydate">
-<code class="descname">to_pydate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#HebrewDate.to_pydate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.HebrewDate.to_pydate" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.to_pydate">
+<code class="descname">to_pydate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#HebrewDate.to_pydate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.HebrewDate.to_pydate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to a standard library date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -576,8 +606,8 @@ the same date type as operated on.</td>
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="luachcal.dates.HebrewDate.today">
-<em class="property">static </em><code class="descname">today</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#HebrewDate.today"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.HebrewDate.today" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.today">
+<em class="property">static </em><code class="descname">today</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#HebrewDate.today"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.HebrewDate.today" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return HebrewDate instance for the current day.</p>
 <p>This static method wraps the Python standard library&#8217;s
 date.today() method to get the date from the timestamp.</p>
@@ -587,15 +617,15 @@ date.today() method to get the date from the timestamp.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The current Hebrew date from the computer&#8217;s timestamp.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.HebrewDate" title="luachcal.dates.HebrewDate">HebrewDate</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyluach.dates.HebrewDate" title="pyluach.dates.HebrewDate">HebrewDate</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.HebrewDate.tuple">
-<code class="descname">tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.HebrewDate.tuple" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.tuple">
+<code class="descname">tuple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyluach.dates.HebrewDate.tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return date as tuple.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -610,8 +640,8 @@ date.today() method to get the date from the timestamp.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.HebrewDate.weekday">
-<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.HebrewDate.weekday" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.HebrewDate.weekday">
+<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyluach.dates.HebrewDate.weekday" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return day of week as an integer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -629,9 +659,9 @@ through Saturday as 7.</td>
 </dd></dl>
 
 <dl class="class">
-<dt id="luachcal.dates.JulianDay">
-<em class="property">class </em><code class="descclassname">luachcal.dates.</code><code class="descname">JulianDay</code><span class="sig-paren">(</span><em>day</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#JulianDay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.JulianDay" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#luachcal.dates.BaseDate" title="luachcal.dates.BaseDate"><code class="xref py py-class docutils literal"><span class="pre">luachcal.dates.BaseDate</span></code></a></p>
+<dt id="pyluach.dates.JulianDay">
+<em class="property">class </em><code class="descclassname">pyluach.dates.</code><code class="descname">JulianDay</code><span class="sig-paren">(</span><em>day</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#JulianDay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.JulianDay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyluach.dates.BaseDate" title="pyluach.dates.BaseDate"><code class="xref py py-class docutils literal"><span class="pre">pyluach.dates.BaseDate</span></code></a></p>
 <p>A JulianDay object represents a Julian Day at midnight.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -643,22 +673,22 @@ number 10 is represented as 9.5 which is day 10 at midnight.</td>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="luachcal.dates.JulianDay.day">
-<code class="descname">day</code><a class="headerlink" href="#luachcal.dates.JulianDay.day" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.JulianDay.day">
+<code class="descname">day</code><a class="headerlink" href="#pyluach.dates.JulianDay.day" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>float</em></p>
 <p>The Julian Day Number at midnight (as <em>n</em>.5)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.dates.JulianDay.jd">
-<code class="descname">jd</code><a class="headerlink" href="#luachcal.dates.JulianDay.jd" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.JulianDay.jd">
+<code class="descname">jd</code><a class="headerlink" href="#pyluach.dates.JulianDay.jd" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>float</em></p>
 <p>Alias for day.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.JulianDay.shabbos">
-<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luachcal.dates.JulianDay.shabbos" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.JulianDay.shabbos">
+<code class="descname">shabbos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyluach.dates.JulianDay.shabbos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the Shabbos on or following the date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -674,8 +704,8 @@ the same date type as operated on.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.JulianDay.to_greg">
-<code class="descname">to_greg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#JulianDay.to_greg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.JulianDay.to_greg" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.JulianDay.to_greg">
+<code class="descname">to_greg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#JulianDay.to_greg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.JulianDay.to_greg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert JulianDay to a Gregorian Date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -683,7 +713,7 @@ the same date type as operated on.</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent Gregorian date instance.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.GregorianDate" title="luachcal.dates.GregorianDate">GregorianDate</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyluach.dates.GregorianDate" title="pyluach.dates.GregorianDate">GregorianDate</a></td>
 </tr>
 </tbody>
 </table>
@@ -692,8 +722,8 @@ the same date type as operated on.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.JulianDay.to_heb">
-<code class="descname">to_heb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#JulianDay.to_heb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.JulianDay.to_heb" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.JulianDay.to_heb">
+<code class="descname">to_heb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#JulianDay.to_heb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.JulianDay.to_heb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to a Hebrew date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -701,15 +731,15 @@ the same date type as operated on.</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The equivalent Hebrew date instance.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.HebrewDate" title="luachcal.dates.HebrewDate">HebrewDate</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyluach.dates.HebrewDate" title="pyluach.dates.HebrewDate">HebrewDate</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.JulianDay.to_pydate">
-<code class="descname">to_pydate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#JulianDay.to_pydate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.JulianDay.to_pydate" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.JulianDay.to_pydate">
+<code class="descname">to_pydate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#JulianDay.to_pydate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.JulianDay.to_pydate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to a datetime.date object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -724,8 +754,8 @@ the same date type as operated on.</td>
 </dd></dl>
 
 <dl class="staticmethod">
-<dt id="luachcal.dates.JulianDay.today">
-<em class="property">static </em><code class="descname">today</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#JulianDay.today"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.JulianDay.today" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.JulianDay.today">
+<em class="property">static </em><code class="descname">today</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#JulianDay.today"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.JulianDay.today" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return instance of current Julian day from timestamp.</p>
 <p>Extends the built-in <code class="docutils literal"><span class="pre">datetime.date.today()</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -735,15 +765,15 @@ the same date type as operated on.</td>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A JulianDay instance representing the current Julian day from
 the timestamp.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#luachcal.dates.JulianDay" title="luachcal.dates.JulianDay">JulianDay</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#pyluach.dates.JulianDay" title="pyluach.dates.JulianDay">JulianDay</a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.dates.JulianDay.weekday">
-<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/dates.html#JulianDay.weekday"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.dates.JulianDay.weekday" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.dates.JulianDay.weekday">
+<code class="descname">weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/dates.html#JulianDay.weekday"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.dates.JulianDay.weekday" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return weekday of date.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -761,11 +791,11 @@ the timestamp.</td>
 
 </div>
 </div>
-<div class="section" id="module-luachcal.hebrewcal">
-<span id="luachcal-hebrewcal-module"></span><h2>luachcal.hebrewcal module<a class="headerlink" href="#module-luachcal.hebrewcal" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-pyluach.hebrewcal">
+<span id="pyluach-hebrewcal-module"></span><h2>pyluach.hebrewcal module<a class="headerlink" href="#module-pyluach.hebrewcal" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="luachcal.hebrewcal.Month">
-<em class="property">class </em><code class="descclassname">luachcal.hebrewcal.</code><code class="descname">Month</code><span class="sig-paren">(</span><em>year</em>, <em>month</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Month"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Month" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Month">
+<em class="property">class </em><code class="descclassname">pyluach.hebrewcal.</code><code class="descname">Month</code><span class="sig-paren">(</span><em>year</em>, <em>month</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/hebrewcal.html#Month"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.hebrewcal.Month" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>A Month object represents a month of the Hebrew calendar.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -782,30 +812,30 @@ if necessary for Adar Sheni and then 1-6 for Nissan - Elul.</li>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="luachcal.hebrewcal.Month.year">
-<code class="descname">year</code><a class="headerlink" href="#luachcal.hebrewcal.Month.year" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Month.year">
+<code class="descname">year</code><a class="headerlink" href="#pyluach.hebrewcal.Month.year" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 <p>The Hebrew year.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.hebrewcal.Month.month">
-<code class="descname">month</code><a class="headerlink" href="#luachcal.hebrewcal.Month.month" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Month.month">
+<code class="descname">month</code><a class="headerlink" href="#pyluach.hebrewcal.Month.month" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 <p>The month as an integer starting with 7 for Tishrei through 13
 if necessary for Adar Sheni and then 1-6 for Nissan - Elul.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.hebrewcal.Month.name">
-<code class="descname">name</code><a class="headerlink" href="#luachcal.hebrewcal.Month.name" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Month.name">
+<code class="descname">name</code><a class="headerlink" href="#pyluach.hebrewcal.Month.name" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>str</em></p>
 <p>The name of the month.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.hebrewcal.Month.iterdates">
-<code class="descname">iterdates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Month.iterdates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Month.iterdates" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Month.iterdates">
+<code class="descname">iterdates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/hebrewcal.html#Month.iterdates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.hebrewcal.Month.iterdates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return iterator that yields an instance of HebrewDate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -820,8 +850,8 @@ Tishrei through the last day of Ellul.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.hebrewcal.Month.starting_weekday">
-<code class="descname">starting_weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Month.starting_weekday"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Month.starting_weekday" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Month.starting_weekday">
+<code class="descname">starting_weekday</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/hebrewcal.html#Month.starting_weekday"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.hebrewcal.Month.starting_weekday" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return first weekday of the month.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -839,8 +869,8 @@ through Saturday as 7.</td>
 </dd></dl>
 
 <dl class="class">
-<dt id="luachcal.hebrewcal.Year">
-<em class="property">class </em><code class="descclassname">luachcal.hebrewcal.</code><code class="descname">Year</code><span class="sig-paren">(</span><em>year</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Year" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Year">
+<em class="property">class </em><code class="descclassname">pyluach.hebrewcal.</code><code class="descname">Year</code><span class="sig-paren">(</span><em>year</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/hebrewcal.html#Year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.hebrewcal.Year" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>A Year object represents a Hebrew calendar year.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -852,22 +882,22 @@ through Saturday as 7.</td>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="luachcal.hebrewcal.Year.year">
-<code class="descname">year</code><a class="headerlink" href="#luachcal.hebrewcal.Year.year" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Year.year">
+<code class="descname">year</code><a class="headerlink" href="#pyluach.hebrewcal.Year.year" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int</em></p>
 <p>The hebrew year.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="luachcal.hebrewcal.Year.leap">
-<code class="descname">leap</code><a class="headerlink" href="#luachcal.hebrewcal.Year.leap" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Year.leap">
+<code class="descname">leap</code><a class="headerlink" href="#pyluach.hebrewcal.Year.leap" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>bool</em></p>
 <p>True if the year is a leap year else false.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.hebrewcal.Year.iterdates">
-<code class="descname">iterdates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Year.iterdates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Year.iterdates" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Year.iterdates">
+<code class="descname">iterdates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/hebrewcal.html#Year.iterdates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.hebrewcal.Year.iterdates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield HebrewDate instance for each day of the year.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -882,8 +912,8 @@ the first of Tishrei.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.hebrewcal.Year.iterdays">
-<code class="descname">iterdays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Year.iterdays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Year.iterdays" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Year.iterdays">
+<code class="descname">iterdays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/hebrewcal.html#Year.iterdays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.hebrewcal.Year.iterdays" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield integer for each day of the year.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -898,8 +928,8 @@ the year.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="luachcal.hebrewcal.Year.itermonths">
-<code class="descname">itermonths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#Year.itermonths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.Year.itermonths" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.Year.itermonths">
+<code class="descname">itermonths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/hebrewcal.html#Year.itermonths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.hebrewcal.Year.itermonths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield Month instance for each month of the year.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -917,8 +947,8 @@ Tishrei and ending with Elul.</td>
 </dd></dl>
 
 <dl class="function">
-<dt id="luachcal.hebrewcal.holiday">
-<code class="descclassname">luachcal.hebrewcal.</code><code class="descname">holiday</code><span class="sig-paren">(</span><em>date</em>, <em>israel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/hebrewcal.html#holiday"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.hebrewcal.holiday" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.hebrewcal.holiday">
+<code class="descclassname">pyluach.hebrewcal.</code><code class="descname">holiday</code><span class="sig-paren">(</span><em>date</em>, <em>israel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/hebrewcal.html#holiday"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.hebrewcal.holiday" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return Jewish holiday of given date.</p>
 <p>The holidays include the major and minor religious Jewish
 holidays including fast days.</p>
@@ -946,11 +976,11 @@ a Jewish holiday.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-luachcal.parshios">
-<span id="luachcal-parshios-module"></span><h2>luachcal.parshios module<a class="headerlink" href="#module-luachcal.parshios" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-pyluach.parshios">
+<span id="pyluach-parshios-module"></span><h2>pyluach.parshios module<a class="headerlink" href="#module-pyluach.parshios" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="luachcal.parshios.getparsha">
-<code class="descclassname">luachcal.parshios.</code><code class="descname">getparsha</code><span class="sig-paren">(</span><em>date</em>, <em>israel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/parshios.html#getparsha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.parshios.getparsha" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.parshios.getparsha">
+<code class="descclassname">pyluach.parshios.</code><code class="descname">getparsha</code><span class="sig-paren">(</span><em>date</em>, <em>israel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/parshios.html#getparsha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.parshios.getparsha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the parsha for a given date.</p>
 <p>Returns the parsha for the Shabbos on or following the given
 date.</p>
@@ -977,8 +1007,8 @@ a parsha (i.e. it&#8217;s on Yom Tov).</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="luachcal.parshios.iterparshios">
-<code class="descclassname">luachcal.parshios.</code><code class="descname">iterparshios</code><span class="sig-paren">(</span><em>year</em>, <em>israel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/parshios.html#iterparshios"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.parshios.iterparshios" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.parshios.iterparshios">
+<code class="descclassname">pyluach.parshios.</code><code class="descname">iterparshios</code><span class="sig-paren">(</span><em>year</em>, <em>israel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/parshios.html#iterparshios"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.parshios.iterparshios" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate all the parshios in the year.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1002,8 +1032,8 @@ Yields <code class="docutils literal"><span class="pre">None</span></code> for a
 </dd></dl>
 
 <dl class="function">
-<dt id="luachcal.parshios.parshatable">
-<code class="descclassname">luachcal.parshios.</code><code class="descname">parshatable</code><span class="sig-paren">(</span><em>year</em>, <em>israel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luachcal/parshios.html#parshatable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luachcal.parshios.parshatable" title="Permalink to this definition">¶</a></dt>
+<dt id="pyluach.parshios.parshatable">
+<code class="descclassname">pyluach.parshios.</code><code class="descname">parshatable</code><span class="sig-paren">(</span><em>year</em>, <em>israel=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyluach/parshios.html#parshatable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyluach.parshios.parshatable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a table of all the Shabbosos in the year</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1039,14 +1069,14 @@ Shabbos with no parsha.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">luachcal package</a><ul>
+<li><a class="reference internal" href="#">pyluach package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-luachcal.dates">luachcal.dates module</a><ul>
+<li><a class="reference internal" href="#module-pyluach.dates">pyluach.dates module</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-luachcal.hebrewcal">luachcal.hebrewcal module</a></li>
-<li><a class="reference internal" href="#module-luachcal.parshios">luachcal.parshios module</a></li>
+<li><a class="reference internal" href="#module-pyluach.hebrewcal">pyluach.hebrewcal module</a></li>
+<li><a class="reference internal" href="#module-pyluach.parshios">pyluach.parshios module</a></li>
 </ul>
 </li>
 </ul>

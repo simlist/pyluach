@@ -1,7 +1,7 @@
 from collections import deque, OrderedDict
 
-from luachcal.dates import HebrewDate
-from luachcal.utils import memoize
+from pyluach.dates import HebrewDate
+from pyluach.utils import memoize
 
 """This module has functions to find the weekly parasha for a given Shabbos.
 The algorithm comes from Dr. Irv Bromberg, University of Toronto at 

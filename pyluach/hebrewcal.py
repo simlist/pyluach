@@ -4,8 +4,8 @@ from __future__ import division
 from collections import deque
 from numbers import Number
 
-from luachcal.dates import HebrewDate
-from luachcal.utils import memoize
+from pyluach.dates import HebrewDate
+from pyluach.utils import memoize
 
 def _adjust_postponed(date):
     """Return actual date of fast day.

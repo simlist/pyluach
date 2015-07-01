@@ -1,7 +1,7 @@
-luachcal
+pyluach
 ============================
 
-Luachcal is a Python package for manipulating Hebrew calendar dates and 
+Pyluach is a Python package for manipulating Hebrew calendar dates and 
 Hebrew-Gregorian conversions.
 
 Features
@@ -14,13 +14,13 @@ Features
 
 Installation
 ---------------------
-Still under developement. When completed use ``pip install luachcal``
+Still under developement. When completed use ``pip install pyluach``
 
 Typical use
 --------------------
 ::
 
-    from luachcal import dates, hebrewcal
+    from pyluach import dates, hebrewcal
     
     >>> today = dates.HebrewDate.today()
     >>> lastweek_gregorian = (today - 7).to_greg()
@@ -43,5 +43,5 @@ For questions and comments feel free to contact me at simlist@gmail.com.
 
 License
 --------------
-Luachcal is licensed under the MIT license.
+Pyluach is licensed under the MIT license.
 
