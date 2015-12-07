@@ -1,0 +1,762 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>luachcal.dates &mdash; pyluach 0.2.0dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyluach 0.2.0dev documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyluach 0.2.0dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for luachcal.dates</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;The dates module implements classes for representing and</span>
+<span class="sd">manipulating several date types.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">* BaseDate</span>
+<span class="sd">* CalendarDateMixin</span>
+<span class="sd">* JulianDay</span>
+<span class="sd">* GregorianDate</span>
+<span class="sd">* HebrewDate</span>
+
+<span class="sd">Note</span>
+<span class="sd">----</span>
+<span class="sd">All instances of the classes in this module should be treated as read</span>
+<span class="sd">only. No attributes should be changed once they&#39;re created.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
+
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">memoize</span>
+
+
+<div class="viewcode-block" id="BaseDate"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.BaseDate">[docs]</a><span class="k">class</span> <span class="nc">BaseDate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;BaseDate is a base class for all date types.</span>
+<span class="sd">    </span>
+<span class="sd">    It provides the following arithmetic and comparison operators</span>
+<span class="sd">    common to all child date types. </span>
+
+<span class="sd">    ===================  =============================================</span>
+<span class="sd">    Operation            Result</span>
+<span class="sd">    ===================  =============================================</span>
+<span class="sd">    d2 = date1 + int     New date ``int`` days after date1</span>
+<span class="sd">    d2 = date1 - int     New date ``int`` days before date1</span>
+<span class="sd">    int = date1 - date2  Integer equal to the absolute value of the</span>
+<span class="sd">                         difference between date1 and date2</span>
+<span class="sd">    date1 &gt; date2        True if date1 occurs later than date2</span>
+<span class="sd">    date1 &lt; date2        True if date1 occurs earlier than date2</span>
+<span class="sd">    date1 == date2       True if date1 occurs on the same day as date2</span>
+<span class="sd">    date1 != date2       True if ``date1 == date2`` is False</span>
+<span class="sd">    date1 &gt;=, &lt;= date2   True if both are True</span>
+<span class="sd">    ===================  =============================================</span>
+<span class="sd">    </span>
+<span class="sd">    Any child of BaseDate that implements a ``jd`` attribute</span>
+<span class="sd">    representing the Julian Day of that date can be compared to and</span>
+<span class="sd">    diffed with any other valid date type.</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jd</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">JulianDay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">+</span> <span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">_to_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;You can only add a number to a date.&#39;</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">JulianDay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">-</span> <span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">_to_x</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">jd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;&quot;&quot;You can only subtract a number or another date</span>
+<span class="s">                              that has a &quot;jd&quot; attribute from a date&quot;&quot;&quot;</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">jd</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_string</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">jd</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_string</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">jd</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_string</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">jd</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_string</span><span class="p">)</span>
+
+    
+    <span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">&lt;=</span> <span class="n">other</span><span class="o">.</span><span class="n">jd</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_string</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">&gt;=</span> <span class="n">other</span><span class="o">.</span><span class="n">jd</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_string</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="BaseDate.shabbos"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.BaseDate.shabbos">[docs]</a>    <span class="k">def</span> <span class="nf">shabbos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the Shabbos on or following the date.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Date</span>
+<span class="sd">          Self if it&#39;s Shabbos or else the following Shabbos as</span>
+<span class="sd">          the same date type as operated on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="p">(</span><span class="mi">7</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">weekday</span><span class="p">())</span> 
+
+</div></div>
+<div class="viewcode-block" id="CalendarDateMixin"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.CalendarDateMixin">[docs]</a><span class="k">class</span> <span class="nc">CalendarDateMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;CalendarDateMixin is a mixin for Hebrew and Gregorian dates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Year : int</span>
+<span class="sd">    Month : int</span>
+<span class="sd">    day : int</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">    month : int</span>
+<span class="sd">    day : int</span>
+<span class="sd">    jd : float</span>
+<span class="sd">      The equivelant Julian day at midnight.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">jd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a calendar date.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">year</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">month</span> <span class="o">=</span> <span class="n">month</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">=</span> <span class="n">day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jd</span> <span class="o">=</span> <span class="n">jd</span>
+        <span class="bp">self</span><span class="o">.</span> <span class="n">error_string</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;&#39;&#39;Only a date with a &quot;jd&quot; attribute can</span>
+<span class="s">                              be compared to a {0}&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+                              <span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;{0}({1}, {2}, {3})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;{0}-{1}-{2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="CalendarDateMixin.weekday"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.CalendarDateMixin.weekday">[docs]</a>    <span class="k">def</span> <span class="nf">weekday</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return day of week as an integer.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">          An integer representing the day of the week with Sunday as 1</span>
+<span class="sd">          through Saturday as 7.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jd</span><span class="o">+.</span><span class="mi">5</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span> <span class="o">+</span> <span class="mi">1</span>
+    </div>
+<div class="viewcode-block" id="CalendarDateMixin.tuple"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.CalendarDateMixin.tuple">[docs]</a>    <span class="k">def</span> <span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return date as tuple.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple of ints</span>
+<span class="sd">          A tuple of ints in the form ``(year, month, day)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="CalendarDateMixin.dict"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.CalendarDateMixin.dict">[docs]</a>    <span class="k">def</span> <span class="nf">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the date as a dictionary.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict</span>
+<span class="sd">          A dictionary in the form </span>
+<span class="sd">          ``{&#39;year&#39;: int, &#39;month&#39;: int, &#39;day&#39;: int}``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;year&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="s">&#39;month&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="s">&#39;day&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">}</span>
+    
+</div></div>
+<div class="viewcode-block" id="JulianDay"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.JulianDay">[docs]</a><span class="k">class</span> <span class="nc">JulianDay</span><span class="p">(</span><span class="n">BaseDate</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;A JulianDay object represents a Julian Day at midnight.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    day : float or int</span>
+<span class="sd">      The julian day. Note that Julian days start at noon so day</span>
+<span class="sd">      number 10 is represented as 9.5 which is day 10 at midnight.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    day : float</span>
+<span class="sd">      The Julian Day Number at midnight (as *n*.5)</span>
+<span class="sd">    jd : float</span>
+<span class="sd">      Alias for day.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">day</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a JulianDay instance.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">day</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">day</span><span class="p">)</span> <span class="o">&lt;</span> <span class="o">.</span><span class="mi">5</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">day</span><span class="p">)</span> <span class="o">-</span> <span class="o">.</span><span class="mi">5</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">day</span><span class="p">)</span> <span class="o">+</span> <span class="o">.</span><span class="mi">5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span>
+        
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;JulianDay({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="JulianDay.weekday"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.JulianDay.weekday">[docs]</a>    <span class="k">def</span> <span class="nf">weekday</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return weekday of date.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">          The weekday with Sunday as 1 through Saturday as 7.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="o">+.</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span> <span class="o">+</span> <span class="mi">1</span>
+    </div>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="JulianDay.today"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.JulianDay.today">[docs]</a>    <span class="k">def</span> <span class="nf">today</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Return instance of current Julian day from timestamp.</span>
+<span class="sd">        </span>
+<span class="sd">        Extends the built-in ``datetime.date.today()``.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        JulianDay</span>
+<span class="sd">          A JulianDay instance representing the current Julian day from</span>
+<span class="sd">          the timestamp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GregorianDate</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">to_jd</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="JulianDay.to_greg"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.JulianDay.to_greg">[docs]</a>    <span class="k">def</span> <span class="nf">to_greg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert JulianDay to a Gregorian Date.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GregorianDate</span>
+<span class="sd">          The equivalent Gregorian date instance.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This method uses the Fliegel-Van Flandern algorithm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">+</span> <span class="o">.</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">jd</span> <span class="o">+</span> <span class="mi">68569</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">L</span> <span class="o">//</span> <span class="mi">146097</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L</span> <span class="o">-</span> <span class="p">(</span><span class="mi">146097</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">//</span> <span class="mi">4</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4000</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">//</span> <span class="mi">1461001</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">L</span> <span class="o">-</span> <span class="p">((</span><span class="mi">1461</span><span class="o">*</span><span class="n">i</span><span class="p">)</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">31</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="mi">80</span><span class="o">*</span><span class="n">L</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2447</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="n">L</span> <span class="o">-</span> <span class="mi">2447</span><span class="o">*</span><span class="n">j</span> <span class="o">//</span> <span class="mi">80</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">j</span> <span class="o">//</span> <span class="mi">11</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">12</span><span class="o">*</span><span class="n">L</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">49</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="n">L</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">year</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">GregorianDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="JulianDay.to_heb"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.JulianDay.to_heb">[docs]</a>    <span class="k">def</span> <span class="nf">to_heb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Convert to a Hebrew date.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        HebrewDate</span>
+<span class="sd">          The equivalent Hebrew date instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">&lt;=</span> <span class="mi">347997</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Date is before creation&#39;</span><span class="p">)</span>
+    
+        <span class="n">jd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">+</span> <span class="o">.</span><span class="mi">5</span><span class="p">)</span>  <span class="c"># Try to account for half day</span>
+        <span class="n">jd</span> <span class="o">-=</span> <span class="mi">347997</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">jd</span><span class="o">//</span><span class="mi">365</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>  <span class="c">## try that to debug early years</span>
+        <span class="n">first_day</span> <span class="o">=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_elapsed_days</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+    
+        <span class="k">while</span> <span class="n">first_day</span> <span class="o">&gt;</span> <span class="n">jd</span><span class="p">:</span>
+            <span class="n">year</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">first_day</span> <span class="o">=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_elapsed_days</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+        
+        <span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">):</span>
+            <span class="n">months</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+        
+        <span class="n">days_remaining</span> <span class="o">=</span> <span class="n">jd</span> <span class="o">-</span> <span class="n">first_day</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">months</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">days_remaining</span> <span class="o">&gt;=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_month_length</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
+                <span class="n">days_remaining</span> <span class="o">-=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_month_length</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">days_remaining</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_to_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a date object of the given type.&quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">type_</span><span class="p">,</span> <span class="n">GregorianDate</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_greg</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">type_</span><span class="p">,</span> <span class="n">HebrewDate</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_heb</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">type_</span><span class="p">,</span> <span class="n">JulianDay</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        
+<div class="viewcode-block" id="JulianDay.to_pydate"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.JulianDay.to_pydate">[docs]</a>    <span class="k">def</span> <span class="nf">to_pydate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert to a datetime.date object.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        datetime.date</span>
+<span class="sd">          A standard library datetime.date instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_greg</span><span class="p">()</span><span class="o">.</span><span class="n">to_pydate</span><span class="p">()</span>
+           </div></div>
+<div class="viewcode-block" id="GregorianDate"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.GregorianDate">[docs]</a><span class="k">class</span> <span class="nc">GregorianDate</span><span class="p">(</span><span class="n">BaseDate</span><span class="p">,</span> <span class="n">CalendarDateMixin</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;A GregorianDate object represents a Gregorian date (year, month, day).</span>
+<span class="sd">    </span>
+<span class="sd">    This is an idealized date with the current Gregorian calendar</span>
+<span class="sd">    infinitely extended in both directions.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">    month : int</span>
+<span class="sd">    day : int</span>
+<span class="sd">    jd : float, optional</span>
+<span class="sd">      This parameter should not be assigned manually.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">    month : int</span>
+<span class="sd">    day : int</span>
+<span class="sd">    jd : float(property)</span>
+<span class="sd">      The corresponding Julian Day Number at midnight (as *n*.5).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">jd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a GregorianDate.</span>
+<span class="sd">        </span>
+<span class="sd">        This initializer extends the CalendarDateMixin initializer</span>
+<span class="sd">        adding in date validation specific to Gregorian dates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">month</span> <span class="o">&gt;</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;{0} is an invalid month.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">month</span><span class="p">)))</span>
+        <span class="n">monthlength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monthlength</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">day</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">day</span> <span class="o">&gt;</span> <span class="n">monthlength</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Given month has {0} days.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">monthlength</span><span class="p">))</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GregorianDate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">jd</span><span class="p">)</span>
+           
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">year</span>
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span>
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span>
+        
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">jd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the corresponding Julian Day.</span>
+<span class="sd">        </span>
+<span class="sd">        This property retrieves the corresponding Julian Day as a float</span>
+<span class="sd">        if it was passed into the init method or already calculated, and</span>
+<span class="sd">        if it wasn&#39;t, it calculates it and saves it for later retrievals</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jd</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">year</span>
+            <span class="n">month</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span>
+            <span class="n">day</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span>
+            <span class="k">if</span> <span class="n">year</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">year</span> <span class="o">+=</span> <span class="mi">1</span> 
+            <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">year</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">month</span> <span class="o">+=</span> <span class="mi">12</span>
+            <span class="n">month</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">year</span> <span class="o">//</span> <span class="mi">100</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span><span class="o">//</span><span class="mi">4</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_jd</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">365.25</span><span class="o">*</span><span class="n">year</span><span class="p">)</span> <span class="o">+</span> 
+                        <span class="nb">int</span><span class="p">(</span><span class="mf">30.6001</span><span class="o">*</span><span class="n">month</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">day</span> <span class="o">+</span> <span class="mf">1720994.5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jd</span>
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="GregorianDate.today"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.GregorianDate.today">[docs]</a>    <span class="k">def</span> <span class="nf">today</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Return a GregorianDate instance for the current day.</span>
+<span class="sd">        </span>
+<span class="sd">        This static method wraps the Python standard library&#39;s</span>
+<span class="sd">        date.today() method to get the date from the timestamp.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GregorianDate</span>
+<span class="sd">          The current Gregorian date from the computer&#39;s timestamp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GregorianDate</span><span class="p">(</span><span class="o">*</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span>
+    </div>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return True if year of date is a leap year, otherwise False.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">year</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">year</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span>
+            <span class="p">(</span><span class="n">year</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">year</span> <span class="o">%</span> <span class="mi">400</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+          <span class="p">):</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    
+<div class="viewcode-block" id="GregorianDate.is_leap"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.GregorianDate.is_leap">[docs]</a>    <span class="k">def</span> <span class="nf">is_leap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return if the date is in a leap year</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">          True if the date is in a leap year, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+    </div>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_monthlength</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="mi">31</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">30</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">29</span> <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="k">else</span> <span class="mi">28</span>
+            
+<div class="viewcode-block" id="GregorianDate.to_jd"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.GregorianDate.to_jd">[docs]</a>    <span class="k">def</span> <span class="nf">to_jd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert to a Julian day.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        JulianDay</span>
+<span class="sd">          The equivalent JulianDay instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">JulianDay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jd</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="GregorianDate.to_heb"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.GregorianDate.to_heb">[docs]</a>    <span class="k">def</span> <span class="nf">to_heb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">night</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert to Hebrew date.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        night : bool, optional</span>
+<span class="sd">          True if it is after nightfall of the secular date but before</span>
+<span class="sd">          midnight else False (as a Hebrew date begins at nightfall).</span>
+<span class="sd">          Defaults to false.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        HebrewDate</span>
+<span class="sd">          The equivalent Hebrew date instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">today</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="n">night</span><span class="p">:</span>
+            <span class="n">today</span> <span class="o">=</span> <span class="bp">self</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">today</span><span class="o">.</span><span class="n">to_jd</span><span class="p">()</span><span class="o">.</span><span class="n">to_heb</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="GregorianDate.to_pydate"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.GregorianDate.to_pydate">[docs]</a>    <span class="k">def</span> <span class="nf">to_pydate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert to a standard library date.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        datetime.date</span>
+<span class="sd">          The equivalent datetime.date instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">date</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">())</span>
+
+</div></div>
+<div class="viewcode-block" id="HebrewDate"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.HebrewDate">[docs]</a><span class="k">class</span> <span class="nc">HebrewDate</span><span class="p">(</span><span class="n">BaseDate</span><span class="p">,</span> <span class="n">CalendarDateMixin</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;A class for manipulating Hebrew dates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">      The Hebrew year. If the year is less than 1 it will raise a</span>
+<span class="sd">      ValueError.</span>
+<span class="sd">          </span>
+<span class="sd">    month : int</span>
+<span class="sd">      The Hebrew month starting with Nissan as 1 (and Tishrei as 7).</span>
+<span class="sd">      If there is a second Adar in the year it is represented as 13.</span>
+<span class="sd">      A month below 1 or above the last month will raise a ValueError.</span>
+
+<span class="sd">    day : int</span>
+<span class="sd">      The Hebrew day of the month. An invalid day will raise a</span>
+<span class="sd">      ValueError.</span>
+
+<span class="sd">    jd : float, optional</span>
+<span class="sd">      This parameter should not be assigned manually.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">    month : int</span>
+<span class="sd">      The Hebrew month starting with Nissan as 1 (and Tishrei as 7).</span>
+<span class="sd">      If there is a second Adar it is represented as 13.</span>
+<span class="sd">    day : int</span>
+<span class="sd">      The day of the month.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">jd</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        
+        <span class="sd">&quot;&quot;&quot;Initialize a HebrewDate instance.</span>
+<span class="sd">        </span>
+<span class="sd">        This initializer extends the CalendarDateMixin adding validation</span>
+<span class="sd">        specific to hebrew dates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Date supplied is before creation.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">month</span> <span class="o">&gt;</span> <span class="mi">13</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;{0} is an invalid month.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">month</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">))</span> <span class="ow">and</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;{0} is not a leap year&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">year</span><span class="p">))</span>
+        <span class="n">monthlength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_month_length</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">day</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">day</span> <span class="o">&gt;</span> <span class="n">monthlength</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Given month has {0} days.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">monthlength</span><span class="p">))</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HebrewDate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">jd</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">jd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jd</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">):</span>
+                <span class="n">months</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+    
+            <span class="n">jd</span> <span class="o">=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_elapsed_days</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">months</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">m</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">:</span>
+                    <span class="n">jd</span> <span class="o">+=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_month_length</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_jd</span> <span class="o">=</span> <span class="n">jd</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">347996.5</span>
+                    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jd</span>
+            
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="HebrewDate.today"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.HebrewDate.today">[docs]</a>    <span class="k">def</span> <span class="nf">today</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Return HebrewDate instance for the current day.</span>
+<span class="sd">        </span>
+<span class="sd">        This static method wraps the Python standard library&#39;s</span>
+<span class="sd">        date.today() method to get the date from the timestamp.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        HebrewDate</span>
+<span class="sd">          The current Hebrew date from the computer&#39;s timestamp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GregorianDate</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">to_heb</span><span class="p">()</span>
+     </div>
+<div class="viewcode-block" id="HebrewDate.to_jd"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.HebrewDate.to_jd">[docs]</a>    <span class="k">def</span> <span class="nf">to_jd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert to a Julian day.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        JulianDay</span>
+<span class="sd">          The equivalent JulianDay instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">JulianDay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jd</span><span class="p">)</span>
+            </div>
+<div class="viewcode-block" id="HebrewDate.to_greg"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.HebrewDate.to_greg">[docs]</a>    <span class="k">def</span> <span class="nf">to_greg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert to a Gregorian date.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GregorianDate</span>
+<span class="sd">          The equivalent GregorianDate instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_jd</span><span class="p">()</span><span class="o">.</span><span class="n">to_greg</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="HebrewDate.to_pydate"><a class="viewcode-back" href="../../luachcal.html#luachcal.dates.HebrewDate.to_pydate">[docs]</a>    <span class="k">def</span> <span class="nf">to_pydate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert to a standard library date.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        datetime.date</span>
+<span class="sd">          The equivalent datetime.date instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_greg</span><span class="p">()</span><span class="o">.</span><span class="n">to_pydate</span><span class="p">()</span>
+    </div>
+    <span class="k">def</span> <span class="nf">to_heb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+    
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(((</span><span class="mi">7</span><span class="o">*</span><span class="n">year</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">19</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    
+    <span class="nd">@classmethod</span>
+    <span class="nd">@memoize</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_elapsed_days</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+        <span class="n">months_elapsed</span> <span class="o">=</span> <span class="p">(</span>
+                      <span class="p">(</span><span class="mi">235</span> <span class="o">*</span> <span class="p">((</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">19</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="p">((</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">19</span><span class="p">))</span> <span class="o">+</span> 
+                      <span class="p">(</span><span class="mi">7</span> <span class="o">*</span> <span class="p">((</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">19</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">19</span>
+                      <span class="p">)</span>
+        <span class="n">parts_elapsed</span> <span class="o">=</span> <span class="mi">204</span> <span class="o">+</span> <span class="mi">793</span><span class="o">*</span><span class="p">(</span><span class="n">months_elapsed</span><span class="o">%</span><span class="mi">1080</span><span class="p">)</span>
+        <span class="n">hours_elapsed</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">12</span><span class="o">*</span><span class="n">months_elapsed</span> <span class="o">+</span> <span class="mi">793</span><span class="o">*</span><span class="p">(</span><span class="n">months_elapsed</span><span class="o">//</span><span class="mi">1080</span><span class="p">)</span> <span class="o">+</span>
+                         <span class="n">parts_elapsed</span><span class="o">//</span><span class="mi">1080</span><span class="p">)</span>
+        <span class="n">conjunction_day</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">29</span><span class="o">*</span><span class="n">months_elapsed</span> <span class="o">+</span> <span class="n">hours_elapsed</span><span class="o">//</span><span class="mi">24</span>
+        <span class="n">conjunction_parts</span> <span class="o">=</span> <span class="mi">1080</span> <span class="o">*</span> <span class="p">(</span><span class="n">hours_elapsed</span><span class="o">%</span><span class="mi">24</span><span class="p">)</span> <span class="o">+</span> <span class="n">parts_elapsed</span><span class="o">%</span><span class="mi">1080</span>
+    
+        <span class="k">if</span> <span class="p">(</span>
+              <span class="p">(</span><span class="n">conjunction_parts</span> <span class="o">&gt;=</span> <span class="mi">19440</span><span class="p">)</span> <span class="ow">or</span>
+              <span class="p">(</span>
+               <span class="p">(</span><span class="n">conjunction_day</span> <span class="o">%</span> <span class="mi">7</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span>
+               <span class="p">(</span><span class="n">conjunction_parts</span> <span class="o">&gt;=</span> <span class="mi">9924</span><span class="p">)</span> <span class="ow">and</span>
+               <span class="p">(</span><span class="ow">not</span> <span class="n">cls</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">))</span>
+              <span class="p">)</span> <span class="ow">or</span>
+              <span class="p">(</span>
+               <span class="p">(</span><span class="n">conjunction_day</span> <span class="o">%</span> <span class="mi">7</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span>
+               <span class="n">conjunction_parts</span> <span class="o">&gt;=</span> <span class="mi">16789</span> <span class="ow">and</span> <span class="n">cls</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))):</span>
+            <span class="c"># if all that</span>
+            <span class="n">alt_day</span> <span class="o">=</span> <span class="n">conjunction_day</span> <span class="o">+</span> <span class="mi">1</span>
+    
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alt_day</span> <span class="o">=</span> <span class="n">conjunction_day</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="n">alt_day</span> <span class="o">%</span> <span class="mi">7</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+            <span class="n">alt_day</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+        <span class="k">return</span> <span class="n">alt_day</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_days_in_year</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">_elapsed_days</span><span class="p">(</span><span class="n">year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">cls</span><span class="o">.</span><span class="n">_elapsed_days</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_long_cheshvan</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if Cheshvan has 30 days&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">_days_in_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">5</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_short_kislev</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if Kislev has 29 days&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">_days_in_year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">3</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_month_length</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Months start with Nissan (Nissan is 1 and Tishrei is 7&quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">month</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="mi">30</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="mi">29</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">30</span> <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="k">else</span> <span class="mi">29</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>   <span class="c"># if long Cheshvan return 30, else return 29</span>
+            <span class="k">return</span> <span class="mi">30</span> <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_long_cheshvan</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="k">else</span> <span class="mi">29</span>
+        <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>   <span class="c"># if short Kislev return 29, else return 30</span>
+            <span class="k">return</span> <span class="mi">29</span> <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_short_kislev</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="k">else</span> <span class="mi">30</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Simlist.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,7 +1,7 @@
 from collections import deque, OrderedDict
 
-from luachcal.dates import HebrewDate
-from luachcal.utils import memoize
+from pyluach.dates import HebrewDate
+from pyluach.utils import memoize
 
 """This module has functions to find the weekly parasha for a given Shabbos.
 The algorithm comes from Dr. Irv Bromberg, University of Toronto at 
@@ -38,13 +38,14 @@ def _parshaless(date, israel=False):
 
 @memoize(maxlen=50)
 def _gentable(year, israel=False):
+    """Return OrderedDict mapping date of Shabbos to parsha name."""
     parshalist = deque([51, 52] + range(52))
     table = OrderedDict()
     leap = HebrewDate._is_leap(year)
     pesachday = HebrewDate(year, 1, 15).weekday()
     rosh_hashana = HebrewDate(year, 7, 1)
     shabbos = (rosh_hashana + 2).shabbos()
-    if rosh_hashana.weekday > 4:
+    if rosh_hashana.weekday() > 4:
         parshalist.popleft()
                 
     while shabbos.year == year:

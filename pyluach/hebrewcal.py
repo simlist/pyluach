@@ -4,8 +4,8 @@ from __future__ import division
 from collections import deque
 from numbers import Number
 
-from luachcal.dates import HebrewDate
-from luachcal.utils import memoize
+from pyluach.dates import HebrewDate
+from pyluach.utils import memoize
 
 def _adjust_postponed(date):
     """Return actual date of fast day.
@@ -115,8 +115,8 @@ class Year(object):
     """
     A Year object represents a Hebrew calendar year.
     
-    Parameter
-    ---------
+    Parameters
+    ----------
     year : int
       A Hebrew year.
 
@@ -268,9 +268,15 @@ class Month(object):
             raise TypeError('''You can only subtract a number or a month
                             object from a month''')
             
-            
-    @property
     def starting_weekday(self):
+        """Return first weekday of the month.
+        
+        Returns
+        -------
+        int
+          The weekday of the first day of the month starting with Sunday as 1
+          through Saturday as 7.
+        """
         return HebrewDate(self.year, self.month, 1).weekday()
     
     def _elapsed_months(self):

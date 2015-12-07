@@ -23,7 +23,6 @@ from numbers import Number
 from utils import memoize
 
 
-
 class BaseDate(object):
     
     """BaseDate is a base class for all date types.
@@ -127,7 +126,7 @@ class BaseDate(object):
           the same date type as operated on.
         """
         return self + (7 - self.weekday()) 
-    
+
 
 class CalendarDateMixin(object):
     """CalendarDateMixin is a mixin for Hebrew and Gregorian dates.
@@ -193,7 +192,7 @@ class CalendarDateMixin(object):
         
         Returns
         -------
-        dict
+        Dict
           A dictionary in the form 
           ``{'year': int, 'month': int, 'day': int}``.
         """
@@ -264,8 +263,8 @@ class JulianDay(BaseDate):
         GregorianDate
           The equivalent Gregorian date instance.
 
-        Note
-        ----
+        Notes
+        -----
         This method uses the Fliegel-Van Flandern algorithm.
         """
         jd = int(self.day + .5)
@@ -279,7 +278,8 @@ class JulianDay(BaseDate):
         L = j // 11
         month = j + 2 - 12*L
         year = 100 * (n-49) + i + L
-    
+        if year < 1:
+            year -= 1
         return GregorianDate(year, month, day, self.day)
     
     def to_heb(self):
@@ -357,7 +357,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     jd : float(property)
       The corresponding Julian Day Number at midnight (as *n*.5).
     """
- 
+
     def __init__(self, year, month, day, jd=None):
         """Initialize a GregorianDate.
         
@@ -379,20 +379,28 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     
     @property
     def jd(self):
-        """Return the corresponding Julian Day.
+        """Return the corresponding Julian day number.
         
         This property retrieves the corresponding Julian Day as a float
         if it was passed into the init method or already calculated, and
         if it wasn't, it calculates it and saves it for later retrievals
         and returns it.
+
+        Returns
+        -------
+        float
+          The Julian day number at midnight.
         """
         if self._jd is None:
             year = self.year
-            month = self.month + 1
+            month = self.month
             day = self.day
+            if year < 0:
+                year += 1 
             if month < 3:
                 year -= 1
                 month += 12
+            month += 1
             a = year // 100
             b = 2 - a + a//4
             self._jd = (int(365.25*year) + 
@@ -415,6 +423,8 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     @staticmethod
     def _is_leap(year):
         """Return True if year of date is a leap year, otherwise False."""
+        if year < 0:
+            year += 1
         if(
             (year % 4 == 0) and not
             (year % 100 == 0 and year % 400 != 0)
@@ -451,15 +461,25 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         """
         return JulianDay(self.jd)
     
-    def to_heb(self):
+    def to_heb(self, night=False):
         """Convert to Hebrew date.
         
+        Parameters
+        ----------
+        night : bool, optional
+          True if it is after nightfall of the secular date but before
+          midnight else False (as a Hebrew date begins at nightfall).
+          Defaults to false.
+
         Returns
         -------
         HebrewDate
           The equivalent Hebrew date instance.
         """
-        return self.to_jd().to_heb()
+        today = self
+        if night:
+            today = self + 1
+        return today.to_jd().to_heb()
     
     def to_pydate(self):
         """Convert to a standard library date.
@@ -524,6 +544,19 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     
     @property
     def jd(self):
+        """Return the corresponding Julian day number.
+        
+        This property retrieves the corresponding Julian Day as a float
+        if it was passed into the init method or already calculated, and
+        if it wasn't, it calculates it, saves it for later retrievals,
+        and returns it.
+
+        Returns
+        -------
+        float
+          The Julian day number at midnight.
+
+        """
         if self._jd is None:
             months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
             if not HebrewDate._is_leap(self.year):

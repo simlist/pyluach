@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>luachcal.tests &mdash; luachcal  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="luachcal  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">luachcal  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for luachcal.tests</h1><div class="highlight"><pre>
+<span class="c">#!usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">gt</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="n">eq</span><span class="p">,</span> <span class="n">ne</span><span class="p">,</span> <span class="n">ge</span><span class="p">,</span> <span class="n">le</span>
+
+<span class="kn">from</span> <span class="nn">luachcal</span> <span class="kn">import</span> <span class="n">dates</span>
+
+<span class="n">KNOWN_VALUES</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">2009</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">21</span><span class="p">):</span> <span class="p">(</span><span class="mi">5769</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">2009</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">30</span><span class="p">):</span> <span class="p">(</span><span class="mi">5770</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">2009</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span> <span class="p">(</span><span class="mi">5770</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">26</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">2010</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">):</span> <span class="p">(</span><span class="mi">5770</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">2010</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">26</span><span class="p">):</span> <span class="p">(</span><span class="mi">5770</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">17</span><span class="p">):</span> <span class="p">(</span><span class="mi">5774</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">2014</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span> <span class="p">(</span><span class="mi">5774</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">2014</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span> <span class="p">(</span><span class="mi">5774</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+                <span class="p">}</span>
+        
+            
+<div class="viewcode-block" id="ClassesSanityTest"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ClassesSanityTest">[docs]</a><span class="k">class</span> <span class="nc">ClassesSanityTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassesSanityTest.test_greg_sanity"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ClassesSanityTest.test_greg_sanity">[docs]</a>    <span class="k">def</span> <span class="nf">test_greg_sanity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">347998</span><span class="p">,</span><span class="mi">2460000</span><span class="p">,</span> <span class="mi">117</span><span class="p">):</span>
+            <span class="n">jd</span> <span class="o">=</span> <span class="n">dates</span><span class="o">.</span><span class="n">JulianDay</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">conf</span> <span class="o">=</span> <span class="n">jd</span><span class="o">.</span><span class="n">to_greg</span><span class="p">()</span><span class="o">.</span><span class="n">to_jd</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">jd</span><span class="o">.</span><span class="n">day</span><span class="p">,</span>
+                             <span class="n">conf</span><span class="o">.</span><span class="n">day</span><span class="p">,</span>
+                             <span class="s">&#39;jd={0},conv={1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">jd</span><span class="o">.</span><span class="n">day</span><span class="p">,</span><span class="n">conf</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+                             <span class="p">)</span>
+            </div>
+<div class="viewcode-block" id="ClassesSanityTest.test_heb_sanity"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ClassesSanityTest.test_heb_sanity">[docs]</a>    <span class="k">def</span> <span class="nf">test_heb_sanity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">347998</span><span class="p">,</span> <span class="mi">2460000</span><span class="p">,</span> <span class="mi">117</span><span class="p">):</span>
+            <span class="n">jd</span> <span class="o">=</span> <span class="n">dates</span><span class="o">.</span><span class="n">JulianDay</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">conf</span> <span class="o">=</span> <span class="n">jd</span><span class="o">.</span><span class="n">to_heb</span><span class="p">()</span><span class="o">.</span><span class="n">to_jd</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">jd</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">conf</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="s">&#39;jd={0}, conf={1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">jd</span><span class="p">,</span><span class="n">conf</span><span class="p">))</span>
+            
+            </div></div>
+<div class="viewcode-block" id="ClassesConversionTest"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ClassesConversionTest">[docs]</a><span class="k">class</span> <span class="nc">ClassesConversionTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="ClassesConversionTest.test_from_greg"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ClassesConversionTest.test_from_greg">[docs]</a>    <span class="k">def</span> <span class="nf">test_from_greg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">KNOWN_VALUES</span><span class="p">:</span>
+            <span class="n">heb</span> <span class="o">=</span> <span class="n">dates</span><span class="o">.</span><span class="n">GregorianDate</span><span class="p">(</span><span class="o">*</span><span class="n">date</span><span class="p">)</span><span class="o">.</span><span class="n">to_heb</span><span class="p">()</span><span class="o">.</span><span class="n">tuple</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">KNOWN_VALUES</span><span class="p">[</span><span class="n">date</span><span class="p">],</span> <span class="n">heb</span><span class="p">)</span>
+            </div>
+<div class="viewcode-block" id="ClassesConversionTest.test_from_heb"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ClassesConversionTest.test_from_heb">[docs]</a>    <span class="k">def</span> <span class="nf">test_from_heb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">KNOWN_VALUES</span><span class="p">:</span>
+            <span class="n">greg</span> <span class="o">=</span> <span class="n">dates</span><span class="o">.</span><span class="n">HebrewDate</span><span class="p">(</span><span class="o">*</span><span class="n">KNOWN_VALUES</span><span class="p">[</span><span class="n">date</span><span class="p">])</span><span class="o">.</span><span class="n">to_greg</span><span class="p">()</span><span class="o">.</span><span class="n">tuple</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">greg</span><span class="p">)</span>
+            
+</div></div>
+<div class="viewcode-block" id="OperatorsTest"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.OperatorsTest">[docs]</a><span class="k">class</span> <span class="nc">OperatorsTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="OperatorsTest.setUp"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.OperatorsTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">dates</span><span class="o">.</span><span class="n">GregorianDate</span><span class="p">,</span> <span class="n">dates</span><span class="o">.</span><span class="n">HebrewDate</span><span class="p">,</span> <span class="n">dates</span><span class="o">.</span><span class="n">JulianDay</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deltas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">1004</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="OperatorsTest.test_add"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.OperatorsTest.test_add">[docs]</a>    <span class="k">def</span> <span class="nf">test_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cal</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">deltas</span><span class="p">:</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="n">cal</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+                <span class="n">date2</span> <span class="o">=</span> <span class="n">date</span> <span class="o">+</span> <span class="n">delta</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">jd</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="n">date2</span><span class="o">.</span><span class="n">jd</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="OperatorsTest.test_min_int"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.OperatorsTest.test_min_int">[docs]</a>    <span class="k">def</span> <span class="nf">test_min_int</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Test subtracting a number from a date&#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">cal</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">deltas</span><span class="p">:</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="n">cal</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+                <span class="n">date2</span> <span class="o">=</span> <span class="n">date</span> <span class="o">-</span> <span class="n">delta</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">jd</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="n">date2</span><span class="o">.</span><span class="n">jd</span><span class="p">)</span>
+             </div>
+<div class="viewcode-block" id="OperatorsTest.test_min_date"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.OperatorsTest.test_min_date">[docs]</a>    <span class="k">def</span> <span class="nf">test_min_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Test subtracting one date from another</span>
+<span class="sd">        </span>
+<span class="sd">        This test loops through subtracting the current date of each</span>
+<span class="sd">        calendar from a date of each calendar at intervals from the</span>
+<span class="sd">        current date.   </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">cal</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">cal2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>  
+                <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">deltas</span><span class="p">:</span>
+                    <span class="n">today</span> <span class="o">=</span> <span class="n">cal</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+                    <span class="n">difference</span> <span class="o">=</span> <span class="p">(</span><span class="n">cal2</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">-</span> <span class="n">delta</span><span class="p">)</span> <span class="o">-</span> <span class="n">today</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">difference</span><span class="p">)</span>
+             
+ </div></div>
+<div class="viewcode-block" id="ComparisonTests"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ComparisonTests">[docs]</a><span class="k">class</span> <span class="nc">ComparisonTests</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;In ComparisonTests, comparisons are tested.</span>
+<span class="sd">    </span>
+<span class="sd">    Every function tests one test case comparing a date from each</span>
+<span class="sd">    calendar type to another date from each calendar type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="ComparisonTests.setUp"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ComparisonTests.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">dates</span><span class="o">.</span><span class="n">GregorianDate</span><span class="p">,</span> <span class="n">dates</span><span class="o">.</span><span class="n">HebrewDate</span><span class="p">,</span> <span class="n">dates</span><span class="o">.</span><span class="n">JulianDay</span><span class="p">]</span>
+    </div>
+<div class="viewcode-block" id="ComparisonTests.test_gt"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ComparisonTests.test_gt">[docs]</a>    <span class="k">def</span> <span class="nf">test_gt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test all comparers when one date is greater.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">cal</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>
+            <span class="n">today</span> <span class="o">=</span> <span class="n">cal</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">cal2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>
+                <span class="n">yesterday</span> <span class="o">=</span> <span class="n">cal2</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="p">[</span><span class="n">gt</span><span class="p">,</span> <span class="n">ge</span><span class="p">,</span> <span class="n">ne</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">yesterday</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="p">[</span><span class="n">eq</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="n">le</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">yesterday</span><span class="p">))</span>
+             </div>
+<div class="viewcode-block" id="ComparisonTests.test_lt"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ComparisonTests.test_lt">[docs]</a>    <span class="k">def</span> <span class="nf">test_lt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test all comparers when one date is less than another.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">cal</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>
+            <span class="n">today</span> <span class="o">=</span> <span class="n">cal</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">cal2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>
+                <span class="n">tomorrow</span> <span class="o">=</span> <span class="n">cal2</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="p">[</span><span class="n">lt</span><span class="p">,</span> <span class="n">le</span><span class="p">,</span> <span class="n">ne</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">tomorrow</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="p">[</span><span class="n">gt</span><span class="p">,</span> <span class="n">ge</span><span class="p">,</span> <span class="n">eq</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">tomorrow</span><span class="p">))</span>    
+     </div>
+<div class="viewcode-block" id="ComparisonTests.test_eq"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.ComparisonTests.test_eq">[docs]</a>    <span class="k">def</span> <span class="nf">test_eq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test all comparers when the dates are equal.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">cal</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>
+            <span class="n">today</span> <span class="o">=</span> <span class="n">cal</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">cal2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caltypes</span><span class="p">:</span>
+                <span class="n">today2</span> <span class="o">=</span> <span class="n">cal2</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="p">[</span><span class="n">eq</span><span class="p">,</span> <span class="n">ge</span><span class="p">,</span> <span class="n">le</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">today2</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="p">[</span><span class="n">gt</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="n">ne</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">today2</span><span class="p">))</span>
+                    
+                    </div></div>
+<div class="viewcode-block" id="TestErrors"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.TestErrors">[docs]</a><span class="k">class</span> <span class="nc">TestErrors</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="TestErrors.test_too_low_heb"><a class="viewcode-back" href="../../luachcal.html#luachcal.tests.TestErrors.test_too_low_heb">[docs]</a>    <span class="k">def</span> <span class="nf">test_too_low_heb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">dates</span><span class="o">.</span><span class="n">HebrewDate</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">dates</span><span class="o">.</span><span class="n">HebrewDate</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        
+                 
+
+   </div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">luachcal  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

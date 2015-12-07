@@ -3,7 +3,8 @@
 import unittest
 from operator import gt, lt, eq, ne, ge, le
 
-from luachcal import dates
+from pyluach import dates
+
 
 KNOWN_VALUES = {(2009, 8, 21): (5769, 6, 1),
                 (2009, 9, 30): (5770, 7, 12),
@@ -12,7 +13,8 @@ KNOWN_VALUES = {(2009, 8, 21): (5769, 6, 1),
                 (2010, 5, 26): (5770, 3, 13),
                 (2013, 11, 17): (5774, 9, 14),
                 (2014, 3, 12): (5774, 13, 10),
-                (2014, 6, 10): (5774, 3, 12)
+                (2014, 6, 10): (5774, 3, 12),
+                (2016, 2, 10): (5776, 12, 1)
                 }
         
             
@@ -130,7 +132,7 @@ class TestErrors(unittest.TestCase):
     def test_too_low_heb(self):
         self.assertRaises(ValueError, dates.HebrewDate, 0, 7, 1)
         self.assertRaises(ValueError, dates.HebrewDate, -1, 7, 1)
-        
+
  
 if __name__ == '__main__':
     unittest.main()

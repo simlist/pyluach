@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>luachcal.hebrewcal &mdash; pyluach 0.2.0dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="pyluach 0.2.0dev documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyluach 0.2.0dev documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for luachcal.hebrewcal</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
+
+<span class="kn">from</span> <span class="nn">luachcal.dates</span> <span class="kn">import</span> <span class="n">HebrewDate</span>
+<span class="kn">from</span> <span class="nn">luachcal.utils</span> <span class="kn">import</span> <span class="n">memoize</span>
+
+<span class="k">def</span> <span class="nf">_adjust_postponed</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return actual date of fast day.</span>
+<span class="sd">    </span>
+<span class="sd">    For usual date of a fast day returns fast day adjusted for any</span>
+<span class="sd">    postponements. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">date</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">date</span><span class="o">.</span><span class="n">month</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">]:</span>
+            <span class="n">date</span> <span class="o">-=</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">date</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">date</span>
+        
+
+<span class="nd">@memoize</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_fast_day_table</span><span class="p">(</span><span class="n">year</span><span class="p">):</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">workingdate</span> <span class="o">=</span> <span class="n">_adjust_postponed</span><span class="p">(</span><span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">table</span><span class="p">[</span><span class="n">workingdate</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Tzom Gedalia&#39;</span>
+    
+    <span class="n">workingdate</span> <span class="o">=</span> <span class="n">_adjust_postponed</span><span class="p">(</span><span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">table</span><span class="p">[</span><span class="n">workingdate</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;10 of Teves&#39;</span>
+    
+    <span class="n">month</span> <span class="o">=</span> <span class="mi">13</span> <span class="k">if</span> <span class="n">Year</span><span class="p">(</span><span class="n">year</span><span class="p">)</span><span class="o">.</span><span class="n">leap</span> <span class="k">else</span> <span class="mi">12</span>
+    <span class="n">workingdate</span> <span class="o">=</span> <span class="n">_adjust_postponed</span><span class="p">(</span><span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+    <span class="n">table</span><span class="p">[</span><span class="n">workingdate</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Taanis Esther&#39;</span>
+    
+    <span class="n">workingdate</span> <span class="o">=</span> <span class="n">_adjust_postponed</span><span class="p">(</span><span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">17</span><span class="p">))</span>
+    <span class="n">table</span><span class="p">[</span><span class="n">workingdate</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;17 of Tamuz&#39;</span>
+    
+    <span class="n">workingdate</span> <span class="o">=</span> <span class="n">_adjust_postponed</span><span class="p">(</span><span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+    <span class="n">table</span><span class="p">[</span><span class="n">workingdate</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;9 of Av&#39;</span>
+    
+    <span class="k">return</span> <span class="n">table</span>
+
+<div class="viewcode-block" id="holiday"><a class="viewcode-back" href="../../luachcal.html#luachcal.hebrewcal.holiday">[docs]</a><span class="k">def</span> <span class="nf">holiday</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">israel</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return Jewish holiday of given date.</span>
+<span class="sd">    </span>
+<span class="sd">    The holidays include the major and minor religious Jewish</span>
+<span class="sd">    holidays including fast days.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``</span>
+<span class="sd">      Any date that implements a ``to_heb()`` method which returns a</span>
+<span class="sd">      ``HebrewDate`` can be used.</span>
+<span class="sd">      </span>
+<span class="sd">    israel : boolian, optional</span>
+<span class="sd">      True if you want the holidays according to the israel schedule.</span>
+<span class="sd">      Defaults to ``False``.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str or ``None``</span>
+<span class="sd">      The name of the holiday or ``None`` if the given date is not</span>
+<span class="sd">      a Jewish holiday.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">to_heb</span><span class="p">()</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">year</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">month</span>
+    <span class="n">day</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">day</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">_fast_day_table</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">table</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">table</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s">&#39;Rosh Hashana&#39;</span>
+        <span class="k">elif</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;Yom Kippur&#39;</span>
+        <span class="k">elif</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">22</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s">&#39;Succos&#39;</span>
+        <span class="k">elif</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">22</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;Shmini Atzeres&#39;</span>
+        <span class="k">elif</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">23</span> <span class="ow">and</span> <span class="n">israel</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;Simchas Torah&#39;</span>
+    <span class="k">elif</span><span class="p">(</span>
+         <span class="p">(</span><span class="n">month</span> <span class="o">==</span> <span class="mi">9</span> <span class="ow">and</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span> <span class="ow">or</span> 
+         <span class="n">date</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">HebrewDate</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">29</span><span class="p">)</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+         <span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;Chanuka&#39;</span>
+    <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">11</span> <span class="ow">and</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">15</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;Tu B&#39;shvat&quot;</span>
+    <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+        <span class="n">leap</span> <span class="o">=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">14</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;Purim Katan&#39;</span> <span class="k">if</span> <span class="n">leap</span> <span class="k">else</span> <span class="s">&#39;Purim&#39;</span>
+        <span class="k">if</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">15</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">leap</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;Shushan Purim&#39;</span>
+    <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">14</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s">&#39;Purim&#39;</span>
+        <span class="k">elif</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">15</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;Shushan Purim&#39;</span>
+    <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">22</span> <span class="k">if</span> <span class="n">israel</span> <span class="k">else</span> <span class="mi">23</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;Pesach&#39;</span>
+    <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">18</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;Lag Ba&#39;omer&quot;</span>
+    <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="p">(</span><span class="n">day</span> <span class="o">==</span> <span class="mi">6</span> <span class="k">if</span> <span class="n">israel</span> <span class="k">else</span> <span class="n">day</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="s">&#39;Shavuos&#39;</span>
+    <span class="k">elif</span> <span class="n">month</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">day</span> <span class="o">==</span> <span class="mi">15</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&quot;Tu B&#39;av&quot;</span> 
+
+</div>
+<div class="viewcode-block" id="Year"><a class="viewcode-back" href="../../luachcal.html#luachcal.hebrewcal.Year">[docs]</a><span class="k">class</span> <span class="nc">Year</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Year object represents a Hebrew calendar year.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">      A Hebrew year.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">      The hebrew year.</span>
+<span class="sd">    leap : bool</span>
+<span class="sd">      True if the year is a leap year else false.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+        
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The initializer for a Year object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Year {0} is before creation.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">year</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span> <span class="n">year</span> <span class="o">=</span> <span class="n">year</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leap</span> <span class="o">=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;Year({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_days_in_year</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="Year.__iter__"><a class="viewcode-back" href="../../luachcal.html#luachcal.hebrewcal.Year.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Yield integer for each month in year.&quot;&quot;&quot;</span>
+        <span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">leap</span><span class="p">:</span>
+            <span class="n">months</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">months</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">month</span>
+            </div>
+<div class="viewcode-block" id="Year.itermonths"><a class="viewcode-back" href="../../luachcal.html#luachcal.hebrewcal.Year.itermonths">[docs]</a>    <span class="k">def</span> <span class="nf">itermonths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Yield Month instance for each month of the year.</span>
+<span class="sd">        </span>
+<span class="sd">        Yields</span>
+<span class="sd">        ------</span>
+<span class="sd">        Month</span>
+<span class="sd">          The next month in the Hebrew calendar year as a</span>
+<span class="sd">          ``luachcal.hebrewcal.Month`` instance beginning with</span>
+<span class="sd">          Tishrei and ending with Elul.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">Month</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="Year.iterdays"><a class="viewcode-back" href="../../luachcal.html#luachcal.hebrewcal.Year.iterdays">[docs]</a>    <span class="k">def</span> <span class="nf">iterdays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Yield integer for each day of the year.</span>
+<span class="sd">        </span>
+<span class="sd">        Yields</span>
+<span class="sd">        ------</span>
+<span class="sd">        int</span>
+<span class="sd">          An integer beginning with 1 representing the next day of</span>
+<span class="sd">          the year.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">day</span>
+            </div>
+<div class="viewcode-block" id="Year.iterdates"><a class="viewcode-back" href="../../luachcal.html#luachcal.hebrewcal.Year.iterdates">[docs]</a>    <span class="k">def</span> <span class="nf">iterdates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Yield HebrewDate instance for each day of the year.</span>
+<span class="sd">        </span>
+<span class="sd">        Yields</span>
+<span class="sd">        ------</span>
+<span class="sd">        ``HebrewDate``</span>
+<span class="sd">            The next date of the Hebrew calendar year starting with</span>
+<span class="sd">            the first of Tishrei. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">itermonths</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">month</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">HebrewDate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+        
+</div></div>
+<div class="viewcode-block" id="Month"><a class="viewcode-back" href="../../luachcal.html#luachcal.hebrewcal.Month">[docs]</a><span class="k">class</span> <span class="nc">Month</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Month object represents a month of the Hebrew calendar.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">    month : int</span>
+<span class="sd">      The month as an integer starting with 7 for Tishrei through 13</span>
+<span class="sd">      if necessary for Adar Sheni and then 1-6 for Nissan - Elul.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    year : int</span>
+<span class="sd">      The Hebrew year.</span>
+<span class="sd">    month : int</span>
+<span class="sd">      The month as an integer starting with 7 for Tishrei through 13</span>
+<span class="sd">      if necessary for Adar Sheni and then 1-6 for Nissan - Elul.</span>
+<span class="sd">    name : str</span>
+<span class="sd">      The name of the month. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">_monthnames</span> <span class="o">=</span> <span class="p">{</span><span class="mi">7</span><span class="p">:</span> <span class="s">&#39;Tishrei&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="s">&#39;Cheshvan&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="s">&#39;Kislev&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span> <span class="s">&#39;Teves&#39;</span><span class="p">,</span> 
+                  <span class="mi">11</span><span class="p">:</span> <span class="s">&#39;Shvat&#39;</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span><span class="s">&#39;Adar Sheni&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s">&#39;Nissan&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s">&#39;Iyar&#39;</span><span class="p">,</span>
+                  <span class="mi">3</span><span class="p">:</span> <span class="s">&#39;Sivan&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s">&#39;Tamuz&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="s">&#39;Av&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="s">&#39;Elul&#39;</span><span class="p">}</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Year is before creation.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">year</span>
+        <span class="n">leap</span> <span class="o">=</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_is_leap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+        <span class="n">yearlength</span> <span class="o">=</span> <span class="mi">13</span> <span class="k">if</span> <span class="n">leap</span> <span class="k">else</span> <span class="mi">12</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">month</span> <span class="o">&gt;</span> <span class="n">yearlength</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;&#39;&#39;Month must be between 1 and 12 for a normal</span>
+<span class="s">            year and 13 for a leap year.&#39;&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">month</span> <span class="o">=</span> <span class="n">month</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_monthnames</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Adar Rishon&#39;</span> <span class="k">if</span> <span class="n">leap</span> <span class="k">else</span> <span class="s">&#39;Adar&#39;</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monthnames</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">]</span>
+        
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;Month({0}, {1})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+            
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">HebrewDate</span><span class="o">.</span><span class="n">_month_length</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> 
+    
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">day</span>
+            
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">yearmonths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Year</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">))</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">yearmonths</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+        <span class="n">leftover_months</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">yearmonths</span><span class="p">[</span><span class="n">index</span><span class="p">:])</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="o">&lt;</span> <span class="n">leftover_months</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Month</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">yearmonths</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="n">other</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Month</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">__add__</span><span class="p">(</span><span class="n">other</span> <span class="o">-</span> <span class="n">leftover_months</span><span class="p">)</span>
+                                               
+    
+    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+            <span class="n">yearmonths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Year</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">))</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">yearmonths</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+            <span class="n">leftover_months</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="k">if</span> <span class="n">other</span> <span class="o">&lt;</span> <span class="n">leftover_months</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Month</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">yearmonths</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="n">other</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">Month</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                         <span class="n">deque</span><span class="p">(</span><span class="n">Year</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span><span class="o">.</span><span class="n">__sub__</span><span class="p">(</span>
+                                                    <span class="n">other</span> <span class="o">-</span> <span class="n">leftover_months</span>
+                                                    <span class="p">)</span>
+                    <span class="c"># Recursive call on the last month of the previous year. </span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elapsed_months</span><span class="p">()</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">_elapsed_months</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;&#39;&#39;You can only subtract a number or a month</span>
+<span class="s">                            object from a month&#39;&#39;&#39;</span><span class="p">)</span>
+            
+<div class="viewcode-block" id="Month.starting_weekday"><a class="viewcode-back" href="../../luachcal.html#luachcal.hebrewcal.Month.starting_weekday">[docs]</a>    <span class="k">def</span> <span class="nf">starting_weekday</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return first weekday of the month.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">          The weekday of the first day of the month starting with Sunday as 1</span>
+<span class="sd">          through Saturday as 7.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">HebrewDate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span>
+    </div>
+    <span class="k">def</span> <span class="nf">_elapsed_months</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return number of months elapsed from beginning of calendar&#39;&#39;&#39;</span>
+        <span class="n">yearmonths</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">Year</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">))</span>
+        <span class="n">months_elapsed</span> <span class="o">=</span> <span class="p">(</span>
+                      <span class="p">(</span><span class="mi">235</span> <span class="o">*</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">19</span><span class="p">))</span> <span class="o">+</span>
+                      <span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">19</span><span class="p">))</span> <span class="o">+</span> 
+                      <span class="p">(</span><span class="mi">7</span> <span class="o">*</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">19</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">19</span> <span class="o">+</span>
+                      <span class="n">yearmonths</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+                      <span class="p">)</span>
+        <span class="k">return</span> <span class="n">months_elapsed</span>
+    
+<div class="viewcode-block" id="Month.iterdates"><a class="viewcode-back" href="../../luachcal.html#luachcal.hebrewcal.Month.iterdates">[docs]</a>    <span class="k">def</span> <span class="nf">iterdates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return iterator that yields an instance of HebrewDate.</span>
+<span class="sd">        </span>
+<span class="sd">        Yields</span>
+<span class="sd">        ------</span>
+<span class="sd">        ``HebrewDate``</span>
+<span class="sd">          The next Hebrew Date of the year starting the first day of</span>
+<span class="sd">          Tishrei through the last day of Ellul.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">HebrewDate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Simlist.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.4</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
