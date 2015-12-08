@@ -6,7 +6,7 @@ setup(name='pyluach',
       author='MS List',
       author_email='simlist@gmail.com',
       packages= ['pyluach',],
-      url='https://github.com/simlist/luachcal',
+      url='https://github.com/simlist/pyluach',
       license='MIT',
       description=('''Package for manipulating Hebrew dates and
                     Gregorian-Hebrew conversion'''),
