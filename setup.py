@@ -1,11 +1,11 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import io
 
 setup(name='pyluach',
       version='0.2.0dev',
       author='MS List',
       author_email='simlist@gmail.com',
-      packages='pyluach',
+      packages= find_packages(),
       url='https://github.com/simlist/luachcal',
       license='MIT',
       description=('''Package for manipulating Hebrew dates and
