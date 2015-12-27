@@ -11,6 +11,7 @@ Features
 * Finding a date at a given duration from the given date
 * Rich comparisons between dates
 * Finding the weekday of a given date
+* Finding the weekly Parsha reading of a given date
 
 Installation
 ---------------------
