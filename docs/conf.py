@@ -33,7 +33,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
 	'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon',
+    'sphinxcontrib.napoleon',
 #    'numpydoc',
 ]
 # Napoleon settings
