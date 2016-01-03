@@ -1,11 +1,11 @@
 pyluach
-============================
+========
 
 Pyluach is a Python package for manipulating Hebrew calendar dates and 
 Hebrew-Gregorian conversions.
 
 Features
----------------
+---------
 * Conversion between Hebrew and Gregorian dates
 * Finding the difference between two dates
 * Finding a date at a given duration from the given date
@@ -14,11 +14,11 @@ Features
 * Finding the weekly Parsha reading of a given date
 
 Installation
----------------------
-Still under developement. When completed use ``pip install pyluach``
+-------------
+Use ``pip install pyluach``.
 
 Typical use
---------------------
+------------
 ::
 
     from pyluach import dates, hebrewcal
@@ -39,10 +39,10 @@ Typical use
 	Tishrei Cheshvan ...
 
 Contact
-----------------
+--------
 For questions and comments feel free to contact me at simlist@gmail.com.
 
 License
---------------
+--------
 Pyluach is licensed under the MIT license.
 
