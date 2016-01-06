@@ -43,31 +43,3 @@ class memoize(object):
             self.cache[args] = result
             return result
         return innercall
-    
-    
-##  Debug!!!
-#class test(object):
-    
-    
-#    @memoize(maxlength=30)
-#    def change(self, var):
-#        print 'called change'
-#        return var
-        
-#t = test()
-
-#def testit():
-#    for i in xrange(21):
-#        print t.change(i)
-        
-#testit()
-#testit()
-#testit()
-    
-    
-        
-        
-        
-        
-    
-        

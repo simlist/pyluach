@@ -20,7 +20,7 @@ from __future__ import division
 from datetime import date
 from numbers import Number
 
-from utils import memoize
+from pyluach.utils import memoize
 
 
 class BaseDate(object):
