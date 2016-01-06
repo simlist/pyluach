@@ -40,7 +40,7 @@ extensions = [
 napoleon_include_special_with_doc = False
 
 # Numpydoc settings (not using for now)
-#  numpydoc_class_members_toctree = False
+# numpydoc_class_members_toctree = False
 
 autodoc_default_flags = ['members', 'inherited-members', 'show-inheritance']
 

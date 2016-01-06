@@ -576,12 +576,19 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         """Return HebrewDate instance for the current day.
         
         This static method wraps the Python standard library's
-        date.today() method to get the date from the timestamp.
+        ``date.today()`` method to get the date from the timestamp.
         
         Returns
         -------
         HebrewDate
           The current Hebrew date from the computer's timestamp.
+
+        Note
+        ----
+        This method coverts the Gregorian date from the time stamp to
+        a Hebrew date, so if it is after nightfall but before 
+        midnight you will have to add one day, ie.
+        ``today = HebrewDate.today() + 1``.
         """
         return GregorianDate.today().to_heb()
      
@@ -675,7 +682,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
 
     @classmethod
     def _month_length(cls, year, month):
-        """Months start with Nissan (Nissan is 1 and Tishrei is 7"""
+        """Months start with Nissan (Nissan is 1 and Tishrei is 7)"""
         
         if month in [1, 3, 5, 7, 11]:
             return 30

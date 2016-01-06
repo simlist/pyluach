@@ -1,5 +1,4 @@
 #! python
-from __future__ import division
 
 import unittest
 from operator import gt, lt, eq, ne, ge, le
