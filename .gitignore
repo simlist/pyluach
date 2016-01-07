@@ -3,3 +3,6 @@
 *.pyc
 *~
 ENV*
+*egg*
+*build*
+*.whl
