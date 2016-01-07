@@ -1,4 +1,4 @@
-#!usr/bin/env python
+#! python
 
 import unittest
 from operator import gt, lt, eq, ne, ge, le
@@ -20,7 +20,7 @@ KNOWN_VALUES = {(2009, 8, 21): (5769, 6, 1),
             
 class ClassesSanityTest(unittest.TestCase):
     def test_greg_sanity(self):
-        for i in xrange(347998,2460000, 117):
+        for i in range(347998,2460000, 117):
             jd = dates.JulianDay(i)
             conf = jd.to_greg().to_jd()
             self.assertEqual(jd.day,
@@ -29,7 +29,7 @@ class ClassesSanityTest(unittest.TestCase):
                              )
             
     def test_heb_sanity(self):
-        for i in xrange(347998, 2460000, 117):
+        for i in range(347998, 2460000, 117):
             jd = dates.JulianDay(i)
             conf = jd.to_heb().to_jd()
             self.assertEqual(jd.day, conf.day, 'jd={0}, conf={1}'.format(jd,conf))

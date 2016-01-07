@@ -12,11 +12,11 @@ class Cache(OrderedDict):
         self.maxlen = kwargs.pop('maxlen', None)
         super(Cache, self).__init__(*args, **kwargs)
         
-    def __setitem__(self, key, value, dict_setitem=dict.__setitem__):
+    def __setitem__(self, key, value):
         if self.maxlen is not None:
             while len(self) >= self.maxlen:
                 self.popitem(False)
-        return OrderedDict.__setitem__(self, key, value, dict_setitem=dict_setitem)
+        OrderedDict.__setitem__(self, key, value)
     
 class memoize(object):
     
@@ -43,31 +43,3 @@ class memoize(object):
             self.cache[args] = result
             return result
         return innercall
-    
-    
-##  Debug!!!
-#class test(object):
-    
-    
-#    @memoize(maxlength=30)
-#    def change(self, var):
-#        print 'called change'
-#        return var
-        
-#t = test()
-
-#def testit():
-#    for i in xrange(21):
-#        print t.change(i)
-        
-#testit()
-#testit()
-#testit()
-    
-    
-        
-        
-        
-        
-    
-        

@@ -55,8 +55,8 @@ def holiday(date, israel=False):
       ``HebrewDate`` can be used.
       
     israel : boolian, optional
-      True if you want the holidays according to the israel schedule.
-      Defaults to ``False``.
+      ``True`` if you want the holidays according to the israel
+      schedule. Defaults to ``False``.
     
     Returns
     -------

@@ -2,3 +2,7 @@
 !.gitignore
 *.pyc
 *~
+ENV*
+*egg*
+*build*
+*.whl

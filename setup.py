@@ -15,5 +15,5 @@ setup(name='pyluach',
                      'Intended Audience :: Developers',
                      'License :: OSI Approved :: MIT License',
                      'Programming Language :: Python :: 2.7'],
-      keywords = [' hebrew calendar jewish luach gregorian julian days conversion']
+      keywords = [' hebrew calendar jewish luach gregorian julian days dates date conversion']
       )
