@@ -1,14 +1,27 @@
+"""This module has functions to find the weekly parasha for a given Shabbos.
+
+Attributes
+----------
+PARSHIOS : list of str
+  A list of all of the parsha names starting with Beraishis through V'zos
+  Habrocha.
+
+Notes
+-----
+The algorithm is based on Dr. Irv Bromberg's, University of Toronto at 
+http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
+
+All parsha names are transliterated into the American Ashkenazik pronunciation.
+"""
+
+from __future__ import division
+
 from collections import deque, OrderedDict
 
 from pyluach.dates import HebrewDate
 from pyluach.utils import memoize
 
-"""This module has functions to find the weekly parasha for a given Shabbos.
-The algorithm comes from Dr. Irv Bromberg, University of Toronto at 
-http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
-
-All parsha names are transliterated into the American Ashkenazik pronunciation.
-"""  
+  
 
 PARSHIOS = [
             'Beraishis', 'Noach', "Lech L'cha", 'Vayera', 'Chayei Sarah',
@@ -55,7 +68,7 @@ def _gentable(year, israel=False):
             parsha = parshalist.popleft()
             table[shabbos] = PARSHIOS[parsha]
             if(
-               (parsha == 21 and (HebrewDate(year, 1, 14)-shabbos) / 7 < 3) or
+               (parsha == 21 and (HebrewDate(year, 1, 14)-shabbos) // 7 < 3) or
                (parsha in [26, 28] and not leap) or
                (parsha == 31 and not leap and (
                                                not israel or pesachday != 7
