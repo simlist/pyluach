@@ -27,7 +27,7 @@ PARSHIOS = [
 def _parshaless(date, israel=False):
     if israel and date.tuple()[1:] in [(7,23), (1,22), (3,7)]:
         return False
-    if date.month == 7 and date.day in ([1,2,10] + range(15, 24)):
+    if date.month == 7 and date.day in ([1,2,10] + list(range(15, 24))):
         return True
     if date.month == 1 and date.day in range(15, 23):
         return True
@@ -39,7 +39,7 @@ def _parshaless(date, israel=False):
 @memoize(maxlen=50)
 def _gentable(year, israel=False):
     """Return OrderedDict mapping date of Shabbos to parsha name."""
-    parshalist = deque([51, 52] + range(52))
+    parshalist = deque([51, 52] + list(range(52)))
     table = OrderedDict()
     leap = HebrewDate._is_leap(year)
     pesachday = HebrewDate(year, 1, 15).weekday()
