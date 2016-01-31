@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import io
 
 setup(name='pyluach',
-      version='0.2.0dev1',
+      version='0.3.0dev0',
       author='MS List',
       author_email='simlist@gmail.com',
       packages= ['pyluach',],
@@ -17,6 +17,7 @@ setup(name='pyluach',
                      'License :: OSI Approved :: MIT License',
                      'Programming Language :: Python :: 2.7',
                      'Programming Language :: Python :: 3'],
-      keywords = [''' hebrew calendar jewish luach gregorian julian days
-                  dates date conversion parsha holiday''']
+      keywords = ['hebrew', 'calendar', 'jewish', 'luach', 'gregorian',
+                  'julian', 'days', 'dates', 'date', 'conversion', 
+                  'parsha', 'holiday']
       )
