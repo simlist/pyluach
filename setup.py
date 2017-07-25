@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import io
 
 setup(name='pyluach',
-      version='0.3.0dev0',
+      version='0.3.0dev1',
       author='MS List',
       author_email='simlist@gmail.com',
       packages= ['pyluach',],
