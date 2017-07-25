@@ -143,6 +143,11 @@ class Year(object):
 
     def __len__(self):
         return HebrewDate._days_in_year(self.year)
+
+    def __eq__(self, other):
+        if isinstance(other, Year) and self.year == other.year:
+            return True
+        return False
     
     def __iter__(self):
         """Yield integer for each month in year."""
@@ -240,14 +245,22 @@ class Month(object):
     def __iter__(self):
         for day in range(1, len(self) + 1):
             yield day
+
+    def __eq__(self, other):
+        if(
+           isinstance(other, Month) and
+           self.year == other.year and 
+           self.month == other.month):
+            return True
+        return False 
             
     def __add__(self, other):
         yearmonths = list(Year(self.year))
         index = yearmonths.index(self.month)
-        leftover_months = len(yearmonths[index:]) - 1
-        if other < leftover_months:
+        leftover_months = len(yearmonths[index + 1:])
+        if other <= leftover_months:
             return Month(self.year, yearmonths[index + other])
-        return Month(self.year + 1, 1).__add__(other - leftover_months)
+        return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
                                                
     
     def __sub__(self, other):
@@ -255,11 +268,11 @@ class Month(object):
             yearmonths = list(Year(self.year))
             index = yearmonths.index(self.month)
             leftover_months = index
-            if other < leftover_months:
+            if other <= leftover_months:
                 return Month(self.year, yearmonths[index - other])
             return Month(self.year - 1,
                          deque(Year(self.year - 1), maxlen=1).pop()).__sub__(
-                                                    other - leftover_months
+                                                    other - 1 - leftover_months
                                                     )
                     # Recursive call on the last month of the previous year. 
         try:
