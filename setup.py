@@ -12,7 +12,7 @@ setup(name='pyluach',
                     Gregorian-Hebrew conversion, and other Hebrew
                     calendar related calculations.'''),
       long_description=io.open('README.rst').read(),
-      classifiers = ['Development Status :: 2 - Pre-Alpha',
+      classifiers = ['Development Status :: 3 - Alpha',
                      'Intended Audience :: Developers',
                      'License :: OSI Approved :: MIT License',
                      'Programming Language :: Python :: 2.7',
