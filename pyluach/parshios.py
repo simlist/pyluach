@@ -1,14 +1,28 @@
+"""This module has functions to find the weekly parasha for a given Shabbos.
+
+Attributes
+----------
+PARSHIOS : list of str
+  A list of all of the parsha names starting with Beraishis through V'zos
+  Habrocha.
+
+Notes
+-----
+The algorithm is based on Dr. Irv Bromberg's, University of Toronto at 
+http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
+
+All parsha names are transliterated into the American Ashkenazik pronunciation.
+"""
+
+from __future__ import division
+from __future__ import unicode_literals
+
 from collections import deque, OrderedDict
 
 from pyluach.dates import HebrewDate
 from pyluach.utils import memoize
 
-"""This module has functions to find the weekly parasha for a given Shabbos.
-The algorithm comes from Dr. Irv Bromberg, University of Toronto at 
-http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
-
-All parsha names are transliterated into the American Ashkenazik pronunciation.
-"""  
+  
 
 PARSHIOS = [
             'Beraishis', 'Noach', "Lech L'cha", 'Vayera', 'Chayei Sarah',
@@ -38,7 +52,11 @@ def _parshaless(date, israel=False):
 
 @memoize(maxlen=50)
 def _gentable(year, israel=False):
-    """Return OrderedDict mapping date of Shabbos to parsha name."""
+    """Return OrderedDict mapping date of Shabbos to list of parsha numbers.
+    
+    The numbers start with Beraishis as 0. Double parshios are represented
+    as a list of the two numbers. If there is no Parsha the value is None.
+    """
     parshalist = deque([51, 52] + list(range(52)))
     table = OrderedDict()
     leap = HebrewDate._is_leap(year)
@@ -53,9 +71,9 @@ def _gentable(year, israel=False):
             table[shabbos] = None
         else:
             parsha = parshalist.popleft()
-            table[shabbos] = PARSHIOS[parsha]
+            table[shabbos] = [parsha,]
             if(
-               (parsha == 21 and (HebrewDate(year, 1, 14)-shabbos) / 7 < 3) or
+               (parsha == 21 and (HebrewDate(year, 1, 14)-shabbos) // 7 < 3) or
                (parsha in [26, 28] and not leap) or
                (parsha == 31 and not leap and (
                                                not israel or pesachday != 7
@@ -64,10 +82,7 @@ def _gentable(year, israel=False):
                (parsha == 41 and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2)  or
                (parsha == 50 and HebrewDate(year+1, 7, 1).weekday() > 4)
                ):  #  If any of that then it's a double parsha.
-                table[shabbos] = ', '.join([
-                                      table[shabbos],
-                                      PARSHIOS[parshalist.popleft()]
-                                      ])
+                table[shabbos].append(parshalist.popleft())
         shabbos += 7
     return table    
         
@@ -89,13 +104,41 @@ def getparsha(date, israel=False):
       
     Returns
     -------
-    str or ``None``
-      The name of the parsha, or ``None`` if the Shabbos doesn't have
-      a parsha (i.e. it's on Yom Tov).
+    list of ints or ``None``
+      A list of the numbers of the parshios beginning with 0 for Beraishis, or ``None``
+      if the Shabbos doesn't have a parsha (i.e. it's on Yom Tov).
     """
     shabbos = date.to_heb().shabbos()
     table = _gentable(shabbos.year, israel)
     return table[shabbos]
+
+def getparsha_string(date, israel=False):
+    """Return the parsha as a string for the given date.
+
+    This function wraps ``getparsha`` returning a the parsha name
+    transliterated into English.
+
+    Parameters
+    ----------
+    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+      This date does not have to be a Shabbos.
+      
+    israel : bool, optional
+      ``True`` if you want the parsha according to the Israel schedule
+      (with only one day of Yom Tov). Defaults to ``False``.
+    
+    Returns
+    -------
+    str or ``None``
+      The name of the parsha seperated by a comma and space if it is a 
+      double parsha or ``None`` if there is no parsha that Shabbos
+      (ie. it's yom tov). 
+    """
+    if parsha is None:
+        return None
+    parsha = getparsha(date, israel)
+    name = [PARSHIOS[n] for n in parsha]
+    return ', '.join(name)
 
 
 def iterparshios(year, israel=False):
@@ -113,13 +156,13 @@ def iterparshios(year, israel=False):
     Yields
     ------
     str
-      The name of the parsha for the next Shabbos in the given year.
+      A list of the numbers of the parshios for the next Shabbos in the given year.
       Yields ``None`` for a Shabbos that doesn't have its own parsha
       (i.e. it occurs on a yom tov). 
     """
     table = _gentable(year, israel)
     for shabbos in table:
-        yield table[shabbos]    
+        yield table[shabbos]
 
 def parshatable(year, israel=False):
     """Return a table of all the Shabbosos in the year
@@ -137,7 +180,7 @@ def parshatable(year, israel=False):
     -------
     OrderedDict
       An ordered dictionary with the date of each Shabbos
-      as the key mapped to the parsha as a string, or ``None`` for a
+      as the key mapped to the parsha as a list of ints, or ``None`` for a
       Shabbos with no parsha.
     """
     return _gentable(year, israel)
