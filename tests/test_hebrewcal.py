@@ -1,6 +1,7 @@
 import pytest
 
 from pyluach import dates, hebrewcal
+from pyluach.hebrewcal import *
 
 class TestYear(object):
 
@@ -8,6 +9,22 @@ class TestYear(object):
         year1 = hebrewcal.Year(5777)
         year2 = hebrewcal.Year(5777)
         assert year1 == year2
+
+    def test_addtoyear(self):
+        year = Year(5777)
+        assert year + 2 == Year(5779)
+        assert year + 0 == year
+
+    def test_subtractintfromyear(self):
+        year = Year(5777)
+        assert year - 0 == year
+        assert year - 3 == Year(5774)
+
+    def test_subtractyearfromyear(self):
+        year = Year(5777)
+        assert year - year == 0
+        assert year - (year - 1) == 1
+        assert year - (year + 2) == 2
 
 class TestMonth(object):
 

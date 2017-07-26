@@ -135,7 +135,7 @@ class Year(object):
         """
         if year < 1:
             raise ValueError('Year {0} is before creation.'.format(year))
-        self. year = year
+        self.year = year
         self.leap = HebrewDate._is_leap(year)
         
     def __repr__(self):
@@ -148,7 +148,26 @@ class Year(object):
         if isinstance(other, Year) and self.year == other.year:
             return True
         return False
+
+    def __add__(self, other):
+        """Add int to year."""
+        return Year(self.year + other)
     
+    def __sub__(self, other):
+        """Subtract int or Year from Year.
+        
+        If other is an int return a new Year other before original year. If
+        other is a Year object, return delta of the two years as an int.
+        """
+        if isinstance(other, Year):
+            return abs(self.year - other.year)
+        else:
+            try:
+                return Year(self.year - other)
+            except AttributeError:
+                raise TypeError('Only an int or another Year object can'
+                                ' be subtracted from a year.')
+
     def __iter__(self):
         """Yield integer for each month in year."""
         months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
