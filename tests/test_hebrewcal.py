@@ -5,6 +5,14 @@ from pyluach.hebrewcal import *
 
 class TestYear(object):
 
+    def test_repryear(self):
+        year = Year(5777)
+        assert eval(repr(year)) == year
+       
+    def test_iteryear(self):
+        assert list(Year(5777)) == [7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6]
+        assert list(Year(5776)) == [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
+
     def test_equalyear(self):
         year1 = hebrewcal.Year(5777)
         year2 = hebrewcal.Year(5777)
@@ -27,6 +35,10 @@ class TestYear(object):
         assert year - (year + 2) == 2
 
 class TestMonth(object):
+
+    def test_reprmonth(self):
+        month = Month(5777, 10)
+        assert eval(repr(month)) == month
 
     def test_equalmonth(self):
         month1 = hebrewcal.Month(5777, 12)
