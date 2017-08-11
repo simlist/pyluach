@@ -89,49 +89,45 @@ class TestOperators(object):
                     assert delta == difference
 
 
-class TestComparisons(unittest.TestCase):
+class TestComparisons(object):
     """In ComparisonTests, comparisons are tested.
 
     Every function tests one test case comparing a date from each
     calendar type to another date from each calendar type.
     """
 
-    def setUp(self):
-        self.caltypes = [dates.GregorianDate, dates.HebrewDate,
-                         dates.JulianDay]
-
-    def test_gt(self):
+    def test_gt(self, setup):
         """Test all comparers when one date is greater."""
-        for cal in self.caltypes:
+        for cal in setup['caltypes']:
             today = cal.today()
-            for cal2 in self.caltypes:
+            for cal2 in setup['caltypes']:
                 yesterday = cal2.today() - 1
                 for comp in [gt, ge, ne]:
-                    self.assertTrue(comp(today, yesterday))
+                    assert comp(today, yesterday)
                 for comp in [eq, lt, le]:
-                    self.assertFalse(comp(today, yesterday))
+                    assert not comp(today, yesterday)
 
-    def test_lt(self):
+    def test_lt(self, setup):
         """Test all comparers when one date is less than another."""
-        for cal in self.caltypes:
+        for cal in setup['caltypes']:
             today = cal.today()
-            for cal2 in self.caltypes:
+            for cal2 in setup['caltypes']:
                 tomorrow = cal2.today() + 1
                 for comp in [lt, le, ne]:
-                    self.assertTrue(comp(today, tomorrow))
+                    assert comp(today, tomorrow)
                 for comp in [gt, ge, eq]:
-                    self.assertFalse(comp(today, tomorrow))
+                    assert not comp(today, tomorrow)
 
-    def test_eq(self):
+    def test_eq(self, setup):
         """Test all comparers when the dates are equal."""
-        for cal in self.caltypes:
+        for cal in setup['caltypes']:
             today = cal.today()
-            for cal2 in self.caltypes:
+            for cal2 in setup['caltypes']:
                 today2 = cal2.today()
                 for comp in [eq, ge, le]:
-                    self.assertTrue(comp(today, today2))
+                    assert comp(today, today2)
                 for comp in [gt, lt, ne]:
-                    self.assertFalse(comp(today, today2))
+                    assert not comp(today, today2)
 
 
 class TestErrors(object):
@@ -165,6 +161,3 @@ class TestReprandStr(object):
         for datetype in datetypeslist:
             assert eval(repr(datetype.today())) == datetype.today()
 
-
-if __name__ == '__main__':
-    unittest.main()
