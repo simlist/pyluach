@@ -1,6 +1,3 @@
-#! python
-
-import unittest
 import pytest
 from operator import gt, lt, eq, ne, ge, le, add, sub
 
@@ -105,7 +102,7 @@ class TestComparisons(object):
                 for comp in [gt, ge, ne]:
                     assert comp(today, yesterday)
                 for comp in [eq, lt, le]:
-                    assert not comp(today, yesterday)
+                    assert comp(today, yesterday) is False
 
     def test_lt(self, setup):
         """Test all comparers when one date is less than another."""
@@ -116,7 +113,7 @@ class TestComparisons(object):
                 for comp in [lt, le, ne]:
                     assert comp(today, tomorrow)
                 for comp in [gt, ge, eq]:
-                    assert not comp(today, tomorrow)
+                    assert comp(today, tomorrow) is False
 
     def test_eq(self, setup):
         """Test all comparers when the dates are equal."""
@@ -127,7 +124,7 @@ class TestComparisons(object):
                 for comp in [eq, ge, le]:
                     assert comp(today, today2)
                 for comp in [gt, lt, ne]:
-                    assert not comp(today, today2)
+                    assert comp(today, today2) is False
 
 
 class TestErrors(object):
@@ -160,4 +157,10 @@ class TestReprandStr(object):
     def test_repr(self, datetypeslist):
         for datetype in datetypeslist:
             assert eval(repr(datetype.today())) == datetype.today()
+
+
+def test_weekday():
+    assert GregorianDate(2017, 8, 7).weekday() == 2
+    assert HebrewDate(5777, 6, 1).weekday() == 4
+
 
