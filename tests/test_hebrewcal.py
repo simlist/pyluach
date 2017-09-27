@@ -1,15 +1,55 @@
 import pytest
 
 from pyluach import dates, hebrewcal
+from pyluach.hebrewcal import Year, Month, holiday
+
+
+class TestHoliday(object):
+
+    def test_holiday(self):
+        years = [5777, 5770, 5781]
+        for year in years:
+            assert holiday(dates.HebrewDate(year, 7, 1)) == 'Rosh Hashana'
+            assert holiday(dates.HebrewDate(year, 7, 10)) == 'Yom Kippur'
+
 
 class TestYear(object):
+
+    def test_repryear(self):
+        year = Year(5777)
+        assert eval(repr(year)) == year
+
+    def test_iteryear(self):
+        assert list(Year(5777)) == [7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6]
+        assert list(Year(5776)) == [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
 
     def test_equalyear(self):
         year1 = hebrewcal.Year(5777)
         year2 = hebrewcal.Year(5777)
         assert year1 == year2
 
+    def test_addtoyear(self):
+        year = Year(5777)
+        assert year + 2 == Year(5779)
+        assert year + 0 == year
+
+    def test_subtractintfromyear(self):
+        year = Year(5777)
+        assert year - 0 == year
+        assert year - 3 == Year(5774)
+
+    def test_subtractyearfromyear(self):
+        year = Year(5777)
+        assert year - year == 0
+        assert year - (year - 1) == 1
+        assert year - (year + 2) == 2
+
+
 class TestMonth(object):
+
+    def test_reprmonth(self):
+        month = Month(5777, 10)
+        assert eval(repr(month)) == month
 
     def test_equalmonth(self):
         month1 = hebrewcal.Month(5777, 12)
@@ -36,3 +76,4 @@ class TestMonth(object):
         assert month - 2 == hebrewcal.Month(5778, 7)
         assert month - 3 == hebrewcal.Month(5777, 6)
         assert month - 30 == hebrewcal.Month(5775, 4)
+

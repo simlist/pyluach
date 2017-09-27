@@ -6,3 +6,5 @@ ENV*
 *egg*
 *build*
 *.whl
+dist/*
+*htmlcov*

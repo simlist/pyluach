@@ -38,6 +38,10 @@ Typical use
     ...     print month.name
 	Tishrei Cheshvan ...
 
+Documentation
+-------------
+Documentation for pyluach can be found at https://readthedocs.org/projects/pyluach/.
+
 Contact
 --------
 For questions and comments feel free to contact me at simlist@gmail.com.
