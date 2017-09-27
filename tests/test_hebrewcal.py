@@ -77,3 +77,10 @@ class TestMonth(object):
         assert month - 3 == hebrewcal.Month(5777, 6)
         assert month - 30 == hebrewcal.Month(5775, 4)
 
+class TestHoliday(object):
+
+    def test_succos(self):
+        day = dates.HebrewDate(5778, 7, 18)
+        assert holiday(day) == 'Succos'
+        day2 = dates.HebrewDate(5778, 7, 23)
+        assert holiday(day2, israel=True) is None
