@@ -27,3 +27,7 @@ class TestGetParsha(object):
             assert (parshios.getparsha_string(dates.GregorianDate(*key)) ==
                     KNOWN_VALUES_STRINGS[key])
 
+
+def test_parshatable():
+    assert parshios.parshatable(5777) == parshios._gentable(5777)
+    assert parshios.parshatable(5778, True) == parshios._gentable(5778, True)
