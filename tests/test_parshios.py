@@ -15,6 +15,7 @@ KNOWN_VALUES_STRINGS = {
     (2017, 9, 26): None
     }
 
+
 class TestGetParsha(object):
 
     def test_getparsha(self):
@@ -26,6 +27,18 @@ class TestGetParsha(object):
         for key in KNOWN_VALUES_STRINGS:
             assert (parshios.getparsha_string(dates.GregorianDate(*key)) ==
                     KNOWN_VALUES_STRINGS[key])
+
+    def test_chukas_balak(self):
+        chukas_balak = dates.HebrewDate(5780, 4, 12)
+        assert parshios.getparsha(chukas_balak) == [38, 39]
+        assert parshios.getparsha(chukas_balak, True) == [39, ]
+        assert parshios.getparsha(chukas_balak - 8) == [37, ]
+        assert parshios.getparsha(chukas_balak - 13, True) == [38, ]
+        shavuos = dates.HebrewDate(5780, 3, 6)
+        assert parshios.getparsha_string(shavuos, True) == 'Naso'
+        assert parshios.getparsha_string(shavuos) is None
+        assert parshios. getparsha_string(shavuos + 7, True) == "Baha'aloscha"
+        assert parshios.getparsha_string(shavuos + 7) == 'Naso'
 
 
 def test_parshatable():
