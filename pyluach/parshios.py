@@ -30,7 +30,7 @@ PARSHIOS = [
             'Yisro',  'Mishpatim', 'Teruma', 'Tetzave', 'Ki Sisa', 'Vayakhel',
             'Pekudei', 'Vayikra', 'Tzav','Shemini', 'Tazria', 'Metzora',
             'Acharei Mos', 'Kedoshim', 'Emor', 'Behar', 'Bechukosai', 'Bamidbar',
-            'Naso', "Baha'aloscha", "Shelach", 'Korach', 'Chukas', 'Balak',
+            'Naso', "Beha'aloscha", "Shelach", 'Korach', 'Chukas', 'Balak',
             'Pinchas', 'Matos', "Ma'sei", 'Devarim', "Va'eschanan", 'Eikev',
             "R'ey", 'Shoftim', 'Ki Setzei', 'Ki Savo', 'Netzavim', 'Vayelech',
             'Haazinu', "V'zos Habrocha"

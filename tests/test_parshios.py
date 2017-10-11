@@ -37,7 +37,7 @@ class TestGetParsha(object):
         shavuos = dates.HebrewDate(5780, 3, 6)
         assert parshios.getparsha_string(shavuos, True) == 'Naso'
         assert parshios.getparsha_string(shavuos) is None
-        assert parshios. getparsha_string(shavuos + 7, True) == "Baha'aloscha"
+        assert parshios. getparsha_string(shavuos + 7, True) == "Beha'aloscha"
         assert parshios.getparsha_string(shavuos + 7) == 'Naso'
 
 
