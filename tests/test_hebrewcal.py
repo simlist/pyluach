@@ -90,3 +90,13 @@ class TestHoliday(object):
         for i in range(8):
             assert holiday(chanuka + i) == 'Chanuka'
 
+    def test_tubshvat(self):
+        assert holiday(dates.HebrewDate(5779, 11, 15)) == "Tu B'shvat"
+
+    def test_purim(self):
+        purims = [dates.HebrewDate(5778, 12, 14),
+                  dates.HebrewDate(5779, 13, 14)]
+        for purim in purims:
+            assert holiday(purim) == 'Purim'
+            assert holiday(purim + 1) == 'Shushan Purim'
+        assert holiday(dates.HebrewDate(5779, 12, 14)) == 'Purim Katan'
