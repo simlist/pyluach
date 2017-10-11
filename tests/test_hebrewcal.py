@@ -84,3 +84,9 @@ class TestHoliday(object):
         assert holiday(day) == 'Succos'
         day2 = dates.HebrewDate(5778, 7, 23)
         assert holiday(day2, israel=True) is None
+
+    def test_chanuka(self):
+        chanuka = dates.HebrewDate(5778, 9, 25)
+        for i in range(8):
+            assert holiday(chanuka + i) == 'Chanuka'
+
