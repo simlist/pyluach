@@ -110,4 +110,13 @@ class TestHoliday(object):
                    )
         eighth = pesach + 7
         assert holiday(eighth) == 'Pesach' and holiday(eighth, True) is None
-        assert holiday(eighth + 1) is None 
+        assert holiday(eighth + 1) is None
+
+    def test_lagbaomer(self):
+        assert holiday(dates.GregorianDate(2018, 5, 3)) == "Lag Ba'omer"
+
+    def test_shavuos(self):
+        shavuos = dates.HebrewDate(5778, 3, 6)
+        assert all([holiday(day) == 'Shavuos' for day in [shavuos, shavuos + 1]])
+        assert holiday(shavuos, True) == 'Shavuos'
+        assert holiday(shavuos + 1, True) is None
