@@ -100,3 +100,14 @@ class TestHoliday(object):
             assert holiday(purim) == 'Purim'
             assert holiday(purim + 1) == 'Shushan Purim'
         assert holiday(dates.HebrewDate(5779, 12, 14)) == 'Purim Katan'
+
+    def test_pesach(self):
+        pesach = dates.HebrewDate(5778, 1, 15)
+        for i in range (6):
+            assert (
+                    holiday(pesach + i, True) == 'Pesach' and
+                    holiday(pesach + i) == 'Pesach'
+                   )
+        eighth = pesach + 7
+        assert holiday(eighth) == 'Pesach' and holiday(eighth, True) is None
+        assert holiday(eighth + 1) is None 
