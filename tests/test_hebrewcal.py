@@ -120,3 +120,6 @@ class TestHoliday(object):
         assert all([holiday(day) == 'Shavuos' for day in [shavuos, shavuos + 1]])
         assert holiday(shavuos, True) == 'Shavuos'
         assert holiday(shavuos + 1, True) is None
+
+    def test_tubeav(self):
+        assert holiday(dates.HebrewDate(5779, 5, 15)) == "Tu B'av"
