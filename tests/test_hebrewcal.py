@@ -1,16 +1,5 @@
-import pytest
-
 from pyluach import dates, hebrewcal
 from pyluach.hebrewcal import Year, Month, holiday
-
-
-class TestHoliday(object):
-
-    def test_holiday(self):
-        years = [5777, 5770, 5781]
-        for year in years:
-            assert holiday(dates.HebrewDate(year, 7, 1)) == 'Rosh Hashana'
-            assert holiday(dates.HebrewDate(year, 7, 10)) == 'Yom Kippur'
 
 
 class TestYear(object):
@@ -79,11 +68,28 @@ class TestMonth(object):
 
 class TestHoliday(object):
 
+    def test_roshhashana(self):
+        roshhashana = dates.HebrewDate(5779, 7, 1)
+        assert all([holiday(day, location) == 'Rosh Hashana'
+                    for day in[roshhashana, roshhashana + 1]
+                    for location in [True, False]
+                   ])
+
+    def test_yomkippur(self):
+        assert holiday(dates.HebrewDate(5775, 7, 10)) == 'Yom Kippur'
+
     def test_succos(self):
         day = dates.HebrewDate(5778, 7, 18)
         assert holiday(day) == 'Succos'
         day2 = dates.HebrewDate(5778, 7, 23)
         assert holiday(day2, israel=True) is None
+
+    def test_shmini(self):
+        shmini = dates.HebrewDate(5780, 7, 22)
+        assert holiday(shmini, True) == 'Shmini Atzeres'
+        assert holiday(shmini) == 'Shmini Atzeres'
+        assert holiday(shmini + 1) == 'Simchas Torah'
+        assert holiday(shmini + 1, True) is None
 
     def test_chanuka(self):
         chanuka = dates.HebrewDate(5778, 9, 25)
@@ -123,3 +129,4 @@ class TestHoliday(object):
 
     def test_tubeav(self):
         assert holiday(dates.HebrewDate(5779, 5, 15)) == "Tu B'av"
+
