@@ -130,3 +130,30 @@ class TestHoliday(object):
     def test_tubeav(self):
         assert holiday(dates.HebrewDate(5779, 5, 15)) == "Tu B'av"
 
+class TestFasts(object):
+
+    def test_gedalia(self):
+        assert holiday(dates.HebrewDate(5779, 7, 3)) == 'Tzom Gedalia'
+        assert holiday(dates.HebrewDate(5778, 7, 3)) is None
+        assert holiday(dates.HebrewDate(5778, 7, 4)) == 'Tzom Gedalia'
+
+    def test_asara(self):
+        assert holiday(dates.GregorianDate(2018, 12, 18)) == '10 of Teves'
+
+    def test_esther(self):
+        fasts = [
+            dates.HebrewDate(5778, 12, 13),
+            dates.HebrewDate(5776, 13, 13),
+            dates.HebrewDate(5777, 12, 11),  #nidche
+            dates.HebrewDate(5784, 13, 11)  #ibbur and nidche
+        ]
+        for fast in fasts:
+            assert holiday(fast)  == 'Taanis Esther'
+        non_fasts = [
+            dates.HebrewDate(5776, 12, 13),
+            dates.HebrewDate(5777, 12, 13),
+            dates.HebrewDate(5784, 12, 11),
+            dates.HebrewDate(5784, 13, 13)
+        ]
+        for non in non_fasts:
+            assert holiday(non) is None
