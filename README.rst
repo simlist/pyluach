@@ -5,6 +5,9 @@ pyluach
   :alt: Documentation Status
 .. image:: https://travis-ci.org/simlist/pyluach.svg?branch=master
     :target: https://travis-ci.org/simlist/pyluach
+.. image:: https://coveralls.io/repos/github/simlist/pyluach/badge.svg?branch=master
+    :target: https://coveralls.io/github/simlist/pyluach?branch=master
+
 
 Pyluach is a Python package for manipulating Hebrew calendar dates and 
 Hebrew-Gregorian conversions.
