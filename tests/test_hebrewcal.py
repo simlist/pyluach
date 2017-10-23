@@ -157,3 +157,16 @@ class TestFasts(object):
         ]
         for non in non_fasts:
             assert holiday(non) is None
+
+    def test_tamuz(self):
+        fasts = [dates.HebrewDate(5777, 4, 17), dates.HebrewDate(5778, 4, 18)]
+        for fast in fasts:
+            assert holiday(fast) == '17 of Tamuz'
+        assert holiday(dates.HebrewDate(5778, 4, 17)) is None
+
+    def test_av(self):
+        fasts = [dates.HebrewDate(5777, 5, 9), dates.HebrewDate(5778, 5, 10)]
+        for fast in fasts:
+            assert holiday(fast) == '9 of Av'
+        assert holiday(dates.HebrewDate(5778, 5, 9)) is None
+
