@@ -80,6 +80,11 @@ class TestMonth(object):
         assert month - 3 == hebrewcal.Month(5777, 6)
         assert month - 30 == hebrewcal.Month(5775, 4)
 
+    def test_startingweekday(self):
+        assert Month(5778, 8).starting_weekday() == 7
+        assert Month(5778, 9).starting_weekday() == 1
+
+
 class TestHoliday(object):
 
     def test_roshhashana(self):
