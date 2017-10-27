@@ -33,6 +33,20 @@ class TestYear(object):
         assert year - (year - 1) == 1
         assert year - (year + 2) == 2
 
+    def test_iterdays(self):
+        year = Year(5778)
+        yearlist = list(year.iterdays())
+        assert len(yearlist) == len(year)
+        assert yearlist[0] == 1
+        assert yearlist[-1] == len(year)
+
+    def test_iterdates(self):
+        year = 5778
+        workingdate = dates.HebrewDate(year, 7, 1)
+        for date in Year(year).iterdates():
+            assert workingdate == date
+            workingdate += 1
+
 
 class TestMonth(object):
 
