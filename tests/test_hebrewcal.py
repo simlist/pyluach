@@ -58,6 +58,7 @@ class TestMonth(object):
         month1 = hebrewcal.Month(5777, 12)
         month2 = hebrewcal.Month(5777, 12)
         assert month1 == month2
+        assert not month1 == (month2 + 1)
 
     def test_addinttomonth(self):
         month = hebrewcal.Month(5777, 12)
