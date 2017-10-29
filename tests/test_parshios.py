@@ -44,3 +44,11 @@ class TestGetParsha(object):
 def test_parshatable():
     assert parshios.parshatable(5777) == parshios._gentable(5777)
     assert parshios.parshatable(5778, True) == parshios._gentable(5778, True)
+
+def test_iterparshios():
+    year = 5776
+    parshalist = list(parshios.parshatable(year).values())
+    index = 0
+    for p in parshios.iterparshios(year):
+        assert p == parshalist[index]
+        index += 1
