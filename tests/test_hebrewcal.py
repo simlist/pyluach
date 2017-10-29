@@ -33,6 +33,20 @@ class TestYear(object):
         assert year - (year - 1) == 1
         assert year - (year + 2) == 2
 
+    def test_iterdays(self):
+        year = Year(5778)
+        yearlist = list(year.iterdays())
+        assert len(yearlist) == len(year)
+        assert yearlist[0] == 1
+        assert yearlist[-1] == len(year)
+
+    def test_iterdates(self):
+        year = 5778
+        workingdate = dates.HebrewDate(year, 7, 1)
+        for date in Year(year).iterdates():
+            assert workingdate == date
+            workingdate += 1
+
 
 class TestMonth(object):
 
@@ -44,6 +58,7 @@ class TestMonth(object):
         month1 = hebrewcal.Month(5777, 12)
         month2 = hebrewcal.Month(5777, 12)
         assert month1 == month2
+        assert not month1 == (month2 + 1)
 
     def test_addinttomonth(self):
         month = hebrewcal.Month(5777, 12)
@@ -65,6 +80,19 @@ class TestMonth(object):
         assert month - 2 == hebrewcal.Month(5778, 7)
         assert month - 3 == hebrewcal.Month(5777, 6)
         assert month - 30 == hebrewcal.Month(5775, 4)
+
+    def test_startingweekday(self):
+        assert Month(5778, 8).starting_weekday() == 7
+        assert Month(5778, 9).starting_weekday() == 1
+
+    def test_iterdate(self):
+        year = 5770
+        workingdate = dates.HebrewDate(year, 7 ,1)
+        for month in (range(7, 13) + range(1, 7)):
+            for date in Month(year, month).iterdates():
+                assert date == workingdate
+                workingdate += 1
+
 
 class TestHoliday(object):
 
@@ -157,3 +185,16 @@ class TestFasts(object):
         ]
         for non in non_fasts:
             assert holiday(non) is None
+
+    def test_tamuz(self):
+        fasts = [dates.HebrewDate(5777, 4, 17), dates.HebrewDate(5778, 4, 18)]
+        for fast in fasts:
+            assert holiday(fast) == '17 of Tamuz'
+        assert holiday(dates.HebrewDate(5778, 4, 17)) is None
+
+    def test_av(self):
+        fasts = [dates.HebrewDate(5777, 5, 9), dates.HebrewDate(5778, 5, 10)]
+        for fast in fasts:
+            assert holiday(fast) == '9 of Av'
+        assert holiday(dates.HebrewDate(5778, 5, 9)) is None
+

@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 import io
 
 setup(name='pyluach',
@@ -8,8 +8,8 @@ setup(name='pyluach',
       packages=['pyluach', ],
       url='https://github.com/simlist/pyluach',
       license='MIT',
-      description=('''Package for manipulating Hebrew dates,
-                    Gregorian-Hebrew conversion, and other Hebrew
+      description=('''Pyluach is a Python package for manipulating Hebrew dates,
+                    Gregorian-Hebrew calendar conversions, and other Jewish
                     calendar related calculations.'''),
       long_description=io.open('README.rst').read(),
       classifiers=['Development Status :: 3 - Alpha',
