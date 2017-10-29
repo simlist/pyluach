@@ -88,7 +88,7 @@ class TestMonth(object):
     def test_iterdate(self):
         year = 5770
         workingdate = dates.HebrewDate(year, 7 ,1)
-        for month in (range(7, 13) + range(1, 7)):
+        for month in (list(range(7, 13)) + list(range(1, 7))):
             for date in Month(year, month).iterdates():
                 assert date == workingdate
                 workingdate += 1
