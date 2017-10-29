@@ -84,6 +84,14 @@ class TestMonth(object):
         assert Month(5778, 8).starting_weekday() == 7
         assert Month(5778, 9).starting_weekday() == 1
 
+    def test_iterdate(self):
+        year = 5770
+        workingdate = dates.HebrewDate(year, 7 ,1)
+        for month in (range(7, 13) + range(1, 7)):
+            for date in Month(year, month).iterdates():
+                assert date == workingdate
+                workingdate += 1
+
 
 class TestHoliday(object):
 
