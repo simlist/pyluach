@@ -162,4 +162,11 @@ def test_weekday():
     assert GregorianDate(2017, 8, 7).weekday() == 2
     assert HebrewDate(5777, 6, 1).weekday() == 4
 
+class TestMixinMethods():
 
+    @pytest.fixture
+    def date(self):
+        return dates.GregorianDate(2017, 10, 31)
+
+    def test_str(self, date):
+        assert str(date) == '2017-10-31'
