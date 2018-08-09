@@ -173,3 +173,6 @@ class TestMixinMethods():
 
     def test_dict(self, date):
         assert date.dict() == {'year': 2017, 'month': 10, 'day': 31}
+
+    def test_iter(self, date):
+        assert list(date) == [date.year, date.month, date.day]
