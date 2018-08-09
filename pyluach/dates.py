@@ -165,6 +165,11 @@ class CalendarDateMixin(object):
     def __str__(self):
         return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
 
+    def __iter__(self):
+        yield self.year
+        yield self.month
+        yield self.day
+
     def weekday(self):
         """Return day of week as an integer.
 
@@ -370,11 +375,6 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         if day < 1 or day > monthlength:
             raise ValueError('Given month has {0} days.'.format(monthlength))
         super(GregorianDate, self).__init__(year, month, day, jd)
-
-    def __iter__(self):
-        yield self.year
-        yield self.month
-        yield self.day
 
     @property
     def jd(self):
