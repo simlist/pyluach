@@ -1,5 +1,6 @@
 import pytest
 from operator import gt, lt, eq, ne, ge, le, add, sub
+import datetime
 
 from pyluach import dates
 from pyluach.dates import HebrewDate, GregorianDate, JulianDay
@@ -181,3 +182,9 @@ class TestMixinMethods():
 
     def test_iter(self, date):
         assert list(date) == [date.year, date.month, date.day]
+
+def test_to_pydate():
+    day = HebrewDate(5778, 6, 1)
+    jd = day.to_jd()
+    for day_type in [day, jd]:
+        assert day_type.to_pydate() == datetime.date(2018, 8, 12)
