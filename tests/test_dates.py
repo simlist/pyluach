@@ -138,10 +138,11 @@ class TestErrors(object):
 
     def test_comparer_errors(self):
         day1 = dates.HebrewDate(5777, 12, 10)
-        for comparer in [gt, lt, eq, ne, ge, le]:
-            for value in [1, 0, 'hello', None, '']:
-                with pytest.raises(TypeError):
-                    comparer(day1, value)
+        for date in [day1, day1.to_greg(), day1.to_jd()]:
+            for comparer in [gt, lt, eq, ne, ge, le]:
+                for value in [1, 0, 'hello', None, '']:
+                    with pytest.raises(TypeError):
+                        comparer(date, value)
 
     def test_operator_errors(self):
         day = dates.GregorianDate(2016, 11, 20)
@@ -167,6 +168,7 @@ def test_jd_str():
 def test_weekday():
     assert GregorianDate(2017, 8, 7).weekday() == 2
     assert HebrewDate(5777, 6, 1).weekday() == 4
+    assert JulianDay(2458342.5).weekday() == 1
 
 class TestMixinMethods():
 
