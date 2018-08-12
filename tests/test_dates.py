@@ -148,8 +148,8 @@ class TestErrors(object):
             for value in ['Hello', '', None]:
                 with pytest.raises(TypeError):
                     operator(day, value)
-                with pytest.raises(TypeError):
-                    day + (day+1)
+        with pytest.raises(TypeError):
+            day + (day+1)
 
 
 class TestReprandStr(object):
