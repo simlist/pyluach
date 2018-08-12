@@ -156,6 +156,8 @@ class TestReprandStr(object):
     def test_repr(self, datetypeslist):
         for datetype in datetypeslist:
             assert eval(repr(datetype.today())) == datetype.today()
+        jd = JulianDay.today()
+        assert eval(repr(jd)) == jd
 
 
 def test_weekday():
