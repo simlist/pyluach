@@ -156,13 +156,19 @@ class TestErrors(object):
     def test_HebrewDate_errors(self):
             with pytest.raises(ValueError):
                 HebrewDate(0, 6, 29)
-            for datetuple in [(5778, 0, 5), (5779, -1, 7), (5759, 14, 8), (5778, 13, 20)]:
+            for datetuple in [(5778, 0, 5), (5779, -1, 7),
+                              (5759, 14, 8), (5778, 13, 20)]:
                 with pytest.raises(ValueError):
                     HebrewDate(*datetuple)
             for datetuple in [(5778, 6, 0), (5779, 8, 31), (5779, 10, 30)]:
                 with pytest.raises(ValueError):
                     HebrewDate(*datetuple)
 
+    def test_GregorianDate_errors(self):
+        for datetuple in [(2018, 0, 3), (2018, -2, 8), (2018, 13, 9),
+                          (2018, 2, 0), (2018, 2, 29), (2012, 2, 30)]:
+                          with pytest.raises(ValueError):
+                            GregorianDate(*datetuple)
 
 class TestReprandStr(object):
     def test_repr(self, datetypeslist):
