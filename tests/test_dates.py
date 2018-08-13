@@ -153,6 +153,16 @@ class TestErrors(object):
         with pytest.raises(TypeError):
             day + (day+1)
 
+    def test_HebrewDate_errors(self):
+            with pytest.raises(ValueError):
+                HebrewDate(0, 6, 29)
+            for datetuple in [(5778, 0, 5), (5779, -1, 7), (5759, 14, 8), (5778, 13, 20)]:
+                with pytest.raises(ValueError):
+                    HebrewDate(*datetuple)
+            for datetuple in [(5778, 6, 0), (5779, 8, 31), (5779, 10, 30)]:
+                with pytest.raises(ValueError):
+                    HebrewDate(*datetuple)
+
 
 class TestReprandStr(object):
     def test_repr(self, datetypeslist):
