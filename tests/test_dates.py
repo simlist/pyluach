@@ -1,5 +1,6 @@
 import pytest
 from operator import gt, lt, eq, ne, ge, le, add, sub
+import datetime
 
 from pyluach import dates
 from pyluach.dates import HebrewDate, GregorianDate, JulianDay
@@ -137,10 +138,11 @@ class TestErrors(object):
 
     def test_comparer_errors(self):
         day1 = dates.HebrewDate(5777, 12, 10)
-        for comparer in [gt, lt, eq, ne, ge, le]:
-            for value in [1, 0, 'hello', None, '']:
-                with pytest.raises(TypeError):
-                    comparer(day1, value)
+        for date in [day1, day1.to_greg(), day1.to_jd()]:
+            for comparer in [gt, lt, eq, ne, ge, le]:
+                for value in [1, 0, 'hello', None, '']:
+                    with pytest.raises(TypeError):
+                        comparer(date, value)
 
     def test_operator_errors(self):
         day = dates.GregorianDate(2016, 11, 20)
@@ -148,18 +150,59 @@ class TestErrors(object):
             for value in ['Hello', '', None]:
                 with pytest.raises(TypeError):
                     operator(day, value)
-                with pytest.raises(TypeError):
-                    day + (day+1)
+        with pytest.raises(TypeError):
+            day + (day+1)
 
+    def test_HebrewDate_errors(self):
+            with pytest.raises(ValueError):
+                HebrewDate(0, 6, 29)
+            for datetuple in [(5778, 0, 5), (5779, -1, 7),
+                              (5759, 14, 8), (5778, 13, 20)]:
+                with pytest.raises(ValueError):
+                    HebrewDate(*datetuple)
+            for datetuple in [(5778, 6, 0), (5779, 8, 31), (5779, 10, 30)]:
+                with pytest.raises(ValueError):
+                    HebrewDate(*datetuple)
+
+    def test_GregorianDate_errors(self):
+        for datetuple in [(2018, 0, 3), (2018, -2, 8), (2018, 13, 9),
+                          (2018, 2, 0), (2018, 2, 29), (2012, 2, 30)]:
+                          with pytest.raises(ValueError):
+                            GregorianDate(*datetuple)
 
 class TestReprandStr(object):
     def test_repr(self, datetypeslist):
         for datetype in datetypeslist:
             assert eval(repr(datetype.today())) == datetype.today()
+        jd = JulianDay.today()
+        assert eval(repr(jd)) == jd
 
+def test_jd_str():
+    assert str(JulianDay(550.5)) == '550.5'
+    assert str(JulianDay(1008)) == '1007.5'
 
 def test_weekday():
     assert GregorianDate(2017, 8, 7).weekday() == 2
     assert HebrewDate(5777, 6, 1).weekday() == 4
+    assert JulianDay(2458342.5).weekday() == 1
 
+class TestMixinMethods():
 
+    @pytest.fixture
+    def date(self):
+        return dates.GregorianDate(2017, 10, 31)
+
+    def test_str(self, date):
+        assert str(date) == '2017-10-31'
+
+    def test_dict(self, date):
+        assert date.dict() == {'year': 2017, 'month': 10, 'day': 31}
+
+    def test_iter(self, date):
+        assert list(date) == [date.year, date.month, date.day]
+
+def test_to_pydate():
+    day = HebrewDate(5778, 6, 1)
+    jd = day.to_jd()
+    for day_type in [day, jd]:
+        assert day_type.to_pydate() == datetime.date(2018, 8, 12)

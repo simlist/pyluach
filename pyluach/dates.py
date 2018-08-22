@@ -73,7 +73,7 @@ class BaseDate(object):
                 return True
             return False
         except AttributeError:
-            raise TypeError(self.error_string)
+            raise TypeError(self._error_string)
 
     def __ne__(self, other):
         try:
@@ -81,7 +81,7 @@ class BaseDate(object):
                 return True
             return False
         except AttributeError:
-            raise TypeError(self.error_string)
+            raise TypeError(self._error_string)
 
     def __lt__(self, other):
         try:
@@ -89,7 +89,7 @@ class BaseDate(object):
                 return True
             return False
         except AttributeError:
-            raise TypeError(self.error_string)
+            raise TypeError(self._error_string)
 
     def __gt__(self, other):
         try:
@@ -97,7 +97,7 @@ class BaseDate(object):
                 return True
             return False
         except AttributeError:
-            raise TypeError(self.error_string)
+            raise TypeError(self._error_string)
 
     def __le__(self, other):
         try:
@@ -105,7 +105,7 @@ class BaseDate(object):
                 return True
             return False
         except AttributeError:
-            raise TypeError(self.error_string)
+            raise TypeError(self._error_string)
 
     def __ge__(self, other):
         try:
@@ -113,7 +113,7 @@ class BaseDate(object):
                 return True
             return False
         except AttributeError:
-            raise TypeError(self.error_string)
+            raise TypeError(self._error_string)
 
     def shabbos(self):
         """Return the Shabbos on or following the date.
@@ -151,7 +151,7 @@ class CalendarDateMixin(object):
         self.month = month
         self.day = day
         self._jd = jd
-        self. error_string = ('''Only a date with a "jd" attribute can
+        self. _error_string = ('''Only a date with a "jd" attribute can
                               be compared to a {0}'''.format(
                                                 self.__class__.__name__)
                               )
@@ -164,6 +164,11 @@ class CalendarDateMixin(object):
 
     def __str__(self):
         return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
+
+    def __iter__(self):
+        yield self.year
+        yield self.month
+        yield self.day
 
     def weekday(self):
         """Return day of week as an integer.
@@ -223,6 +228,8 @@ class JulianDay(BaseDate):
         else:
             self.day = int(day) + .5
         self.jd = self.day
+        self._error_string = """Only a date with a "jd" attribute can
+        be compared to a Julian Day instance."""
 
     def __repr__(self):
         return 'JulianDay({0})'.format(self.day)
@@ -370,11 +377,6 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         if day < 1 or day > monthlength:
             raise ValueError('Given month has {0} days.'.format(monthlength))
         super(GregorianDate, self).__init__(year, month, day, jd)
-
-    def __iter__(self):
-        yield self.year
-        yield self.month
-        yield self.day
 
     @property
     def jd(self):

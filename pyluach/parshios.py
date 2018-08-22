@@ -156,7 +156,7 @@ def iterparshios(year, israel=False):
 
     Yields
     ------
-    str
+    list of ints or ``None``
       A list of the numbers of the parshios for the next Shabbos in the given year.
       Yields ``None`` for a Shabbos that doesn't have its own parsha
       (i.e. it occurs on a yom tov).
