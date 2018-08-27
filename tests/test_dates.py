@@ -177,9 +177,15 @@ class TestReprandStr(object):
         jd = JulianDay.today()
         assert eval(repr(jd)) == jd
 
-def test_jd_str():
-    assert str(JulianDay(550.5)) == '550.5'
-    assert str(JulianDay(1008)) == '1007.5'
+    def test_jd_str(self):
+        assert str(JulianDay(550.5)) == '550.5'
+        assert str(JulianDay(1008)) == '1007.5'
+
+    def test_greg_str(self):
+        date = GregorianDate(2018, 8, 22)
+        assert str(date) == '2018-08-22'
+        assert str(GregorianDate(2008, 12, 2)) == '2008-12-02'
+        assert str(GregorianDate(1, 1, 1)) == '0001-01-01'
 
 def test_weekday():
     assert GregorianDate(2017, 8, 7).weekday() == 2
