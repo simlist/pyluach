@@ -163,7 +163,7 @@ class CalendarDateMixin(object):
                                            self.day)
 
     def __str__(self):
-        return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
+        return '{0:04d}-{1:02d}-{2:02d}'.format(self.year, self.month, self.day)
 
     def __iter__(self):
         yield self.year
