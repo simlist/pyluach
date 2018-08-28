@@ -212,3 +212,7 @@ def test_to_pydate():
     jd = day.to_jd()
     for day_type in [day, jd]:
         assert day_type.to_pydate() == datetime.date(2018, 8, 12)
+
+def test_from_pydate():
+    date = datetime.date(2018, 8, 27)
+    assert date == GregorianDate.from_pydate(date).to_jd().to_pydate()

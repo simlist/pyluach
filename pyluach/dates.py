@@ -413,6 +413,22 @@ class GregorianDate(BaseDate, CalendarDateMixin):
             self._jd = (int(365.25*year) +
                         int(30.6001*month) + b + day + 1720994.5)
         return self._jd
+
+    @classmethod
+    def from_pydate(cls, pydate):
+        """Return a `GregorianDate` instance from a python date object.
+
+        Parameters
+        ----------
+        pydate : datetime.date
+          A python standard library ``datetime.date`` instance.
+
+        Returns
+        -------
+        GregorianDate
+        """
+        return cls(*pydate.timetuple()[:3])
+
     @staticmethod
     def today():
         """Return a GregorianDate instance for the current day.
@@ -425,7 +441,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         GregorianDate
           The current Gregorian date from the computer's timestamp.
         """
-        return GregorianDate(*date.today().timetuple()[:3])
+        return GregorianDate.from_pydate(date.today())
 
     @staticmethod
     def _is_leap(year):
