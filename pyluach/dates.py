@@ -286,7 +286,7 @@ class JulianDay(BaseDate):
         year = 100 * (n-49) + i + L
         if year < 1:
             year -= 1
-        return GregorianDate(year, month, day)
+        return GregorianDate(year, month, day, self.day)
 
     def to_heb(self):
         """ Convert to a Hebrew date.
@@ -318,7 +318,7 @@ class JulianDay(BaseDate):
             if days_remaining >= HebrewDate._month_length(year, month):
                 days_remaining -= HebrewDate._month_length(year, month)
             else:
-                return HebrewDate(year, month, days_remaining + 1)
+                return HebrewDate(year, month, days_remaining + 1, self.day)
 
     def _to_x(self, type_):
         """Return a date object of the given type."""
@@ -363,6 +363,12 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     day : int
     jd : float(property)
       The corresponding Julian Day Number at midnight (as *n*.5).
+
+    Warnings
+    --------
+    Although B.C.E. dates are allowed, they should be treated as
+    approximations as they may return inconsistent results when converting
+    between date types and using arithmetic and comparison operators!
     """
 
     def __init__(self, year, month, day, jd=None):
