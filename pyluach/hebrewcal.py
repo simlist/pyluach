@@ -118,6 +118,7 @@ class Year(object):
     A Year object represents a Hebrew calendar year.
 
     It provided the following operators:
+
     =====================  ================================================
     Operation              Result
     =====================  ================================================
