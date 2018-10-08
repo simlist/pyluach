@@ -126,6 +126,7 @@ class Year(object):
     int = year1 - year2    ``int`` equal to the absolute value of
                            the difference between year2 and year1.
     bool = year1 == year2  True if year1 represents the same year as year2.
+    =====================  ================================================
 
     Parameters
     ----------
