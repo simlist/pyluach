@@ -10,7 +10,7 @@ setup(name='pyluach',
       license='MIT',
       description=("""Pyluach is a Python package for manipulating Hebrew dates,
                     Gregorian-Hebrew calendar conversions, and other Jewish
-                    calendar related calculations.""),
+                    calendar related calculations."""),
       long_description=io.open('README.rst').read(),
       classifiers=['Development Status :: 3 - Alpha',
                      'Intended Audience :: Developers',
