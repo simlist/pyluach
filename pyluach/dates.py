@@ -414,8 +414,8 @@ class GregorianDate(BaseDate, CalendarDateMixin):
                         int(30.6001*month) + b + day + 1720994.5)
         return self._jd
 
-    @classmethod
-    def from_pydate(cls, pydate):
+    @staticmethod
+    def from_pydate(pydate):
         """Return a `GregorianDate` instance from a python date object.
 
         Parameters
@@ -427,7 +427,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         -------
         GregorianDate
         """
-        return cls(*pydate.timetuple()[:3])
+        return GregorianDate(*pydate.timetuple()[:3])
 
     @staticmethod
     def today():
