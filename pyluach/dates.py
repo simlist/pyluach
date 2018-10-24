@@ -24,7 +24,6 @@ from pyluach.utils import memoize
 
 
 class BaseDate(object):
-
     """BaseDate is a base class for all date types.
 
     It provides the following arithmetic and comparison operators
@@ -204,7 +203,6 @@ class CalendarDateMixin(object):
 
 
 class JulianDay(BaseDate):
-
     """A JulianDay object represents a Julian Day at midnight.
 
     Parameters
@@ -357,7 +355,6 @@ class JulianDay(BaseDate):
 
 
 class GregorianDate(BaseDate, CalendarDateMixin):
-
     """A GregorianDate object represents a Gregorian date (year, month, day).
 
     This is an idealized date with the current Gregorian calendar
@@ -531,7 +528,6 @@ class GregorianDate(BaseDate, CalendarDateMixin):
 
 
 class HebrewDate(BaseDate, CalendarDateMixin):
-
     """A class for manipulating Hebrew dates.
 
     Parameters
@@ -744,4 +740,3 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             return 30 if cls._long_cheshvan(year) else 29
         elif month == 9:   # if short Kislev return 29, else return 30
             return 29 if cls._short_kislev(year) else 30
-
