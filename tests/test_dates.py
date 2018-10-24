@@ -216,3 +216,5 @@ def test_to_pydate():
 def test_from_pydate():
     date = datetime.date(2018, 8, 27)
     assert date == GregorianDate.from_pydate(date).to_jd().to_pydate()
+    assert date == HebrewDate.from_pydate(date).to_pydate()
+    assert date == JulianDay.from_pydate(date).to_pydate()

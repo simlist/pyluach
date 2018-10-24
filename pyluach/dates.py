@@ -248,6 +248,21 @@ class JulianDay(BaseDate):
         return (int(self.day+.5) + 1) % 7 + 1
 
     @staticmethod
+    def from_pydate(pydate):
+        """Return a `JulianDay` from a python date object.
+        
+        Parameters
+        ----------
+        pydate : datetime.date
+          A python standard library ``datetime.date`` instance
+
+        Returns
+        -------
+        JulianDay
+        """
+        return GregorianDate.from_pydate(pydate).to_jd()
+
+    @staticmethod
     def today():
         """Return instance of current Julian day from timestamp.
 
@@ -336,7 +351,7 @@ class JulianDay(BaseDate):
         Returns
         -------
         datetime.date
-          A standard library datetime.date instance.
+          A standard library ``datetime.date`` instance.
         """
         return self.to_greg().to_pydate()
 
@@ -593,6 +608,21 @@ class HebrewDate(BaseDate, CalendarDateMixin):
                     self._jd = jd + (self.day-1) + 347996.5
 
         return self._jd
+
+    @staticmethod
+    def from_pydate(pydate):
+        """Return a `HebrewDate` from a python date object.
+        
+        Parameters
+        ----------
+        pydate : datetime.date
+          A python standard library ``datetime.date`` instance
+
+        Returns
+        -------
+        HebrewDate
+        """
+        return GregorianDate.from_pydate(pydate).to_heb()
 
     @staticmethod
     def today():
