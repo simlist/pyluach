@@ -40,6 +40,16 @@ class TestGetParsha(object):
         assert parshios. getparsha_string(shavuos + 7, True) == "Beha'aloscha"
         assert parshios.getparsha_string(shavuos + 7) == 'Naso'
 
+    def test_eighth_day_pesach(self):
+        eighth_day_pesach = dates.HebrewDate(5779, 1, 22)
+        reunion_shabbos = dates.HebrewDate(5779, 5, 2)
+        assert parshios.getparsha_string(eighth_day_pesach) is None
+        assert parshios.getparsha_string(eighth_day_pesach, True) == 'Acharei Mos'
+        assert parshios.getparsha(eighth_day_pesach + 7) == [28,]
+        assert parshios.getparsha(eighth_day_pesach + 7, True) == [29,]
+        assert parshios.getparsha_string(reunion_shabbos) == "Matos, Ma'sei"
+        assert parshios.getparsha_string(reunion_shabbos, True) == "Ma'sei"
+
 
 def test_parshatable():
     assert parshios.parshatable(5777) == parshios._gentable(5777)
