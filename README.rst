@@ -28,7 +28,7 @@ Typical use
 ------------
 ::
 
-    from pyluach import dates, hebrewcal
+    >>> from pyluach import dates, hebrewcal, parshios
     
     >>> today = dates.HebrewDate.today()
     >>> lastweek_gregorian = (today - 7).to_greg()
@@ -45,6 +45,11 @@ Typical use
     ...     print month.name
 	Tishrei Cheshvan ...
 
+    >>> date = dates.GregorianDate(2010, 10, 6)
+    >>> print(parshios.getparsha(date))
+        [0]
+    >>> print(parshios.getparsha_string(date))
+        Beraishis
 Documentation
 -------------
 Documentation for pyluach can be found at https://readthedocs.org/projects/pyluach/.
