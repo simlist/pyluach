@@ -29,7 +29,10 @@ class TestClassesSanity(object):
         for i in range(347998, 2460000, 117):
             jd = dates.JulianDay(i)
             conf = jd.to_greg().to_jd()
-            assert jd.day == conf.day
+            if jd >= dates.GregorianDate(1, 1, 1):
+                assert jd.day == conf.day
+            else:
+                assert abs(jd.day - conf.day) <= 1
 
     def test_heb_sanity(self):
         for i in range(347998, 2460000, 117):
