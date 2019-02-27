@@ -2,7 +2,7 @@ from setuptools import setup
 import io
 
 setup(name='pyluach',
-      version='0.3.2.dev2',
+      version='1.0.0',
       author='MS List',
       author_email='simlist@gmail.com',
       packages=['pyluach', ],
@@ -12,7 +12,7 @@ setup(name='pyluach',
                     Gregorian-Hebrew calendar conversions, and other Jewish
                     calendar related calculations."""),
       long_description=io.open('README.rst').read(),
-      classifiers=['Development Status :: 3 - Alpha',
+      classifiers=['Development Status :: 5 - Production/Stable',
                      'Intended Audience :: Developers',
                      'License :: OSI Approved :: MIT License',
                      'Programming Language :: Python :: 2.7',
