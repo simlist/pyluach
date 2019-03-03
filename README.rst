@@ -50,6 +50,7 @@ Typical use
     [0]
     >>> print(parshios.getparsha_string(date))
     Beraishis
+
 Documentation
 -------------
 Documentation for pyluach can be found at https://readthedocs.org/projects/pyluach/.
