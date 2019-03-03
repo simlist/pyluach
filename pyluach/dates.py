@@ -24,7 +24,6 @@ from pyluach.utils import memoize
 
 
 class BaseDate(object):
-
     """BaseDate is a base class for all date types.
 
     It provides the following arithmetic and comparison operators
@@ -163,7 +162,7 @@ class CalendarDateMixin(object):
                                            self.day)
 
     def __str__(self):
-        return '{0}-{1}-{2}'.format(self.year, self.month, self.day)
+        return '{0:04d}-{1:02d}-{2:02d}'.format(self.year, self.month, self.day)
 
     def __iter__(self):
         yield self.year
@@ -204,7 +203,6 @@ class CalendarDateMixin(object):
 
 
 class JulianDay(BaseDate):
-
     """A JulianDay object represents a Julian Day at midnight.
 
     Parameters
@@ -246,6 +244,21 @@ class JulianDay(BaseDate):
           The weekday with Sunday as 1 through Saturday as 7.
         """
         return (int(self.day+.5) + 1) % 7 + 1
+
+    @staticmethod
+    def from_pydate(pydate):
+        """Return a `JulianDay` from a python date object.
+        
+        Parameters
+        ----------
+        pydate : datetime.date
+          A python standard library ``datetime.date`` instance
+
+        Returns
+        -------
+        JulianDay
+        """
+        return GregorianDate.from_pydate(pydate).to_jd()
 
     @staticmethod
     def today():
@@ -336,13 +349,12 @@ class JulianDay(BaseDate):
         Returns
         -------
         datetime.date
-          A standard library datetime.date instance.
+          A standard library ``datetime.date`` instance.
         """
         return self.to_greg().to_pydate()
 
 
 class GregorianDate(BaseDate, CalendarDateMixin):
-
     """A GregorianDate object represents a Gregorian date (year, month, day).
 
     This is an idealized date with the current Gregorian calendar
@@ -363,6 +375,12 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     day : int
     jd : float(property)
       The corresponding Julian Day Number at midnight (as *n*.5).
+
+    Warnings
+    --------
+    Although B.C.E. dates are allowed, they should be treated as
+    approximations as they may return inconsistent results when converting
+    between date types and using arithmetic and comparison operators!
     """
 
     def __init__(self, year, month, day, jd=None):
@@ -407,6 +425,22 @@ class GregorianDate(BaseDate, CalendarDateMixin):
             self._jd = (int(365.25*year) +
                         int(30.6001*month) + b + day + 1720994.5)
         return self._jd
+
+    @staticmethod
+    def from_pydate(pydate):
+        """Return a `GregorianDate` instance from a python date object.
+
+        Parameters
+        ----------
+        pydate : datetime.date
+          A python standard library ``datetime.date`` instance.
+
+        Returns
+        -------
+        GregorianDate
+        """
+        return GregorianDate(*pydate.timetuple()[:3])
+
     @staticmethod
     def today():
         """Return a GregorianDate instance for the current day.
@@ -419,7 +453,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         GregorianDate
           The current Gregorian date from the computer's timestamp.
         """
-        return GregorianDate(*date.today().timetuple()[:3])
+        return GregorianDate.from_pydate(date.today())
 
     @staticmethod
     def _is_leap(year):
@@ -462,25 +496,15 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         """
         return JulianDay(self.jd)
 
-    def to_heb(self, night=False):
+    def to_heb(self):
         """Convert to Hebrew date.
-
-        Parameters
-        ----------
-        night : bool, optional
-          True if it is after nightfall of the secular date but before
-          midnight else False (as a Hebrew date begins at nightfall).
-          Defaults to false.
 
         Returns
         -------
         HebrewDate
-          The equivalent Hebrew date instance.
+          The equivalent HebrewDate instance.
         """
-        today = self
-        if night:
-            today = self + 1
-        return today.to_jd().to_heb()
+        return self.to_jd().to_heb()
 
     def to_pydate(self):
         """Convert to a standard library date.
@@ -494,7 +518,6 @@ class GregorianDate(BaseDate, CalendarDateMixin):
 
 
 class HebrewDate(BaseDate, CalendarDateMixin):
-
     """A class for manipulating Hebrew dates.
 
     Parameters
@@ -571,6 +594,21 @@ class HebrewDate(BaseDate, CalendarDateMixin):
                     self._jd = jd + (self.day-1) + 347996.5
 
         return self._jd
+
+    @staticmethod
+    def from_pydate(pydate):
+        """Return a `HebrewDate` from a python date object.
+        
+        Parameters
+        ----------
+        pydate : datetime.date
+          A python standard library ``datetime.date`` instance
+
+        Returns
+        -------
+        HebrewDate
+        """
+        return GregorianDate.from_pydate(pydate).to_heb()
 
     @staticmethod
     def today():
@@ -692,4 +730,3 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             return 30 if cls._long_cheshvan(year) else 29
         elif month == 9:   # if short Kislev return 29, else return 30
             return 29 if cls._short_kislev(year) else 30
-

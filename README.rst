@@ -28,23 +28,28 @@ Typical use
 ------------
 ::
 
-    from pyluach import dates, hebrewcal
+    >>> from pyluach import dates, hebrewcal, parshios
     
     >>> today = dates.HebrewDate.today()
     >>> lastweek_gregorian = (today - 7).to_greg()
     >>> lastweek_gregorian < today
 	True
     >>> today - lastweek_gregorian
-	7
+    7
     >>> greg = GregorianDate(1986, 3, 21)
     >>> heb = HebrewDate(5746, 13, 10)
     >>> greg == heb
-	True
+    True
     
     >>> for month in hebrewcal.Year(5774).itermonths():
-    ...     print month.name
-	Tishrei Cheshvan ...
+    ...     print(month.name)
+    Tishrei Cheshvan ...
 
+    >>> date = dates.GregorianDate(2010, 10, 6)
+    >>> print(parshios.getparsha(date))
+    [0]
+    >>> print(parshios.getparsha_string(date))
+    Beraishis
 Documentation
 -------------
 Documentation for pyluach can be found at https://readthedocs.org/projects/pyluach/.

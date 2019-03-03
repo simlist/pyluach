@@ -29,7 +29,10 @@ class TestClassesSanity(object):
         for i in range(347998, 2460000, 117):
             jd = dates.JulianDay(i)
             conf = jd.to_greg().to_jd()
-            assert jd.day == conf.day
+            if jd >= dates.GregorianDate(1, 1, 1):
+                assert jd.day == conf.day
+            else:
+                assert abs(jd.day - conf.day) <= 1
 
     def test_heb_sanity(self):
         for i in range(347998, 2460000, 117):
@@ -177,9 +180,15 @@ class TestReprandStr(object):
         jd = JulianDay.today()
         assert eval(repr(jd)) == jd
 
-def test_jd_str():
-    assert str(JulianDay(550.5)) == '550.5'
-    assert str(JulianDay(1008)) == '1007.5'
+    def test_jd_str(self):
+        assert str(JulianDay(550.5)) == '550.5'
+        assert str(JulianDay(1008)) == '1007.5'
+
+    def test_greg_str(self):
+        date = GregorianDate(2018, 8, 22)
+        assert str(date) == '2018-08-22'
+        assert str(GregorianDate(2008, 12, 2)) == '2008-12-02'
+        assert str(GregorianDate(1, 1, 1)) == '0001-01-01'
 
 def test_weekday():
     assert GregorianDate(2017, 8, 7).weekday() == 2
@@ -206,3 +215,9 @@ def test_to_pydate():
     jd = day.to_jd()
     for day_type in [day, jd]:
         assert day_type.to_pydate() == datetime.date(2018, 8, 12)
+
+def test_from_pydate():
+    date = datetime.date(2018, 8, 27)
+    assert date == GregorianDate.from_pydate(date).to_jd().to_pydate()
+    assert date == HebrewDate.from_pydate(date).to_pydate()
+    assert date == JulianDay.from_pydate(date).to_pydate()
