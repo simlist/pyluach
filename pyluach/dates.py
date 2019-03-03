@@ -496,25 +496,15 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         """
         return JulianDay(self.jd)
 
-    def to_heb(self, night=False):
+    def to_heb(self):
         """Convert to Hebrew date.
-
-        Parameters
-        ----------
-        night : bool, optional
-          True if it is after nightfall of the secular date but before
-          midnight else False (as a Hebrew date begins at nightfall).
-          Defaults to false.
 
         Returns
         -------
         HebrewDate
-          The equivalent Hebrew date instance.
+          The equivalent HebrewDate instance.
         """
-        today = self
-        if night:
-            today = self + 1
-        return today.to_jd().to_heb()
+        return self.to_jd().to_heb()
 
     def to_pydate(self):
         """Convert to a standard library date.
