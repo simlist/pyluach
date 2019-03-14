@@ -669,7 +669,16 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         if (((7*year) + 1) % 19) < 7:
             return True
         return False
-
+    
+    def is_leap(self):
+        """Return if the date is in a leap year
+        Returns
+        -------
+        bool
+          True if the date is in a leap year, False otherwise.
+        """
+        return self._is_leap(self.year)
+    
     @classmethod
     @memoize(maxlen=100)
     def _elapsed_days(cls, year):
