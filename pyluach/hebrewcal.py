@@ -74,7 +74,7 @@ def holiday(date, israel=False):
     if date in table:
         return table[date]
     if month == 7:
-        if day in range(1, 3):
+        if day in [1, 2]:
             return 'Rosh Hashana'
         elif day == 10:
             return 'Yom Kippur'
