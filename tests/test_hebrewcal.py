@@ -92,7 +92,12 @@ class TestMonth(object):
             for date in Month(year, month).iterdates():
                 assert date == workingdate
                 workingdate += 1
-
+    
+    def test_molad(self):
+        month = Month(5779, 7)
+        assert month.molad() == {'weekday': 2, 'hours':14, 'parts': 316}
+        month = Month(5779, 5)
+        assert month.molad() == {'weekday':5, 'hours': 10, 'parts': 399}
 
 class TestHoliday(object):
 
@@ -197,4 +202,3 @@ class TestFasts(object):
         for fast in fasts:
             assert holiday(fast) == '9 of Av'
         assert holiday(dates.HebrewDate(5778, 5, 9)) is None
-
