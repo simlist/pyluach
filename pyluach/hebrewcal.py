@@ -226,7 +226,7 @@ class Year(object):
         for month in self.itermonths():
             for day in month:
                 yield HebrewDate(self.year, month.month, day)
-
+    
 
 class Month(object):
 
@@ -328,11 +328,9 @@ class Month(object):
         '''Return number of months elapsed from beginning of calendar'''
         yearmonths = tuple(Year(self.year))
         months_elapsed = (
-                      (235 * ((self.year-1) // 19)) +
-                      (12 * ((self.year-1) % 19)) +
-                      (7 * ((self.year-1) % 19) + 1) // 19 +
-                      yearmonths.index(self.month)
-                      )
+            HebrewDate._elapsed_months(self.year)
+            + yearmonths.index(self.month)
+        )
         return months_elapsed
 
     def iterdates(self):
@@ -347,3 +345,17 @@ class Month(object):
         for day in self:
             yield HebrewDate(self.year, self.month, day)
 
+
+    def molad(self):
+        """Return the month's molad.
+
+        Returns
+        -------
+        dict
+          A dictionary in the form {days: int, hours: int, parts: int}
+        """
+        months = self._elapsed_months()
+        parts = 204 + months*793
+        hours = 5 + months*12 + parts//1080
+        days = 2 + months*29 + hours//24
+        return {'day': days % 7, 'hour': hours % 24, 'parts': parts % 1080}
