@@ -671,12 +671,14 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         return False
 
     @classmethod
+    def _elapsed_months(cls, year):
+        return (235 * year - 234) // 19
+
+
+    @classmethod
     @memoize(maxlen=100)
     def _elapsed_days(cls, year):
-        months_elapsed = (
-                      (235 * ((year-1) // 19)) + (12 * ((year-1) % 19)) +
-                      (7 * ((year-1) % 19) + 1) // 19
-                      )
+        months_elapsed = cls._elapsed_months(year)
         parts_elapsed = 204 + 793*(months_elapsed%1080)
         hours_elapsed = (5 + 12*months_elapsed + 793*(months_elapsed//1080) +
                          parts_elapsed//1080)
