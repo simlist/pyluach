@@ -352,10 +352,10 @@ class Month(object):
         Returns
         -------
         dict
-          A dictionary in the form {days: int, hours: int, parts: int}
+          A dictionary in the form {weekday: int, hours: int, parts: int}
         """
         months = self._elapsed_months()
         parts = 204 + months*793
         hours = 5 + months*12 + parts//1080
         days = 2 + months*29 + hours//24
-        return {'day': days % 7, 'hour': hours % 24, 'parts': parts % 1080}
+        return {'weekday': days % 7, 'hours': hours % 24, 'parts': parts % 1080}
