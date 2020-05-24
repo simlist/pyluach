@@ -15,8 +15,6 @@ All instances of the classes in this module should be treated as read
 only. No attributes should be changed once they're created.
 """
 
-from __future__ import division
-
 from datetime import date
 from numbers import Number
 

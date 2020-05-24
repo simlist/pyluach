@@ -14,9 +14,6 @@ http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
 All parsha names are transliterated into the American Ashkenazik pronunciation.
 """
 
-from __future__ import division
-from __future__ import unicode_literals
-
 from collections import deque, OrderedDict
 
 from pyluach.dates import HebrewDate
