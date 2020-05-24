@@ -17,8 +17,7 @@ only. No attributes should be changed once they're created.
 
 from datetime import date
 from numbers import Number
-
-from pyluach.utils import memoize
+from functools import lru_cache
 
 
 class BaseDate(object):
@@ -669,7 +668,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         return False
 
     @classmethod
-    @memoize(maxlen=100)
+    @lru_cache(maxsize=100)
     def _elapsed_days(cls, year):
         months_elapsed = (
                       (235 * ((year-1) // 19)) + (12 * ((year-1) % 19)) +

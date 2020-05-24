@@ -15,9 +15,9 @@ All parsha names are transliterated into the American Ashkenazik pronunciation.
 """
 
 from collections import deque, OrderedDict
+from functools import lru_cache
 
 from pyluach.dates import HebrewDate
-from pyluach.utils import memoize
 
 
 PARSHIOS = [
@@ -46,7 +46,7 @@ def _parshaless(date, israel=False):
     return False
 
 
-@memoize(maxlen=50)
+@lru_cache(maxsize=50)
 def _gentable(year, israel=False):
     """Return OrderedDict mapping date of Shabbos to list of parsha numbers.
 
@@ -183,4 +183,3 @@ def parshatable(year, israel=False):
       Shabbos with no parsha.
     """
     return _gentable(year, israel)
-

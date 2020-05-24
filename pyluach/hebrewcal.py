@@ -1,8 +1,8 @@
 from collections import deque
 from numbers import Number
+from functools import lru_cache
 
 from pyluach.dates import HebrewDate
-from pyluach.utils import memoize
 
 
 def _adjust_postponed(date):
@@ -19,7 +19,7 @@ def _adjust_postponed(date):
     return date
 
 
-@memoize(maxlen=50)
+@lru_cache(maxsize=50)
 def _fast_day_table(year):
     table = dict()
     workingdate = _adjust_postponed(HebrewDate(year, 7, 3))
