@@ -18,4 +18,4 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Initial public release
 
 
-.. _`0.1.0`: https://github.com/simlist/pyluach/releases/tag/v1.0.1
+.. _`1.0.1`: https://github.com/simlist/pyluach/releases/tag/v1.0.1
