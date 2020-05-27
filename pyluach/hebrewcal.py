@@ -345,7 +345,6 @@ class Month(object):
         for day in self:
             yield HebrewDate(self.year, self.month, day)
 
-
     def molad(self):
         """Return the month's molad.
 
@@ -359,3 +358,25 @@ class Month(object):
         hours = 5 + months*12 + parts//1080
         days = 2 + months*29 + hours//24
         return {'weekday': days % 7, 'hours': hours % 24, 'parts': parts % 1080}
+
+    def molad_announcement(self):
+        """Return the months molad in the announcement form.
+        
+        Returns a dictionary in the form that the molad is traditionaly
+        announced. The hour is the hour of the day 
+        Returns
+        -------
+        dict
+          A dictionary in the form:
+          `{weekday: int, hours: int, minutes: int, parts: int}`
+        """
+        molad = self.molad()
+        hour = 18 + molad['hours']
+        if hour >= 24:
+            hour = hour - 24
+        minutes = molad['parts'] // 18
+        parts = molad['parts'] % 18
+        return {
+            'weekday': molad['weekday'], 'hour': hour,
+            'minutes': minutes, 'parts': parts
+        }
