@@ -1,13 +1,13 @@
 """The dates module implements classes for representing and
 manipulating several date types.
 
-Classes
--------
-* BaseDate
-* CalendarDateMixin
-* JulianDay
-* GregorianDate
-* HebrewDate
+Contents
+--------
+* :class:`~pyluach.dates.BaseDate`
+* :class:`~pyluach.dates.CalendarDateMixin`
+* :class:`~pyluach.dates.JulianDay`
+* :class:`~pyluach.dates.GregorianDate`
+* :class:`~pyluach.dates.HebrewDate`
 
 Note
 ----
@@ -15,15 +15,13 @@ All instances of the classes in this module should be treated as read
 only. No attributes should be changed once they're created.
 """
 
-from __future__ import division
-
 from datetime import date
 from numbers import Number
 
 from pyluach.utils import memoize
 
 
-class BaseDate(object):
+class BaseDate:
     """BaseDate is a base class for all date types.
 
     It provides the following arithmetic and comparison operators
@@ -43,7 +41,7 @@ class BaseDate(object):
     date1 >=, <= date2   True if both are True
     ===================  =============================================
 
-    Any child of BaseDate that implements a ``jd`` attribute
+    Any child of BaseDate that implements a `jd` attribute
     representing the Julian Day of that date can be compared to and
     diffed with any other valid date type.
     """
@@ -126,7 +124,7 @@ class BaseDate(object):
         return self + (7 - self.weekday())
 
 
-class CalendarDateMixin(object):
+class CalendarDateMixin:
     """CalendarDateMixin is a mixin for Hebrew and Gregorian dates.
 
     Parameters
