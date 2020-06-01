@@ -365,7 +365,7 @@ class Month:
     def molad_announcement(self):
         """Return the months molad in the announcement form.
         
-        Returns a dictionary in the form that the molad is traditionaly
+        Returns a dictionary in the form that the molad is traditionally
         announced. The weekday is adjusted to change at midnight and
         the hour of the day and minutes are given as traditionally announced.
         Note that the hour is given as in a twenty four hour clock ie. 0 for
@@ -374,13 +374,23 @@ class Month:
         Returns
         -------
         dict
-          A dictionary in the form `{weekday: int, hour: int, minutes: int, parts: int}`
+          A dictionary in the form
+          ::
+            {
+                weekday: int,
+                hour: int,
+                minutes: int,
+                parts: int
+            }
         """
         molad = self.molad()
         weekday = molad['weekday']
         hour = 18 + molad['hours']
         if hour < 24:
-            weekday -= 1
+            if weekday != 1:
+                weekday -= 1
+            else:
+                weekday = 7
         else:
             hour -= 24
         minutes = molad['parts'] // 18
