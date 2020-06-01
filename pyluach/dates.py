@@ -9,8 +9,8 @@ Contents
 * :class:`~pyluach.dates.GregorianDate`
 * :class:`~pyluach.dates.HebrewDate`
 
-Note
-----
+Notes
+-----
 All instances of the classes in this module should be treated as read
 only. No attributes should be changed once they're created.
 """
@@ -620,8 +620,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         HebrewDate
           The current Hebrew date from the computer's timestamp.
 
-        Note
-        ----
+        Notes
+        -----
         This method coverts the Gregorian date from the time stamp to
         a Hebrew date, so if it is after nightfall but before
         midnight you will have to add one day, ie.
