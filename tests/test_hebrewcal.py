@@ -105,6 +105,16 @@ class TestMonth(object):
             'weekday': 6, 'hour': 11, 'minutes':42, 'parts': 13
         }
 
+        month = Month(5780, 2)
+        assert month.molad_announcement() == {
+            'weekday': 4, 'hour': 22, 'minutes': 58, 'parts': 12
+        }
+        month = Month(5780, 8)
+        assert month.molad_announcement() == {
+            'weekday': 2, 'hour': 18, 'minutes': 34, 'parts': 6
+        }
+
+
 class TestHoliday(object):
 
     def test_roshhashana(self):

@@ -112,12 +112,11 @@ def holiday(date, israel=False):
         return "Tu B'av"
 
 
-class Year(object):
-
-    """
-    A Year object represents a Hebrew calendar year.
+class Year:
+    """A Year object represents a Hebrew calendar year.
 
     It provided the following operators:
+
     =====================  ================================================
     Operation              Result
     =====================  ================================================
@@ -142,10 +141,6 @@ class Year(object):
     """
 
     def __init__(self, year):
-
-        """
-        The initializer for a Year object.
-        """
         if year < 1:
             raise ValueError('Year {0} is before creation.'.format(year))
         self.year = year
@@ -219,7 +214,7 @@ class Year(object):
 
         Yields
         ------
-        ``HebrewDate``
+        HebrewDate
             The next date of the Hebrew calendar year starting with
             the first of Tishrei.
         """
@@ -228,10 +223,8 @@ class Year(object):
                 yield HebrewDate(self.year, month.month, day)
     
 
-class Month(object):
-
-    """
-    A Month object represents a month of the Hebrew calendar.
+class Month:
+    """A Month object represents a month of the Hebrew calendar.
 
     Parameters
     ----------
@@ -352,6 +345,16 @@ class Month(object):
         -------
         dict
           A dictionary in the form {weekday: int, hours: int, parts: int}
+
+        Notes
+        -----
+        This method does not return the molad in the form that is
+        traditionally announced in the shul. This is the molad in the
+        form used to calculate the length of the year.
+
+        See Also
+        --------
+        molad_announcement: The molad as it is traditionally announced.
         """
         months = self._elapsed_months()
         parts = 204 + months*793
@@ -363,20 +366,26 @@ class Month(object):
         """Return the months molad in the announcement form.
         
         Returns a dictionary in the form that the molad is traditionaly
-        announced. The hour is the hour of the day 
+        announced. The weekday is adjusted to change at midnight and
+        the hour of the day and minutes are given as traditionally announced.
+        Note that the hour is given as in a twenty four hour clock ie. 0 for
+        12:00 AM through 23 for 11:00 PM.
+
         Returns
         -------
         dict
-          A dictionary in the form:
-          `{weekday: int, hours: int, minutes: int, parts: int}`
+          A dictionary in the form `{weekday: int, hour: int, minutes: int, parts: int}`
         """
         molad = self.molad()
+        weekday = molad['weekday']
         hour = 18 + molad['hours']
-        if hour >= 24:
-            hour = hour - 24
+        if hour < 24:
+            weekday -= 1
+        else:
+            hour -= 24
         minutes = molad['parts'] // 18
         parts = molad['parts'] % 18
         return {
-            'weekday': molad['weekday'], 'hour': hour,
+            'weekday': weekday, 'hour': hour,
             'minutes': minutes, 'parts': parts
         }
