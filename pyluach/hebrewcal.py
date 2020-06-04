@@ -125,6 +125,10 @@ class Year:
     int = year1 - year2    ``int`` equal to the absolute value of
                            the difference between year2 and year1.
     bool = year1 == year2  True if year1 represents the same year as year2.
+    bool = year1 > year2   True if year1 is later than year2.
+    bool = year1 >= year2  True if year1 is later or equal to year2.
+    bool = year1 < year2   True if year 1 earlier than year2.
+    bool = year1 <= year2  True if year 1 earlier or equal to year 2.
     =====================  ================================================
 
     Parameters
@@ -176,6 +180,26 @@ class Year:
                 raise TypeError('Only an int or another Year object can'
                                 ' be subtracted from a year.')
 
+    def __gt__(self, other):
+        if self.year > other.year:
+            return True
+        return False
+
+    def __ge__(self, other):
+        if self == other or self > other:
+            return True
+        return False
+
+    def __lt__(self, other):
+        if self.year < other.year:
+            return True
+        return False
+
+    def __le__(self, other):
+        if self < other or self == other:
+            return True
+        return False
+
     def __iter__(self):
         """Yield integer for each month in year."""
         months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
@@ -225,6 +249,8 @@ class Year:
 
 class Month:
     """A Month object represents a month of the Hebrew calendar.
+
+    It provides the same operators as a `Year` object.
 
     Parameters
     ----------
@@ -305,6 +331,32 @@ class Month:
         except AttributeError:
             raise TypeError('''You can only subtract a number or a month
                             object from a month''')
+
+    def __gt__(self, other):
+        if (
+            self.year > other.year
+            or (self.year == other.year and self.month > other.month)
+        ):
+            return True
+        return False
+
+    def __ge__(self, other):
+        if self > other or self == other:
+            return True
+        return False
+
+    def __lt__(self, other):
+        if (
+            self.year < other.year
+            or (self.year == other.year and self.month < other.month)
+        ):
+            return True
+        return False
+
+    def __le__(self, other):
+        if self < other or self == other:
+            return True
+        return False
 
     def starting_weekday(self):
         """Return first weekday of the month.
