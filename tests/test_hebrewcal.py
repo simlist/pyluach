@@ -5,7 +5,7 @@ from pyluach import dates, hebrewcal
 from pyluach.hebrewcal import Year, Month, holiday
 
 
-class TestYear(object):
+class TestYear:
 
     def test_repryear(self):
         year = Year(5777)
@@ -84,7 +84,7 @@ class TestYearComparisons:
         assert years[1] <= years[2]
         assert (years[2] <= years[1]) is False
 
-class TestMonth(object):
+class TestMonth:
 
     def test_reprmonth(self):
         month = Month(5777, 10)
@@ -191,8 +191,7 @@ class TestCompareMonth:
         assert months[3] != months[1]
         assert (copy(months[1]) != months[1]) is False
 
-
-class TestHoliday(object):
+class TestHoliday:
 
     def test_roshhashana(self):
         roshhashana = dates.HebrewDate(5779, 7, 1)
@@ -256,7 +255,7 @@ class TestHoliday(object):
     def test_tubeav(self):
         assert holiday(dates.HebrewDate(5779, 5, 15)) == "Tu B'av"
 
-class TestFasts(object):
+class TestFasts:
 
     def test_gedalia(self):
         assert holiday(dates.HebrewDate(5779, 7, 3)) == 'Tzom Gedalia'

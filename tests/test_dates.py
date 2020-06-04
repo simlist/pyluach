@@ -24,7 +24,7 @@ def datetypeslist():
     return datetypes
 
 
-class TestClassesSanity(object):
+class TestClassesSanity:
     def test_greg_sanity(self):
         for i in range(347998, 2460000, 117):
             jd = dates.JulianDay(i)
@@ -41,7 +41,7 @@ class TestClassesSanity(object):
             assert jd.day == conf.day
 
 
-class TestClassesConversion(object):
+class TestClassesConversion:
     def test_from_greg(self):
         for date in KNOWN_VALUES:
             heb = dates.GregorianDate(*date).to_heb().tuple()
@@ -58,7 +58,7 @@ def setup(scope='module'):
     deltas =  [0, 1, 29, 73, 1004]
     return  {'caltypes': caltypes, 'deltas': deltas}
 
-class TestOperators(object):
+class TestOperators:
 
     def test_add(self, setup):
         for cal in setup['caltypes']:
@@ -90,7 +90,7 @@ class TestOperators(object):
                     assert delta == difference
 
 
-class TestComparisons(object):
+class TestComparisons:
     """In ComparisonTests, comparisons are tested.
 
     Every function tests one test case comparing a date from each
@@ -131,7 +131,7 @@ class TestComparisons(object):
                     assert comp(today, today2) is False
 
 
-class TestErrors(object):
+class TestErrors:
 
     def test_too_low_heb(self):
         with pytest.raises(ValueError):
@@ -173,7 +173,7 @@ class TestErrors(object):
                           with pytest.raises(ValueError):
                             GregorianDate(*datetuple)
 
-class TestReprandStr(object):
+class TestReprandStr:
     def test_repr(self, datetypeslist):
         for datetype in datetypeslist:
             assert eval(repr(datetype.today())) == datetype.today()
@@ -195,7 +195,7 @@ def test_weekday():
     assert HebrewDate(5777, 6, 1).weekday() == 4
     assert JulianDay(2458342.5).weekday() == 1
 
-class TestMixinMethods():
+class TestMixinMethods:
 
     @pytest.fixture
     def date(self):

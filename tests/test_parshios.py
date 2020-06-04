@@ -16,7 +16,7 @@ KNOWN_VALUES_STRINGS = {
     }
 
 
-class TestGetParsha(object):
+class TestGetParsha:
 
     def test_getparsha(self):
         for key in KNOWN_VALUES:
