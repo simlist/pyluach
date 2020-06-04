@@ -6,7 +6,7 @@ This document records all notable changes to `pyluach <https://github.com/simlis
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 
-1.1.0 (unreleased)
+1.1.0
 -------------------------
 
 * Redesigned documentation.
