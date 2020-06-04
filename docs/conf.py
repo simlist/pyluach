@@ -20,8 +20,8 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'pyluach'
-copyright = '2016, simlist'
-author = 'simlist'
+copyright = '2016, MS List'
+author = 'MS List'
 
 # The full version, including alpha/beta/rc tags
 release = '1.0.1'
