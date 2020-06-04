@@ -1,3 +1,6 @@
+from copy import copy
+
+from pytest import fixture
 from pyluach import dates, hebrewcal
 from pyluach.hebrewcal import Year, Month, holiday
 
@@ -48,6 +51,39 @@ class TestYear(object):
             workingdate += 1
 
 
+@fixture
+def years():
+    year1 = Year(5778)
+    year2 = Year(5780)
+    return {1: year1, 2: year2}
+
+class TestYearComparisons:
+
+    def test_year_equals(self, years):
+        assert years[1] == copy(years[1])
+        assert (years[1] == years[2]) is False
+        assert years[2] != years[1]
+        assert (copy(years[2]) != years[2]) is False
+
+    def test_year_gt(self, years):
+        assert years[2] > years[1]
+        assert (years[1] > years[1]) is False
+
+    def test_years_ge(self, years):
+        assert copy(years[1]) >= years[1]
+        assert years[2] >= years[1]
+        assert (years[1] >= years[2]) is False
+
+    def test_years_lt(self, years):
+        assert years[1] < years[2]
+        assert (copy(years[2]) < years[2]) is False
+        assert (years[2] < years[1]) is False
+
+    def test_years_le(self, years):
+        assert copy(years[1]) <= years[1]
+        assert years[1] <= years[2]
+        assert (years[2] <= years[1]) is False
+
 class TestMonth(object):
 
     def test_reprmonth(self):
@@ -92,6 +128,68 @@ class TestMonth(object):
             for date in Month(year, month).iterdates():
                 assert date == workingdate
                 workingdate += 1
+    
+    def test_molad(self):
+        month = Month(5779, 7)
+        assert month.molad() == {'weekday': 2, 'hours':14, 'parts': 316}
+        month = Month(5779, 5)
+        assert month.molad() == {'weekday':5, 'hours': 10, 'parts': 399}
+    
+    def test_molad_announcement(self):
+        month = Month(5780, 3)
+        assert month.molad_announcement() == {
+            'weekday': 6, 'hour': 11, 'minutes':42, 'parts': 13
+        }
+
+        month = Month(5780, 2)
+        assert month.molad_announcement() == {
+            'weekday': 4, 'hour': 22, 'minutes': 58, 'parts': 12
+        }
+        month = Month(5780, 8)
+        assert month.molad_announcement() == {
+            'weekday': 2, 'hour': 18, 'minutes': 34, 'parts': 6
+        }
+        month = Month(5780, 12)
+        assert month.molad_announcement() == {
+            'weekday': 1, 'hour':21, 'minutes': 30, 'parts': 10
+        }
+
+
+@fixture
+def months():
+    month1 = Month(5780, 3)
+    month2 = Month(5780, 4)
+    month3 = Month(5781, 3)
+    return {1: month1, 2: month2, 3: month3}
+
+class TestCompareMonth:
+
+    def test_month_gt(self, months):
+        assert months[2] > months[1]
+        assert (months[1] > months[2]) is False
+        assert months[3] > months[1]
+        assert (months[2] > months[3]) is False
+
+    def test_month_ge(self, months):
+        assert copy(months[1]) >= months[1]
+        assert months[2] >= months[1]
+        assert (months[2] >= months[3]) is False
+
+    def test_month_lt(self, months):
+        assert (copy(months[2]) < months[2]) is False
+        assert months[1] < months[2]
+        assert months[2] < months[3]
+        assert (months[3] < months[1]) is False
+    
+    def test_month_le(self, months):
+        assert copy(months[2]) <= months[2]
+        assert months[1] <= months[2]
+        assert (months[3] <= months[2]) is False
+    
+    def rest_month_ne(self, months):
+        assert months[2] != months[1]
+        assert months[3] != months[1]
+        assert (copy(months[1]) != months[1]) is False
 
 
 class TestHoliday(object):
@@ -197,4 +295,3 @@ class TestFasts(object):
         for fast in fasts:
             assert holiday(fast) == '9 of Av'
         assert holiday(dates.HebrewDate(5778, 5, 9)) is None
-

@@ -109,10 +109,8 @@ def holiday(date, israel=False):
         return "Tu B'av"
 
 
-class Year(object):
-
-    """
-    A Year object represents a Hebrew calendar year.
+class Year:
+    """A Year object represents a Hebrew calendar year.
 
     It provided the following operators:
 
@@ -124,6 +122,10 @@ class Year(object):
     int = year1 - year2    ``int`` equal to the absolute value of
                            the difference between year2 and year1.
     bool = year1 == year2  True if year1 represents the same year as year2.
+    bool = year1 > year2   True if year1 is later than year2.
+    bool = year1 >= year2  True if year1 is later or equal to year2.
+    bool = year1 < year2   True if year 1 earlier than year2.
+    bool = year1 <= year2  True if year 1 earlier or equal to year 2.
     =====================  ================================================
 
     Parameters
@@ -140,10 +142,6 @@ class Year(object):
     """
 
     def __init__(self, year):
-
-        """
-        The initializer for a Year object.
-        """
         if year < 1:
             raise ValueError('Year {0} is before creation.'.format(year))
         self.year = year
@@ -178,6 +176,26 @@ class Year(object):
             except AttributeError:
                 raise TypeError('Only an int or another Year object can'
                                 ' be subtracted from a year.')
+
+    def __gt__(self, other):
+        if self.year > other.year:
+            return True
+        return False
+
+    def __ge__(self, other):
+        if self == other or self > other:
+            return True
+        return False
+
+    def __lt__(self, other):
+        if self.year < other.year:
+            return True
+        return False
+
+    def __le__(self, other):
+        if self < other or self == other:
+            return True
+        return False
 
     def __iter__(self):
         """Yield integer for each month in year."""
@@ -217,19 +235,19 @@ class Year(object):
 
         Yields
         ------
-        ``HebrewDate``
+        HebrewDate
             The next date of the Hebrew calendar year starting with
             the first of Tishrei.
         """
         for month in self.itermonths():
             for day in month:
                 yield HebrewDate(self.year, month.month, day)
+    
 
+class Month:
+    """A Month object represents a month of the Hebrew calendar.
 
-class Month(object):
-
-    """
-    A Month object represents a month of the Hebrew calendar.
+    It provides the same operators as a `Year` object.
 
     Parameters
     ----------
@@ -311,6 +329,32 @@ class Month(object):
             raise TypeError('''You can only subtract a number or a month
                             object from a month''')
 
+    def __gt__(self, other):
+        if (
+            self.year > other.year
+            or (self.year == other.year and self.month > other.month)
+        ):
+            return True
+        return False
+
+    def __ge__(self, other):
+        if self > other or self == other:
+            return True
+        return False
+
+    def __lt__(self, other):
+        if (
+            self.year < other.year
+            or (self.year == other.year and self.month < other.month)
+        ):
+            return True
+        return False
+
+    def __le__(self, other):
+        if self < other or self == other:
+            return True
+        return False
+
     def starting_weekday(self):
         """Return first weekday of the month.
 
@@ -326,11 +370,9 @@ class Month(object):
         '''Return number of months elapsed from beginning of calendar'''
         yearmonths = tuple(Year(self.year))
         months_elapsed = (
-                      (235 * ((self.year-1) // 19)) +
-                      (12 * ((self.year-1) % 19)) +
-                      (7 * ((self.year-1) % 19) + 1) // 19 +
-                      yearmonths.index(self.month)
-                      )
+            HebrewDate._elapsed_months(self.year)
+            + yearmonths.index(self.month)
+        )
         return months_elapsed
 
     def iterdates(self):
@@ -345,3 +387,64 @@ class Month(object):
         for day in self:
             yield HebrewDate(self.year, self.month, day)
 
+    def molad(self):
+        """Return the month's molad.
+
+        Returns
+        -------
+        dict
+          A dictionary in the form {weekday: int, hours: int, parts: int}
+
+        Notes
+        -----
+        This method does not return the molad in the form that is
+        traditionally announced in the shul. This is the molad in the
+        form used to calculate the length of the year.
+
+        See Also
+        --------
+        molad_announcement: The molad as it is traditionally announced.
+        """
+        months = self._elapsed_months()
+        parts = 204 + months*793
+        hours = 5 + months*12 + parts//1080
+        days = 2 + months*29 + hours//24
+        return {'weekday': days % 7, 'hours': hours % 24, 'parts': parts % 1080}
+
+    def molad_announcement(self):
+        """Return the months molad in the announcement form.
+        
+        Returns a dictionary in the form that the molad is traditionally
+        announced. The weekday is adjusted to change at midnight and
+        the hour of the day and minutes are given as traditionally announced.
+        Note that the hour is given as in a twenty four hour clock ie. 0 for
+        12:00 AM through 23 for 11:00 PM.
+
+        Returns
+        -------
+        dict
+          A dictionary in the form
+          ::
+            {
+                weekday: int,
+                hour: int,
+                minutes: int,
+                parts: int
+            }
+        """
+        molad = self.molad()
+        weekday = molad['weekday']
+        hour = 18 + molad['hours']
+        if hour < 24:
+            if weekday != 1:
+                weekday -= 1
+            else:
+                weekday = 7
+        else:
+            hour -= 24
+        minutes = molad['parts'] // 18
+        parts = molad['parts'] % 18
+        return {
+            'weekday': weekday, 'hour': hour,
+            'minutes': minutes, 'parts': parts
+        }
