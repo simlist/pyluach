@@ -667,8 +667,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             return True
         return False
 
-    @classmethod
-    def _elapsed_months(cls, year):
+    @staticmethod
+    def _elapsed_months(year):
         return (235 * year - 234) // 19
 
     @classmethod
