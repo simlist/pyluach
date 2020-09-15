@@ -2,7 +2,7 @@ from copy import copy
 
 from pytest import fixture
 from pyluach import dates, hebrewcal
-from pyluach.hebrewcal import Year, Month, holiday
+from pyluach.hebrewcal import Year, Month, holiday, fast
 
 
 class TestYear:
@@ -259,11 +259,15 @@ class TestFasts:
 
     def test_gedalia(self):
         assert holiday(dates.HebrewDate(5779, 7, 3)) == 'Tzom Gedalia'
+        assert fast(dates.HebrewDate(5779, 7, 3)) == 'Tzom Gedalia'
         assert holiday(dates.HebrewDate(5778, 7, 3)) is None
+        assert fast(dates.HebrewDate(5778, 7, 3)) is None
         assert holiday(dates.HebrewDate(5778, 7, 4)) == 'Tzom Gedalia'
+        assert fast(dates.HebrewDate(5778, 7, 4)) == 'Tzom Gedalia'
 
     def test_asara(self):
         assert holiday(dates.GregorianDate(2018, 12, 18)) == '10 of Teves'
+        assert fast(dates.GregorianDate(2018, 12, 18)) == '10 of Teves'
 
     def test_esther(self):
         fasts = [
@@ -272,8 +276,9 @@ class TestFasts:
             dates.HebrewDate(5777, 12, 11),  #nidche
             dates.HebrewDate(5784, 13, 11)  #ibbur and nidche
         ]
-        for fast in fasts:
-            assert holiday(fast)  == 'Taanis Esther'
+        for fast_day in fasts:
+            assert holiday(fast_day) == 'Taanis Esther'
+            assert fast(fast_day) == 'Taanis Esther'
         non_fasts = [
             dates.HebrewDate(5776, 12, 13),
             dates.HebrewDate(5777, 12, 13),
@@ -282,15 +287,20 @@ class TestFasts:
         ]
         for non in non_fasts:
             assert holiday(non) is None
+            assert fast(non) is None
 
     def test_tamuz(self):
         fasts = [dates.HebrewDate(5777, 4, 17), dates.HebrewDate(5778, 4, 18)]
-        for fast in fasts:
-            assert holiday(fast) == '17 of Tamuz'
+        for fast_day in fasts:
+            assert holiday(fast_day) == '17 of Tamuz'
+            assert fast(fast_day) == '17 of Tamuz'
         assert holiday(dates.HebrewDate(5778, 4, 17)) is None
+        assert fast(dates.HebrewDate(5778, 4, 17)) is None
 
     def test_av(self):
         fasts = [dates.HebrewDate(5777, 5, 9), dates.HebrewDate(5778, 5, 10)]
-        for fast in fasts:
-            assert holiday(fast) == '9 of Av'
+        for fast_day in fasts:
+            assert holiday(fast_day) == '9 of Av'
+            assert fast(fast_day) == '9 of Av'
         assert holiday(dates.HebrewDate(5778, 5, 9)) is None
+        assert fast(dates.HebrewDate(5778, 5, 9)) is None

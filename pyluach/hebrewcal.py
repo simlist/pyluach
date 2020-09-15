@@ -41,6 +41,27 @@ def _fast_day_table(year):
     return table
 
 
+def fast(date):
+    """Return Jewish fast of given date.
+
+    Parameters
+    ----------
+    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+      Any date that implements a ``to_heb()`` method which returns a
+      ``HebrewDate`` can be used.
+
+    Returns
+    -------
+    str or ``None``
+      The name of the fast or ``None`` if the given date is not
+      a Jewish fast.
+    """
+    date = date.to_heb()
+    table = _fast_day_table(date.year)
+    if date in table:
+        return table[date]
+
+
 def holiday(date, israel=False):
     """Return Jewish holiday of given date.
 
@@ -67,9 +88,9 @@ def holiday(date, israel=False):
     year = date.year
     month = date.month
     day = date.day
-    table = _fast_day_table(year)
-    if date in table:
-        return table[date]
+    fast_day = fast(date)
+    if fast_day:
+        return fast_day
     if month == 7:
         if day in [1, 2]:
             return 'Rosh Hashana'
@@ -242,7 +263,7 @@ class Year:
         for month in self.itermonths():
             for day in month:
                 yield HebrewDate(self.year, month.month, day)
-    
+
 
 class Month:
     """A Month object represents a month of the Hebrew calendar.
@@ -322,7 +343,7 @@ class Month:
                          deque(Year(self.year - 1), maxlen=1).pop()).__sub__(
                                                     other - 1 - leftover_months
                                                     )
-                    # Recursive call on the last month of the previous year. 
+                    # Recursive call on the last month of the previous year.
         try:
             return abs(self._elapsed_months() - other._elapsed_months())
         except AttributeError:

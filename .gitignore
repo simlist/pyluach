@@ -8,3 +8,4 @@ ENV*
 *.whl
 dist/*
 *htmlcov*
+venv/*
