@@ -122,6 +122,20 @@ class BaseDate:
         """
         return self + (7 - self.weekday())
 
+    def isoweekday(self):
+        """Return the day of the week corresponding to the iso standard.
+
+        Returns
+        -------
+        int
+          An integer representing the day of the week where Monday
+          is 1 and and Sunday is 7.
+        """
+        weekday = self.weekday() 
+        if weekday == 1:
+            return 7
+        return weekday - 1
+
 
 class CalendarDateMixin:
     """CalendarDateMixin is a mixin for Hebrew and Gregorian dates.
@@ -176,7 +190,7 @@ class CalendarDateMixin:
           through Saturday as 7.
         """
         return int(self.jd+.5+1) % 7 + 1
-
+    
     def tuple(self):
         """Return date as tuple.
 

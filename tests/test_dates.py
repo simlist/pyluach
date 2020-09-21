@@ -195,6 +195,12 @@ def test_weekday():
     assert HebrewDate(5777, 6, 1).weekday() == 4
     assert JulianDay(2458342.5).weekday() == 1
 
+def test_isoweekday():
+    assert GregorianDate(2020, 9, 20).isoweekday() == 7
+    assert GregorianDate(2020, 10, 3).isoweekday() == 6
+    assert GregorianDate(2020, 10, 5).isoweekday() == 1 
+    assert JulianDay(2458342.5).isoweekday() == 7
+
 class TestMixinMethods:
 
     @pytest.fixture
