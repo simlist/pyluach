@@ -40,6 +40,42 @@ def _fast_day_table(year):
 
     return table
 
+def fast_day(date):
+    """Return name of fast day or None.
+
+    Parameters
+    ----------
+    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+      Any date that implements a ``to_heb()`` method which returns a
+      ``HebrewDate`` can be used.
+
+    Returns
+    -------
+    str or ``None``
+      The name of the fast day or ``None`` if the given date is not
+      a fast day.
+    """
+    date = date.to_heb()
+    year = date.year
+    month = date.month
+    day = date.day
+    weekday = date.weekday()
+    adar = 13 if Year(year).leap else 12
+
+    if month == 7:
+        if (weekday == 1 and day == 4) or (weekday != 7 and day == 3):
+            return 'Tzom Gedalia'
+    elif month == 10 and day == 10:
+        return '10 of Teves'
+    elif month == adar:
+        if (weekday == 5 and day == 11) or weekday != 7 and day == 13:
+            return 'Taanis Esther'
+    elif month == 4:
+        if (weekday == 1 and day == 18) or (weekday != 7 and day == 17):
+            return '17 of Tamuz'
+    elif month == 5:
+        if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
+            return '9 of Av'
 
 def holiday(date, israel=False):
     """Return Jewish holiday of given date.
@@ -67,9 +103,12 @@ def holiday(date, israel=False):
     year = date.year
     month = date.month
     day = date.day
-    table = _fast_day_table(year)
-    if date in table:
-        return table[date]
+    # table = _fast_day_table(year)
+    # if date in table:
+    #     return table[date]
+    fast = fast_day(date)
+    if fast:
+        return fast
     if month == 7:
         if day in [1, 2]:
             return 'Rosh Hashana'

@@ -217,9 +217,11 @@ class TestHoliday:
         assert holiday(shmini + 1, True) is None
 
     def test_chanuka(self):
-        chanuka = dates.HebrewDate(5778, 9, 25)
-        for i in range(8):
-            assert holiday(chanuka + i) == 'Chanuka'
+        for year in [5778, 5787]:
+            chanuka = dates.HebrewDate(year, 9, 25)
+            for i in range(8):
+                assert holiday(chanuka + i) == 'Chanuka'
+            assert holiday(chanuka + 8) is None
 
     def test_tubshvat(self):
         assert holiday(dates.HebrewDate(5779, 11, 15)) == "Tu B'shvat"
