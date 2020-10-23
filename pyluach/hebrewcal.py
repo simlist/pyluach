@@ -77,11 +77,11 @@ def fast_day(date):
         if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
             return '9 of Av'
 
-def holiday(date, israel=False):
-    """Return Jewish holiday of given date.
+def festival(date, israel=False):
+    """Return Jewish festival of given day.
 
-    The holidays include the major and minor religious Jewish
-    holidays including fast days.
+    This method will return all major and minor religous
+    Jewish holidays not including fast days.
 
     Parameters
     ----------
@@ -89,26 +89,20 @@ def holiday(date, israel=False):
       Any date that implements a ``to_heb()`` method which returns a
       ``HebrewDate`` can be used.
 
-    israel : boolian, optional
-      ``True`` if you want the holidays according to the israel
+    israel : bool, optional
+      ``True`` if you want the holidays according to the Israel
       schedule. Defaults to ``False``.
 
     Returns
     -------
     str or ``None``
-      The name of the holiday or ``None`` if the given date is not
-      a Jewish holiday.
+      The name of the festival or ``None`` if the given date is not
+      a Jewish festival.
     """
     date = date.to_heb()
     year = date.year
     month = date.month
     day = date.day
-    # table = _fast_day_table(year)
-    # if date in table:
-    #     return table[date]
-    fast = fast_day(date)
-    if fast:
-        return fast
     if month == 7:
         if day in [1, 2]:
             return 'Rosh Hashana'
@@ -147,6 +141,35 @@ def holiday(date, israel=False):
     elif month == 5 and day == 15:
         return "Tu B'av"
 
+
+def holiday(date, israel=False):
+    """Return Jewish holiday of given date.
+
+    The holidays include the major and minor religious Jewish
+    holidays including fast days.
+
+    Parameters
+    ----------
+    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+      Any date that implements a ``to_heb()`` method which returns a
+      ``HebrewDate`` can be used.
+
+    israel : bool, optional
+      ``True`` if you want the holidays according to the israel
+      schedule. Defaults to ``False``.
+
+    Returns
+    -------
+    str or ``None``
+      The name of the holiday or ``None`` if the given date is not
+      a Jewish holiday.
+    """
+    fest = festival(date, israel)
+    if fest:
+        return fest
+    fast = fast_day(date)
+    if fast:
+        return fast
 
 class Year:
     """A Year object represents a Hebrew calendar year.
