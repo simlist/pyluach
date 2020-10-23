@@ -5,41 +5,6 @@ from functools import lru_cache
 from pyluach.dates import HebrewDate
 
 
-def _adjust_postponed(date):
-    """Return actual date of fast day.
-
-    For usual date of a fast day returns fast day adjusted for any
-    postponements.
-    """
-    if date.weekday() == 7:
-        if date.month in [12, 13]:
-            date -= 2
-        else:
-            date += 1
-    return date
-
-
-@lru_cache(maxsize=50)
-def _fast_day_table(year):
-    table = dict()
-    workingdate = _adjust_postponed(HebrewDate(year, 7, 3))
-    table[workingdate] = 'Tzom Gedalia'
-
-    workingdate = _adjust_postponed(HebrewDate(year, 10, 10))
-    table[workingdate] = '10 of Teves'
-
-    month = 13 if Year(year).leap else 12
-    workingdate = _adjust_postponed(HebrewDate(year, month, 13))
-    table[workingdate] = 'Taanis Esther'
-
-    workingdate = _adjust_postponed(HebrewDate(year, 4, 17))
-    table[workingdate] = '17 of Tamuz'
-
-    workingdate = _adjust_postponed(HebrewDate(year, 5, 9))
-    table[workingdate] = '9 of Av'
-
-    return table
-
 def fast_day(date):
     """Return name of fast day or None.
 
@@ -76,6 +41,7 @@ def fast_day(date):
     elif month == 5:
         if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
             return '9 of Av'
+
 
 def festival(date, israel=False):
     """Return Jewish festival of given day.
