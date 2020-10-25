@@ -100,6 +100,8 @@ def festival(date, israel=False):
             return 'Shushan Purim'
     elif month == 1 and day in range(15, 22 if israel else 23):
         return 'Pesach'
+    elif month == 2 and day == 14:
+        return 'Pesach Sheni'
     elif month == 2 and day == 18:
         return "Lag Ba'omer"
     elif month == 3 and (day == 6 if israel else day in (6, 7)):

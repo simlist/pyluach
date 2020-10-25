@@ -245,6 +245,11 @@ class TestHoliday:
         assert holiday(eighth) == 'Pesach' and holiday(eighth, True) is None
         assert holiday(eighth + 1) is None
 
+    def test_pesach_sheni(self):
+        ps = dates.HebrewDate(5781, 2, 14)
+        assert holiday(ps) == 'Pesach Sheni'
+        assert holiday(ps + 1) is None
+
     def test_lagbaomer(self):
         assert holiday(dates.GregorianDate(2018, 5, 3)) == "Lag Ba'omer"
 
