@@ -153,6 +153,9 @@ class TestMonth:
         assert month.molad_announcement() == {
             'weekday': 1, 'hour':21, 'minutes': 30, 'parts': 10
         }
+        month = Month(5781, 1) == {
+            'weekday': 7, 'hour': 19, 'minutes': 3, 'parts': 5
+        }
 
 
 @fixture
