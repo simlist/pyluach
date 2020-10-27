@@ -227,3 +227,7 @@ def test_from_pydate():
     assert date == GregorianDate.from_pydate(date).to_jd().to_pydate()
     assert date == HebrewDate.from_pydate(date).to_pydate()
     assert date == JulianDay.from_pydate(date).to_pydate()
+
+def test_is_leap():
+    assert GregorianDate(2020, 10, 26).is_leap() == True
+    assert GregorianDate(2021, 10, 26).is_leap() == False
