@@ -114,6 +114,10 @@ class TestMonth:
         assert month + 6 == hebrewcal.Month(5777, 6)
         assert month + 7 == hebrewcal.Month(5778, 7)
         assert month + 35 == hebrewcal.Month(5780, 10)
+        with raises(TypeError):
+            month + month
+        with raises(TypeError):
+            month + 'str'
 
     def test_subtract_month(self):
         month1 = hebrewcal.Month(5775, 10)
@@ -127,6 +131,8 @@ class TestMonth:
         assert month - 2 == hebrewcal.Month(5778, 7)
         assert month - 3 == hebrewcal.Month(5777, 6)
         assert month - 30 == hebrewcal.Month(5775, 4)
+        with raises(TypeError):
+            month - 'str'
 
     def test_startingweekday(self):
         assert Month(5778, 8).starting_weekday() == 7
