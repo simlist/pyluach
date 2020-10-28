@@ -1,6 +1,6 @@
 from copy import copy
 
-from pytest import fixture
+from pytest import fixture, raises
 from pyluach import dates, hebrewcal
 from pyluach.hebrewcal import Year, Month, holiday
 
@@ -24,11 +24,17 @@ class TestYear:
         year = Year(5777)
         assert year + 2 == Year(5779)
         assert year + 0 == year
+        with raises(TypeError):
+            year + year
+        with raises(TypeError):
+            year + 'str'
 
     def test_subtractintfromyear(self):
         year = Year(5777)
         assert year - 0 == year
         assert year - 3 == Year(5774)
+        with raises(TypeError):
+            year - 'str'
 
     def test_subtractyearfromyear(self):
         year = Year(5777)
@@ -50,12 +56,17 @@ class TestYear:
             assert workingdate == date
             workingdate += 1
 
+    def test_errors(self):
+        with raises(ValueError):
+            Year(0)
+
 
 @fixture
 def years():
     year1 = Year(5778)
     year2 = Year(5780)
     return {1: year1, 2: year2}
+
 
 class TestYearComparisons:
 
@@ -157,6 +168,12 @@ class TestMonth:
         assert month.molad_announcement() == {
             'weekday': 7, 'hour': 19, 'minutes': 3, 'parts': 5
         }
+    
+    def test_errors(self):
+        with raises(ValueError):
+            Month(-1, 1)
+        with raises(ValueError):
+            Month(5781, 13)
 
 
 @fixture

@@ -172,6 +172,10 @@ class TestErrors:
                           (2018, 2, 0), (2018, 2, 29), (2012, 2, 30)]:
                           with pytest.raises(ValueError):
                             GregorianDate(*datetuple)
+    
+    def test_JD_errors(self):
+        with pytest.raises(ValueError):
+            JulianDay(-1).to_heb()
 
 class TestReprandStr:
     def test_repr(self, datetypeslist):
