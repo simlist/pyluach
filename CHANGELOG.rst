@@ -6,7 +6,7 @@ This document records all notable changes to `pyluach <https://github.com/simlis
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 
-`1.2.0`_ (2020-__-__)
+`1.2.0`_ (2020-10-28)
 ---------------------
 * Created isoweekday method for all date types.
 * Created fast_day and festival functions (`#11`_)
