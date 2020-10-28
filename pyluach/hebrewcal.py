@@ -343,8 +343,8 @@ class Month:
             if other <= leftover_months:
                 return Month(self.year, yearmonths[index + other])
             return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
-        except ValueError:
-            raise ValueError('You can only add a number to a year.')
+        except (AttributeError, TypeError):
+            raise TypeError('You can only add a number to a year.')
 
 
     def __sub__(self, other):
