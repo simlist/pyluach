@@ -190,7 +190,10 @@ class Year:
 
     def __add__(self, other):
         """Add int to year."""
-        return Year(self.year + other)
+        try:
+            return Year(self.year + other)
+        except TypeError:
+            raise TypeError('You can only add a number to a year.')
 
     def __sub__(self, other):
         """Subtract int or Year from Year.
@@ -203,7 +206,7 @@ class Year:
         else:
             try:
                 return Year(self.year - other)
-            except AttributeError:
+            except TypeError:
                 raise TypeError('Only an int or another Year object can'
                                 ' be subtracted from a year.')
 
@@ -336,9 +339,12 @@ class Month:
         yearmonths = list(Year(self.year))
         index = yearmonths.index(self.month)
         leftover_months = len(yearmonths[index + 1:])
-        if other <= leftover_months:
-            return Month(self.year, yearmonths[index + other])
-        return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
+        try:
+            if other <= leftover_months:
+                return Month(self.year, yearmonths[index + other])
+            return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
+        except ValueError:
+            raise ValueError('You can only add a number to a year.')
 
 
     def __sub__(self, other):
@@ -357,7 +363,7 @@ class Month:
             return abs(self._elapsed_months() - other._elapsed_months())
         except AttributeError:
             raise TypeError('''You can only subtract a number or a month
-                            object from a month''')
+                            object from a month.''')
 
     def __gt__(self, other):
         if (
