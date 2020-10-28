@@ -51,15 +51,15 @@ class BaseDate:
     def __add__(self, other):
         try:
             return JulianDay(self.jd + other)._to_x(self)
-        except AttributeError:
+        except TypeError:
             raise TypeError('You can only add a number to a date.')
 
     def __sub__(self, other):
-        if isinstance(other, Number):
-            return JulianDay(self.jd - other)._to_x(self)
         try:
+            if isinstance(other, Number):
+                return JulianDay(self.jd - other)._to_x(self)
             return abs(self.jd - other.jd)
-        except AttributeError:
+        except (AttributeError, TypeError):
             raise TypeError("""You can only subtract a number or another date
                               that has a "jd" attribute from a date""")
 
