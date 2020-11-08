@@ -10,6 +10,11 @@ MONTH_NAMES = [
     'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 1', 'Adar 2'
 ]
 
+MONTH_NAMES_HEBREW = [
+    'ניסן', 'אייר', 'סיון', 'תמוז', 'אב', 'אלול', 'תשרי', 'חשון', 'כסלו',
+    'טבת', 'שבט', 'אדר', 'אדר א׳', 'אדר ב׳'
+]
+
 
 def fast_day(date):
     """Return name of fast day or None.
