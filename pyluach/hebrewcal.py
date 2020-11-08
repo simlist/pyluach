@@ -445,7 +445,8 @@ class Month:
         parts = 204 + months*793
         hours = 5 + months*12 + parts//1080
         days = 2 + months*29 + hours//24
-        return {'weekday': days % 7, 'hours': hours % 24, 'parts': parts % 1080}
+        weekday = days % 7 or 7
+        return {'weekday': weekday, 'hours': hours % 24, 'parts': parts % 1080}
 
     def molad_announcement(self):
         """Return the months molad in the announcement form.

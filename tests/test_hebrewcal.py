@@ -174,6 +174,10 @@ class TestMonth:
         assert month.molad_announcement() == {
             'weekday': 7, 'hour': 19, 'minutes': 3, 'parts': 5
         }
+        month = Month(5781, 8)
+        assert month.molad_announcement() == {
+            'weekday': 7, 'hour': 3, 'minutes': 23, 'parts': 0
+        }
     
     def test_errors(self):
         with raises(ValueError):
