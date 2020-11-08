@@ -121,7 +121,7 @@ def getparsha(date, israel=False):
     return table[shabbos]
 
 
-def getparsha_string(date, israel=False):
+def getparsha_string(date, israel=False, hebrew=False):
     """Return the parsha as a string for the given date.
 
     This function wraps ``getparsha`` returning a the parsha name
@@ -136,6 +136,10 @@ def getparsha_string(date, israel=False):
       ``True`` if you want the parsha according to the Israel schedule
       (with only one day of Yom Tov). Defaults to ``False``.
 
+    hebrew : bool, optional
+      ``True`` if you want the name of the parsha in Hebrew.
+      Defaults to ``False``.
+
     Returns
     -------
     str or ``None``
@@ -146,7 +150,10 @@ def getparsha_string(date, israel=False):
     parsha = getparsha(date, israel)
     if parsha is None:
         return None
-    name = [PARSHIOS[n] for n in parsha]
+    if not hebrew:
+        name = [PARSHIOS[n] for n in parsha]
+    else:
+        name = [PARSHIOS_HEBREW[n] for n in parsha]
     return ', '.join(name)
 
 
