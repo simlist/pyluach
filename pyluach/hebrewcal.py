@@ -5,6 +5,12 @@ from functools import lru_cache
 from pyluach.dates import HebrewDate
 
 
+MONTH_NAMES = [
+    'Nissan', 'Iyar', 'Sivan', 'Tammuz', 'Av', 'Elul', 'Tishrei', 'Cheshvan',
+    'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 1', 'Adar 2'
+]
+
+
 def fast_day(date):
     """Return name of fast day or None.
 
