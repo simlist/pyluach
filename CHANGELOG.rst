@@ -6,6 +6,10 @@ This document records all notable changes to `pyluach <https://github.com/simlis
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 
+`1.2.1`_ (2020-11-08)
+---------------------
+* Fixed molad having weekday of `0` when it should be `7`.
+
 `1.2.0`_ (2020-10-28)
 ---------------------
 * Created isoweekday method for all date types.
@@ -31,6 +35,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Initial public release
 
 
+.. _`1.2.1`: https://github.com/simlist/pyluach/compare/v1.2.0...v1.2.1
 .. _`1.2.0`: https://github.com/simlist/pyluach/compare/v1.1.1...v1.2.0
 .. _`1.1.1`: https://github.com/simlist/pyluach/compare/v1.1.0...v1.1.1
 .. _`1.1.0`: https://github.com/simlist/pyluach/compare/v1.0.1...v1.1.0
