@@ -309,6 +309,10 @@ class Month:
       if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
     name : str
       The name of the month.
+      .. deprecated:: 1.3.0
+          `name` attribute will be replaced by `month_name` method, because
+          the latter allows a `hebrew` parameter. the month_name also uses
+          slightly different transliteration.
     """
 
     _monthnames = {7: 'Tishrei', 8: 'Cheshvan', 9: 'Kislev', 10: 'Teves',
@@ -401,6 +405,25 @@ class Month:
         if self < other or self == other:
             return True
         return False
+
+    def month_name(self, hebrew=False):
+        """Return the name of the month.
+
+        Replaces `name` attribute.
+
+        Parameters
+        ----------
+        hebrew : bool, optional
+          `True` if the month name should be written with Hebrew letters
+          and False to be transliterated into English using the Ashkenazic
+          pronunciation. Default is `False`.
+        """
+        index = self.month
+        if self.month < 12 or not HebrewDate._is_leap(self.year):
+            index -=1
+        if hebrew:
+            return MONTH_NAMES_HEBREW[index]
+        else return MONTH_NAMES[index]
 
     def starting_weekday(self):
         """Return first weekday of the month.
