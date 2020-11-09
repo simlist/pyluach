@@ -3,6 +3,7 @@ from numbers import Number
 from functools import lru_cache
 
 from pyluach.dates import HebrewDate
+from pyluach.utils import _holiday, _fast_day_string, _festival_string
 
 
 MONTH_NAMES = [
@@ -16,7 +17,7 @@ MONTH_NAMES_HEBREW = [
 ]
 
 
-def fast_day(date):
+def fast_day(date, hebrew=False):
     """Return name of fast day or None.
 
     Parameters
@@ -31,30 +32,10 @@ def fast_day(date):
       The name of the fast day or ``None`` if the given date is not
       a fast day.
     """
-    date = date.to_heb()
-    year = date.year
-    month = date.month
-    day = date.day
-    weekday = date.weekday()
-    adar = 13 if Year(year).leap else 12
-
-    if month == 7:
-        if (weekday == 1 and day == 4) or (weekday != 7 and day == 3):
-            return 'Tzom Gedalia'
-    elif month == 10 and day == 10:
-        return '10 of Teves'
-    elif month == adar:
-        if (weekday == 5 and day == 11) or weekday != 7 and day == 13:
-            return 'Taanis Esther'
-    elif month == 4:
-        if (weekday == 1 and day == 18) or (weekday != 7 and day == 17):
-            return '17 of Tamuz'
-    elif month == 5:
-        if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
-            return '9 of Av'
+    return _fast_day_string(date, hebrew)
 
 
-def festival(date, israel=False):
+def festival(date, israel=False, hebrew=False):
     """Return Jewish festival of given day.
 
     This method will return all major and minor religous
@@ -76,52 +57,10 @@ def festival(date, israel=False):
       The name of the festival or ``None`` if the given date is not
       a Jewish festival.
     """
-    date = date.to_heb()
-    year = date.year
-    month = date.month
-    day = date.day
-    if month == 7:
-        if day in [1, 2]:
-            return 'Rosh Hashana'
-        elif day == 10:
-            return 'Yom Kippur'
-        elif day in range(15, 22):
-            return 'Succos'
-        elif day == 22:
-            return 'Shmini Atzeres'
-        elif day == 23 and israel == False:
-            return 'Simchas Torah'
-    elif(
-         (month == 9 and day in range(25, 30)) or
-         date in [(HebrewDate(year, 9, 29) + n) for n in range(1, 4)]
-         ):
-        return 'Chanuka'
-    elif month == 11 and day == 15:
-        return "Tu B'shvat"
-    elif month == 12:
-        leap = HebrewDate._is_leap(year)
-        if day == 14:
-            return 'Purim Katan' if leap else 'Purim'
-        if day == 15 and not leap:
-            return 'Shushan Purim'
-    elif month == 13:
-        if day == 14:
-                return 'Purim'
-        elif day == 15:
-            return 'Shushan Purim'
-    elif month == 1 and day in range(15, 22 if israel else 23):
-        return 'Pesach'
-    elif month == 2 and day == 14:
-        return 'Pesach Sheni'
-    elif month == 2 and day == 18:
-        return "Lag Ba'omer"
-    elif month == 3 and (day == 6 if israel else day in (6, 7)):
-        return 'Shavuos'
-    elif month == 5 and day == 15:
-        return "Tu B'av"
+    return _festival_string(date, israel, hebrew)
 
 
-def holiday(date, israel=False):
+def holiday(date, israel=False, hebrew=False):
     """Return Jewish holiday of given date.
 
     The holidays include the major and minor religious Jewish
@@ -143,12 +82,8 @@ def holiday(date, israel=False):
       The name of the holiday or ``None`` if the given date is not
       a Jewish holiday.
     """
-    fest = festival(date, israel)
-    if fest:
-        return fest
-    fast = fast_day(date)
-    if fast:
-        return fast
+    return _holiday(date, israel, hebrew)
+
 
 class Year:
     """A Year object represents a Hebrew calendar year.

@@ -8,7 +8,7 @@ MONTH_NAMES_HEBREW = [
 
 
 FAST_DAYS = [
-    'Tzom Gedalia', '10 of Teves', 'Taanis Esther', '17 of Tammuz', '9 of Av'
+    'Tzom Gedalia', '10 of Teves', 'Taanis Esther', '17 of Tamuz', '9 of Av'
 ]
 
 FAST_DAYS_HEBREW = [
@@ -21,7 +21,7 @@ FESTIVALS = [
     'Pesach', 'Pesach Sheni', "Lag Ba'omer", 'Shavuos', "Tu B'av"
 ]
 
-FESTIVALS_HEBREW [
+FESTIVALS_HEBREW = [
     'ראש השנה', 'יום כיפור', 'סוכות', 'שמיני עצרת', 'שמחת תורה', 'חנוכה',
     'ט״ו בשבט', 'פורים קטן', 'פורים', 'שושן פורים', 'פסח', 'פסח שני',
     'ל״ג בעומר', 'שבועות', 'ט״ו באב'
@@ -112,7 +112,7 @@ def _fast_day(date):
     month = date.month
     day = date.day
     weekday = date.weekday()
-    adar = 13 if Year(year).leap else 12
+    adar = 13 if _is_leap(year) else 12
 
     if month == 7:
         if (weekday == 1 and day == 4) or (weekday != 7 and day == 3):
@@ -121,13 +121,13 @@ def _fast_day(date):
         return 1
     elif month == adar:
         if (weekday == 5 and day == 11) or weekday != 7 and day == 13:
-            return 3
+            return 2
     elif month == 4:
         if (weekday == 1 and day == 18) or (weekday != 7 and day == 17):
-            return 4
+            return 3
     elif month == 5:
         if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
-            return 5
+            return 4
     return None
 
 
@@ -135,7 +135,7 @@ def _fast_day_string(date, hebrew=False):
     fast = _fast_day(date)
     if fast is None:
         return None
-   if hebrew:
+    if hebrew:
        return FAST_DAYS_HEBREW[fast] 
     return FAST_DAYS[fast]
 
@@ -177,15 +177,17 @@ def _festival(date, israel=False):
             return 3
         elif day == 23 and israel == False:
             return 4
-    elif(
-         (month == 9 and day in range(25, 30)) or
-         date in [(HebrewDate(year, 9, 29) + n) for n in range(1, 4)]
-         ):
-        return 5
+    elif(month in [9, 10]):
+        kislev_length = _month_length(year, 9)
+        if (
+           month == 9 and day in range(25, kislev_length + 1)
+           or month == 10 and day in range(1, 8 - (kislev_length - 25))
+        ):
+            return 5
     elif month == 11 and day == 15:
         return 6
     elif month == 12:
-        leap = HebrewDate._is_leap(year)
+        leap = _is_leap(year)
         if day == 14:
             return 7 if leap else 8
         if day == 15 and not leap:
