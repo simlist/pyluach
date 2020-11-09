@@ -293,6 +293,11 @@ class Month:
 
     It provides the same operators as a `Year` object.
 
+    .. deprecated:: 1.3.0
+      `name` attribute will be replaced by `month_name` method, because
+      the latter allows a `hebrew` parameter. The month_name also uses
+      slightly different transliteration.
+
     Parameters
     ----------
     year : int
@@ -309,10 +314,6 @@ class Month:
       if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
     name : str
       The name of the month.
-      .. deprecated:: 1.3.0
-          `name` attribute will be replaced by `month_name` method, because
-          the latter allows a `hebrew` parameter. the month_name also uses
-          slightly different transliteration.
     """
 
     _monthnames = {7: 'Tishrei', 8: 'Cheshvan', 9: 'Kislev', 10: 'Teves',
@@ -423,7 +424,7 @@ class Month:
             index -=1
         if hebrew:
             return MONTH_NAMES_HEBREW[index]
-        else return MONTH_NAMES[index]
+        return MONTH_NAMES[index]
 
     def starting_weekday(self):
         """Return first weekday of the month.
