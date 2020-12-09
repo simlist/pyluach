@@ -3,6 +3,7 @@ from numbers import Number
 from functools import lru_cache
 
 from pyluach.dates import HebrewDate
+from pyluach import utils
 from pyluach.utils import _holiday, _fast_day_string, _festival_string
 
 
@@ -26,6 +27,9 @@ def fast_day(date, hebrew=False):
       Any date that implements a ``to_heb()`` method which returns a
       ``HebrewDate`` can be used.
 
+    hebrew : bool, optional
+      ``True`` if you want the fast_day name in Hebrew letters. Default
+      is ``False``, which returns the name transliterated into English.
     Returns
     -------
     str or ``None``
@@ -48,8 +52,12 @@ def festival(date, israel=False, hebrew=False):
       ``HebrewDate`` can be used.
 
     israel : bool, optional
-      ``True`` if you want the holidays according to the Israel
+      ``True`` if you want the festivals according to the Israel
       schedule. Defaults to ``False``.
+
+    hebrew : bool, optional
+      ``True`` if you want the festival name in Hebrew letters. Default
+      is ``False``, which returns the name transliterated into English.
 
     Returns
     -------
@@ -69,12 +77,14 @@ def holiday(date, israel=False, hebrew=False):
     Parameters
     ----------
     date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
-      Any date that implements a ``to_heb()`` method which returns a
-      ``HebrewDate`` can be used.
-
+        Any date that implements a ``to_heb()`` method which returns a
+        ``HebrewDate`` can be used.
     israel : bool, optional
-      ``True`` if you want the holidays according to the israel
-      schedule. Defaults to ``False``.
+        ``True`` if you want the holidays according to the israel
+        schedule. Defaults to ``False``.
+    hebrew : bool, optional
+        ``True`` if you want the holiday name in Hebrew letters. Default
+        is ``False``, which returns the name transliterated into English.
 
     Returns
     -------
@@ -107,27 +117,27 @@ class Year:
     Parameters
     ----------
     year : int
-      A Hebrew year.
+        A Hebrew year.
 
     Attributes
     ----------
     year : int
-      The hebrew year.
+        The hebrew year.
     leap : bool
-      True if the year is a leap year else false.
+        True if the year is a leap year else false.
     """
 
     def __init__(self, year):
         if year < 1:
             raise ValueError('Year {0} is before creation.'.format(year))
         self.year = year
-        self.leap = HebrewDate._is_leap(year)
+        self.leap = utils._is_leap(year)
 
     def __repr__(self):
         return 'Year({0})'.format(self.year)
 
     def __len__(self):
-        return HebrewDate._days_in_year(self.year)
+        return utils._days_in_year(self.year)
 
     def __eq__(self, other):
         if isinstance(other, Year) and self.year == other.year:
@@ -189,10 +199,10 @@ class Year:
 
         Yields
         ------
-        Month
-          The next month in the Hebrew calendar year as a
-          ``luachcal.hebrewcal.Month`` instance beginning with
-          Tishrei and ending with Elul.
+        ``Month``
+            The next month in the Hebrew calendar year as a
+            ``luachcal.hebrewcal.Month`` instance beginning with
+            Tishrei and ending with Elul.
         """
         for month in self:
             yield Month(self.year, month)
@@ -203,8 +213,8 @@ class Year:
         Yields
         ------
         int
-          An integer beginning with 1 representing the next day of
-          the year.
+            An integer beginning with 1 representing the next day of
+            the year.
         """
         for day in range(1, len(self) + 1):
             yield day
@@ -237,18 +247,18 @@ class Month:
     ----------
     year : int
     month : int
-      The month as an integer starting with 7 for Tishrei through 13
-      if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
+        The month as an integer starting with 7 for Tishrei through 13
+        if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
 
     Attributes
     ----------
     year : int
-      The Hebrew year.
+        The Hebrew year.
     month : int
-      The month as an integer starting with 7 for Tishrei through 13
-      if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
+        The month as an integer starting with 7 for Tishrei through 13
+        if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
     name : str
-      The name of the month.
+        The name of the month.
     """
 
     _monthnames = {7: 'Tishrei', 8: 'Cheshvan', 9: 'Kislev', 10: 'Teves',
@@ -259,7 +269,7 @@ class Month:
         if year < 1:
             raise ValueError('Year is before creation.')
         self.year = year
-        leap = HebrewDate._is_leap(self.year)
+        leap = utils._is_leap(self.year)
         yearlength = 13 if leap else 12
         if month < 1 or month > yearlength:
             raise ValueError('''Month must be between 1 and 12 for a normal
@@ -272,7 +282,7 @@ class Month:
         return 'Month({0}, {1})'.format(self.year, self.month)
 
     def __len__(self):
-        return HebrewDate._month_length(self.year, self.month)
+        return utils._month_length(self.year, self.month)
 
     def __iter__(self):
         for day in range(1, len(self) + 1):
@@ -350,16 +360,16 @@ class Month:
         Parameters
         ----------
         hebrew : bool, optional
-          `True` if the month name should be written with Hebrew letters
-          and False to be transliterated into English using the Ashkenazic
-          pronunciation. Default is `False`.
+            `True` if the month name should be written with Hebrew letters
+            and False to be transliterated into English using the Ashkenazic
+            pronunciation. Default is `False`.
         """
         index = self.month
-        if self.month < 12 or not HebrewDate._is_leap(self.year):
+        if self.month < 12 or not utils._is_leap(self.year):
             index -=1
         if hebrew:
-            return MONTH_NAMES_HEBREW[index]
-        return MONTH_NAMES[index]
+            return utils.MONTH_NAMES_HEBREW[index]
+        return utils.MONTH_NAMES[index]
 
     def starting_weekday(self):
         """Return first weekday of the month.
@@ -367,8 +377,8 @@ class Month:
         Returns
         -------
         int
-          The weekday of the first day of the month starting with Sunday as 1
-          through Saturday as 7.
+            The weekday of the first day of the month starting with Sunday as 1
+            through Saturday as 7.
         """
         return HebrewDate(self.year, self.month, 1).weekday()
 
@@ -376,7 +386,7 @@ class Month:
         '''Return number of months elapsed from beginning of calendar'''
         yearmonths = tuple(Year(self.year))
         months_elapsed = (
-            HebrewDate._elapsed_months(self.year)
+            utils._elapsed_months(self.year)
             + yearmonths.index(self.month)
         )
         return months_elapsed
@@ -387,8 +397,8 @@ class Month:
         Yields
         ------
         ``HebrewDate``
-          The next Hebrew Date of the year starting the first day of
-          Tishrei through the last day of Ellul.
+            The next Hebrew Date of the year starting the first day of
+            Tishrei through the last day of Ellul.
         """
         for day in self:
             yield HebrewDate(self.year, self.month, day)
@@ -399,7 +409,7 @@ class Month:
         Returns
         -------
         dict
-          A dictionary in the form {weekday: int, hours: int, parts: int}
+            A dictionary in the form {weekday: int, hours: int, parts: int}
 
         Notes
         -----
@@ -430,14 +440,14 @@ class Month:
         Returns
         -------
         dict
-          A dictionary in the form
-          ::
-            {
-                weekday: int,
-                hour: int,
-                minutes: int,
-                parts: int
-            }
+            A dictionary in the form
+            ::
+                {
+                    weekday: int,
+                    hour: int,
+                    minutes: int,
+                    parts: int
+                }
         """
         molad = self.molad()
         weekday = molad['weekday']
