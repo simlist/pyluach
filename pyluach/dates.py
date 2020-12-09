@@ -19,6 +19,8 @@ from datetime import date
 from numbers import Number
 from functools import lru_cache
 
+from pyluach import utils
+
 
 class BaseDate:
     """BaseDate is a base class for all date types.
@@ -117,8 +119,8 @@ class BaseDate:
         Returns
         -------
         Date
-          Self if it's Shabbos or else the following Shabbos as
-          the same date type as operated on.
+            `self` if the date is Shabbos or else the following Shabbos as
+            the same date type as operated on.
         """
         return self + (7 - self.weekday())
 
@@ -128,8 +130,8 @@ class BaseDate:
         Returns
         -------
         int
-          An integer representing the day of the week where Monday
-          is 1 and and Sunday is 7.
+            An integer representing the day of the week where Monday
+            is 1 and and Sunday is 7.
         """
         weekday = self.weekday() 
         if weekday == 1:
@@ -152,7 +154,7 @@ class CalendarDateMixin:
     month : int
     day : int
     jd : float
-      The equivelant Julian day at midnight.
+        The equivelant Julian day at midnight.
     """
 
     def __init__(self, year, month, day, jd=None):
@@ -186,8 +188,8 @@ class CalendarDateMixin:
         Returns
         -------
         int
-          An integer representing the day of the week with Sunday as 1
-          through Saturday as 7.
+            An integer representing the day of the week with Sunday as 1
+            through Saturday as 7.
         """
         return int(self.jd+.5+1) % 7 + 1
     
@@ -197,7 +199,7 @@ class CalendarDateMixin:
         Returns
         -------
         tuple of ints
-          A tuple of ints in the form ``(year, month, day)``.
+            A tuple of ints in the form ``(year, month, day)``.
         """
         return (self.year, self.month, self.day)
 
@@ -207,8 +209,8 @@ class CalendarDateMixin:
         Returns
         -------
         Dict
-          A dictionary in the form
-          ``{'year': int, 'month': int, 'day': int}``.
+            A dictionary in the form
+            ``{'year': int, 'month': int, 'day': int}``.
         """
         return {'year': self.year, 'month': self.month, 'day': self.day}
 
@@ -219,15 +221,15 @@ class JulianDay(BaseDate):
     Parameters
     ----------
     day : float or int
-      The julian day. Note that Julian days start at noon so day
-      number 10 is represented as 9.5 which is day 10 at midnight.
+        The julian day. Note that Julian days start at noon so day
+        number 10 is represented as 9.5 which is day 10 at midnight.
 
     Attributes
     ----------
     day : float
-      The Julian Day Number at midnight (as *n*.5)
+        The Julian Day Number at midnight (as *n*.5)
     jd : float
-      Alias for day.
+        Alias for day.
     """
 
     def __init__(self, day):
@@ -252,7 +254,7 @@ class JulianDay(BaseDate):
         Returns
         -------
         int
-          The weekday with Sunday as 1 through Saturday as 7.
+            The weekday with Sunday as 1 through Saturday as 7.
         """
         return (int(self.day+.5) + 1) % 7 + 1
 
@@ -263,7 +265,7 @@ class JulianDay(BaseDate):
         Parameters
         ----------
         pydate : datetime.date
-          A python standard library ``datetime.date`` instance
+            A python standard library ``datetime.date`` instance
 
         Returns
         -------
@@ -280,8 +282,8 @@ class JulianDay(BaseDate):
         Returns
         -------
         JulianDay
-          A JulianDay instance representing the current Julian day from
-          the timestamp.
+            A JulianDay instance representing the current Julian day from
+            the timestamp.
         """
         return GregorianDate.today().to_jd()
 
@@ -291,7 +293,7 @@ class JulianDay(BaseDate):
         Returns
         -------
         GregorianDate
-          The equivalent Gregorian date instance.
+            The equivalent Gregorian date instance.
 
         Notes
         -----
@@ -318,7 +320,7 @@ class JulianDay(BaseDate):
         Returns
         -------
         HebrewDate
-          The equivalent Hebrew date instance.
+            The equivalent Hebrew date instance.
         """
 
         if self.day <= 347997:
@@ -327,20 +329,20 @@ class JulianDay(BaseDate):
         jd = int(self.day + .5)  # Try to account for half day
         jd -= 347997
         year = int(jd//365) + 2  ## try that to debug early years
-        first_day = HebrewDate._elapsed_days(year)
+        first_day = utils._elapsed_days(year)
 
         while first_day > jd:
             year -= 1
-            first_day = HebrewDate._elapsed_days(year)
+            first_day = utils._elapsed_days(year)
 
         months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
-        if not HebrewDate._is_leap(year):
+        if not utils._is_leap(year):
             months.remove(13)
 
         days_remaining = jd - first_day
         for month in months:
-            if days_remaining >= HebrewDate._month_length(year, month):
-                days_remaining -= HebrewDate._month_length(year, month)
+            if days_remaining >= utils._month_length(year, month):
+                days_remaining -= utils._month_length(year, month)
             else:
                 return HebrewDate(year, month, days_remaining + 1, self.day)
 
@@ -360,7 +362,7 @@ class JulianDay(BaseDate):
         Returns
         -------
         datetime.date
-          A standard library ``datetime.date`` instance.
+            A standard library ``datetime.date`` instance.
         """
         return self.to_greg().to_pydate()
 
@@ -419,7 +421,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         float
-          The Julian day number at midnight.
+            The Julian day number at midnight.
         """
         if self._jd is None:
             year = self.year
@@ -444,7 +446,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         Parameters
         ----------
         pydate : datetime.date
-          A python standard library ``datetime.date`` instance.
+            A python standard library ``datetime.date`` instance.
 
         Returns
         -------
@@ -484,7 +486,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         bool
-          True if the date is in a leap year, False otherwise.
+            True if the date is in a leap year, False otherwise.
         """
         return self._is_leap(self.year)
 
@@ -503,7 +505,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         JulianDay
-          The equivalent JulianDay instance.
+            The equivalent JulianDay instance.
         """
         return JulianDay(self.jd)
 
@@ -513,7 +515,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         HebrewDate
-          The equivalent HebrewDate instance.
+            The equivalent HebrewDate instance.
         """
         return self.to_jd().to_heb()
 
@@ -523,7 +525,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         datetime.date
-          The equivalent datetime.date instance.
+            The equivalent datetime.date instance.
         """
         return date(*self.tuple())
 
@@ -534,29 +536,29 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     Parameters
     ----------
     year : int
-      The Hebrew year. If the year is less than 1 it will raise a
-      ValueError.
+        The Hebrew year. If the year is less than 1 it will raise a
+        ValueError.
 
     month : int
-      The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
-      If there is a second Adar in the year it is represented as 13.
-      A month below 1 or above the last month will raise a ValueError.
+        The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
+        If there is a second Adar in the year it is represented as 13.
+        A month below 1 or above the last month will raise a ValueError.
 
     day : int
-      The Hebrew day of the month. An invalid day will raise a
-      ValueError.
+        The Hebrew day of the month. An invalid day will raise a
+        ValueError.
 
     jd : float, optional
-      This parameter should not be assigned manually.
+        This parameter should not be assigned manually.
 
     Attributes
     ----------
     year : int
     month : int
-      The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
-      If there is a second Adar it is represented as 13.
+        The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
+        If there is a second Adar it is represented as 13.
     day : int
-      The day of the month.
+        The day of the month.
     """
 
     def __init__(self, year, month, day, jd=None):
@@ -570,9 +572,9 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             raise ValueError('Date supplied is before creation.')
         if month < 1 or month > 13:
             raise ValueError('{0} is an invalid month.'.format(str(month)))
-        if (not self._is_leap(year)) and month == 13:
+        if (not utils._is_leap(year)) and month == 13:
             raise ValueError('{0} is not a leap year'.format(year))
-        monthlength = self._month_length(year, month)
+        monthlength = utils._month_length(year, month)
         if day < 1 or day > monthlength:
             raise ValueError('Given month has {0} days.'.format(monthlength))
         super(HebrewDate, self).__init__(year, month, day, jd)
@@ -589,18 +591,18 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         float
-          The Julian day number at midnight.
+            The Julian day number at midnight.
 
         """
         if self._jd is None:
             months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
-            if not HebrewDate._is_leap(self.year):
+            if not utils._is_leap(self.year):
                 months.remove(13)
 
-            jd = HebrewDate._elapsed_days(self.year)
+            jd = utils._elapsed_days(self.year)
             for m in months:
                 if m != self.month:
-                    jd += HebrewDate._month_length(self.year, m)
+                    jd += utils._month_length(self.year, m)
                 else:
                     self._jd = jd + (self.day-1) + 347996.5
 
@@ -613,7 +615,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         Parameters
         ----------
         pydate : datetime.date
-          A python standard library ``datetime.date`` instance
+            A python standard library ``datetime.date`` instance
 
         Returns
         -------
@@ -631,7 +633,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         HebrewDate
-          The current Hebrew date from the computer's timestamp.
+            The current Hebrew date from the computer's timestamp.
 
         Notes
         -----
@@ -648,7 +650,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         JulianDay
-          The equivalent JulianDay instance.
+            The equivalent JulianDay instance.
         """
         return JulianDay(self.jd)
 
@@ -658,7 +660,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         GregorianDate
-          The equivalent GregorianDate instance.
+            The equivalent GregorianDate instance.
         """
         return self.to_jd().to_greg()
 
@@ -668,77 +670,10 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         datetime.date
-          The equivalent datetime.date instance.
+            The equivalent datetime.date instance.
         """
         return self.to_greg().to_pydate()
 
     def to_heb(self):
         return self
-
-    @staticmethod
-    def _is_leap(year):
-        if (((7*year) + 1) % 19) < 7:
-            return True
-        return False
-
-    @staticmethod
-    def _elapsed_months(year):
-        return (235 * year - 234) // 19
-
-    @classmethod
-    @lru_cache(maxsize=100)
-    def _elapsed_days(cls, year):
-        months_elapsed = cls._elapsed_months(year)
-        parts_elapsed = 204 + 793*(months_elapsed%1080)
-        hours_elapsed = (5 + 12*months_elapsed + 793*(months_elapsed//1080) +
-                         parts_elapsed//1080)
-        conjunction_day = 1 + 29*months_elapsed + hours_elapsed//24
-        conjunction_parts = 1080 * (hours_elapsed%24) + parts_elapsed%1080
-
-        if (
-              (conjunction_parts >= 19440) or
-              (
-               (conjunction_day % 7 == 2) and
-               (conjunction_parts >= 9924) and
-               (not cls._is_leap(year))
-              ) or
-              (
-               (conjunction_day % 7 == 1) and
-               conjunction_parts >= 16789 and cls._is_leap(year - 1))):
-            # if all that
-            alt_day = conjunction_day + 1
-        else:
-            alt_day = conjunction_day
-        if (alt_day % 7) in (0, 3, 5):
-            alt_day += 1
-
-        return alt_day
-
-    @classmethod
-    def _days_in_year(cls, year):
-        return cls._elapsed_days(year + 1) - cls._elapsed_days(year)
-
-    @classmethod
-    def _long_cheshvan(cls, year):
-        """Returns True if Cheshvan has 30 days"""
-        return cls._days_in_year(year) % 10 == 5
-
-    @classmethod
-    def _short_kislev(cls, year):
-        """Returns True if Kislev has 29 days"""
-        return cls._days_in_year(year) % 10 == 3
-
-    @classmethod
-    def _month_length(cls, year, month):
-        """Months start with Nissan (Nissan is 1 and Tishrei is 7)"""
-
-        if month in [1, 3, 5, 7, 11]:
-            return 30
-        elif month in [2, 4, 6, 10, 13]:
-            return 29
-        elif month == 12:
-            return 30 if cls._is_leap(year) else 29
-        elif month == 8:   # if long Cheshvan return 30, else return 29
-            return 30 if cls._long_cheshvan(year) else 29
-        elif month == 9:   # if short Kislev return 29, else return 30
-            return 29 if cls._short_kislev(year) else 30
+    
