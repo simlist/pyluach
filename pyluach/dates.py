@@ -124,6 +124,69 @@ class BaseDate:
         """
         return self + (7 - self.weekday())
 
+    def fast_day(self, hebrew=False):
+        """Return name of fast day or `None`.
+
+        Parameters
+        ----------
+        hebrew : bool, optional
+            ``True`` if you want the fast day name in Hebrew letters. Default
+            is ``False``, which returns the name transliterated into English.
+
+        Returns
+        -------
+        str or ``None``
+            The name of the fast day or ``None`` if the date is not
+            a fast day.
+        """
+        return utils._fast_day_string(self)
+
+    def festival(self, israel=False, hebrew=False):
+        """Return name of Jewish festival of date.
+
+        This method will return all major and minor religous
+        Jewish holidays not including fast days.
+
+        Parameters
+        ----------
+        israel : bool, optional
+            ``True`` if you want the holidays according to the Israel
+            schedule. Defaults to ``False``.
+        hebrew : bool, optional
+            ``True`` if you want the festival name in Hebrew letters. Default
+            is ``False``, which returns the name transliterated into English.
+
+        Returns
+        -------
+        str or ``None``
+            The name of the festival or ``None`` if the given date is not
+            a Jewish festival.
+        """
+        return utils._festival_string(date, israel, hebrew)
+
+    def holiday(self, israel=False, hebrew=False):
+        """Return name of Jewish holiday of the date.
+
+        The holidays include the major and minor religious Jewish
+        holidays including fast days.
+
+        Parameters
+        ----------
+        israel : bool, optional
+            ``True`` if you want the holidays according to the Israel
+            schedule. Defaults to ``False``.
+        hebrew : bool, optional
+            ``True`` if you want the holiday name in Hebrew letters. Default is
+            ``False``, which returns the name transliterated into English.
+
+        Returns
+        -------
+        str or ``None``
+            The name of the holiday or ``None`` if the given date is not
+            a Jewish holiday.
+        """
+        return utils._holiday(self, israel, hebrew)
+
     def isoweekday(self):
         """Return the day of the week corresponding to the iso standard.
 
