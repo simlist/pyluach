@@ -18,6 +18,7 @@ from collections import deque, OrderedDict
 from functools import lru_cache
 
 from pyluach.dates import HebrewDate
+from pyluach.utils import _is_leap
 
 
 PARSHIOS = [
@@ -66,7 +67,7 @@ def _gentable(year, israel=False):
     """
     parshalist = deque([51, 52] + list(range(52)))
     table = OrderedDict()
-    leap = HebrewDate._is_leap(year)
+    leap = _is_leap(year)
     pesachday = HebrewDate(year, 1, 15).weekday()
     rosh_hashana = HebrewDate(year, 7, 1)
     shabbos = rosh_hashana.shabbos()
