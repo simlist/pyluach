@@ -2,7 +2,7 @@ from copy import copy
 
 from pytest import fixture, raises
 from pyluach import dates, hebrewcal
-from pyluach.hebrewcal import Year, Month, holiday
+from pyluach.hebrewcal import Year, Month, holiday, festival, fast_day
 
 
 class TestYear:
@@ -238,9 +238,9 @@ class TestHoliday:
 
     def test_succos(self):
         day = dates.HebrewDate(5778, 7, 18)
-        assert holiday(day) == 'Succos'
+        assert festival(day) == 'Succos'
         day2 = dates.HebrewDate(5778, 7, 23)
-        assert holiday(day2, israel=True) is None
+        assert festival(day2, israel=True, hebrew=True) is None
 
     def test_shmini(self):
         shmini = dates.HebrewDate(5780, 7, 22)
@@ -263,7 +263,7 @@ class TestHoliday:
         purims = [dates.HebrewDate(5778, 12, 14),
                   dates.HebrewDate(5779, 13, 14)]
         for purim in purims:
-            assert holiday(purim) == 'Purim'
+            assert holiday(purim, hebrew=True) == 'פורים'
             assert holiday(purim + 1) == 'Shushan Purim'
         assert holiday(dates.HebrewDate(5779, 12, 14)) == 'Purim Katan'
 
@@ -284,7 +284,9 @@ class TestHoliday:
         assert holiday(ps + 1) is None
 
     def test_lagbaomer(self):
-        assert holiday(dates.GregorianDate(2018, 5, 3)) == "Lag Ba'omer"
+        lag_baomer = dates.GregorianDate(2018, 5, 3)
+        assert festival(lag_baomer) == "Lag Ba'omer"
+        assert festival(lag_baomer, hebrew=True) == 'ל״ג בעומר'
 
     def test_shavuos(self):
         shavuos = dates.HebrewDate(5778, 3, 6)
@@ -298,12 +300,14 @@ class TestHoliday:
 class TestFasts:
 
     def test_gedalia(self):
-        assert holiday(dates.HebrewDate(5779, 7, 3)) == 'Tzom Gedalia'
+        assert fast_day(dates.HebrewDate(5779, 7, 3)) == 'Tzom Gedalia'
         assert holiday(dates.HebrewDate(5778, 7, 3)) is None
-        assert holiday(dates.HebrewDate(5778, 7, 4)) == 'Tzom Gedalia'
+        assert holiday(dates.HebrewDate(5778, 7, 4), hebrew=True) == 'צום גדליה'
 
     def test_asara(self):
-        assert holiday(dates.GregorianDate(2018, 12, 18)) == '10 of Teves'
+        ten_of_tammuz = dates.GregorianDate(2018, 12, 18)
+        assert holiday(ten_of_tammuz) == '10 of Teves'
+        assert fast_day(ten_of_tammuz, hebrew=True) == 'י׳ בטבת'
 
     def test_esther(self):
         fasts = [
