@@ -232,7 +232,9 @@ class TestHoliday:
                    ])
 
     def test_yomkippur(self):
-        assert holiday(dates.HebrewDate(5775, 7, 10)) == 'Yom Kippur'
+        yom_kippur = dates.HebrewDate(5775, 7, 10)
+        assert holiday(yom_kippur) == 'Yom Kippur'
+        assert holiday(yom_kippur, hebrew=True) == 'יום כיפור'
 
     def test_succos(self):
         day = dates.HebrewDate(5778, 7, 18)

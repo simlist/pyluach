@@ -220,6 +220,20 @@ class TestMixinMethods:
     def test_iter(self, date):
         assert list(date) == [date.year, date.month, date.day]
 
+
+class TestHolidayMethods:
+
+    def test_fast_day(self):
+        date = dates.HebrewDate(5781, 7, 3)
+        assert date.holiday() == 'Tzom Gedalia'
+        assert date.holiday(False, True) == 'צום גדליה'
+
+    def test_festival(self):
+        date = dates.GregorianDate(2020, 12, 11)
+        assert date.holiday() == 'Chanuka'
+        assert date.holiday(hebrew=True) == 'חנוכה'
+
+
 def test_to_pydate():
     day = HebrewDate(5778, 6, 1)
     jd = day.to_jd()
