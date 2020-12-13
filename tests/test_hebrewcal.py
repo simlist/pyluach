@@ -305,9 +305,9 @@ class TestFasts:
         assert holiday(dates.HebrewDate(5778, 7, 4), hebrew=True) == 'צום גדליה'
 
     def test_asara(self):
-        ten_of_tammuz = dates.GregorianDate(2018, 12, 18)
-        assert holiday(ten_of_tammuz) == '10 of Teves'
-        assert fast_day(ten_of_tammuz, hebrew=True) == 'י׳ בטבת'
+        ten_of_teves = dates.GregorianDate(2018, 12, 18)
+        assert holiday(ten_of_teves) == '10 of Teves'
+        assert fast_day(ten_of_teves, hebrew=True) == 'י׳ בטבת'
 
     def test_esther(self):
         fasts = [
