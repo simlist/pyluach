@@ -1,6 +1,11 @@
 from functools import lru_cache
 
 
+MONTH_NAMES = [
+    'Nissan', 'Iyar', 'Sivan', 'Tammuz', 'Av', 'Elul', 'Tishrei', 'Cheshvan',
+    'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 1', 'Adar 2'
+]
+
 MONTH_NAMES_HEBREW = [
     'ניסן', 'אייר', 'סיון', 'תמוז', 'אב', 'אלול', 'תשרי', 'חשון', 'כסלו',
     'טבת', 'שבט', 'אדר', 'אדר א׳', 'אדר ב׳'
