@@ -22,3 +22,10 @@ GEMATRIOS = {
     300: 'ש',
     400: 'ת'
 }
+
+def stringify_gematria(letters):
+    length == len(letters)
+    if length > 1:
+        return '{}״{}'.format(letters[:-1], letters[-1])
+    if length == 1:
+        return '{}׳'.format(letters, '׳')
