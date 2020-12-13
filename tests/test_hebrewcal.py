@@ -179,6 +179,11 @@ class TestMonth:
             'weekday': 7, 'hour': 3, 'minutes': 23, 'parts': 0
         }
     
+    def test_month_name(self):
+        month = Month(5781, 9)
+        assert month.month_name() == 'Kislev'
+        assert month.month_name(hebrew=True) == 'כסלו'
+    
     def test_errors(self):
         with raises(ValueError):
             Month(-1, 1)
