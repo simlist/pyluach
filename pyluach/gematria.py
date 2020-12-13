@@ -24,8 +24,21 @@ GEMATRIOS = {
 }
 
 def stringify_gematria(letters):
-    length == len(letters)
+    length = len(letters)
     if length > 1:
         return '{}״{}'.format(letters[:-1], letters[-1])
     if length == 1:
         return '{}׳'.format(letters, '׳')
+
+def num_to_string(num):
+    "Return gematria string for number up to 1,000."
+    ones = num % 10
+    tens = num % 100 - ones
+    hundreds = num % 1000 - tens - ones
+    four_hundreds = ''.join(['ת' for i in range(hundreds // 400)])
+    ones = GEMATRIOS.get(ones, '')
+    tens = GEMATRIOS.get(tens, '')
+    hundreds = GEMATRIOS.get(hundreds % 400, '')
+    letters =  '{}{}{}{}'.format(four_hundreds, hundreds, tens, ones)
+    letters = letters.replace('יה', 'טו').replace('יו', 'טז')
+    return stringify_gematria(letters)
