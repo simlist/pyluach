@@ -97,6 +97,15 @@ def _month_length(year, month):
         return 29 if _short_kislev(year) else 30
 
 
+def _month_name(year, month, hebrew):
+    index = month
+    if month < 12 or not _is_leap(year):
+        index -=1
+    if hebrew:
+        return MONTH_NAMES_HEBREW[index]
+    return MONTH_NAMES[index]
+
+
 def _fast_day(date):
     """Return name of fast day or None.
 
