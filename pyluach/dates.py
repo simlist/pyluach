@@ -471,7 +471,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         monthlength = self._monthlength(year, month)
         if day < 1 or day > monthlength:
             raise ValueError('Given month has {0} days.'.format(monthlength))
-        super(GregorianDate, self).__init__(year, month, day, jd)
+        super().__init__(year, month, day, jd)
 
     @property
     def jd(self):
@@ -641,7 +641,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         monthlength = utils._month_length(year, month)
         if day < 1 or day > monthlength:
             raise ValueError('Given month has {0} days.'.format(monthlength))
-        super(HebrewDate, self).__init__(year, month, day, jd)
+        super().__init__(year, month, day, jd)
 
     @property
     def jd(self):
