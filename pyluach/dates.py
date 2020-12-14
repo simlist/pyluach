@@ -20,6 +20,7 @@ from numbers import Number
 from functools import lru_cache
 
 from pyluach import utils
+from pyluach import gematria
 
 
 class BaseDate:
@@ -739,4 +740,75 @@ class HebrewDate(BaseDate, CalendarDateMixin):
 
     def to_heb(self):
         return self
-    
+
+    def month_name(self, hebrew=False):
+        """
+        Return the name of the month.
+
+        Parameters
+        ----------
+        hebrew : bool, optional
+            ``True`` if the month name should be in Hebrew. Default
+            is ``False``.
+
+        Returns
+        -------
+        str
+        """
+        return utils._month_name(self.year, self.month, hebrew)
+
+    def hebrew_day(self):
+        """Return the day of the month in Hebrew letters.
+
+        Returns
+        -------
+        str
+            The day of the month in Hebrew letters. For
+            example 'א׳' for 1, 'ט״ו' for 15.
+        """
+        return gematria.num_to_str(self.day)
+
+    def hebrew_year(self, thousands=False):
+        """Return the year in Hebrew letters.
+
+        Parameters
+        ----------
+        thousands : bool
+            ``True`` to prefix the year with a letter for the
+            thousands place, ie. 'ה׳תשפ״א'. Default is ``False``.
+
+        Returns
+        -------
+        str
+        """
+        return gematria.num_to_str(self.year, thousands)
+
+    def hebrew_date_string(self, thousands=False):
+        """Return a Hebrew string representation of the date.
+
+        The date is in the form f'{day} {month} {year}`.
+
+        Parameters
+        ----------
+        thousands : bool
+            ``True`` to have the thousands include in the year.
+            Default is ``False``.
+
+        Returns
+        -------
+        str
+
+        Examples
+        --------
+        ::
+            >>> date = HebrewDate(5781, 9, 25)
+            >>> date.hebrew_date_string()
+            'כ״ה כסלו תשפ״א'
+            >>> date.hebrew_date_string(True)
+            'כ״ה כסלו ה׳תשפ״א'
+        """
+        return '{} {} {}'.format(
+            self.hebrew_day(),
+            self.month_name(True),
+            self.hebrew_year(thousands)
+        )

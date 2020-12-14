@@ -222,7 +222,6 @@ class TestMixinMethods:
 
 
 class TestHolidayMethods:
-
     def test_fast_day(self):
         date = dates.HebrewDate(5781, 7, 3)
         assert date.holiday() == 'Tzom Gedalia'
@@ -249,3 +248,16 @@ def test_from_pydate():
 def test_is_leap():
     assert GregorianDate(2020, 10, 26).is_leap() == True
     assert GregorianDate(2021, 10, 26).is_leap() == False
+
+def test_hebrew_date_string():
+    date = HebrewDate(5782, 7, 1)
+    assert date.hebrew_date_string() == 'א׳ תשרי תשפ״ב'
+    assert date.hebrew_date_string(True) == 'א׳ תשרי ה׳תשפ״ב'
+
+def test_month_name():
+    date = HebrewDate(5781, 12, 14)
+    assert date.month_name() == 'Adar'
+    assert date.month_name(True) == 'אדר'
+    date2 = HebrewDate(5782, 12, 14)
+    assert date2.month_name() == 'Adar 1'
+    assert date2.month_name(True) == 'אדר א׳'
