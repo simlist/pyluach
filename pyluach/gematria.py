@@ -28,7 +28,7 @@ def stringify_gematria(letters):
     if length > 1:
         return '{}״{}'.format(letters[:-1], letters[-1])
     if length == 1:
-        return '{}׳'.format(letters, '׳')
+        return '{}׳'.format(letters)
     return ''
 
 def num_to_str(num, thousands=False):
