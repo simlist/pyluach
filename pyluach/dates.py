@@ -207,8 +207,8 @@ class CalendarDateMixin:
 
     Parameters
     ----------
-    Year : int
-    Month : int
+    year : int
+    month : int
     day : int
 
     Attributes
