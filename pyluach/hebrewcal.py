@@ -353,12 +353,7 @@ class Month:
             and False to be transliterated into English using the Ashkenazic
             pronunciation. Default is `False`.
         """
-        index = self.month
-        if self.month < 12 or not utils._is_leap(self.year):
-            index -=1
-        if hebrew:
-            return utils.MONTH_NAMES_HEBREW[index]
-        return utils.MONTH_NAMES[index]
+        return utils._month_name(self.year, self.month, hebrew)
 
     def starting_weekday(self):
         """Return first weekday of the month.

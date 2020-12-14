@@ -183,7 +183,11 @@ class TestMonth:
         month = Month(5781, 9)
         assert month.month_name() == 'Kislev'
         assert month.month_name(hebrew=True) == 'כסלו'
-    
+        adar = Month(5781, 12)
+        assert adar.month_name() == 'Adar'
+        adar_bais = Month(5782, 13)
+        assert adar_bais.month_name() == 'Adar 2'
+
     def test_errors(self):
         with raises(ValueError):
             Month(-1, 1)
