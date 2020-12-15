@@ -178,8 +178,8 @@ def iterparshios(year, israel=False):
       (i.e. it occurs on a yom tov).
     """
     table = _gentable(year, israel)
-    for shabbos in table:
-        yield table[shabbos]
+    for shabbos in table.values():
+        yield shabbos
 
 
 def parshatable(year, israel=False):
