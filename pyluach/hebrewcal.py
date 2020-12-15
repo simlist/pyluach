@@ -264,8 +264,7 @@ class Month:
             raise ValueError('''Month must be between 1 and 12 for a normal
             year and 13 for a leap year.''')
         self.month = month
-        self._monthnames[12] = 'Adar Rishon' if leap else 'Adar'
-        self.name = self._monthnames[self.month]
+        self.name = utils._month_name(self.year, self.month, False)
 
     def __repr__(self):
         return 'Month({0}, {1})'.format(self.year, self.month)
