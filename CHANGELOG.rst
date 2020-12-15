@@ -6,6 +6,13 @@ This document records all notable changes to `pyluach <https://github.com/simlis
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 
+`2.0.0`_ (2020-12-__)
+---------------------
+* Added option to get parsha in hebrew
+* Added option to get Month object names in Hebrew
+* Added HebrewDate methods to get hebrew day, month, year, and
+  date string in Hebrew.
+
 `1.2.1`_ (2020-11-08)
 ---------------------
 * Fixed molad having weekday of `0` when it should be `7`.
