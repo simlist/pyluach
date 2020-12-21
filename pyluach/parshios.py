@@ -12,6 +12,18 @@ The algorithm is based on Dr. Irv Bromberg's, University of Toronto at
 http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
 
 All parsha names are transliterated into the American Ashkenazik pronunciation.
+
+Examples
+--------
+::
+    from pyluach import dates, parshios
+
+    >>> date = dates.HebrewDate(5781, 10, 5)
+    >>> parshios.getparsha(date)
+    'Vayigash'
+    >>> parshios.getparsha_string(date, True)
+    'ויגש'
+
 """
 
 from collections import deque, OrderedDict
@@ -38,11 +50,11 @@ PARSHIOS = [
 PARSHIOS_HEBREW = [
   'בראשית', 'נח', 'לך לך', 'וירא', 'חיי שרה', 'תולדות', 'ויצא', 'וישלח',
   'וישב', 'מקץ', 'ויגש', 'ויחי', 'שמות', 'וארא', 'בא', 'בשלח', 'יתרו',
-  'תרומה', 'תצוה', 'כי תשא', 'ויקהל', 'פקודי', 'ויקרא', 'צו', 'שמיני',
-  'תזריע', 'מצורע', 'אחרי מות', 'קדושים', 'אמור', 'בהר', 'בחוקותי', 'במדבר',
-  'נשא', 'בהעלותך', 'שלח', 'קרח', 'חקת', 'בלק', 'פינחס', 'מטות', 'מסעי',
-  'דברים', 'ואתחנן', 'עקב', 'ראה', 'שופטים', 'כי תצא', 'כי תבא', 'נצבים',
-  'וילך', 'האזינו', 'וזאת הברכה'
+  'משפטים', 'תרומה', 'תצוה', 'כי תשא', 'ויקהל', 'פקודי', 'ויקרא', 'צו',
+  'שמיני', 'תזריע', 'מצורע', 'אחרי מות', 'קדושים', 'אמור', 'בהר', 'בחוקותי',
+  'במדבר', 'נשא', 'בהעלותך', 'שלח', 'קרח', 'חקת', 'בלק', 'פינחס', 'מטות',
+  'מסעי', 'דברים', 'ואתחנן', 'עקב', 'ראה', 'שופטים', 'כי תצא', 'כי תבא',
+  'נצבים', 'וילך', 'האזינו', 'וזאת הברכה'
 ]
 
 
