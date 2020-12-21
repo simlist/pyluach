@@ -40,6 +40,16 @@ Typical use
     >>> heb = HebrewDate(5746, 13, 10)
     >>> greg == heb
     True
+    >>> greg > heb - 1
+    True
+
+    >>> rosh_hashana = dates.HebrewDate(5782, 7, 1)
+    >>> rosh_hashana.holiday()
+    'Rosh Hashana'
+    >>> rosh_hashana.holiday(hebrew=True)
+    'ראש השנה'
+    >>> (rosh_hashana + 3).holiday()
+    None
     
     >>> for month in hebrewcal.Year(5774).itermonths():
     ...     print(month.name)
@@ -48,8 +58,15 @@ Typical use
     >>> date = dates.GregorianDate(2010, 10, 6)
     >>> print(parshios.getparsha(date))
     [0]
-    >>> print(parshios.getparsha_string(date))
-    Beraishis
+    >>> parshios.getparsha_string(date, israel=True)
+    'Beraishis'
+    >>> parshios.getparsha_string(date, hebrew=True)
+    'בראשית'
+    >>> new_date = dates.GregorianDate(2021, 3, 10)
+    >>> parshios.getparsha_string(new_date)
+    'Vayakhel, Pekudei'
+    >>> parshios.getparsha_string(new_date, hebrew=True)
+    'ויקהל, פקודי'
 
 Documentation
 -------------
