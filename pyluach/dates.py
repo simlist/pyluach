@@ -800,12 +800,11 @@ class HebrewDate(BaseDate, CalendarDateMixin):
 
         Examples
         --------
-        ::
-            >>> date = HebrewDate(5781, 9, 25)
-            >>> date.hebrew_date_string()
-            'כ״ה כסלו תשפ״א'
-            >>> date.hebrew_date_string(True)
-            'כ״ה כסלו ה׳תשפ״א'
+        >>> date = HebrewDate(5781, 9, 25)
+        >>> date.hebrew_date_string()
+        'כ״ה כסלו תשפ״א'
+        >>> date.hebrew_date_string(True)
+        'כ״ה כסלו ה׳תשפ״א'
         """
         return '{} {} {}'.format(
             self.hebrew_day(),
