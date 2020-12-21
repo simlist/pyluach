@@ -423,8 +423,8 @@ class Month:
         Returns
         -------
         dict
-            A dictionary in the form
-            ::
+            A dictionary in the form::
+
                 {
                     weekday: int,
                     hour: int,
