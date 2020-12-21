@@ -1,13 +1,7 @@
 """This module has functions to find the weekly parasha for a given Shabbos.
 
-Attributes
-----------
-PARSHIOS : list of str
-  A list of all of the parsha names starting with Beraishis through V'zos
-  Habrocha.
-
-Notes
------
+Note
+----
 The algorithm is based on Dr. Irv Bromberg's, University of Toronto at
 http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
 
@@ -15,15 +9,20 @@ All parsha names are transliterated into the American Ashkenazik pronunciation.
 
 Examples
 --------
-::
-    from pyluach import dates, parshios
+>>> from pyluach import dates, parshios
 
-    >>> date = dates.HebrewDate(5781, 10, 5)
-    >>> parshios.getparsha(date)
-    'Vayigash'
-    >>> parshios.getparsha_string(date, True)
-    'ויגש'
+>>> date = dates.HebrewDate(5781, 10, 5)
+>>> parshios.getparsha(date)
+'Vayigash'
+>>> parshios.getparsha_string(date, True)
+'ויגש'
 
+Attributes
+----------
+PARSHIOS : list of str
+    A list of the parshios transliterated into English.
+PARSHIOS_HEBREW : list of str
+    A list of the parshios in Hebrew.
 """
 
 from collections import deque, OrderedDict
@@ -137,8 +136,7 @@ def getparsha(date, israel=False):
 def getparsha_string(date, israel=False, hebrew=False):
     """Return the parsha as a string for the given date.
 
-    This function wraps ``getparsha`` returning a the parsha name
-    transliterated into English.
+    This function wraps ``getparsha`` returning a the parsha name.
 
     Parameters
     ----------
@@ -156,7 +154,7 @@ def getparsha_string(date, israel=False, hebrew=False):
     Returns
     -------
     str or ``None``
-      The name of the parsha seperated by a comma and space if it is a
+      The name of the parsha separated by a comma and space if it is a
       double parsha or ``None`` if there is no parsha that Shabbos
       (ie. it's yom tov).
     """

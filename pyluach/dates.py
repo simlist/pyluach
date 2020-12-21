@@ -9,8 +9,8 @@ Contents
 * :class:`~pyluach.dates.GregorianDate`
 * :class:`~pyluach.dates.HebrewDate`
 
-Notes
------
+Note
+----
 All instances of the classes in this module should be treated as read
 only. No attributes should be changed once they're created.
 """
