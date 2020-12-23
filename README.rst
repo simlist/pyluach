@@ -1,5 +1,5 @@
 pyluach
-========
+=======
 .. image:: https://readthedocs.org/projects/pyluach/badge/?version=latest
   :target: http://pyluach.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status
@@ -24,7 +24,7 @@ Installation
 -------------
 Use ``pip install pyluach``.
 
-Typical use
+Examples
 ------------
 ::
 
@@ -40,8 +40,14 @@ Typical use
     >>> heb = HebrewDate(5746, 13, 10)
     >>> greg == heb
     True
-    >>> greg > heb - 1
-    True
+
+    >>> purim = HebrewDate(5781, 12, 14)
+    >>> purim.hebrew_day()
+    'י״ד'
+    >>> purim.hebrew_date_string()
+    'י״ד אדר תשפ״א'
+    >>> purim.hebrew_date_string(True)
+    'י״ד אדר ה׳תשפ״א'
 
     >>> rosh_hashana = dates.HebrewDate(5782, 7, 1)
     >>> rosh_hashana.holiday()
@@ -51,12 +57,19 @@ Typical use
     >>> (rosh_hashana + 3).holiday()
     None
     
+    >>> month = hebrewcal.Month(5781, 10)
+    >>> month.month_name()
+    'Teves'
+    >>> month.month_name(True)
+    'טבת'
+    >>> month + 3
+    Month(5781, 1)
     >>> for month in hebrewcal.Year(5774).itermonths():
     ...     print(month.name)
     Tishrei Cheshvan ...
 
     >>> date = dates.GregorianDate(2010, 10, 6)
-    >>> print(parshios.getparsha(date))
+    >>> parshios.getparsha(date)
     [0]
     >>> parshios.getparsha_string(date, israel=True)
     'Beraishis'
