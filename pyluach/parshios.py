@@ -1,4 +1,15 @@
-"""This module has functions to find the weekly parasha for a given Shabbos.
+"""The parshios module has functions to find the weekly parasha.
+
+Examples
+--------
+>>> from pyluach import dates, parshios
+>>> date = dates.HebrewDate(5781, 10, 5)
+>>> parshios.getparsha(date)
+'Vayigash'
+>>> parshios.getparsha_string(date, hebrew=True)
+'ויגש'
+>>> parshios.getparsha_string(dates.GregorianDate(2021, 3, 7), hebrew=True)
+'ויקהל, פקודי'
 
 Note
 ----
@@ -7,15 +18,6 @@ http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
 
 All parsha names are transliterated into the American Ashkenazik pronunciation.
 
-Examples
---------
->>> from pyluach import dates, parshios
-
->>> date = dates.HebrewDate(5781, 10, 5)
->>> parshios.getparsha(date)
-'Vayigash'
->>> parshios.getparsha_string(date, True)
-'ויגש'
 
 Attributes
 ----------
@@ -136,7 +138,7 @@ def getparsha(date, israel=False):
 def getparsha_string(date, israel=False, hebrew=False):
     """Return the parsha as a string for the given date.
 
-    This function wraps ``getparsha`` returning a the parsha name.
+    This function wraps ``getparsha`` returning the parsha name.
 
     Parameters
     ----------
