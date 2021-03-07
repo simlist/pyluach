@@ -24,6 +24,10 @@ Installation
 -------------
 Use ``pip install pyluach``.
 
+Documentation
+-------------
+Documentation for pyluach can be found at https://readthedocs.org/projects/pyluach/.
+
 Examples
 ------------
 ::
@@ -80,10 +84,6 @@ Examples
     'Vayakhel, Pekudei'
     >>> parshios.getparsha_string(new_date, hebrew=True)
     'ויקהל, פקודי'
-
-Documentation
--------------
-Documentation for pyluach can be found at https://readthedocs.org/projects/pyluach/.
 
 Contact
 --------
