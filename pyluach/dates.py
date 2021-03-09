@@ -766,7 +766,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             The day of the month in Hebrew letters. For
             example 'א׳' for 1, 'ט״ו' for 15.
         """
-        return gematria.num_to_str(self.day)
+        return gematria._num_to_str(self.day)
 
     def hebrew_year(self, thousands=False):
         """Return the year in Hebrew letters.
@@ -781,7 +781,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         -------
         str
         """
-        return gematria.num_to_str(self.year, thousands)
+        return gematria._num_to_str(self.year, thousands)
 
     def hebrew_date_string(self, thousands=False):
         """Return a Hebrew string representation of the date.
