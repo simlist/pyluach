@@ -24,3 +24,5 @@ def test_five_letters():
 
 def test_thousands():
     assert num_to_str(5781, True) == 'ה׳תשפ״א'
+    assert num_to_str(10000, True) == 'י׳'
+    assert num_to_str(12045, True) == 'יב׳מ״ה'

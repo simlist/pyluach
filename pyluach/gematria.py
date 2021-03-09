@@ -31,6 +31,18 @@ def stringify_gematria(letters):
         return '{}׳'.format(letters)
     return ''
 
+def get_letters(num):
+    """Convert numbers under 1,000 into raw letters."""
+    ones = num % 10
+    tens = num % 100 - ones
+    hundreds = num % 1000 - tens - ones
+    four_hundreds = ''.join(['ת' for i in range(hundreds // 400)])
+    ones = GEMATRIOS.get(ones, '')
+    tens = GEMATRIOS.get(tens, '')
+    hundreds = GEMATRIOS.get(hundreds % 400, '')
+    letters = '{}{}{}{}'.format(four_hundreds, hundreds, tens, ones)
+    return letters.replace('יה', 'טו').replace('יו', 'טז')
+
 def num_to_str(num, thousands=False):
     """Return gematria string for number up to 10,000.
     
@@ -47,17 +59,8 @@ def num_to_str(num, thousands=False):
     str
         The Hebrew representation of the number.
     """
-    ones = num % 10
-    tens = num % 100 - ones
-    hundreds = num % 1000 - tens - ones
-    four_hundreds = ''.join(['ת' for i in range(hundreds // 400)])
-    ones = GEMATRIOS.get(ones, '')
-    tens = GEMATRIOS.get(tens, '')
-    hundreds = GEMATRIOS.get(hundreds % 400, '')
-    letters = '{}{}{}{}'.format(four_hundreds, hundreds, tens, ones)
-    letters = letters.replace('יה', 'טו').replace('יו', 'טז')
-    letters = stringify_gematria(letters)
+    letters = stringify_gematria(get_letters(num))
     if thousands:
-        thousand = stringify_gematria(GEMATRIOS.get(num // 1000, ''))
+        thousand = get_letters(num // 1000) + '׳'
         letters = thousand + letters
     return letters
