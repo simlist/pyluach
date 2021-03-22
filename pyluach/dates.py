@@ -748,8 +748,9 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         Parameters
         ----------
         hebrew : bool, optional
-            ``True`` if the month name should be in Hebrew. Default
-            is ``False``.
+            ``True`` if the month name should be in Hebrew characters.
+            Default is ``False`` which returns the month name
+            transliterated into English.
 
         Returns
         -------
