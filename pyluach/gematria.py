@@ -24,6 +24,7 @@ _GEMATRIOS = {
 }
 
 def _stringify_gematria(letters):
+    """Insert geresh or gershayim symbols into gematria."""
     length = len(letters)
     if length > 1:
         return '{}״{}'.format(letters[:-1], letters[-1])
@@ -44,7 +45,7 @@ def _get_letters(num):
     return letters.replace('יה', 'טו').replace('יו', 'טז')
 
 def _num_to_str(num, thousands=False):
-    """Return gematria string for number up to 10,000.
+    """Return gematria string for number.
     
     Parameters
     ----------
