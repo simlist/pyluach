@@ -35,27 +35,26 @@ from pyluach.utils import _is_leap
 
 
 PARSHIOS = [
-            'Beraishis', 'Noach', "Lech L'cha", 'Vayera', 'Chayei Sarah',
-            'Toldos', 'Vayetzei', 'Vayishlach', 'Vayeshev', 'Miketz',
-            'Vayigash', 'Vayechi', 'Shemos',  "Va'era", 'Bo', 'Beshalach',
-            'Yisro',  'Mishpatim', 'Teruma', 'Tetzave', 'Ki Sisa', 'Vayakhel',
-            'Pekudei', 'Vayikra', 'Tzav','Shemini', 'Tazria', 'Metzora',
-            'Acharei Mos', 'Kedoshim', 'Emor', 'Behar', 'Bechukosai', 'Bamidbar',
-            'Naso', "Beha'aloscha", "Shelach", 'Korach', 'Chukas', 'Balak',
-            'Pinchas', 'Matos', "Ma'sei", 'Devarim', "Va'eschanan", 'Eikev',
-            "R'ey", 'Shoftim', 'Ki Setzei', 'Ki Savo', 'Netzavim', 'Vayelech',
-            'Haazinu', "V'zos Habrocha"
-            ]
+    'Bereishis', 'Noach', 'Lech Lecha', 'Vayeira', 'Chayei Sarah', 'Toldos',
+    'Vayeitzei', 'Vayishlach', 'Vayeishev', 'Mikeitz', 'Vayigash', 'Vayechi',
+    'Shemos',  "Va'eira", 'Bo', 'Beshalach', 'Yisro',  'Mishpatim', 'Terumah',
+    'Tetzaveh', 'Ki Sisa', 'Vayakhel', 'Pekudei', 'Vayikra', 'Tzav', 'Shemini',
+    'Tazria', 'Metzora', 'Acharei Mos', 'Kedoshim', 'Emor', 'Behar',
+    'Bechukosai', 'Bamidbar', 'Nasso', "Beha'aloscha", 'Shelach', 'Korach',
+    'Chukas', 'Balak', 'Pinchas', 'Mattos', 'Masei', 'Devarim', "Va'eschanan",
+    'Eikev', "Re'eh", 'Shoftim', 'Ki Seitzei', 'Ki Savo', 'Nitzavim',
+    'Vayeilech', 'Haazinu', 'Vezos Haberachah'
+    ]
 
 
 PARSHIOS_HEBREW = [
-  'בראשית', 'נח', 'לך לך', 'וירא', 'חיי שרה', 'תולדות', 'ויצא', 'וישלח',
-  'וישב', 'מקץ', 'ויגש', 'ויחי', 'שמות', 'וארא', 'בא', 'בשלח', 'יתרו',
-  'משפטים', 'תרומה', 'תצוה', 'כי תשא', 'ויקהל', 'פקודי', 'ויקרא', 'צו',
-  'שמיני', 'תזריע', 'מצורע', 'אחרי מות', 'קדושים', 'אמור', 'בהר', 'בחוקותי',
-  'במדבר', 'נשא', 'בהעלותך', 'שלח', 'קרח', 'חקת', 'בלק', 'פינחס', 'מטות',
-  'מסעי', 'דברים', 'ואתחנן', 'עקב', 'ראה', 'שופטים', 'כי תצא', 'כי תבא',
-  'נצבים', 'וילך', 'האזינו', 'וזאת הברכה'
+    'בראשית', 'נח', 'לך לך', 'וירא', 'חיי שרה', 'תולדות', 'ויצא', 'וישלח',
+    'וישב', 'מקץ', 'ויגש', 'ויחי', 'שמות', 'וארא', 'בא', 'בשלח', 'יתרו',
+    'משפטים', 'תרומה', 'תצוה', 'כי תשא', 'ויקהל', 'פקודי', 'ויקרא', 'צו',
+    'שמיני', 'תזריע', 'מצורע', 'אחרי מות', 'קדושים', 'אמור', 'בהר', 'בחוקותי',
+    'במדבר', 'נשא', 'בהעלותך', 'שלח', 'קרח', 'חקת', 'בלק', 'פינחס', 'מטות',
+    'מסעי', 'דברים', 'ואתחנן', 'עקב', 'ראה', 'שופטים', 'כי תצא', 'כי תבא',
+    'נצבים', 'וילך', 'האזינו', 'וזאת הברכה'
 ]
 
 
