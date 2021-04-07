@@ -8,10 +8,11 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 `2.0.0`_ (2020-12-__)
 ---------------------
-* Added option to get parsha in hebrew
-* Added option to get Month object names in Hebrew
+* Added option to get parsha in hebrew.
+* Added option to get Month names in Hebrew.
 * Added HebrewDate methods to get hebrew day, month, year, and
   date string in Hebrew.
+* Implemented more consistent Hebrew to English transliterations for parshios.
 
 `1.2.1`_ (2020-11-08)
 ---------------------
@@ -21,16 +22,15 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 ---------------------
 * Created isoweekday method for all date types.
 * Created fast_day and festival functions (`#11`_)
-* Added Pesach Sheni to festival
+* Added Pesach Sheni to festival.
 
 `1.1.1`_ (2020-08-14)
 ---------------------
-* Fixed error getting parsha of Shabbos on Rosh Hashana
+* Fixed error getting parsha of Shabbos on Rosh Hashana.
 
 
 `1.1.0`_ (2020-06-03)
 ---------------------
-
 * Redesigned documentation.
 * Added molad and molad_announcement methods to hebrewcal.Month.
 * Stopped supporting python < 3.4 and modernized code.
