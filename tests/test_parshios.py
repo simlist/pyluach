@@ -11,7 +11,7 @@ KNOWN_VALUES = {
     }
 
 KNOWN_VALUES_STRINGS = {
-    (2016, 1, 7): "Va'era",
+    (2016, 1, 7): "Va'eira",
     (2017, 3, 21): "Vayakhel, Pekudei",
     (2017, 9, 26): None
     }
@@ -36,10 +36,10 @@ class TestGetParsha:
         assert parshios.getparsha(chukas_balak - 8) == [37, ]
         assert parshios.getparsha(chukas_balak - 13, True) == [38, ]
         shavuos = dates.HebrewDate(5780, 3, 6)
-        assert parshios.getparsha_string(shavuos, True) == 'Naso'
+        assert parshios.getparsha_string(shavuos, True) == 'Nasso'
         assert parshios.getparsha_string(shavuos) is None
         assert parshios. getparsha_string(shavuos + 7, True) == "Beha'aloscha"
-        assert parshios.getparsha_string(shavuos + 7) == 'Naso'
+        assert parshios.getparsha_string(shavuos + 7) == 'Nasso'
 
     def test_eighth_day_pesach(self):
         eighth_day_pesach = dates.HebrewDate(5779, 1, 22)
@@ -48,8 +48,8 @@ class TestGetParsha:
         assert parshios.getparsha_string(eighth_day_pesach, True) == 'Acharei Mos'
         assert parshios.getparsha(eighth_day_pesach + 7) == [28,]
         assert parshios.getparsha(eighth_day_pesach + 7, True) == [29,]
-        assert parshios.getparsha_string(reunion_shabbos) == "Matos, Ma'sei"
-        assert parshios.getparsha_string(reunion_shabbos, True) == "Ma'sei"
+        assert parshios.getparsha_string(reunion_shabbos) == "Mattos, Masei"
+        assert parshios.getparsha_string(reunion_shabbos, True) == 'Masei'
 
 
 def test_parshatable():
