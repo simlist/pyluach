@@ -394,7 +394,7 @@ class Month:
         dict
             A dictionary in the form {weekday: int, hours: int, parts: int}
 
-        Notes
+        Note
         -----
         This method does not return the molad in the form that is
         traditionally announced in the shul. This is the molad in the
