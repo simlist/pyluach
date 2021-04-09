@@ -49,6 +49,7 @@ autodoc_default_options = {
     'inherited-members': True,
     'show-inheritance': True
 }
+autodoc_member_order = 'bysource'
 
 # Autosummary settings
 autosummary_generate = True
