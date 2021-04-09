@@ -6,9 +6,9 @@ This document records all notable changes to `pyluach <https://github.com/simlis
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 
-`2.0.0`_ (2020-12-__)
+`1.3.0`_ (2021-04-__)
 ---------------------
-* Added option to get parsha in hebrew.
+* Added option to get parsha in Hebrew.
 * Added option to get Month names in Hebrew.
 * Added HebrewDate methods to get hebrew day, month, year, and
   date string in Hebrew.
