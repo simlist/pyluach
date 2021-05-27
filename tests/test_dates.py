@@ -172,7 +172,7 @@ class TestErrors:
                           (2018, 2, 0), (2018, 2, 29), (2012, 2, 30)]:
                           with pytest.raises(ValueError):
                             GregorianDate(*datetuple)
-    
+
     def test_JD_errors(self):
         with pytest.raises(ValueError):
             JulianDay(-1).to_heb()
@@ -202,7 +202,7 @@ def test_weekday():
 def test_isoweekday():
     assert GregorianDate(2020, 9, 20).isoweekday() == 7
     assert GregorianDate(2020, 10, 3).isoweekday() == 6
-    assert GregorianDate(2020, 10, 5).isoweekday() == 1 
+    assert GregorianDate(2020, 10, 5).isoweekday() == 1
     assert JulianDay(2458342.5).isoweekday() == 7
 
 class TestMixinMethods:
@@ -235,3 +235,5 @@ def test_from_pydate():
 def test_is_leap():
     assert GregorianDate(2020, 10, 26).is_leap() == True
     assert GregorianDate(2021, 10, 26).is_leap() == False
+    assert HebrewDate(5781, 10, 26).is_leap() == False
+    assert HebrewDate(5782, 10, 26).is_leap() == True
