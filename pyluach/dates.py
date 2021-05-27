@@ -1,29 +1,26 @@
 """The dates module implements classes for representing and
 manipulating several date types.
 
-Classes
--------
-* BaseDate
-* CalendarDateMixin
-* JulianDay
-* GregorianDate
-* HebrewDate
+Contents
+--------
+* :class:`~pyluach.dates.BaseDate`
+* :class:`~pyluach.dates.CalendarDateMixin`
+* :class:`~pyluach.dates.JulianDay`
+* :class:`~pyluach.dates.GregorianDate`
+* :class:`~pyluach.dates.HebrewDate`
 
-Note
-----
+Notes
+-----
 All instances of the classes in this module should be treated as read
 only. No attributes should be changed once they're created.
 """
 
-from __future__ import division
-
 from datetime import date
 from numbers import Number
+from functools import lru_cache
 
-from pyluach.utils import memoize
 
-
-class BaseDate(object):
+class BaseDate:
     """BaseDate is a base class for all date types.
 
     It provides the following arithmetic and comparison operators
@@ -43,7 +40,7 @@ class BaseDate(object):
     date1 >=, <= date2   True if both are True
     ===================  =============================================
 
-    Any child of BaseDate that implements a ``jd`` attribute
+    Any child of BaseDate that implements a `jd` attribute
     representing the Julian Day of that date can be compared to and
     diffed with any other valid date type.
     """
@@ -54,15 +51,15 @@ class BaseDate(object):
     def __add__(self, other):
         try:
             return JulianDay(self.jd + other)._to_x(self)
-        except AttributeError:
+        except TypeError:
             raise TypeError('You can only add a number to a date.')
 
     def __sub__(self, other):
-        if isinstance(other, Number):
-            return JulianDay(self.jd - other)._to_x(self)
         try:
+            if isinstance(other, Number):
+                return JulianDay(self.jd - other)._to_x(self)
             return abs(self.jd - other.jd)
-        except AttributeError:
+        except (AttributeError, TypeError):
             raise TypeError("""You can only subtract a number or another date
                               that has a "jd" attribute from a date""")
 
@@ -125,8 +122,22 @@ class BaseDate(object):
         """
         return self + (7 - self.weekday())
 
+    def isoweekday(self):
+        """Return the day of the week corresponding to the iso standard.
 
-class CalendarDateMixin(object):
+        Returns
+        -------
+        int
+          An integer representing the day of the week where Monday
+          is 1 and and Sunday is 7.
+        """
+        weekday = self.weekday() 
+        if weekday == 1:
+            return 7
+        return weekday - 1
+
+
+class CalendarDateMixin:
     """CalendarDateMixin is a mixin for Hebrew and Gregorian dates.
 
     Parameters
@@ -179,7 +190,7 @@ class CalendarDateMixin(object):
           through Saturday as 7.
         """
         return int(self.jd+.5+1) % 7 + 1
-
+    
     def tuple(self):
         """Return date as tuple.
 
@@ -622,8 +633,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         HebrewDate
           The current Hebrew date from the computer's timestamp.
 
-        Note
-        ----
+        Notes
+        -----
         This method coverts the Gregorian date from the time stamp to
         a Hebrew date, so if it is after nightfall but before
         midnight you will have to add one day, ie.
@@ -679,13 +690,15 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         """
         return self._is_leap(self.year)
     
+
+    @staticmethod
+    def _elapsed_months(year):
+        return (235 * year - 234) // 19
+
     @classmethod
-    @memoize(maxlen=100)
+    @lru_cache(maxsize=100)
     def _elapsed_days(cls, year):
-        months_elapsed = (
-                      (235 * ((year-1) // 19)) + (12 * ((year-1) % 19)) +
-                      (7 * ((year-1) % 19) + 1) // 19
-                      )
+        months_elapsed = cls._elapsed_months(year)
         parts_elapsed = 204 + 793*(months_elapsed%1080)
         hours_elapsed = (5 + 12*months_elapsed + 793*(months_elapsed//1080) +
                          parts_elapsed//1080)

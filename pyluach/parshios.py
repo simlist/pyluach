@@ -14,13 +14,10 @@ http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
 All parsha names are transliterated into the American Ashkenazik pronunciation.
 """
 
-from __future__ import division
-from __future__ import unicode_literals
-
 from collections import deque, OrderedDict
+from functools import lru_cache
 
 from pyluach.dates import HebrewDate
-from pyluach.utils import memoize
 
 
 PARSHIOS = [
@@ -49,7 +46,7 @@ def _parshaless(date, israel=False):
     return False
 
 
-@memoize(maxlen=50)
+@lru_cache(maxsize=50)
 def _gentable(year, israel=False):
     """Return OrderedDict mapping date of Shabbos to list of parsha numbers.
 
@@ -61,7 +58,7 @@ def _gentable(year, israel=False):
     leap = HebrewDate._is_leap(year)
     pesachday = HebrewDate(year, 1, 15).weekday()
     rosh_hashana = HebrewDate(year, 7, 1)
-    shabbos = (rosh_hashana + 2).shabbos()
+    shabbos = rosh_hashana.shabbos()
     if rosh_hashana.weekday() > 4:
         parshalist.popleft()
 
@@ -186,4 +183,3 @@ def parshatable(year, israel=False):
       Shabbos with no parsha.
     """
     return _gentable(year, israel)
-
