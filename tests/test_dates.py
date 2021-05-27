@@ -24,7 +24,7 @@ def datetypeslist():
     return datetypes
 
 
-class TestClassesSanity(object):
+class TestClassesSanity:
     def test_greg_sanity(self):
         for i in range(347998, 2460000, 117):
             jd = dates.JulianDay(i)
@@ -41,7 +41,7 @@ class TestClassesSanity(object):
             assert jd.day == conf.day
 
 
-class TestClassesConversion(object):
+class TestClassesConversion:
     def test_from_greg(self):
         for date in KNOWN_VALUES:
             heb = dates.GregorianDate(*date).to_heb().tuple()
@@ -58,7 +58,7 @@ def setup(scope='module'):
     deltas =  [0, 1, 29, 73, 1004]
     return  {'caltypes': caltypes, 'deltas': deltas}
 
-class TestOperators(object):
+class TestOperators:
 
     def test_add(self, setup):
         for cal in setup['caltypes']:
@@ -90,7 +90,7 @@ class TestOperators(object):
                     assert delta == difference
 
 
-class TestComparisons(object):
+class TestComparisons:
     """In ComparisonTests, comparisons are tested.
 
     Every function tests one test case comparing a date from each
@@ -131,7 +131,7 @@ class TestComparisons(object):
                     assert comp(today, today2) is False
 
 
-class TestErrors(object):
+class TestErrors:
 
     def test_too_low_heb(self):
         with pytest.raises(ValueError):
@@ -172,8 +172,12 @@ class TestErrors(object):
                           (2018, 2, 0), (2018, 2, 29), (2012, 2, 30)]:
                           with pytest.raises(ValueError):
                             GregorianDate(*datetuple)
+    
+    def test_JD_errors(self):
+        with pytest.raises(ValueError):
+            JulianDay(-1).to_heb()
 
-class TestReprandStr(object):
+class TestReprandStr:
     def test_repr(self, datetypeslist):
         for datetype in datetypeslist:
             assert eval(repr(datetype.today())) == datetype.today()
@@ -195,7 +199,13 @@ def test_weekday():
     assert HebrewDate(5777, 6, 1).weekday() == 4
     assert JulianDay(2458342.5).weekday() == 1
 
-class TestMixinMethods():
+def test_isoweekday():
+    assert GregorianDate(2020, 9, 20).isoweekday() == 7
+    assert GregorianDate(2020, 10, 3).isoweekday() == 6
+    assert GregorianDate(2020, 10, 5).isoweekday() == 1 
+    assert JulianDay(2458342.5).isoweekday() == 7
+
+class TestMixinMethods:
 
     @pytest.fixture
     def date(self):
@@ -221,3 +231,7 @@ def test_from_pydate():
     assert date == GregorianDate.from_pydate(date).to_jd().to_pydate()
     assert date == HebrewDate.from_pydate(date).to_pydate()
     assert date == JulianDay.from_pydate(date).to_pydate()
+
+def test_is_leap():
+    assert GregorianDate(2020, 10, 26).is_leap() == True
+    assert GregorianDate(2021, 10, 26).is_leap() == False

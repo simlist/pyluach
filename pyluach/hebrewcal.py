@@ -1,54 +1,12 @@
-from __future__ import unicode_literals
-from __future__ import division
-
 from collections import deque
 from numbers import Number
+from functools import lru_cache
 
 from pyluach.dates import HebrewDate
-from pyluach.utils import memoize
 
 
-def _adjust_postponed(date):
-    """Return actual date of fast day.
-
-    For usual date of a fast day returns fast day adjusted for any
-    postponements.
-    """
-    if date.weekday() == 7:
-        if date.month in [12, 13]:
-            date -= 2
-        else:
-            date += 1
-    return date
-
-
-@memoize(maxlen=50)
-def _fast_day_table(year):
-    table = dict()
-    workingdate = _adjust_postponed(HebrewDate(year, 7, 3))
-    table[workingdate] = 'Tzom Gedalia'
-
-    workingdate = _adjust_postponed(HebrewDate(year, 10, 10))
-    table[workingdate] = '10 of Teves'
-
-    month = 13 if Year(year).leap else 12
-    workingdate = _adjust_postponed(HebrewDate(year, month, 13))
-    table[workingdate] = 'Taanis Esther'
-
-    workingdate = _adjust_postponed(HebrewDate(year, 4, 17))
-    table[workingdate] = '17 of Tamuz'
-
-    workingdate = _adjust_postponed(HebrewDate(year, 5, 9))
-    table[workingdate] = '9 of Av'
-
-    return table
-
-
-def holiday(date, israel=False):
-    """Return Jewish holiday of given date.
-
-    The holidays include the major and minor religious Jewish
-    holidays including fast days.
+def fast_day(date):
+    """Return name of fast day or None.
 
     Parameters
     ----------
@@ -56,25 +14,63 @@ def holiday(date, israel=False):
       Any date that implements a ``to_heb()`` method which returns a
       ``HebrewDate`` can be used.
 
-    israel : boolian, optional
-      ``True`` if you want the holidays according to the israel
-      schedule. Defaults to ``False``.
-
     Returns
     -------
     str or ``None``
-      The name of the holiday or ``None`` if the given date is not
-      a Jewish holiday.
+      The name of the fast day or ``None`` if the given date is not
+      a fast day.
     """
     date = date.to_heb()
     year = date.year
     month = date.month
     day = date.day
-    table = _fast_day_table(year)
-    if date in table:
-        return table[date]
+    weekday = date.weekday()
+    adar = 13 if Year(year).leap else 12
+
     if month == 7:
-        if day in range(1, 3):
+        if (weekday == 1 and day == 4) or (weekday != 7 and day == 3):
+            return 'Tzom Gedalia'
+    elif month == 10 and day == 10:
+        return '10 of Teves'
+    elif month == adar:
+        if (weekday == 5 and day == 11) or weekday != 7 and day == 13:
+            return 'Taanis Esther'
+    elif month == 4:
+        if (weekday == 1 and day == 18) or (weekday != 7 and day == 17):
+            return '17 of Tamuz'
+    elif month == 5:
+        if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
+            return '9 of Av'
+
+
+def festival(date, israel=False):
+    """Return Jewish festival of given day.
+
+    This method will return all major and minor religous
+    Jewish holidays not including fast days.
+
+    Parameters
+    ----------
+    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+      Any date that implements a ``to_heb()`` method which returns a
+      ``HebrewDate`` can be used.
+
+    israel : bool, optional
+      ``True`` if you want the holidays according to the Israel
+      schedule. Defaults to ``False``.
+
+    Returns
+    -------
+    str or ``None``
+      The name of the festival or ``None`` if the given date is not
+      a Jewish festival.
+    """
+    date = date.to_heb()
+    year = date.year
+    month = date.month
+    day = date.day
+    if month == 7:
+        if day in [1, 2]:
             return 'Rosh Hashana'
         elif day == 10:
             return 'Yom Kippur'
@@ -104,6 +100,8 @@ def holiday(date, israel=False):
             return 'Shushan Purim'
     elif month == 1 and day in range(15, 22 if israel else 23):
         return 'Pesach'
+    elif month == 2 and day == 14:
+        return 'Pesach Sheni'
     elif month == 2 and day == 18:
         return "Lag Ba'omer"
     elif month == 3 and (day == 6 if israel else day in (6, 7)):
@@ -112,10 +110,37 @@ def holiday(date, israel=False):
         return "Tu B'av"
 
 
-class Year(object):
+def holiday(date, israel=False):
+    """Return Jewish holiday of given date.
 
+    The holidays include the major and minor religious Jewish
+    holidays including fast days.
+
+    Parameters
+    ----------
+    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+      Any date that implements a ``to_heb()`` method which returns a
+      ``HebrewDate`` can be used.
+
+    israel : bool, optional
+      ``True`` if you want the holidays according to the israel
+      schedule. Defaults to ``False``.
+
+    Returns
+    -------
+    str or ``None``
+      The name of the holiday or ``None`` if the given date is not
+      a Jewish holiday.
     """
-    A Year object represents a Hebrew calendar year.
+    fest = festival(date, israel)
+    if fest:
+        return fest
+    fast = fast_day(date)
+    if fast:
+        return fast
+
+class Year:
+    """A Year object represents a Hebrew calendar year.
 
     It provided the following operators:
 
@@ -127,6 +152,10 @@ class Year(object):
     int = year1 - year2    ``int`` equal to the absolute value of
                            the difference between year2 and year1.
     bool = year1 == year2  True if year1 represents the same year as year2.
+    bool = year1 > year2   True if year1 is later than year2.
+    bool = year1 >= year2  True if year1 is later or equal to year2.
+    bool = year1 < year2   True if year 1 earlier than year2.
+    bool = year1 <= year2  True if year 1 earlier or equal to year 2.
     =====================  ================================================
 
     Parameters
@@ -143,10 +172,6 @@ class Year(object):
     """
 
     def __init__(self, year):
-
-        """
-        The initializer for a Year object.
-        """
         if year < 1:
             raise ValueError('Year {0} is before creation.'.format(year))
         self.year = year
@@ -165,7 +190,10 @@ class Year(object):
 
     def __add__(self, other):
         """Add int to year."""
-        return Year(self.year + other)
+        try:
+            return Year(self.year + other)
+        except TypeError:
+            raise TypeError('You can only add a number to a year.')
 
     def __sub__(self, other):
         """Subtract int or Year from Year.
@@ -178,9 +206,29 @@ class Year(object):
         else:
             try:
                 return Year(self.year - other)
-            except AttributeError:
+            except TypeError:
                 raise TypeError('Only an int or another Year object can'
                                 ' be subtracted from a year.')
+
+    def __gt__(self, other):
+        if self.year > other.year:
+            return True
+        return False
+
+    def __ge__(self, other):
+        if self == other or self > other:
+            return True
+        return False
+
+    def __lt__(self, other):
+        if self.year < other.year:
+            return True
+        return False
+
+    def __le__(self, other):
+        if self < other or self == other:
+            return True
+        return False
 
     def __iter__(self):
         """Yield integer for each month in year."""
@@ -220,19 +268,19 @@ class Year(object):
 
         Yields
         ------
-        ``HebrewDate``
+        HebrewDate
             The next date of the Hebrew calendar year starting with
             the first of Tishrei.
         """
         for month in self.itermonths():
             for day in month:
                 yield HebrewDate(self.year, month.month, day)
+    
 
+class Month:
+    """A Month object represents a month of the Hebrew calendar.
 
-class Month(object):
-
-    """
-    A Month object represents a month of the Hebrew calendar.
+    It provides the same operators as a `Year` object.
 
     Parameters
     ----------
@@ -291,9 +339,12 @@ class Month(object):
         yearmonths = list(Year(self.year))
         index = yearmonths.index(self.month)
         leftover_months = len(yearmonths[index + 1:])
-        if other <= leftover_months:
-            return Month(self.year, yearmonths[index + other])
-        return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
+        try:
+            if other <= leftover_months:
+                return Month(self.year, yearmonths[index + other])
+            return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
+        except (AttributeError, TypeError):
+            raise TypeError('You can only add a number to a year.')
 
 
     def __sub__(self, other):
@@ -312,7 +363,33 @@ class Month(object):
             return abs(self._elapsed_months() - other._elapsed_months())
         except AttributeError:
             raise TypeError('''You can only subtract a number or a month
-                            object from a month''')
+                            object from a month.''')
+
+    def __gt__(self, other):
+        if (
+            self.year > other.year
+            or (self.year == other.year and self.month > other.month)
+        ):
+            return True
+        return False
+
+    def __ge__(self, other):
+        if self > other or self == other:
+            return True
+        return False
+
+    def __lt__(self, other):
+        if (
+            self.year < other.year
+            or (self.year == other.year and self.month < other.month)
+        ):
+            return True
+        return False
+
+    def __le__(self, other):
+        if self < other or self == other:
+            return True
+        return False
 
     def starting_weekday(self):
         """Return first weekday of the month.
@@ -329,11 +406,9 @@ class Month(object):
         '''Return number of months elapsed from beginning of calendar'''
         yearmonths = tuple(Year(self.year))
         months_elapsed = (
-                      (235 * ((self.year-1) // 19)) +
-                      (12 * ((self.year-1) % 19)) +
-                      (7 * ((self.year-1) % 19) + 1) // 19 +
-                      yearmonths.index(self.month)
-                      )
+            HebrewDate._elapsed_months(self.year)
+            + yearmonths.index(self.month)
+        )
         return months_elapsed
 
     def iterdates(self):
@@ -348,3 +423,65 @@ class Month(object):
         for day in self:
             yield HebrewDate(self.year, self.month, day)
 
+    def molad(self):
+        """Return the month's molad.
+
+        Returns
+        -------
+        dict
+          A dictionary in the form {weekday: int, hours: int, parts: int}
+
+        Notes
+        -----
+        This method does not return the molad in the form that is
+        traditionally announced in the shul. This is the molad in the
+        form used to calculate the length of the year.
+
+        See Also
+        --------
+        molad_announcement: The molad as it is traditionally announced.
+        """
+        months = self._elapsed_months()
+        parts = 204 + months*793
+        hours = 5 + months*12 + parts//1080
+        days = 2 + months*29 + hours//24
+        weekday = days % 7 or 7
+        return {'weekday': weekday, 'hours': hours % 24, 'parts': parts % 1080}
+
+    def molad_announcement(self):
+        """Return the months molad in the announcement form.
+        
+        Returns a dictionary in the form that the molad is traditionally
+        announced. The weekday is adjusted to change at midnight and
+        the hour of the day and minutes are given as traditionally announced.
+        Note that the hour is given as in a twenty four hour clock ie. 0 for
+        12:00 AM through 23 for 11:00 PM.
+
+        Returns
+        -------
+        dict
+          A dictionary in the form
+          ::
+            {
+                weekday: int,
+                hour: int,
+                minutes: int,
+                parts: int
+            }
+        """
+        molad = self.molad()
+        weekday = molad['weekday']
+        hour = 18 + molad['hours']
+        if hour < 24:
+            if weekday != 1:
+                weekday -= 1
+            else:
+                weekday = 7
+        else:
+            hour -= 24
+        minutes = molad['parts'] // 18
+        parts = molad['parts'] % 18
+        return {
+            'weekday': weekday, 'hour': hour,
+            'minutes': minutes, 'parts': parts
+        }

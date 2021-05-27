@@ -1,8 +1,11 @@
+from copy import copy
+
+from pytest import fixture, raises
 from pyluach import dates, hebrewcal
 from pyluach.hebrewcal import Year, Month, holiday
 
 
-class TestYear(object):
+class TestYear:
 
     def test_repryear(self):
         year = Year(5777)
@@ -21,11 +24,17 @@ class TestYear(object):
         year = Year(5777)
         assert year + 2 == Year(5779)
         assert year + 0 == year
+        with raises(TypeError):
+            year + year
+        with raises(TypeError):
+            year + 'str'
 
     def test_subtractintfromyear(self):
         year = Year(5777)
         assert year - 0 == year
         assert year - 3 == Year(5774)
+        with raises(TypeError):
+            year - 'str'
 
     def test_subtractyearfromyear(self):
         year = Year(5777)
@@ -47,8 +56,46 @@ class TestYear(object):
             assert workingdate == date
             workingdate += 1
 
+    def test_errors(self):
+        with raises(ValueError):
+            Year(0)
 
-class TestMonth(object):
+
+@fixture
+def years():
+    year1 = Year(5778)
+    year2 = Year(5780)
+    return {1: year1, 2: year2}
+
+
+class TestYearComparisons:
+
+    def test_year_equals(self, years):
+        assert years[1] == copy(years[1])
+        assert (years[1] == years[2]) is False
+        assert years[2] != years[1]
+        assert (copy(years[2]) != years[2]) is False
+
+    def test_year_gt(self, years):
+        assert years[2] > years[1]
+        assert (years[1] > years[1]) is False
+
+    def test_years_ge(self, years):
+        assert copy(years[1]) >= years[1]
+        assert years[2] >= years[1]
+        assert (years[1] >= years[2]) is False
+
+    def test_years_lt(self, years):
+        assert years[1] < years[2]
+        assert (copy(years[2]) < years[2]) is False
+        assert (years[2] < years[1]) is False
+
+    def test_years_le(self, years):
+        assert copy(years[1]) <= years[1]
+        assert years[1] <= years[2]
+        assert (years[2] <= years[1]) is False
+
+class TestMonth:
 
     def test_reprmonth(self):
         month = Month(5777, 10)
@@ -67,6 +114,10 @@ class TestMonth(object):
         assert month + 6 == hebrewcal.Month(5777, 6)
         assert month + 7 == hebrewcal.Month(5778, 7)
         assert month + 35 == hebrewcal.Month(5780, 10)
+        with raises(TypeError):
+            month + month
+        with raises(TypeError):
+            month + 'str'
 
     def test_subtract_month(self):
         month1 = hebrewcal.Month(5775, 10)
@@ -80,6 +131,8 @@ class TestMonth(object):
         assert month - 2 == hebrewcal.Month(5778, 7)
         assert month - 3 == hebrewcal.Month(5777, 6)
         assert month - 30 == hebrewcal.Month(5775, 4)
+        with raises(TypeError):
+            month - 'str'
 
     def test_startingweekday(self):
         assert Month(5778, 8).starting_weekday() == 7
@@ -92,9 +145,84 @@ class TestMonth(object):
             for date in Month(year, month).iterdates():
                 assert date == workingdate
                 workingdate += 1
+    
+    def test_molad(self):
+        month = Month(5779, 7)
+        assert month.molad() == {'weekday': 2, 'hours':14, 'parts': 316}
+        month = Month(5779, 5)
+        assert month.molad() == {'weekday':5, 'hours': 10, 'parts': 399}
+    
+    def test_molad_announcement(self):
+        month = Month(5780, 3)
+        assert month.molad_announcement() == {
+            'weekday': 6, 'hour': 11, 'minutes':42, 'parts': 13
+        }
+
+        month = Month(5780, 2)
+        assert month.molad_announcement() == {
+            'weekday': 4, 'hour': 22, 'minutes': 58, 'parts': 12
+        }
+        month = Month(5780, 8)
+        assert month.molad_announcement() == {
+            'weekday': 2, 'hour': 18, 'minutes': 34, 'parts': 6
+        }
+        month = Month(5780, 12)
+        assert month.molad_announcement() == {
+            'weekday': 1, 'hour':21, 'minutes': 30, 'parts': 10
+        }
+        month = Month(5781, 1)
+        assert month.molad_announcement() == {
+            'weekday': 7, 'hour': 19, 'minutes': 3, 'parts': 5
+        }
+        month = Month(5781, 8)
+        assert month.molad_announcement() == {
+            'weekday': 7, 'hour': 3, 'minutes': 23, 'parts': 0
+        }
+    
+    def test_errors(self):
+        with raises(ValueError):
+            Month(-1, 1)
+        with raises(ValueError):
+            Month(5781, 13)
 
 
-class TestHoliday(object):
+@fixture
+def months():
+    month1 = Month(5780, 3)
+    month2 = Month(5780, 4)
+    month3 = Month(5781, 3)
+    return {1: month1, 2: month2, 3: month3}
+
+class TestCompareMonth:
+
+    def test_month_gt(self, months):
+        assert months[2] > months[1]
+        assert (months[1] > months[2]) is False
+        assert months[3] > months[1]
+        assert (months[2] > months[3]) is False
+
+    def test_month_ge(self, months):
+        assert copy(months[1]) >= months[1]
+        assert months[2] >= months[1]
+        assert (months[2] >= months[3]) is False
+
+    def test_month_lt(self, months):
+        assert (copy(months[2]) < months[2]) is False
+        assert months[1] < months[2]
+        assert months[2] < months[3]
+        assert (months[3] < months[1]) is False
+    
+    def test_month_le(self, months):
+        assert copy(months[2]) <= months[2]
+        assert months[1] <= months[2]
+        assert (months[3] <= months[2]) is False
+    
+    def rest_month_ne(self, months):
+        assert months[2] != months[1]
+        assert months[3] != months[1]
+        assert (copy(months[1]) != months[1]) is False
+
+class TestHoliday:
 
     def test_roshhashana(self):
         roshhashana = dates.HebrewDate(5779, 7, 1)
@@ -120,9 +248,11 @@ class TestHoliday(object):
         assert holiday(shmini + 1, True) is None
 
     def test_chanuka(self):
-        chanuka = dates.HebrewDate(5778, 9, 25)
-        for i in range(8):
-            assert holiday(chanuka + i) == 'Chanuka'
+        for year in [5778, 5787]:
+            chanuka = dates.HebrewDate(year, 9, 25)
+            for i in range(8):
+                assert holiday(chanuka + i) == 'Chanuka'
+            assert holiday(chanuka + 8) is None
 
     def test_tubshvat(self):
         assert holiday(dates.HebrewDate(5779, 11, 15)) == "Tu B'shvat"
@@ -146,6 +276,11 @@ class TestHoliday(object):
         assert holiday(eighth) == 'Pesach' and holiday(eighth, True) is None
         assert holiday(eighth + 1) is None
 
+    def test_pesach_sheni(self):
+        ps = dates.HebrewDate(5781, 2, 14)
+        assert holiday(ps) == 'Pesach Sheni'
+        assert holiday(ps + 1) is None
+
     def test_lagbaomer(self):
         assert holiday(dates.GregorianDate(2018, 5, 3)) == "Lag Ba'omer"
 
@@ -158,7 +293,7 @@ class TestHoliday(object):
     def test_tubeav(self):
         assert holiday(dates.HebrewDate(5779, 5, 15)) == "Tu B'av"
 
-class TestFasts(object):
+class TestFasts:
 
     def test_gedalia(self):
         assert holiday(dates.HebrewDate(5779, 7, 3)) == 'Tzom Gedalia'
@@ -197,4 +332,3 @@ class TestFasts(object):
         for fast in fasts:
             assert holiday(fast) == '9 of Av'
         assert holiday(dates.HebrewDate(5778, 5, 9)) is None
-

@@ -6,7 +6,8 @@ from pyluach import parshios, dates
 KNOWN_VALUES = {
     (2016, 1, 7): [13,],
     (2017, 3, 21): [21, 22],
-    (2017, 9, 26): None
+    (2017, 9, 26): None,
+    (2020, 9, 19): None,
     }
 
 KNOWN_VALUES_STRINGS = {
@@ -16,7 +17,7 @@ KNOWN_VALUES_STRINGS = {
     }
 
 
-class TestGetParsha(object):
+class TestGetParsha:
 
     def test_getparsha(self):
         for key in KNOWN_VALUES:
