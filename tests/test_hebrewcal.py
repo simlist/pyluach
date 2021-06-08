@@ -1,3 +1,4 @@
+import datetime
 from copy import copy
 
 from pytest import fixture, raises
@@ -59,6 +60,21 @@ class TestYear:
     def test_errors(self):
         with raises(ValueError):
             Year(0)
+
+    def test_year_string(self):
+        year = Year(5781)
+        assert year.year_string() == 'תשפ״א'
+        assert year.year_string(True) == 'ה׳תשפ״א'
+
+    def test_from_date(self):
+        date = dates.GregorianDate(2021, 6, 7)
+        year = Year.from_date(date)
+        assert year == Year(date.to_heb().year)
+
+    def test_from_pydate(self):
+        pydate = datetime.date(2021, 6, 7)
+        date = dates.HebrewDate.from_pydate(pydate)
+        assert Year.from_pydate(pydate) == Year(date.year)
 
 
 @fixture
@@ -188,12 +204,25 @@ class TestMonth:
         adar_bais = Month(5782, 13)
         assert adar_bais.month_name() == 'Adar 2'
 
+    def test_month_string(self):
+        month = Month(5781, 3)
+        assert month.month_string() == 'סיון תשפ״א'
+        assert month.month_string(True) == 'סיון ה׳תשפ״א'
+
     def test_errors(self):
         with raises(ValueError):
             Month(-1, 1)
         with raises(ValueError):
             Month(5781, 13)
 
+    def test_from_date(self):
+        date = dates.HebrewDate(5781, 7, 10)
+        assert Month.from_date(date) == Month(date.year, date.month)
+
+    def test_from_pydate(self):
+        pydate = datetime.date(2021, 6, 7)
+        date = dates.HebrewDate.from_pydate(pydate)
+        assert Month.from_pydate(pydate) == Month(date.year, date.month)
 
 @fixture
 def months():

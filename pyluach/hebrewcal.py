@@ -1,9 +1,16 @@
+"""The hebrewcal module implements classes for representing a Hebrew
+year and month.
+
+It also has functions for getting the holiday or fast day for a given
+date.
+"""
 from collections import deque
 from numbers import Number
 from functools import lru_cache
 
-from pyluach.dates import HebrewDate
+from pyluach.dates import GregorianDate, HebrewDate
 from pyluach import utils
+from pyluach.gematria import _num_to_str
 from pyluach.utils import _holiday, _fast_day_string, _festival_string
 
 
@@ -19,6 +26,7 @@ def fast_day(date, hebrew=False):
     hebrew : bool, optional
       ``True`` if you want the fast_day name in Hebrew letters. Default
       is ``False``, which returns the name transliterated into English.
+
     Returns
     -------
     str or ``None``
@@ -220,7 +228,56 @@ class Year:
         for month in self.itermonths():
             for day in month:
                 yield HebrewDate(self.year, month.month, day)
-    
+
+    @classmethod
+    def from_date(cls, date):
+        """Return Year object that given date occurs in.
+
+        Parameters
+        ----------
+        date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+            Any one of the ``pyluach`` date types.
+
+        Returns
+        -------
+        Year
+        """
+        return cls(date.to_heb().year)
+
+    @classmethod
+    def from_pydate(cls, pydate):
+        """Return Year object from python date object.
+
+        Parameters
+        ----------
+        pydate : ``datetime.date``
+            A python standard library date object
+
+        Returns
+        -------
+        Year
+            The Hebrew year the given date occurs in
+        """
+        return cls.from_date(HebrewDate.from_pydate(pydate))
+
+    def year_string(self, thousands=False):
+        """Return year as a Hebrew string.
+
+        Parameters
+        ----------
+        thousands: bool, optional
+            ``True`` to prefix the year with the thousands place.
+            default is ``False``.
+
+        Examples
+        --------
+        >>> year = Year(5781)
+        >>> year.year_string()
+        תשפ״א
+        >>> year.year_string(True)
+        ה׳תשפ״א
+        """
+        return _num_to_str(self.year, thousands)
 
 class Month:
     """A Month object represents a month of the Hebrew calendar.
@@ -340,6 +397,38 @@ class Month:
             return True
         return False
 
+    @classmethod
+    def from_date(cls, date):
+        """Return Month object that given date occurs in.
+
+        Parameters
+        ----------
+        date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+            Any ``pyluach`` date type
+        Returns
+        -------
+        Month
+            The Hebrew month the given date occurs in
+        """
+        heb = date.to_heb()
+        return Month(heb.year, heb.month)
+
+    @classmethod
+    def from_pydate(cls, pydate):
+        """Return Month object from python date object.
+
+        Parameters
+        ----------
+        pydate : ``datetime.date``
+            A python standard library date object
+
+        Returns
+        -------
+        Month
+            The Hebrew month the given date occurs in
+        """
+        return cls.from_date(HebrewDate.from_pydate(pydate))
+
     def month_name(self, hebrew=False):
         """Return the name of the month.
 
@@ -351,8 +440,31 @@ class Month:
             `True` if the month name should be written with Hebrew letters
             and False to be transliterated into English using the Ashkenazic
             pronunciation. Default is `False`.
+
+        Returns
+        -------
+        str
         """
         return utils._month_name(self.year, self.month, hebrew)
+
+    def month_string(self, thousands=False):
+        """Return month and year in Hebrew.
+
+        Parameters
+        ----------
+        thousands : bool, optional
+            ``True`` to prefix year with thousands place.
+            Default is ``False``.
+
+        Returns
+        -------
+        str
+            The month and year in Hebrew in the form ``f'{month} {year}'``.
+        """
+        return '{} {}'.format(
+            self.month_name(True),
+            _num_to_str(self.year, thousands)
+        )
 
     def starting_weekday(self):
         """Return first weekday of the month.
