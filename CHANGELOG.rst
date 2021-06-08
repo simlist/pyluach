@@ -9,9 +9,12 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 `1.3.0`_ (2021-04-__)
 ---------------------
 * Added option to get parsha in Hebrew.
-* Added option to get Month names in Hebrew.
 * Added HebrewDate methods to get hebrew day, month, year, and
   date string in Hebrew.
+* Added method to get Month names in Hebrew.
+* Added methods to get Year and month strings in Hebrew.
+* Added classmethods to Year and Month to get objects from dates and pydates
+* Added methods to dates classes to get holidays, fast days and festivals.
 * Implemented more consistent Hebrew to English transliterations for parshios.
 
 `1.2.1`_ (2020-11-08)
