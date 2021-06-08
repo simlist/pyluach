@@ -63,3 +63,9 @@ def test_iterparshios():
     for p in parshios.iterparshios(year):
         assert p == parshalist[index]
         index += 1
+
+def test_get_parshastring_hebrew():
+    date = dates.HebrewDate(5781, 3, 28)
+    assert parshios.getparsha_string(date, hebrew=True) == 'קרח'
+    date2 = dates.GregorianDate(2021, 7, 10)
+    assert parshios.getparsha_string(date2, hebrew=True) == 'מטות, מסעי'
