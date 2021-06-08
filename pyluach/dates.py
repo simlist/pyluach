@@ -503,8 +503,8 @@ class GregorianDate(BaseDate, CalendarDateMixin):
                         int(30.6001*month) + b + day + 1720994.5)
         return self._jd
 
-    @staticmethod
-    def from_pydate(pydate):
+    @classmethod
+    def from_pydate(cls, pydate):
         """Return a `GregorianDate` instance from a python date object.
 
         Parameters
@@ -516,7 +516,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         -------
         GregorianDate
         """
-        return GregorianDate(*pydate.timetuple()[:3])
+        return cls(*pydate.timetuple()[:3])
 
     @staticmethod
     def today():
@@ -787,7 +787,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     def hebrew_date_string(self, thousands=False):
         """Return a Hebrew string representation of the date.
 
-        The date is in the form f'{day} {month} {year}`.
+        The date is in the form ``f'{day} {month} {year}'``.
 
         Parameters
         ----------
