@@ -226,11 +226,15 @@ class TestHolidayMethods:
         date = dates.HebrewDate(5781, 7, 3)
         assert date.holiday() == 'Tzom Gedalia'
         assert date.holiday(False, True) == 'צום גדליה'
+        assert date.fast_day() == 'Tzom Gedalia'
+        assert date.fast_day(True) == 'צום גדליה'
 
     def test_festival(self):
         date = dates.GregorianDate(2020, 12, 11)
         assert date.holiday() == 'Chanuka'
         assert date.holiday(hebrew=True) == 'חנוכה'
+        assert date.festival() == 'Chanuka'
+        assert date.festival(hebrew=True) == 'חנוכה'
 
 
 def test_to_pydate():
