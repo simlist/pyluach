@@ -140,7 +140,7 @@ class BaseDate:
             The name of the fast day or ``None`` if the date is not
             a fast day.
         """
-        return utils._fast_day_string(self)
+        return utils._fast_day_string(self, hebrew)
 
     def festival(self, israel=False, hebrew=False):
         """Return name of Jewish festival of date.
@@ -163,7 +163,7 @@ class BaseDate:
             The name of the festival or ``None`` if the given date is not
             a Jewish festival.
         """
-        return utils._festival_string(date, israel, hebrew)
+        return utils._festival_string(self, israel, hebrew)
 
     def holiday(self, israel=False, hebrew=False):
         """Return name of Jewish holiday of the date.
