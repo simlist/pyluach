@@ -284,11 +284,6 @@ class Month:
 
     It provides the same operators as a `Year` object.
 
-    .. deprecated:: 1.3.0
-      `name` attribute will be replaced by `month_name` method, because
-      the latter allows a `hebrew` parameter. The month_name also uses
-      slightly different transliteration.
-
     Parameters
     ----------
     year : int
@@ -305,6 +300,12 @@ class Month:
         if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
     name : str
         The name of the month.
+
+        .. deprecated:: 1.3.0
+            `name` attribute will be removed in pyluach 2.0.0, it is replaced
+            by `month_name` method, because the latter allows a `hebrew`
+            parameter. The month_name also uses slightly different
+            transliteration.
     """
 
     _monthnames = {7: 'Tishrei', 8: 'Cheshvan', 9: 'Kislev', 10: 'Teves',
