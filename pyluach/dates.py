@@ -119,14 +119,23 @@ class BaseDate:
 
         Returns
         -------
-        Date
+        ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
             `self` if the date is Shabbos or else the following Shabbos as
             the same date type as operated on.
+        
+        Examples
+        --------
+        >>> heb_date = HebrewDate(5781, 3, 29)
+        >>> greg_date = heb_date.to_greg()
+        >>> heb_date.shabbos()
+        HebrewDate(5781, 4, 2)
+        >>> greg_date.shabbos()
+        GregorianDate(2021, 6, 12)
         """
         return self + (7 - self.weekday())
 
     def fast_day(self, hebrew=False):
-        """Return name of fast day or `None`.
+        """Return name of fast day of date.
 
         Parameters
         ----------
