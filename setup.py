@@ -1,6 +1,9 @@
 from setuptools import setup
 import io
 
+with open('README.rst', 'r', encoding='utf-8') as readme:
+      long_description = readme.read()
+
 setup(name='pyluach',
       version='1.3.0',
       author='MS List',
@@ -9,9 +12,10 @@ setup(name='pyluach',
       url='https://github.com/simlist/pyluach',
       license='MIT',
       description=("""Pyluach is a Python package for manipulating Hebrew dates,
-                    Gregorian-Hebrew calendar conversions, and other Jewish
-                    calendar related calculations."""),
-      long_description=io.open('README.rst').read(),
+                    Gregorian-Hebrew calendar conversions, getting the weekly
+                    parsha, and other Jewish calendar related calculations."""
+                  ),
+      long_description=long_description,
       python_requires=">=3.4",
       classifiers=[
             'Development Status :: 5 - Production/Stable',
