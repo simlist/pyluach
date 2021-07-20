@@ -40,12 +40,12 @@ Examples
 	True
     >>> today - lastweek_gregorian
     7
-    >>> greg = GregorianDate(1986, 3, 21)
-    >>> heb = HebrewDate(5746, 13, 10)
+    >>> greg = dates.GregorianDate(1986, 3, 21)
+    >>> heb = dates.HebrewDate(5746, 13, 10)
     >>> greg == heb
     True
 
-    >>> purim = HebrewDate(5781, 12, 14)
+    >>> purim = dates.HebrewDate(5781, 12, 14)
     >>> purim.hebrew_day()
     'י״ד'
     >>> purim.hebrew_date_string()
