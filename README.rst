@@ -8,7 +8,7 @@ pyluach
 .. image:: https://coveralls.io/repos/github/simlist/pyluach/badge.svg?branch=master
     :target: https://coveralls.io/github/simlist/pyluach?branch=master
 
-Pyluach is a Python package for manipulating Hebrew (Jewish) calendar dates and 
+Pyluach is a Python package for manipulating Hebrew (Jewish) calendar dates and
 Hebrew-Gregorian conversions.
 
 Features
@@ -69,7 +69,7 @@ Examples
     >>> month + 3
     Month(5781, 1)
     >>> for month in hebrewcal.Year(5774).itermonths():
-    ...     print(month.name)
+    ...     print(month.month_name())
     Tishrei Cheshvan ...
 
     >>> date = dates.GregorianDate(2010, 10, 6)
@@ -92,4 +92,3 @@ For questions and comments contact me at simlist@gmail.com.
 License
 --------
 Pyluach is licensed under the MIT license.
-
