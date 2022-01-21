@@ -15,7 +15,7 @@ docutils==0.16
 idna==2.9
 imagesize==1.2.0
 importlib-metadata==4.5.0
-ipython==7.21.0
+ipython==7.31.1
 ipython-genutils==0.2.0
 jedi==0.18.0
 jeepney==0.6.0
