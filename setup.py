@@ -5,7 +5,7 @@ with open('README.rst', 'r', encoding='utf-8') as readme:
       long_description = readme.read()
 
 setup(name='pyluach',
-      version='1.3.0',
+      version='1.4.0',
       author='MS List',
       author_email='simlist@gmail.com',
       packages=['pyluach', ],
@@ -29,6 +29,7 @@ setup(name='pyluach',
             'Programming Language :: Python :: 3.7',
             'Programming Language :: Python :: 3.8',
             'Programming Language :: Python :: 3.9',
+            'Programming Language :: Python :: 3.10',
       ],
       keywords=['hebrew', 'calendar', 'jewish', 'luach', 'gregorian',
                   'julian', 'days', 'dates', 'date', 'conversion',
