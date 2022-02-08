@@ -6,6 +6,8 @@ This document records all notable changes to `pyluach <https://github.com/simlis
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 
+`1.4.0`_ (2022-02-xx)
+
 `1.3.0`_ (2021-06-09)
 ---------------------
 * Added option to get parsha in Hebrew.
@@ -45,6 +47,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Initial public release
 
 
+.. _`1.4.0`: https://github.com/simlist/pyluach/compare/v1.3.0...v1.4.0
 .. _`1.3.0`: https://github.com/simlist/pyluach/compare/v1.2.1...v1.3.0
 .. _`1.2.1`: https://github.com/simlist/pyluach/compare/v1.2.0...v1.2.1
 .. _`1.2.0`: https://github.com/simlist/pyluach/compare/v1.1.1...v1.2.0
