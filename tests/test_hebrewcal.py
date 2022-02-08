@@ -1,5 +1,6 @@
 import datetime
 from copy import copy
+from termios import INLCR
 
 from pytest import fixture, raises
 from pyluach import dates, hebrewcal
@@ -268,17 +269,32 @@ class TestHoliday:
                     for day in[roshhashana, roshhashana + 1]
                     for location in [True, False]
                    ])
-
+        assert all([festival(day, location, include_working_days=included_days) == 'Rosh Hashana'
+            for day in [roshhashana, roshhashana + 1]
+            for location in [True, False]
+            for included_days in [True, False]
+        ])
     def test_yomkippur(self):
         yom_kippur = dates.HebrewDate(5775, 7, 10)
         assert holiday(yom_kippur) == 'Yom Kippur'
         assert holiday(yom_kippur, hebrew=True) == 'יום כיפור'
+        assert festival(yom_kippur, include_working_days=False) == 'Yom Kippur'
 
     def test_succos(self):
+        second_day = dates.HebrewDate(5782, 7, 16)
         day = dates.HebrewDate(5778, 7, 18)
         assert festival(day) == 'Succos'
         day2 = dates.HebrewDate(5778, 7, 23)
         assert festival(day2, israel=True, hebrew=True) is None
+        assert festival(day, include_working_days=False) is None
+        assert (
+            festival(second_day + 1, israel=True, include_working_days=False)
+            is None
+        )
+        assert (
+            festival(second_day, israel=False, include_working_days=False)
+            == 'Succos'
+        )
 
     def test_shmini(self):
         shmini = dates.HebrewDate(5780, 7, 22)
@@ -293,9 +309,14 @@ class TestHoliday:
             for i in range(8):
                 assert holiday(chanuka + i) == 'Chanuka'
             assert holiday(chanuka + 8) is None
+        chanuka = dates.HebrewDate(5782, 9, 25)
+        assert festival(chanuka, include_working_days=False) is None
+
 
     def test_tubshvat(self):
-        assert holiday(dates.HebrewDate(5779, 11, 15)) == "Tu B'shvat"
+        tubeshvat = dates.HebrewDate(5779, 11, 15)
+        assert holiday(tubeshvat) == "Tu B'shvat"
+        assert festival(tubeshvat, include_working_days=False) is None
 
     def test_purim(self):
         purims = [dates.HebrewDate(5778, 12, 14),
@@ -304,6 +325,11 @@ class TestHoliday:
             assert holiday(purim, hebrew=True) == 'פורים'
             assert holiday(purim + 1) == 'Shushan Purim'
         assert holiday(dates.HebrewDate(5779, 12, 14)) == 'Purim Katan'
+        for purim in purims:
+            assert (
+                festival(purim, israel=True, include_working_days=False)
+                is None
+            )
 
     def test_pesach(self):
         pesach = dates.HebrewDate(5778, 1, 15)
@@ -315,25 +341,40 @@ class TestHoliday:
         eighth = pesach + 7
         assert holiday(eighth) == 'Pesach' and holiday(eighth, True) is None
         assert holiday(eighth + 1) is None
+        chol_hamoed = [pesach + i for i in range(2, 6)]
+        for day in chol_hamoed:
+            assert festival(day, include_working_days=False) is None
+        assert (
+            festival(pesach + 1, israel=True, include_working_days=False)
+            is None
+        )
 
     def test_pesach_sheni(self):
         ps = dates.HebrewDate(5781, 2, 14)
         assert holiday(ps) == 'Pesach Sheni'
         assert holiday(ps + 1) is None
+        assert festival(ps, include_working_days=False) is None
 
     def test_lagbaomer(self):
         lag_baomer = dates.GregorianDate(2018, 5, 3)
         assert festival(lag_baomer) == "Lag Ba'omer"
         assert festival(lag_baomer, hebrew=True) == 'ל״ג בעומר'
+        assert (
+            festival(lag_baomer, hebrew=True, include_working_days=False)
+            is None
+        )
 
     def test_shavuos(self):
         shavuos = dates.HebrewDate(5778, 3, 6)
         assert all([holiday(day) == 'Shavuos' for day in [shavuos, shavuos + 1]])
         assert holiday(shavuos, True) == 'Shavuos'
         assert holiday(shavuos + 1, True) is None
+        assert festival(shavuos + 1, include_working_days=False) == 'Shavuos'
 
     def test_tubeav(self):
-        assert holiday(dates.HebrewDate(5779, 5, 15)) == "Tu B'av"
+        tubeav = dates.HebrewDate(5779, 5, 15)
+        assert holiday(tubeav) == "Tu B'av"
+        assert festival(tubeav, include_working_days=False) is None
 
 class TestFasts:
 

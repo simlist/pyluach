@@ -235,6 +235,7 @@ class TestHolidayMethods:
         assert date.holiday(hebrew=True) == 'חנוכה'
         assert date.festival() == 'Chanuka'
         assert date.festival(hebrew=True) == 'חנוכה'
+        assert date.festival(include_working_days=False) == None
 
 
 def test_to_pydate():
