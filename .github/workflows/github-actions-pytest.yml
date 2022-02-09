@@ -27,7 +27,7 @@ jobs:
       run: |
         python -m pytest --cov-report= --cov=pyluach tests/
   release:
-    needs: Build
+    needs: build
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
