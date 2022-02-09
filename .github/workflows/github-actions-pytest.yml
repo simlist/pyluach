@@ -1,8 +1,7 @@
 name: Github actions pytest
 on: ['push', 'pull_request']
 jobs:
-  build:
-    name: Build
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,9 +26,18 @@ jobs:
     - name: run-tests
       run: |
         pytest --cov-report= --cov=pyluach tests/
-  release:
-    needs: build
-    - name: Coveralls
+    - name: Coveralls parallel
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        flag-name: run-${{ matrix.python-version }}
+        parallel: true
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true
