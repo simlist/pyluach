@@ -31,8 +31,7 @@ jobs:
     container: python:3-slim
     steps:
     - name: Coveralls Finished
-      steps:
-        run: |
+      run: |
         pip3 install --upgrade coveralls
         coveralls --service=github --finish
       env:
