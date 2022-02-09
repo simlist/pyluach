@@ -36,7 +36,7 @@ def fast_day(date, hebrew=False):
     return _fast_day_string(date, hebrew)
 
 
-def festival(date, israel=False, hebrew=False):
+def festival(date, israel=False, hebrew=False, include_working_days=True):
     """Return Jewish festival of given day.
 
     This method will return all major and minor religous
@@ -62,7 +62,7 @@ def festival(date, israel=False, hebrew=False):
       The name of the festival or ``None`` if the given date is not
       a Jewish festival.
     """
-    return _festival_string(date, israel, hebrew)
+    return _festival_string(date, israel, hebrew, include_working_days)
 
 
 def holiday(date, israel=False, hebrew=False):

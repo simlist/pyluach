@@ -151,7 +151,7 @@ class BaseDate:
         """
         return utils._fast_day_string(self, hebrew)
 
-    def festival(self, israel=False, hebrew=False):
+    def festival(self, israel=False, hebrew=False, include_working_days=True):
         """Return name of Jewish festival of date.
 
         This method will return all major and minor religous
@@ -172,7 +172,9 @@ class BaseDate:
             The name of the festival or ``None`` if the given date is not
             a Jewish festival.
         """
-        return utils._festival_string(self, israel, hebrew)
+        return utils._festival_string(
+            self, israel, hebrew, include_working_days
+            )
 
     def holiday(self, israel=False, hebrew=False):
         """Return name of Jewish holiday of the date.

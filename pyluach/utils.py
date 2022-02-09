@@ -1,4 +1,5 @@
 from functools import lru_cache
+from xml.etree.ElementInclude import include
 
 
 MONTH_NAMES = [
@@ -154,7 +155,7 @@ def _fast_day_string(date, hebrew=False):
     return FAST_DAYS[fast]
 
 
-def _festival(date, israel=False):
+def _festival(date, israel=False, include_working_days=True):
     """Return Jewish festival of given day.
 
     This method will return all major and minor religous
@@ -170,11 +171,16 @@ def _festival(date, israel=False):
       ``True`` if you want the holidays according to the Israel
       schedule. Defaults to ``False``.
 
+    include_working_days : bool, optional
+      ``True`` to include holiday days in which melacha (work) is
+      allowed; ie. Pesach Sheni, Chol Hamoed, etc.
+      Default is ``True``.
+
     Returns
     -------
     str or ``None``
-      The name of the festival or ``None`` if the given date is not
-      a Jewish festival.
+      The festival or ``None`` if the given date is not a Jewish
+      festival.
     """
     date = date.to_heb()
     year = date.year
@@ -185,47 +191,52 @@ def _festival(date, israel=False):
             return 0
         elif day == 10:
             return 1
+        elif not include_working_days and (day in range(17, 22) or (israel and day == 16)):
+            return None
         elif day in range(15, 22):
             return 2
         elif day == 22:
             return 3
         elif day == 23 and israel == False:
             return 4
-    elif(month in [9, 10]):
+    elif month in [9, 10] and include_working_days:
         kislev_length = _month_length(year, 9)
         if (
            month == 9 and day in range(25, kislev_length + 1)
            or month == 10 and day in range(1, 8 - (kislev_length - 25))
         ):
             return 5
-    elif month == 11 and day == 15:
+    elif month == 11 and day == 15 and include_working_days:
         return 6
-    elif month == 12:
+    elif month == 12 and include_working_days:
         leap = _is_leap(year)
         if day == 14:
             return 7 if leap else 8
         if day == 15 and not leap:
             return 9
-    elif month == 13:
+    elif month == 13 and include_working_days:
         if day == 14:
                 return 8
         elif day == 15:
             return 9
-    elif month == 1 and day in range(15, 22 if israel else 23):
-        return 10
-    elif month == 2 and day == 14:
+    elif month ==1:
+        if not include_working_days and (day in range(17, 21) or (israel and day == 16)):
+            return None
+        elif day in range(15, 22 if israel else 23):
+            return 10
+    elif month == 2 and day == 14 and include_working_days:
         return 11
-    elif month == 2 and day == 18:
+    elif month == 2 and day == 18 and include_working_days:
         return 12
-    elif month == 3 and (day == 6 if israel else day in (6, 7)):
+    elif month == 3 and day == 6 or (not israel and day == 7):
         return 13
-    elif month == 5 and day == 15:
+    elif month == 5 and day == 15 and include_working_days:
         return 14
     return None
 
 
-def _festival_string(date, israel=False, hebrew=False):
-    festival = _festival(date, israel)
+def _festival_string(date, israel=False, hebrew=False, include_working_days=True):
+    festival = _festival(date, israel, include_working_days)
     if festival is None:
         return None
     if hebrew:
