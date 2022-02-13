@@ -166,9 +166,9 @@ class BaseDate:
             ``True`` if you want the festival name in Hebrew letters. Default
             is ``False``, which returns the name transliterated into English.
         include_working_days : bool, optional
-        ``True`` to include holiday days in which melacha (work) is
-        allowed; ie. Pesach Sheni, Chol Hamoed, etc.
-        Default is ``True``.
+            ``True`` to include holiday days in which melacha (work) is
+            allowed; ie. Pesach Sheni, Chol Hamoed, etc.
+            Default is ``True``.
 
         Returns
         -------
