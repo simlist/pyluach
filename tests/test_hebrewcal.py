@@ -269,7 +269,7 @@ class TestHoliday:
         roshhashana = dates.HebrewDate(5779, 7, 1)
         assert all([
             holiday(day, location) == 'Rosh Hashana'
-            for day in[roshhashana, roshhashana + 1]
+            for day in [roshhashana, roshhashana + 1]
             for location in [True, False]
         ])
         assert all([

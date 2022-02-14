@@ -18,14 +18,14 @@ KNOWN_VALUES_STRINGS = {
 class TestGetParsha:
 
     def test_getparsha(self):
-        for key in KNOWN_VALUES:
-            assert (parshios.getparsha(dates.GregorianDate(*key)) ==
-                    KNOWN_VALUES[key])
+        for key, value in KNOWN_VALUES.items():
+            assert parshios.getparsha(dates.GregorianDate(*key)) == value
 
     def test_getparsha_string(self):
-        for key in KNOWN_VALUES_STRINGS:
-            assert (parshios.getparsha_string(dates.GregorianDate(*key)) ==
-                    KNOWN_VALUES_STRINGS[key])
+        for key, value in KNOWN_VALUES_STRINGS.items():
+            assert (
+                parshios.getparsha_string(dates.GregorianDate(*key)) == value
+            )
 
     def test_chukas_balak(self):
         chukas_balak = dates.HebrewDate(5780, 4, 12)
