@@ -55,67 +55,67 @@ class BaseDate:
     def __add__(self, other):
         try:
             return JulianDay(self.jd + other)._to_x(self)
-        except TypeError:
-            raise TypeError('You can only add a number to a date.')
+        except TypeError as e:
+            raise TypeError('You can only add a number to a date.') from e
 
     def __sub__(self, other):
         try:
             if isinstance(other, Number):
                 return JulianDay(self.jd - other)._to_x(self)
             return abs(self.jd - other.jd)
-        except (AttributeError, TypeError):
+        except (AttributeError, TypeError) as e:
             raise TypeError(
                 'You can only subtract a number or another date'
                 'that has a "jd" attribute from a date'
-            )
+            ) from e
 
     def __eq__(self, other):
         try:
             if self.jd == other.jd:
                 return True
             return False
-        except AttributeError:
-            raise TypeError(self._error_string)
+        except AttributeError as e:
+            raise TypeError(self._error_string) from e
 
     def __ne__(self, other):
         try:
             if self.jd != other.jd:
                 return True
             return False
-        except AttributeError:
-            raise TypeError(self._error_string)
+        except AttributeError as e:
+            raise TypeError(self._error_string) from e
 
     def __lt__(self, other):
         try:
             if self.jd < other.jd:
                 return True
             return False
-        except AttributeError:
-            raise TypeError(self._error_string)
+        except AttributeError as e:
+            raise TypeError(self._error_string) from e
 
     def __gt__(self, other):
         try:
             if self.jd > other.jd:
                 return True
             return False
-        except AttributeError:
-            raise TypeError(self._error_string)
+        except AttributeError as e:
+            raise TypeError(self._error_string) from e
 
     def __le__(self, other):
         try:
             if self.jd <= other.jd:
                 return True
             return False
-        except AttributeError:
-            raise TypeError(self._error_string)
+        except AttributeError as e:
+            raise TypeError(self._error_string) from e
 
     def __ge__(self, other):
         try:
             if self.jd >= other.jd:
                 return True
             return False
-        except AttributeError:
-            raise TypeError(self._error_string)
+        except AttributeError as e:
+            raise TypeError(self._error_string) from e
 
     def shabbos(self):
         """Return the Shabbos on or following the date.
@@ -432,6 +432,7 @@ class JulianDay(BaseDate):
             return self.to_heb()
         elif isinstance(type_, JulianDay):
             return self
+        return None
 
     def to_pydate(self):
         """Convert to a datetime.date object.
@@ -512,8 +513,9 @@ class GregorianDate(BaseDate, CalendarDateMixin):
             month += 1
             a = year // 100
             b = 2 - a + a//4
-            self._jd = (int(365.25*year) +
-                        int(30.6001*month) + b + day + 1720994.5)
+            self._jd = (
+                int(365.25*year) + int(30.6001*month) + b + day + 1720994.5
+            )
         return self._jd
 
     @classmethod
@@ -568,10 +570,12 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     def _monthlength(cls, year, month):
         if month in [1, 3, 5, 7, 8, 10, 12]:
             return 31
-        elif month != 2:
+        if month != 2:
             return 30
+        if cls._is_leap(year):
+            return 29
         else:
-            return 29 if cls._is_leap(year) else 28
+            return 28
 
     def to_jd(self):
         """Convert to a Julian day.
