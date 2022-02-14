@@ -59,9 +59,9 @@ PARSHIOS_HEBREW = [
 
 
 def _parshaless(date, israel=False):
-    if israel and date.tuple()[1:] in [(7,23), (1,22), (3,7)]:
+    if israel and date.tuple()[1:] in [(7, 23), (1, 22), (3, 7)]:
         return False
-    if date.month == 7 and date.day in ([1,2,10] + list(range(15, 24))):
+    if date.month == 7 and date.day in ([1, 2, 10] + list(range(15, 24))):
         return True
     if date.month == 1 and date.day in range(15, 23):
         return True
@@ -91,17 +91,19 @@ def _gentable(year, israel=False):
             table[shabbos] = None
         else:
             parsha = parshalist.popleft()
-            table[shabbos] = [parsha,]
-            if(
-               (parsha == 21 and (HebrewDate(year, 1, 14)-shabbos) // 7 < 3) or
-               (parsha in [26, 28] and not leap) or
-               (parsha == 31 and not leap and (
-                                               not israel or pesachday != 7
-                                               )) or
-               (parsha == 38 and not israel and pesachday == 5) or
-               (parsha == 41 and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2)  or
-               (parsha == 50 and HebrewDate(year+1, 7, 1).weekday() > 4)
-               ):  #  If any of that then it's a double parsha.
+            table[shabbos] = [parsha]
+            if (
+                (parsha == 21 and (HebrewDate(year, 1, 14)-shabbos) // 7 < 3)
+                or (parsha in [26, 28] and not leap)
+                or (
+                    parsha == 31 and not leap
+                    and (not israel or pesachday != 7)
+                )
+                or (parsha == 38 and not israel and pesachday == 5)
+                or (parsha == 41 and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2)
+                or (parsha == 50 and HebrewDate(year+1, 7, 1).weekday() > 4)
+            ):
+                #  If any of that then it's a double parsha.
                 table[shabbos].append(parshalist.popleft())
         shabbos += 7
     return table
@@ -184,9 +186,9 @@ def iterparshios(year, israel=False):
     Yields
     ------
     list of ints or ``None``
-      A list of the numbers of the parshios for the next Shabbos in the given year.
-      Yields ``None`` for a Shabbos that doesn't have its own parsha
-      (i.e. it occurs on a yom tov).
+      A list of the numbers of the parshios for the next Shabbos in the
+      given year. Yields ``None`` for a Shabbos that doesn't have its
+      own parsha (i.e. it occurs on a yom tov).
     """
     table = _gentable(year, israel)
     for shabbos in table.values():

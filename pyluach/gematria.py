@@ -23,14 +23,16 @@ _GEMATRIOS = {
     400: 'ת'
 }
 
+
 def _stringify_gematria(letters):
     """Insert geresh or gershayim symbols into gematria."""
     length = len(letters)
     if length > 1:
-        return '{}״{}'.format(letters[:-1], letters[-1])
+        return f'{letters[:-1]}״{letters[-1]}'
     if length == 1:
-        return '{}׳'.format(letters)
+        return f'{letters}׳'
     return ''
+
 
 def _get_letters(num):
     """Convert numbers under 1,000 into raw letters."""
@@ -41,12 +43,13 @@ def _get_letters(num):
     ones = _GEMATRIOS.get(ones, '')
     tens = _GEMATRIOS.get(tens, '')
     hundreds = _GEMATRIOS.get(hundreds % 400, '')
-    letters = '{}{}{}{}'.format(four_hundreds, hundreds, tens, ones)
+    letters = f'{four_hundreds}{hundreds}{tens}{ones}'
     return letters.replace('יה', 'טו').replace('יו', 'טז')
+
 
 def _num_to_str(num, thousands=False):
     """Return gematria string for number.
-    
+
     Parameters
     ----------
     num : int
@@ -54,7 +57,7 @@ def _num_to_str(num, thousands=False):
     thousands : bool, optional
         True if the hebrew returned should include a letter for the
         thousands place ie. 'ה׳' for five thousand.
-    
+
     Returns
     -------
     str
@@ -62,6 +65,6 @@ def _num_to_str(num, thousands=False):
     """
     letters = _stringify_gematria(_get_letters(num))
     if thousands:
-        thousand = _get_letters(num // 1000) + '׳'
-        letters = thousand + letters
+        thousand = ''.join([_get_letters(num // 1000), '׳'])
+        letters = ''.join([thousand, letters])
     return letters

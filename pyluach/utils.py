@@ -1,37 +1,31 @@
 from functools import lru_cache
-from xml.etree.ElementInclude import include
 
 
 MONTH_NAMES = [
     'Nissan', 'Iyar', 'Sivan', 'Tammuz', 'Av', 'Elul', 'Tishrei', 'Cheshvan',
-    'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 1', 'Adar 2'
-]
+    'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 1', 'Adar 2']
 
 MONTH_NAMES_HEBREW = [
     'ניסן', 'אייר', 'סיון', 'תמוז', 'אב', 'אלול', 'תשרי', 'חשון', 'כסלו',
-    'טבת', 'שבט', 'אדר', 'אדר א׳', 'אדר ב׳'
-]
-
+    'טבת', 'שבט', 'אדר', 'אדר א׳', 'אדר ב׳']
 
 FAST_DAYS = [
-    'Tzom Gedalia', '10 of Teves', 'Taanis Esther', '17 of Tamuz', '9 of Av'
-]
+    'Tzom Gedalia', '10 of Teves', 'Taanis Esther', '17 of Tamuz', '9 of Av']
 
 FAST_DAYS_HEBREW = [
-    'צום גדליה', 'י׳ בטבת', 'תענית אסתר', 'י״ז בתמוז', 'ט׳ באב'
-]
+    'צום גדליה', 'י׳ בטבת', 'תענית אסתר', 'י״ז בתמוז', 'ט׳ באב']
 
 FESTIVALS = [
     'Rosh Hashana', 'Yom Kippur', 'Succos', 'Shmini Atzeres', 'Simchas Torah',
     'Chanuka', "Tu B'shvat", 'Purim Katan', 'Purim', 'Shushan Purim',
-    'Pesach', 'Pesach Sheni', "Lag Ba'omer", 'Shavuos', "Tu B'av"
-]
+    'Pesach', 'Pesach Sheni', "Lag Ba'omer", 'Shavuos', "Tu B'av"]
 
 FESTIVALS_HEBREW = [
     'ראש השנה', 'יום כיפור', 'סוכות', 'שמיני עצרת', 'שמחת תורה', 'חנוכה',
     'ט״ו בשבט', 'פורים קטן', 'פורים', 'שושן פורים', 'פסח', 'פסח שני',
     'ל״ג בעומר', 'שבועות', 'ט״ו באב'
 ]
+
 
 def _is_leap(year):
     if (((7*year) + 1) % 19) < 7:
@@ -47,22 +41,22 @@ def _elapsed_months(year):
 def _elapsed_days(year):
     months_elapsed = _elapsed_months(year)
     parts_elapsed = 204 + 793*(months_elapsed%1080)
-    hours_elapsed = (5 + 12*months_elapsed + 793*(months_elapsed//1080) +
-                        parts_elapsed//1080)
+    hours_elapsed = (
+        5 + 12*months_elapsed + 793*(months_elapsed//1080)
+        + parts_elapsed//1080)
     conjunction_day = 1 + 29*months_elapsed + hours_elapsed//24
     conjunction_parts = 1080 * (hours_elapsed%24) + parts_elapsed%1080
 
     if (
-            (conjunction_parts >= 19440) or
-            (
-            (conjunction_day % 7 == 2) and
-            (conjunction_parts >= 9924) and
-            (not _is_leap(year))
-            ) or
-            (
-            (conjunction_day % 7 == 1) and
-            conjunction_parts >= 16789 and _is_leap(year - 1))):
-        # if all that
+            (conjunction_parts >= 19440)
+            or (
+                (conjunction_day % 7 == 2) and (conjunction_parts >= 9924)
+                and not _is_leap(year)
+            )
+            or (
+                (conjunction_day % 7 == 1) and conjunction_parts >= 16789
+                and _is_leap(year - 1))
+            ):
         alt_day = conjunction_day + 1
     else:
         alt_day = conjunction_day
@@ -75,17 +69,19 @@ def _elapsed_days(year):
 def _days_in_year(year):
     return _elapsed_days(year + 1) - _elapsed_days(year)
 
+
 def _long_cheshvan(year):
     """Returns True if Cheshvan has 30 days"""
     return _days_in_year(year) % 10 == 5
+
 
 def _short_kislev(year):
     """Returns True if Kislev has 29 days"""
     return _days_in_year(year) % 10 == 3
 
+
 def _month_length(year, month):
     """Months start with Nissan (Nissan is 1 and Tishrei is 7)"""
-
     if month in [1, 3, 5, 7, 11]:
         return 30
     elif month in [2, 4, 6, 10, 13]:
@@ -101,7 +97,7 @@ def _month_length(year, month):
 def _month_name(year, month, hebrew):
     index = month
     if month < 12 or not _is_leap(year):
-        index -=1
+        index -= 1
     if hebrew:
         return MONTH_NAMES_HEBREW[index]
     return MONTH_NAMES[index]
@@ -151,7 +147,7 @@ def _fast_day_string(date, hebrew=False):
     if fast is None:
         return None
     if hebrew:
-       return FAST_DAYS_HEBREW[fast] 
+        return FAST_DAYS_HEBREW[fast]
     return FAST_DAYS[fast]
 
 
@@ -191,20 +187,23 @@ def _festival(date, israel=False, include_working_days=True):
             return 0
         elif day == 10:
             return 1
-        elif not include_working_days and (day in range(17, 22) or (israel and day == 16)):
+        elif (
+                not include_working_days
+                and (day in range(17, 22) or (israel and day == 16))
+                ):
             return None
         elif day in range(15, 22):
             return 2
         elif day == 22:
             return 3
-        elif day == 23 and israel == False:
+        elif day == 23 and not israel:
             return 4
     elif month in [9, 10] and include_working_days:
         kislev_length = _month_length(year, 9)
         if (
-           month == 9 and day in range(25, kislev_length + 1)
-           or month == 10 and day in range(1, 8 - (kislev_length - 25))
-        ):
+                month == 9 and day in range(25, kislev_length + 1)
+                or month == 10 and day in range(1, 8 - (kislev_length - 25))
+                ):
             return 5
     elif month == 11 and day == 15 and include_working_days:
         return 6
@@ -219,8 +218,11 @@ def _festival(date, israel=False, include_working_days=True):
                 return 8
         elif day == 15:
             return 9
-    elif month ==1:
-        if not include_working_days and (day in range(17, 21) or (israel and day == 16)):
+    elif month == 1:
+        if (
+            not include_working_days
+            and (day in range(17, 21) or (israel and day == 16))
+        ):
             return None
         elif day in range(15, 22 if israel else 23):
             return 10
@@ -235,7 +237,8 @@ def _festival(date, israel=False, include_working_days=True):
     return None
 
 
-def _festival_string(date, israel=False, hebrew=False, include_working_days=True):
+def _festival_string(
+        date, israel=False, hebrew=False, include_working_days=True):
     festival = _festival(date, israel, include_working_days)
     if festival is None:
         return None

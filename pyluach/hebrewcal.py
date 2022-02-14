@@ -284,6 +284,7 @@ class Year:
         """
         return _num_to_str(self.year, thousands)
 
+
 class Month:
     """A Month object represents a month of the Hebrew calendar.
 
@@ -313,9 +314,10 @@ class Month:
             transliteration.
     """
 
-    _monthnames = {7: 'Tishrei', 8: 'Cheshvan', 9: 'Kislev', 10: 'Teves',
-                  11: 'Shvat', 13:'Adar Sheni', 1: 'Nissan', 2: 'Iyar',
-                  3: 'Sivan', 4: 'Tamuz', 5: 'Av', 6: 'Elul'}
+    _monthnames = {
+        7: 'Tishrei', 8: 'Cheshvan', 9: 'Kislev', 10: 'Teves',
+        11: 'Shvat', 13: 'Adar Sheni', 1: 'Nissan', 2: 'Iyar',
+        3: 'Sivan', 4: 'Tamuz', 5: 'Av', 6: 'Elul'}
 
     def __init__(self, year, month):
         if year < 1:
@@ -358,7 +360,6 @@ class Month:
         except (AttributeError, TypeError):
             raise TypeError('You can only add a number to a year.')
 
-
     def __sub__(self, other):
         if isinstance(other, Number):
             yearmonths = list(Year(self.year))
@@ -366,11 +367,11 @@ class Month:
             leftover_months = index
             if other <= leftover_months:
                 return Month(self.year, yearmonths[index - other])
-            return Month(self.year - 1,
-                         deque(Year(self.year - 1), maxlen=1).pop()).__sub__(
-                                                    other - 1 - leftover_months
-                                                    )
-                    # Recursive call on the last month of the previous year. 
+            return Month(
+                self.year - 1,
+                deque(Year(self.year - 1), maxlen=1).pop()
+            ).__sub__(other - 1 - leftover_months)
+            # Recursive call on the last month of the previous year.
         try:
             return abs(self._elapsed_months() - other._elapsed_months())
         except AttributeError:
@@ -531,7 +532,7 @@ class Month:
 
     def molad_announcement(self):
         """Return the months molad in the announcement form.
-        
+
         Returns a dictionary in the form that the molad is traditionally
         announced. The weekday is adjusted to change at midnight and
         the hour of the day and minutes are given as traditionally announced.

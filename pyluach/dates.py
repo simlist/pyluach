@@ -48,6 +48,8 @@ class BaseDate:
     diffed with any other valid date type.
     """
 
+    _error_string = 'An error has occured.'
+
     def __hash__(self):
         return hash(self.jd)
 
@@ -122,7 +124,7 @@ class BaseDate:
         ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
             `self` if the date is Shabbos or else the following Shabbos as
             the same date type as operated on.
-        
+
         Examples
         --------
         >>> heb_date = HebrewDate(5781, 3, 29)
@@ -177,8 +179,7 @@ class BaseDate:
             a Jewish festival.
         """
         return utils._festival_string(
-            self, israel, hebrew, include_working_days
-            )
+            self, israel, hebrew, include_working_days)
 
     def holiday(self, israel=False, hebrew=False):
         """Return name of Jewish holiday of the date.
@@ -212,7 +213,7 @@ class BaseDate:
             An integer representing the day of the week where Monday
             is 1 and and Sunday is 7.
         """
-        weekday = self.weekday() 
+        weekday = self.weekday()
         if weekday == 1:
             return 7
         return weekday - 1
@@ -242,19 +243,15 @@ class CalendarDateMixin:
         self.month = month
         self.day = day
         self._jd = jd
-        self. _error_string = ('''Only a date with a "jd" attribute can
-                              be compared to a {0}'''.format(
-                                                self.__class__.__name__)
-                              )
+        self. _error_string = f"""Only a date with a "jd" attribute can
+                              be compared to a {self.__class__.__name__}"""
 
     def __repr__(self):
-        return '{0}({1}, {2}, {3})'.format(self.__class__.__name__,
-                                           self.year,
-                                           self.month,
-                                           self.day)
+        class_name = self.__class__.__name__
+        return f'{class_name}({self.year}, {self.month}, {self.day})'
 
     def __str__(self):
-        return '{0:04d}-{1:02d}-{2:02d}'.format(self.year, self.month, self.day)
+        return f'{self.year:04d}-{self.month:02d}-{self.day:02d}'
 
     def __iter__(self):
         yield self.year
@@ -271,7 +268,7 @@ class CalendarDateMixin:
             through Saturday as 7.
         """
         return int(self.jd+.5+1) % 7 + 1
-    
+
     def tuple(self):
         """Return date as tuple.
 
@@ -319,7 +316,7 @@ class JulianDay(BaseDate):
             self.day = int(day) + .5
         self.jd = self.day
         self._error_string = """Only a date with a "jd" attribute can
-        be compared to a Julian Day instance."""
+            be compared to a Julian Day instance."""
 
     def __repr__(self):
         return 'JulianDay({0})'.format(self.day)
@@ -340,7 +337,7 @@ class JulianDay(BaseDate):
     @staticmethod
     def from_pydate(pydate):
         """Return a `JulianDay` from a python date object.
-        
+
         Parameters
         ----------
         pydate : datetime.date
@@ -407,7 +404,7 @@ class JulianDay(BaseDate):
 
         jd = int(self.day + .5)  # Try to account for half day
         jd -= 347997
-        year = int(jd//365) + 2  ## try that to debug early years
+        year = int(jd//365) + 2  # try that to debug early years
         first_day = utils._elapsed_days(year)
 
         while first_day > jd:
@@ -482,10 +479,10 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         adding in date validation specific to Gregorian dates.
         """
         if month < 1 or month > 12:
-            raise ValueError('{0} is an invalid month.'.format(str(month)))
+            raise ValueError(f'{str(month)} is an invalid month.')
         monthlength = self._monthlength(year, month)
         if day < 1 or day > monthlength:
-            raise ValueError('Given month has {0} days.'.format(monthlength))
+            raise ValueError(f'Given month has {monthlength} days.')
         super().__init__(year, month, day, jd)
 
     @property
@@ -552,11 +549,11 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         """Return True if year of date is a leap year, otherwise False."""
         if year < 0:
             year += 1
-        if(
-            (year % 4 == 0) and not
-            (year % 100 == 0 and year % 400 != 0)
-          ):
-                return True
+        if (
+                (year % 4 == 0) and not
+                (year % 100 == 0 and year % 400 != 0)
+                ):
+            return True
         return False
 
     def is_leap(self):
@@ -690,7 +687,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     @staticmethod
     def from_pydate(pydate):
         """Return a `HebrewDate` from a python date object.
-        
+
         Parameters
         ----------
         pydate : datetime.date
