@@ -1,6 +1,5 @@
 import datetime
 from copy import copy
-from termios import INLCR
 
 from pytest import fixture, raises
 from pyluach import dates, hebrewcal
@@ -112,6 +111,7 @@ class TestYearComparisons:
         assert years[1] <= years[2]
         assert (years[2] <= years[1]) is False
 
+
 class TestMonth:
 
     def test_reprmonth(self):
@@ -157,24 +157,23 @@ class TestMonth:
 
     def test_iterdate(self):
         year = 5770
-        workingdate = dates.HebrewDate(year, 7 ,1)
+        workingdate = dates.HebrewDate(year, 7, 1)
         for month in (list(range(7, 13)) + list(range(1, 7))):
             for date in Month(year, month).iterdates():
                 assert date == workingdate
                 workingdate += 1
-    
+
     def test_molad(self):
         month = Month(5779, 7)
-        assert month.molad() == {'weekday': 2, 'hours':14, 'parts': 316}
+        assert month.molad() == {'weekday': 2, 'hours': 14, 'parts': 316}
         month = Month(5779, 5)
-        assert month.molad() == {'weekday':5, 'hours': 10, 'parts': 399}
-    
+        assert month.molad() == {'weekday': 5, 'hours': 10, 'parts': 399}
+
     def test_molad_announcement(self):
         month = Month(5780, 3)
         assert month.molad_announcement() == {
-            'weekday': 6, 'hour': 11, 'minutes':42, 'parts': 13
+            'weekday': 6, 'hour': 11, 'minutes': 42, 'parts': 13
         }
-
         month = Month(5780, 2)
         assert month.molad_announcement() == {
             'weekday': 4, 'hour': 22, 'minutes': 58, 'parts': 12
@@ -185,7 +184,7 @@ class TestMonth:
         }
         month = Month(5780, 12)
         assert month.molad_announcement() == {
-            'weekday': 1, 'hour':21, 'minutes': 30, 'parts': 10
+            'weekday': 1, 'hour': 21, 'minutes': 30, 'parts': 10
         }
         month = Month(5781, 1)
         assert month.molad_announcement() == {
@@ -195,7 +194,7 @@ class TestMonth:
         assert month.molad_announcement() == {
             'weekday': 7, 'hour': 3, 'minutes': 23, 'parts': 0
         }
-    
+
     def test_month_name(self):
         month = Month(5781, 9)
         assert month.month_name() == 'Kislev'
@@ -225,12 +224,14 @@ class TestMonth:
         date = dates.HebrewDate.from_pydate(pydate)
         assert Month.from_pydate(pydate) == Month(date.year, date.month)
 
+
 @fixture
 def months():
     month1 = Month(5780, 3)
     month2 = Month(5780, 4)
     month3 = Month(5781, 3)
     return {1: month1, 2: month2, 3: month3}
+
 
 class TestCompareMonth:
 
@@ -250,30 +251,37 @@ class TestCompareMonth:
         assert months[1] < months[2]
         assert months[2] < months[3]
         assert (months[3] < months[1]) is False
-    
+
     def test_month_le(self, months):
         assert copy(months[2]) <= months[2]
         assert months[1] <= months[2]
         assert (months[3] <= months[2]) is False
-    
+
     def rest_month_ne(self, months):
         assert months[2] != months[1]
         assert months[3] != months[1]
         assert (copy(months[1]) != months[1]) is False
 
+
 class TestHoliday:
 
     def test_roshhashana(self):
         roshhashana = dates.HebrewDate(5779, 7, 1)
-        assert all([holiday(day, location) == 'Rosh Hashana'
-                    for day in[roshhashana, roshhashana + 1]
-                    for location in [True, False]
-                   ])
-        assert all([festival(day, location, include_working_days=included_days) == 'Rosh Hashana'
+        assert all([
+            holiday(day, location) == 'Rosh Hashana'
+            for day in[roshhashana, roshhashana + 1]
+            for location in [True, False]
+        ])
+        assert all([
+            festival(
+                day, location,
+                include_working_days=included_days
+            ) == 'Rosh Hashana'
             for day in [roshhashana, roshhashana + 1]
             for location in [True, False]
             for included_days in [True, False]
         ])
+
     def test_yomkippur(self):
         yom_kippur = dates.HebrewDate(5775, 7, 10)
         assert holiday(yom_kippur) == 'Yom Kippur'
@@ -312,7 +320,6 @@ class TestHoliday:
         chanuka = dates.HebrewDate(5782, 9, 25)
         assert festival(chanuka, include_working_days=False) is None
 
-
     def test_tubshvat(self):
         tubeshvat = dates.HebrewDate(5779, 11, 15)
         assert holiday(tubeshvat) == "Tu B'shvat"
@@ -333,11 +340,11 @@ class TestHoliday:
 
     def test_pesach(self):
         pesach = dates.HebrewDate(5778, 1, 15)
-        for i in range (6):
+        for i in range(6):
             assert (
-                    holiday(pesach + i, True) == 'Pesach' and
-                    holiday(pesach + i) == 'Pesach'
-                   )
+                holiday(pesach + i, True) == 'Pesach'
+                and holiday(pesach + i) == 'Pesach'
+            )
         eighth = pesach + 7
         assert holiday(eighth) == 'Pesach' and holiday(eighth, True) is None
         assert holiday(eighth + 1) is None
@@ -366,7 +373,8 @@ class TestHoliday:
 
     def test_shavuos(self):
         shavuos = dates.HebrewDate(5778, 3, 6)
-        assert all([holiday(day) == 'Shavuos' for day in [shavuos, shavuos + 1]])
+        assert all([
+            holiday(day) == 'Shavuos' for day in [shavuos, shavuos + 1]])
         assert holiday(shavuos, True) == 'Shavuos'
         assert holiday(shavuos + 1, True) is None
         assert festival(shavuos + 1, include_working_days=False) == 'Shavuos'
@@ -376,12 +384,15 @@ class TestHoliday:
         assert holiday(tubeav) == "Tu B'av"
         assert festival(tubeav, include_working_days=False) is None
 
+
 class TestFasts:
 
     def test_gedalia(self):
         assert fast_day(dates.HebrewDate(5779, 7, 3)) == 'Tzom Gedalia'
         assert holiday(dates.HebrewDate(5778, 7, 3)) is None
-        assert holiday(dates.HebrewDate(5778, 7, 4), hebrew=True) == 'צום גדליה'
+        assert (
+            holiday(dates.HebrewDate(5778, 7, 4), hebrew=True) == 'צום גדליה'
+        )
 
     def test_asara(self):
         ten_of_teves = dates.GregorianDate(2018, 12, 18)
@@ -392,11 +403,11 @@ class TestFasts:
         fasts = [
             dates.HebrewDate(5778, 12, 13),
             dates.HebrewDate(5776, 13, 13),
-            dates.HebrewDate(5777, 12, 11),  #nidche
-            dates.HebrewDate(5784, 13, 11)  #ibbur and nidche
+            dates.HebrewDate(5777, 12, 11),  # nidche
+            dates.HebrewDate(5784, 13, 11)  # ibbur and nidche
         ]
         for fast in fasts:
-            assert holiday(fast)  == 'Taanis Esther'
+            assert holiday(fast) == 'Taanis Esther'
         non_fasts = [
             dates.HebrewDate(5776, 12, 13),
             dates.HebrewDate(5777, 12, 13),

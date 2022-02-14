@@ -52,11 +52,13 @@ class TestClassesConversion:
             greg = dates.HebrewDate(*KNOWN_VALUES[date]).to_greg().tuple()
             assert date == greg
 
+
 @pytest.fixture
 def setup(scope='module'):
     caltypes = [GregorianDate, HebrewDate, JulianDay]
-    deltas =  [0, 1, 29, 73, 1004]
-    return  {'caltypes': caltypes, 'deltas': deltas}
+    deltas = [0, 1, 29, 73, 1004]
+    return {'caltypes': caltypes, 'deltas': deltas}
+
 
 class TestOperators:
 
@@ -68,7 +70,7 @@ class TestOperators:
                 assert date.jd + delta == date2.jd
 
     def test_min_int(self, setup):
-        '''Test subtracting a number from a date'''
+        """Test subtracting a number from a date"""
         for cal in setup['caltypes']:
             for delta in setup['deltas']:
                 date = cal.today()
@@ -76,12 +78,12 @@ class TestOperators:
                 assert date.jd - delta == date2.jd
 
     def test_min_date(self, setup):
-        '''Test subtracting one date from another
+        """Test subtracting one date from another
 
         This test loops through subtracting the current date of each
         calendar from a date of each calendar at intervals from the
         current date.
-        '''
+        """
         for cal in setup['caltypes']:
             for cal2 in setup['caltypes']:
                 for delta in setup['deltas']:
@@ -168,14 +170,17 @@ class TestErrors:
                     HebrewDate(*datetuple)
 
     def test_GregorianDate_errors(self):
-        for datetuple in [(2018, 0, 3), (2018, -2, 8), (2018, 13, 9),
-                          (2018, 2, 0), (2018, 2, 29), (2012, 2, 30)]:
-                          with pytest.raises(ValueError):
-                            GregorianDate(*datetuple)
-    
+        for datetuple in [
+            (2018, 0, 3), (2018, -2, 8), (2018, 13, 9),
+            (2018, 2, 0), (2018, 2, 29), (2012, 2, 30)
+        ]:
+            with pytest.raises(ValueError):
+                GregorianDate(*datetuple)
+
     def test_JD_errors(self):
         with pytest.raises(ValueError):
             JulianDay(-1).to_heb()
+
 
 class TestReprandStr:
     def test_repr(self, datetypeslist):
@@ -194,16 +199,19 @@ class TestReprandStr:
         assert str(GregorianDate(2008, 12, 2)) == '2008-12-02'
         assert str(GregorianDate(1, 1, 1)) == '0001-01-01'
 
+
 def test_weekday():
     assert GregorianDate(2017, 8, 7).weekday() == 2
     assert HebrewDate(5777, 6, 1).weekday() == 4
     assert JulianDay(2458342.5).weekday() == 1
 
+
 def test_isoweekday():
     assert GregorianDate(2020, 9, 20).isoweekday() == 7
     assert GregorianDate(2020, 10, 3).isoweekday() == 6
-    assert GregorianDate(2020, 10, 5).isoweekday() == 1 
+    assert GregorianDate(2020, 10, 5).isoweekday() == 1
     assert JulianDay(2458342.5).isoweekday() == 7
+
 
 class TestMixinMethods:
 
@@ -235,7 +243,7 @@ class TestHolidayMethods:
         assert date.holiday(hebrew=True) == 'חנוכה'
         assert date.festival() == 'Chanuka'
         assert date.festival(hebrew=True) == 'חנוכה'
-        assert date.festival(include_working_days=False) == None
+        assert date.festival(include_working_days=False) is None
 
 
 def test_to_pydate():
@@ -244,20 +252,24 @@ def test_to_pydate():
     for day_type in [day, jd]:
         assert day_type.to_pydate() == datetime.date(2018, 8, 12)
 
+
 def test_from_pydate():
     date = datetime.date(2018, 8, 27)
     assert date == GregorianDate.from_pydate(date).to_jd().to_pydate()
     assert date == HebrewDate.from_pydate(date).to_pydate()
     assert date == JulianDay.from_pydate(date).to_pydate()
 
+
 def test_is_leap():
-    assert GregorianDate(2020, 10, 26).is_leap() == True
-    assert GregorianDate(2021, 10, 26).is_leap() == False
+    assert GregorianDate(2020, 10, 26).is_leap() is True
+    assert GregorianDate(2021, 10, 26).is_leap() is False
+
 
 def test_hebrew_date_string():
     date = HebrewDate(5782, 7, 1)
     assert date.hebrew_date_string() == 'א׳ תשרי תשפ״ב'
     assert date.hebrew_date_string(True) == 'א׳ תשרי ה׳תשפ״ב'
+
 
 def test_month_name():
     date = HebrewDate(5781, 12, 14)

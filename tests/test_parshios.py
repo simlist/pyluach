@@ -4,7 +4,7 @@ from pyluach import parshios, dates
 
 
 KNOWN_VALUES = {
-    (2016, 1, 7): [13,],
+    (2016, 1, 7): [13],
     (2017, 3, 21): [21, 22],
     (2017, 9, 26): None,
     (2020, 9, 19): None,
@@ -45,9 +45,11 @@ class TestGetParsha:
         eighth_day_pesach = dates.HebrewDate(5779, 1, 22)
         reunion_shabbos = dates.HebrewDate(5779, 5, 2)
         assert parshios.getparsha_string(eighth_day_pesach) is None
-        assert parshios.getparsha_string(eighth_day_pesach, True) == 'Acharei Mos'
-        assert parshios.getparsha(eighth_day_pesach + 7) == [28,]
-        assert parshios.getparsha(eighth_day_pesach + 7, True) == [29,]
+        assert (
+            parshios.getparsha_string(eighth_day_pesach, True) == 'Acharei Mos'
+        )
+        assert parshios.getparsha(eighth_day_pesach + 7) == [28]
+        assert parshios.getparsha(eighth_day_pesach + 7, True) == [29]
         assert parshios.getparsha_string(reunion_shabbos) == "Mattos, Masei"
         assert parshios.getparsha_string(reunion_shabbos, True) == 'Masei'
 
@@ -56,6 +58,7 @@ def test_parshatable():
     assert parshios.parshatable(5777) == parshios._gentable(5777)
     assert parshios.parshatable(5778, True) == parshios._gentable(5778, True)
 
+
 def test_iterparshios():
     year = 5776
     parshalist = list(parshios.parshatable(year).values())
@@ -63,6 +66,7 @@ def test_iterparshios():
     for p in parshios.iterparshios(year):
         assert p == parshalist[index]
         index += 1
+
 
 def test_get_parshastring_hebrew():
     date = dates.HebrewDate(5781, 3, 28)
