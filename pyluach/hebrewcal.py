@@ -342,9 +342,9 @@ class Month:
 
     def __eq__(self, other):
         if(
-           isinstance(other, Month) and
-           self.year == other.year and
-           self.month == other.month):
+           isinstance(other, Month)
+           and self.year == other.year
+           and self.month == other.month):
             return True
         return False
 
