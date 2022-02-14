@@ -48,15 +48,16 @@ def _elapsed_days(year):
     conjunction_parts = 1080 * (hours_elapsed%24) + parts_elapsed%1080
 
     if (
-            (conjunction_parts >= 19440)
-            or (
-                (conjunction_day % 7 == 2) and (conjunction_parts >= 9924)
-                and not _is_leap(year)
-            )
-            or (
-                (conjunction_day % 7 == 1) and conjunction_parts >= 16789
-                and _is_leap(year - 1))
-            ):
+        (conjunction_parts >= 19440)
+        or (
+            (conjunction_day % 7 == 2) and (conjunction_parts >= 9924)
+            and not _is_leap(year)
+        )
+        or (
+            (conjunction_day % 7 == 1) and conjunction_parts >= 16789
+            and _is_leap(year - 1)
+        )
+    ):
         alt_day = conjunction_day + 1
     else:
         alt_day = conjunction_day
@@ -188,9 +189,9 @@ def _festival(date, israel=False, include_working_days=True):
         elif day == 10:
             return 1
         elif (
-                not include_working_days
-                and (day in range(17, 22) or (israel and day == 16))
-                ):
+            not include_working_days
+            and (day in range(17, 22) or (israel and day == 16))
+        ):
             return None
         elif day in range(15, 22):
             return 2
@@ -201,9 +202,9 @@ def _festival(date, israel=False, include_working_days=True):
     elif month in [9, 10] and include_working_days:
         kislev_length = _month_length(year, 9)
         if (
-                month == 9 and day in range(25, kislev_length + 1)
-                or month == 10 and day in range(1, 8 - (kislev_length - 25))
-                ):
+            month == 9 and day in range(25, kislev_length + 1)
+            or month == 10 and day in range(1, 8 - (kislev_length - 25))
+        ):
             return 5
     elif month == 11 and day == 15 and include_working_days:
         return 6

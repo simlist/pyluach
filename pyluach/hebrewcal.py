@@ -6,9 +6,8 @@ date.
 """
 from collections import deque
 from numbers import Number
-from functools import lru_cache
 
-from pyluach.dates import GregorianDate, HebrewDate
+from pyluach.dates import HebrewDate
 from pyluach import utils
 from pyluach.gematria import _num_to_str
 from pyluach.utils import _holiday, _fast_day_string, _festival_string

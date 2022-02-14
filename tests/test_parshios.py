@@ -1,5 +1,3 @@
-import pytest
-
 from pyluach import parshios, dates
 
 
@@ -8,13 +6,13 @@ KNOWN_VALUES = {
     (2017, 3, 21): [21, 22],
     (2017, 9, 26): None,
     (2020, 9, 19): None,
-    }
+}
 
 KNOWN_VALUES_STRINGS = {
     (2016, 1, 7): "Va'eira",
     (2017, 3, 21): "Vayakhel, Pekudei",
     (2017, 9, 26): None
-    }
+}
 
 
 class TestGetParsha:

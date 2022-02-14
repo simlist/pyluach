@@ -17,7 +17,6 @@ only. No attributes should be changed once they're created.
 
 from datetime import date
 from numbers import Number
-from functools import lru_cache
 
 from pyluach import utils
 from pyluach import gematria
@@ -65,8 +64,10 @@ class BaseDate:
                 return JulianDay(self.jd - other)._to_x(self)
             return abs(self.jd - other.jd)
         except (AttributeError, TypeError):
-            raise TypeError("""You can only subtract a number or another date
-                              that has a "jd" attribute from a date""")
+            raise TypeError(
+                'You can only subtract a number or another date'
+                'that has a "jd" attribute from a date'
+            )
 
     def __eq__(self, other):
         try:
@@ -549,10 +550,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         """Return True if year of date is a leap year, otherwise False."""
         if year < 0:
             year += 1
-        if (
-                (year % 4 == 0) and not
-                (year % 100 == 0 and year % 400 != 0)
-                ):
+        if (year % 4 == 0) and not (year % 100 == 0 and year % 400 != 0):
             return True
         return False
 

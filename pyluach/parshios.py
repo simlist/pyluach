@@ -37,14 +37,14 @@ from pyluach.utils import _is_leap
 PARSHIOS = [
     'Bereishis', 'Noach', 'Lech Lecha', 'Vayeira', 'Chayei Sarah', 'Toldos',
     'Vayeitzei', 'Vayishlach', 'Vayeishev', 'Mikeitz', 'Vayigash', 'Vayechi',
-    'Shemos',  "Va'eira", 'Bo', 'Beshalach', 'Yisro',  'Mishpatim', 'Terumah',
+    'Shemos', "Va'eira", 'Bo', 'Beshalach', 'Yisro', 'Mishpatim', 'Terumah',
     'Tetzaveh', 'Ki Sisa', 'Vayakhel', 'Pekudei', 'Vayikra', 'Tzav', 'Shemini',
     'Tazria', 'Metzora', 'Acharei Mos', 'Kedoshim', 'Emor', 'Behar',
     'Bechukosai', 'Bamidbar', 'Nasso', "Beha'aloscha", 'Shelach', 'Korach',
     'Chukas', 'Balak', 'Pinchas', 'Mattos', 'Masei', 'Devarim', "Va'eschanan",
     'Eikev', "Re'eh", 'Shoftim', 'Ki Seitzei', 'Ki Savo', 'Nitzavim',
     'Vayeilech', 'Haazinu', 'Vezos Haberachah'
-    ]
+]
 
 
 PARSHIOS_HEBREW = [
@@ -93,7 +93,7 @@ def _gentable(year, israel=False):
             parsha = parshalist.popleft()
             table[shabbos] = [parsha]
             if (
-                (parsha == 21 and (HebrewDate(year, 1, 14)-shabbos) // 7 < 3)
+                (parsha == 21 and (HebrewDate(year, 1, 14) - shabbos) // 7 < 3)
                 or (parsha in [26, 28] and not leap)
                 or (
                     parsha == 31 and not leap
