@@ -61,67 +61,64 @@ class BaseDate(abc.ABC):
     def __add__(self, other):
         try:
             return JulianDay(self.jd + other)._to_x(self)
-        except TypeError as e:
-            raise TypeError('You can only add a number to a date.') from e
+        except TypeError:
+            return NotImplemented
 
     def __sub__(self, other):
         try:
             if isinstance(other, Number):
                 return JulianDay(self.jd - other)._to_x(self)
             return abs(self.jd - other.jd)
-        except (AttributeError, TypeError) as e:
-            raise TypeError(
-                'You can only subtract a number or another date'
-                'that has a "jd" attribute from a date'
-            ) from e
+        except (AttributeError, TypeError):
+            return NotImplemented
 
     def __eq__(self, other):
         try:
             if self.jd == other.jd:
                 return True
             return False
-        except AttributeError as e:
-            raise TypeError(self._error_string) from e
+        except AttributeError:
+            return NotImplemented
 
     def __ne__(self, other):
         try:
             if self.jd != other.jd:
                 return True
             return False
-        except AttributeError as e:
-            raise TypeError(self._error_string) from e
+        except AttributeError:
+            return NotImplemented
 
     def __lt__(self, other):
         try:
             if self.jd < other.jd:
                 return True
             return False
-        except AttributeError as e:
-            raise TypeError(self._error_string) from e
+        except AttributeError:
+            return NotImplemented
 
     def __gt__(self, other):
         try:
             if self.jd > other.jd:
                 return True
             return False
-        except AttributeError as e:
-            raise TypeError(self._error_string) from e
+        except AttributeError:
+            return NotImplemented
 
     def __le__(self, other):
         try:
             if self.jd <= other.jd:
                 return True
             return False
-        except AttributeError as e:
-            raise TypeError(self._error_string) from e
+        except AttributeError:
+            return NotImplemented
 
     def __ge__(self, other):
         try:
             if self.jd >= other.jd:
                 return True
             return False
-        except AttributeError as e:
-            raise TypeError(self._error_string) from e
+        except AttributeError:
+            return NotImplemented
 
     def weekday(self):
         """Return day of week as an integer.
