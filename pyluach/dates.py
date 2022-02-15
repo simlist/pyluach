@@ -15,6 +15,7 @@ All instances of the classes in this module should be treated as read
 only. No attributes should be changed once they're created.
 """
 
+import abc
 from datetime import date
 from numbers import Number
 
@@ -22,7 +23,7 @@ from pyluach import utils
 from pyluach import gematria
 
 
-class BaseDate:
+class BaseDate(abc.ABC):
     """BaseDate is a base class for all date types.
 
     It provides the following arithmetic and comparison operators
@@ -48,6 +49,11 @@ class BaseDate:
     """
 
     _error_string = 'An error has occured.'
+
+    @property
+    @abc.abstractmethod
+    def jd(self):
+        """Return julian day number."""
 
     def __hash__(self):
         return hash(self.jd)
@@ -116,6 +122,31 @@ class BaseDate:
             return False
         except AttributeError as e:
             raise TypeError(self._error_string) from e
+
+    def weekday(self):
+        """Return day of week as an integer.
+
+        Returns
+        -------
+        int
+            An integer representing the day of the week with Sunday as 1
+            through Saturday as 7.
+        """
+        return int(self.jd+.5+1) % 7 + 1
+
+    def isoweekday(self):
+        """Return the day of the week corresponding to the iso standard.
+
+        Returns
+        -------
+        int
+            An integer representing the day of the week where Monday
+            is 1 and and Sunday is 7.
+        """
+        weekday = self.weekday()
+        if weekday == 1:
+            return 7
+        return weekday - 1
 
     def shabbos(self):
         """Return the Shabbos on or following the date.
@@ -205,22 +236,8 @@ class BaseDate:
         """
         return utils._holiday(self, israel, hebrew)
 
-    def isoweekday(self):
-        """Return the day of the week corresponding to the iso standard.
 
-        Returns
-        -------
-        int
-            An integer representing the day of the week where Monday
-            is 1 and and Sunday is 7.
-        """
-        weekday = self.weekday()
-        if weekday == 1:
-            return 7
-        return weekday - 1
-
-
-class CalendarDateMixin:
+class CalendarDateMixin(abc.ABC):
     """CalendarDateMixin is a mixin for Hebrew and Gregorian dates.
 
     Parameters
@@ -258,17 +275,6 @@ class CalendarDateMixin:
         yield self.year
         yield self.month
         yield self.day
-
-    def weekday(self):
-        """Return day of week as an integer.
-
-        Returns
-        -------
-        int
-            An integer representing the day of the week with Sunday as 1
-            through Saturday as 7.
-        """
-        return int(self.jd+.5+1) % 7 + 1
 
     def tuple(self):
         """Return date as tuple.
@@ -315,12 +321,11 @@ class JulianDay(BaseDate):
             self.day = int(day) - .5
         else:
             self.day = int(day) + .5
-        self.jd = self.day
         self._error_string = """Only a date with a "jd" attribute can
             be compared to a Julian Day instance."""
 
     def __repr__(self):
-        return 'JulianDay({0})'.format(self.day)
+        return f'JulianDay({self.day})'
 
     def __str__(self):
         return str(self.day)
@@ -334,6 +339,10 @@ class JulianDay(BaseDate):
             The weekday with Sunday as 1 through Saturday as 7.
         """
         return (int(self.day+.5) + 1) % 7 + 1
+
+    @property
+    def jd(self):
+        return self.day
 
     @staticmethod
     def from_pydate(pydate):
@@ -428,9 +437,9 @@ class JulianDay(BaseDate):
 
         if isinstance(type_, GregorianDate):
             return self.to_greg()
-        elif isinstance(type_, HebrewDate):
+        if isinstance(type_, HebrewDate):
             return self.to_heb()
-        elif isinstance(type_, JulianDay):
+        if isinstance(type_, JulianDay):
             return self
         return None
 
