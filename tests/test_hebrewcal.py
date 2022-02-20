@@ -272,7 +272,7 @@ class TestHoliday:
             for day in [roshhashana, roshhashana + 1]
             for location in [True, False]
         ])
-        assert all([
+        assert all((
             festival(
                 day, location,
                 include_working_days=included_days
@@ -280,7 +280,7 @@ class TestHoliday:
             for day in [roshhashana, roshhashana + 1]
             for location in [True, False]
             for included_days in [True, False]
-        ])
+        ))
 
     def test_yomkippur(self):
         yom_kippur = dates.HebrewDate(5775, 7, 10)
@@ -373,8 +373,8 @@ class TestHoliday:
 
     def test_shavuos(self):
         shavuos = dates.HebrewDate(5778, 3, 6)
-        assert all([
-            holiday(day) == 'Shavuos' for day in [shavuos, shavuos + 1]])
+        assert all(
+            (holiday(day) == 'Shavuos' for day in [shavuos, shavuos + 1]))
         assert holiday(shavuos, True) == 'Shavuos'
         assert holiday(shavuos + 1, True) is None
         assert festival(shavuos + 1, include_working_days=False) == 'Shavuos'

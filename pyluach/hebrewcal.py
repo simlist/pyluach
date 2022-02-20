@@ -149,8 +149,8 @@ class Year:
         """Add int to year."""
         try:
             return Year(self.year + other)
-        except TypeError:
-            raise TypeError('You can only add a number to a year.')
+        except TypeError as e:
+            raise TypeError('You can only add a number to a year.') from e
 
     def __sub__(self, other):
         """Subtract int or Year from Year.
@@ -160,12 +160,13 @@ class Year:
         """
         if isinstance(other, Year):
             return abs(self.year - other.year)
-        else:
-            try:
-                return Year(self.year - other)
-            except TypeError:
-                raise TypeError('Only an int or another Year object can'
-                                ' be subtracted from a year.')
+        try:
+            return Year(self.year - other)
+        except TypeError as e:
+            raise TypeError(
+                'Only an int or another Year object can'
+                ' be subtracted from a year.'
+            ) from e
 
     def __gt__(self, other):
         if self.year > other.year:
@@ -356,8 +357,8 @@ class Month:
             if other <= leftover_months:
                 return Month(self.year, yearmonths[index + other])
             return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
-        except (AttributeError, TypeError):
-            raise TypeError('You can only add a number to a year.')
+        except (AttributeError, TypeError) as e:
+            raise TypeError('You can only add a number to a year.') from e
 
     def __sub__(self, other):
         if isinstance(other, Number):
@@ -373,9 +374,11 @@ class Month:
             # Recursive call on the last month of the previous year.
         try:
             return abs(self._elapsed_months() - other._elapsed_months())
-        except AttributeError:
-            raise TypeError('''You can only subtract a number or a month
-                            object from a month.''')
+        except AttributeError as e:
+            raise TypeError(
+                'You can only subtract a number or a month '
+                'object from a month.'
+            ) from e
 
     def __gt__(self, other):
         if (

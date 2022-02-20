@@ -1,6 +1,7 @@
-import pytest
-from operator import gt, lt, eq, ne, ge, le, add, sub
 import datetime
+from operator import gt, lt, eq, ne, ge, le, add, sub
+
+import pytest
 
 from pyluach import dates
 from pyluach.dates import HebrewDate, GregorianDate, JulianDay
@@ -159,15 +160,17 @@ class TestErrors:
             day + (day+1)
 
     def test_HebrewDate_errors(self):
+        with pytest.raises(ValueError):
+            HebrewDate(0, 6, 29)
+        for datetuple in [
+            (5778, 0, 5), (5779, -1, 7),
+            (5759, 14, 8), (5778, 13, 20)
+        ]:
             with pytest.raises(ValueError):
-                HebrewDate(0, 6, 29)
-            for datetuple in [(5778, 0, 5), (5779, -1, 7),
-                              (5759, 14, 8), (5778, 13, 20)]:
-                with pytest.raises(ValueError):
-                    HebrewDate(*datetuple)
-            for datetuple in [(5778, 6, 0), (5779, 8, 31), (5779, 10, 30)]:
-                with pytest.raises(ValueError):
-                    HebrewDate(*datetuple)
+                HebrewDate(*datetuple)
+        for datetuple in [(5778, 6, 0), (5779, 8, 31), (5779, 10, 30)]:
+            with pytest.raises(ValueError):
+                HebrewDate(*datetuple)
 
     def test_GregorianDate_errors(self):
         for datetuple in [
@@ -183,6 +186,7 @@ class TestErrors:
 
 
 class TestReprandStr:
+
     def test_repr(self, datetypeslist):
         for datetype in datetypeslist:
             assert eval(repr(datetype.today())) == datetype.today()

@@ -1,3 +1,7 @@
+"""The utils module contains functions to be shared between modules.
+
+They are to be used internally.
+"""
 from functools import lru_cache
 
 
@@ -61,7 +65,7 @@ def _elapsed_days(year):
         alt_day = conjunction_day + 1
     else:
         alt_day = conjunction_day
-    if (alt_day % 7) in (0, 3, 5):
+    if alt_day % 7 in [0, 3, 5]:
         alt_day += 1
 
     return alt_day
@@ -85,14 +89,21 @@ def _month_length(year, month):
     """Months start with Nissan (Nissan is 1 and Tishrei is 7)"""
     if month in [1, 3, 5, 7, 11]:
         return 30
-    elif month in [2, 4, 6, 10, 13]:
+    if month in [2, 4, 6, 10, 13]:
         return 29
-    elif month == 12:
-        return 30 if _is_leap(year) else 29
-    elif month == 8:   # if long Cheshvan return 30, else return 29
-        return 30 if _long_cheshvan(year) else 29
-    elif month == 9:   # if short Kislev return 29, else return 30
-        return 29 if _short_kislev(year) else 30
+    if month == 12:
+        if _is_leap(year):
+            return 30
+        return 29
+    if month == 8:   # if long Cheshvan return 30, else return 29
+        if _long_cheshvan(year):
+            return 30
+        return 29
+    if month == 9:   # if short Kislev return 29, else return 30
+        if _short_kislev(year):
+            return 29
+        return 30
+    raise ValueError('Invalid month')
 
 
 def _month_name(year, month, hebrew):
@@ -186,18 +197,18 @@ def _festival(date, israel=False, include_working_days=True):
     if month == 7:
         if day in [1, 2]:
             return 0
-        elif day == 10:
+        if day == 10:
             return 1
-        elif (
+        if (
             not include_working_days
             and (day in range(17, 22) or (israel and day == 16))
         ):
             return None
-        elif day in range(15, 22):
+        if day in range(15, 22):
             return 2
-        elif day == 22:
+        if day == 22:
             return 3
-        elif day == 23 and not israel:
+        if day == 23 and not israel:
             return 4
     elif month in [9, 10] and include_working_days:
         kislev_length = _month_length(year, 9)
@@ -217,7 +228,7 @@ def _festival(date, israel=False, include_working_days=True):
     elif month == 13 and include_working_days:
         if day == 14:
             return 8
-        elif day == 15:
+        if day == 15:
             return 9
     elif month == 1:
         if (
@@ -225,7 +236,7 @@ def _festival(date, israel=False, include_working_days=True):
             and (day in range(17, 21) or (israel and day == 16))
         ):
             return None
-        elif day in range(15, 22 if israel else 23):
+        if day in range(15, 22 if israel else 23):
             return 10
     elif month == 2 and day == 14 and include_working_days:
         return 11
