@@ -831,8 +831,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         >>> date.hebrew_date_string(True)
         'כ״ה כסלו ה׳תשפ״א'
         """
-        return '{} {} {}'.format(
-            self.hebrew_day(),
-            self.month_name(True),
-            self.hebrew_year(thousands)
-        )
+        day = self.hebrew_day()
+        month = self.month_name(True)
+        year = self.hebrew_year(thousands)
+        return f'{day} {month} {year}'

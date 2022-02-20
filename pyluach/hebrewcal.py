@@ -130,12 +130,12 @@ class Year:
 
     def __init__(self, year):
         if year < 1:
-            raise ValueError('Year {0} is before creation.'.format(year))
+            raise ValueError(f'Year {year} is before creation.')
         self.year = year
         self.leap = utils._is_leap(year)
 
     def __repr__(self):
-        return 'Year({0})'.format(self.year)
+        return f'Year({self.year})'
 
     def __len__(self):
         return utils._days_in_year(self.year)
@@ -332,7 +332,7 @@ class Month:
         self.name = utils._month_name(self.year, self.month, False)
 
     def __repr__(self):
-        return 'Month({0}, {1})'.format(self.year, self.month)
+        return f'Month({self.year}, {self.month})'
 
     def __len__(self):
         return utils._month_length(self.year, self.month)
@@ -470,10 +470,7 @@ class Month:
         str
             The month and year in Hebrew in the form ``f'{month} {year}'``.
         """
-        return '{} {}'.format(
-            self.month_name(True),
-            _num_to_str(self.year, thousands)
-        )
+        return f'{self.month_name(True)} {_num_to_str(self.year, thousands)}'
 
     def starting_weekday(self):
         """Return first weekday of the month.
