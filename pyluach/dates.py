@@ -441,7 +441,9 @@ class JulianDay(BaseDate):
             return self.to_heb()
         if isinstance(type_, JulianDay):
             return self
-        return None
+        raise NotImplementedError(
+            'This method has not been implemented with that date type.'
+        )
 
     def to_pydate(self):
         """Convert to a datetime.date object.
@@ -579,12 +581,11 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     def _monthlength(cls, year, month):
         if month in [1, 3, 5, 7, 8, 10, 12]:
             return 31
-        if month != 2:
-            return 30
-        if cls._is_leap(year):
-            return 29
-        else:
+        if month == 2:
+            if cls._is_leap(year):
+                return 29
             return 28
+        return 30
 
     def to_jd(self):
         """Convert to a Julian day.
@@ -658,12 +659,12 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         if year < 1:
             raise ValueError('Date supplied is before creation.')
         if month < 1 or month > 13:
-            raise ValueError('{0} is an invalid month.'.format(str(month)))
+            raise ValueError(f'{month} is an invalid month.')
         if (not utils._is_leap(year)) and month == 13:
-            raise ValueError('{0} is not a leap year'.format(year))
+            raise ValueError(f'{year} is not a leap year')
         monthlength = utils._month_length(year, month)
         if day < 1 or day > monthlength:
-            raise ValueError('Given month has {0} days.'.format(monthlength))
+            raise ValueError(f'Given month has {monthlength} days.')
         super().__init__(year, month, day, jd)
 
     @property
