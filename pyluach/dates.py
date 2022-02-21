@@ -440,8 +440,8 @@ class JulianDay(BaseDate):
             return self.to_heb()
         if isinstance(type_, JulianDay):
             return self
-        raise NotImplementedError(
-            'This method has not been implemented with that date type.'
+        raise TypeError(
+            'This method has not been implemented with that type.'
         )
 
     def to_pydate(self):
