@@ -214,6 +214,8 @@ class TestMonth:
             Month(-1, 1)
         with raises(ValueError):
             Month(5781, 13)
+        with raises(ValueError):
+            Month(5781, 14)
 
     def test_from_date(self):
         date = dates.HebrewDate(5781, 7, 10)
