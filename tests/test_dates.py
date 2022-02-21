@@ -164,7 +164,8 @@ class TestErrors:
             HebrewDate(0, 6, 29)
         for datetuple in [
             (5778, 0, 5), (5779, -1, 7),
-            (5759, 14, 8), (5778, 13, 20)
+            (5759, 14, 8), (5778, 13, 20),
+            (5782, 12, 31)
         ]:
             with pytest.raises(ValueError):
                 HebrewDate(*datetuple)
