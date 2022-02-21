@@ -3,7 +3,7 @@ pyluach
 .. image:: https://readthedocs.org/projects/pyluach/badge/?version=latest
   :target: http://pyluach.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status
-.. image:: https://github.com/simlist/pyluach/actions/workflows/testing-and-coverage.yml/badge.svg?branch=dev
+.. image:: https://github.com/simlist/pyluach/actions/workflows/testing-and-coverage.yml/badge.svg?branch=master
     :target: https://github.com/simlist/pyluach/actions/workflows/testing-and-coverage.yml
 .. image:: https://coveralls.io/repos/github/simlist/pyluach/badge.svg?branch=master
     :target: https://coveralls.io/github/simlist/pyluach?branch=master
