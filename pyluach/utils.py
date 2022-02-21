@@ -180,7 +180,7 @@ def _festival(date, israel=False, include_working_days=True):
       schedule. Defaults to ``False``.
 
     include_working_days : bool, optional
-      ``True`` to include holiday days in which melacha (work) is
+      ``True`` to include festival days in which melacha (work) is
       allowed; ie. Pesach Sheni, Chol Hamoed, etc.
       Default is ``True``.
 
