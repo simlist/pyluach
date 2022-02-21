@@ -1,7 +1,7 @@
 pyluach
 =======
-.. image:: https://readthedocs.org/projects/pyluach/badge/?version=latest
-  :target: http://pyluach.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/pyluach/badge/?version=stable
+  :target: http://pyluach.readthedocs.io/en/latest/?badge=stable
   :alt: Documentation Status
 .. image:: https://github.com/simlist/pyluach/actions/workflows/testing-and-coverage.yml/badge.svg?branch=master
     :target: https://github.com/simlist/pyluach/actions/workflows/testing-and-coverage.yml
