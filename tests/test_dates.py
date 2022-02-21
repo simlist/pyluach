@@ -3,7 +3,7 @@ from operator import gt, lt, eq, ne, ge, le, add, sub
 
 import pytest
 
-from pyluach import dates
+from pyluach import dates, utils
 from pyluach.dates import HebrewDate, GregorianDate, JulianDay
 
 
@@ -164,7 +164,8 @@ class TestErrors:
             HebrewDate(0, 6, 29)
         for datetuple in [
             (5778, 0, 5), (5779, -1, 7),
-            (5759, 14, 8), (5778, 13, 20)
+            (5759, 14, 8), (5778, 13, 20),
+            (5782, 12, 31)
         ]:
             with pytest.raises(ValueError):
                 HebrewDate(*datetuple)
@@ -282,3 +283,8 @@ def test_month_name():
     date2 = HebrewDate(5782, 12, 14)
     assert date2.month_name() == 'Adar 1'
     assert date2.month_name(True) == 'אדר א׳'
+
+
+def test_month_length():
+    with pytest.raises(ValueError):
+        utils._month_length(5782, 14)
