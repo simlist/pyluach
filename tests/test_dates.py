@@ -3,7 +3,7 @@ from operator import gt, lt, eq, ne, ge, le, add, sub
 
 import pytest
 
-from pyluach import dates
+from pyluach import dates, utils
 from pyluach.dates import HebrewDate, GregorianDate, JulianDay
 
 
@@ -283,3 +283,8 @@ def test_month_name():
     date2 = HebrewDate(5782, 12, 14)
     assert date2.month_name() == 'Adar 1'
     assert date2.month_name(True) == 'אדר א׳'
+
+
+def test_month_length():
+    with pytest.raises(ValueError):
+        utils._month_length(5782, 14)
