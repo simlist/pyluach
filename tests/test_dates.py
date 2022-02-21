@@ -184,6 +184,8 @@ class TestErrors:
     def test_JD_errors(self):
         with pytest.raises(ValueError):
             JulianDay(-1).to_heb()
+        with pytest.raises(TypeError):
+            JulianDay(689)._to_x(datetime.date)
 
 
 class TestReprandStr:
