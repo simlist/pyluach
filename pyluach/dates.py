@@ -211,7 +211,8 @@ class BaseDate(abc.ABC):
             a Jewish festival.
         """
         return utils._festival_string(
-            self, israel, hebrew, include_working_days)
+            self, israel, hebrew, include_working_days
+        )
 
     def holiday(self, israel=False, hebrew=False):
         """Return name of Jewish holiday of the date.
@@ -261,8 +262,6 @@ class CalendarDateMixin(abc.ABC):
         self.month = month
         self.day = day
         self._jd = jd
-        self. _error_string = f"""Only a date with a "jd" attribute can
-                              be compared to a {self.__class__.__name__}"""
 
     def __repr__(self):
         class_name = self.__class__.__name__
