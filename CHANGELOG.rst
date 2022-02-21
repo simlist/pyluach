@@ -6,7 +6,9 @@ This document records all notable changes to `pyluach <https://github.com/simlis
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 
-`1.4.0`_ (2022-02-xx)
+`1.4.0`_ (2022-02-21)
+* Added parameter `include_working_days` to festival method and function.
+* Removed support for python < 3.6
 
 `1.3.0`_ (2021-06-09)
 ---------------------
