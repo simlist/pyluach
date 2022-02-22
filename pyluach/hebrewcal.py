@@ -326,8 +326,10 @@ class Month:
         leap = utils._is_leap(self.year)
         yearlength = 13 if leap else 12
         if month < 1 or month > yearlength:
-            raise ValueError('''Month must be between 1 and 12 for a normal
-            year and 13 for a leap year.''')
+            raise ValueError(
+                'Month must be between 1 and 12 for a normal '
+                'year and 13 for a leap year.'
+            )
         self.month = month
         self.name = utils._month_name(self.year, self.month, False)
 
@@ -358,7 +360,7 @@ class Month:
                 return Month(self.year, yearmonths[index + other])
             return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
         except (AttributeError, TypeError) as e:
-            raise TypeError('You can only add a number to a year.') from e
+            raise TypeError('You can only add a number to a month.') from e
 
     def __sub__(self, other):
         if isinstance(other, Number):
