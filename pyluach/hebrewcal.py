@@ -149,13 +149,8 @@ class Year:
         """Add int to year."""
         try:
             return Year(self.year + other)
-<<<<<<< HEAD
-        except TypeError as e:
-            raise TypeError('You can only add a number to a year.') from e
-=======
         except TypeError:
             return NotImplemented
->>>>>>> Set operators and comparers to return NotImplemented instead of errors.
 
     def __sub__(self, other):
         """Subtract int or Year from Year.
@@ -167,16 +162,8 @@ class Year:
             return abs(self.year - other.year)
         try:
             return Year(self.year - other)
-<<<<<<< HEAD
-        except TypeError as e:
-            raise TypeError(
-                'Only an int or another Year object can'
-                ' be subtracted from a year.'
-            ) from e
-=======
         except TypeError:
             return NotImplemented
->>>>>>> Set operators and comparers to return NotImplemented instead of errors.
 
     def __gt__(self, other):
         if self.year > other.year:
