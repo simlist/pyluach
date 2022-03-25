@@ -486,7 +486,7 @@ class Month:
         return HebrewDate(self.year, self.month, 1).weekday()
 
     def _elapsed_months(self):
-        '''Return number of months elapsed from beginning of calendar'''
+        """Return number of months elapsed from beginning of calendar"""
         yearmonths = tuple(Year(self.year))
         months_elapsed = (
             utils._elapsed_months(self.year)
@@ -500,8 +500,7 @@ class Month:
         Yields
         ------
         ``HebrewDate``
-            The next Hebrew Date of the year starting the first day of
-            Tishrei through the last day of Ellul.
+            The next Hebrew date of the month.
         """
         for day in self:
             yield HebrewDate(self.year, self.month, day)
