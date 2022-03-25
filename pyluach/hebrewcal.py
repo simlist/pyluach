@@ -326,8 +326,10 @@ class Month:
         leap = utils._is_leap(self.year)
         yearlength = 13 if leap else 12
         if month < 1 or month > yearlength:
-            raise ValueError('''Month must be between 1 and 12 for a normal
-            year and 13 for a leap year.''')
+            raise ValueError(
+                'Month must be between 1 and 12 for a normal '
+                'year and 13 for a leap year.'
+            )
         self.month = month
         self.name = utils._month_name(self.year, self.month, False)
 
@@ -358,7 +360,7 @@ class Month:
                 return Month(self.year, yearmonths[index + other])
             return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
         except (AttributeError, TypeError) as e:
-            raise TypeError('You can only add a number to a year.') from e
+            raise TypeError('You can only add a number to a month.') from e
 
     def __sub__(self, other):
         if isinstance(other, Number):
@@ -484,7 +486,7 @@ class Month:
         return HebrewDate(self.year, self.month, 1).weekday()
 
     def _elapsed_months(self):
-        '''Return number of months elapsed from beginning of calendar'''
+        """Return number of months elapsed from beginning of calendar"""
         yearmonths = tuple(Year(self.year))
         months_elapsed = (
             utils._elapsed_months(self.year)
@@ -498,8 +500,7 @@ class Month:
         Yields
         ------
         ``HebrewDate``
-            The next Hebrew Date of the year starting the first day of
-            Tishrei through the last day of Ellul.
+            The next Hebrew date of the month.
         """
         for day in self:
             yield HebrewDate(self.year, self.month, day)
