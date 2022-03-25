@@ -6,6 +6,7 @@ date.
 """
 from collections import deque
 from numbers import Number
+import calendar
 
 from pyluach.dates import HebrewDate
 from pyluach import utils
@@ -563,3 +564,24 @@ class Month:
             'weekday': weekday, 'hour': hour,
             'minutes': minutes, 'parts': parts
         }
+
+
+def _weekday(year, month, day):
+    return HebrewDate(year, month, day).weekday()
+
+
+def _month_range(year, month):
+    return _weekday(year, month, 1), len(Month(year, month))
+
+
+class Calendar(calendar.Calendar):
+    """Calendar class."""
+    def __init__(self, firstweekday=1):
+        super().__init__(firstweekday)
+
+    def _first_day(self, year, month):
+        starting_date = HebrewDate(year, month, 1)
+        starting_weekday = starting_date.weekday()
+        if starting_weekday == self.firstweekday:
+            return starting_date
+        return starting_date - (starting_weekday - self.firstweekday) % 7
