@@ -6,6 +6,10 @@ This document records all notable changes to `pyluach <https://github.com/simlis
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 
+`1.4.1`_ (2022-03-25)
+---------------------
+* Fixed mistakes in docstring and error message.
+
 `1.4.0`_ (2022-02-21)
 ---------------------
 * Added parameter `include_working_days` to festival method and function.
@@ -50,6 +54,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Initial public release
 
 
+.. _`1.4.1`: https://github.com/simlist/pyluach/compare/v1.4.0...v1.4.1
 .. _`1.4.0`: https://github.com/simlist/pyluach/compare/v1.3.0...v1.4.0
 .. _`1.3.0`: https://github.com/simlist/pyluach/compare/v1.2.1...v1.3.0
 .. _`1.2.1`: https://github.com/simlist/pyluach/compare/v1.2.0...v1.2.1
