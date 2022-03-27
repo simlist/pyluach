@@ -14,6 +14,27 @@ from pyluach.gematria import _num_to_str
 from pyluach.utils import _holiday, _fast_day_string, _festival_string
 
 
+class IllegalMonthError(ValueError):
+    def __init__(self, month):
+        self.month = month
+
+    def __str__(self):
+        return (
+            f'bad month number {self.month}; must be 1-12 or 13 in a leap year'
+        )
+
+
+class IllegalWeekdayError(ValueError):
+    def __init__(self, weekday):
+        self.weekday = weekday
+
+    def __str__(self):
+        return (
+            f'bad weekday number {self.weekday}; '
+            f'must be 1 (Sunday) to 7 (Saturday)'
+        )
+
+
 def fast_day(date, hebrew=False):
     """Return name of fast day or None.
 
@@ -324,10 +345,7 @@ class Month:
         leap = utils._is_leap(self.year)
         yearlength = 13 if leap else 12
         if month < 1 or month > yearlength:
-            raise ValueError(
-                'Month must be between 1 and 12 for a normal '
-                'year and 13 for a leap year.'
-            )
+            raise IllegalMonthError(month)
         self.month = month
         self.name = utils._month_name(self.year, self.month, False)
 
@@ -581,14 +599,15 @@ def _weekday(year, month, day):
 
 
 def _month_range(year, month):
-    return _weekday(year, month, 1), len(Month(year, month))
+    month = Month(year, month)
+    return _to_pyweekday(month.starting_weekday), len(month)
 
 
 class Calendar(calendar.Calendar):
     """Calendar class."""
     def __init__(self, firstweekday=1):
         if firstweekday < 1 or firstweekday > 7:
-            raise ValueError('Weekday must be 1-7.')
+            raise IllegalWeekdayError(firstweekday)
         pyfirstweekday = _to_pyweekday(firstweekday)
         super().__init__(pyfirstweekday)
 
