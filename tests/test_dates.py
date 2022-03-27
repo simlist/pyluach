@@ -145,7 +145,7 @@ class TestErrors:
     def test_comparer_errors(self):
         day1 = dates.HebrewDate(5777, 12, 10)
         for date in [day1, day1.to_greg(), day1.to_jd()]:
-            for comparer in [gt, lt, eq, ne, ge, le]:
+            for comparer in [gt, lt, ge, le]:
                 for value in [1, 0, 'hello', None, '']:
                     with pytest.raises(TypeError):
                         comparer(date, value)
