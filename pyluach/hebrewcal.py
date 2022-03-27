@@ -566,6 +566,16 @@ class Month:
         }
 
 
+def _to_pyweekday(weekday):
+    if weekday == 1:
+        return 6
+    return weekday - 2
+
+
+def _from_pyweekday(pyweekday):
+    return (pyweekday+2) % 7
+
+
 def _weekday(year, month, day):
     return HebrewDate(year, month, day).weekday()
 
@@ -577,7 +587,10 @@ def _month_range(year, month):
 class Calendar(calendar.Calendar):
     """Calendar class."""
     def __init__(self, firstweekday=1):
-        super().__init__(firstweekday)
+        if firstweekday < 1 or firstweekday > 7:
+            raise ValueError('Weekday must be 1-7.')
+        pyfirstweekday = _to_pyweekday(firstweekday)
+        super().__init__(pyfirstweekday)
 
     def _first_day(self, year, month):
         starting_date = HebrewDate(year, month, 1)
