@@ -56,7 +56,7 @@ class BaseDate(abc.ABC):
         """Return julian day number."""
 
     def __hash__(self):
-        return hash(self.jd)
+        return hash(repr(self))
 
     def __add__(self, other):
         try:
