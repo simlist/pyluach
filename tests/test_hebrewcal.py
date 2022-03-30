@@ -2,6 +2,7 @@ import datetime
 from copy import copy
 
 from pytest import fixture, raises
+
 from pyluach import dates, hebrewcal
 from pyluach.hebrewcal import Year, Month, holiday, festival, fast_day
 
@@ -443,6 +444,18 @@ def cal():
 
 class TestCalendar:
 
+    def test_iterweekdays(self):
+        for startingweekday in range(1, 8):
+            cal = hebrewcal.Calendar(startingweekday)
+            weekdays = list(cal.iterweekdays())
+            assert len(weekdays) == 7
+            assert weekdays[0] == startingweekday
+            last = startingweekday - 1 or 7
+            assert weekdays[-1] == last
+
+    def test_first_month(self, cal):
+        list(cal.itermonthdates(1, 7))
+
     def test_itermonthdates(self, cal):
         adar2 = list(cal.itermonthdates(5782, 13))
         assert adar2[0] == dates.HebrewDate(5782, 12, 26)
@@ -462,3 +475,24 @@ class TestCalendar:
             for y, m in [(1, 7), (6000, 12)]:
                 days = list(cal.itermonthdays(y, m))
                 assert len(days) in [35, 42]
+
+    def test_itermonthdays2(self, cal):
+        tishrei = list(cal.itermonthdays2(5783, 7))
+        assert tishrei[0] == (0, 1)
+        assert tishrei[-1] == (0, 7)
+
+    def test_errors(self):
+        with raises(hebrewcal.IllegalWeekdayError):
+            hebrewcal.Calendar(0)
+        with raises(hebrewcal.IllegalWeekdayError):
+            hebrewcal.Calendar(8)
+
+    def test_error_message(self):
+        try:
+            hebrewcal.Calendar(0)
+        except hebrewcal.IllegalWeekdayError as e:
+            assert str(e).startswith('bad weekday number 0;')
+        try:
+            Month(5781, 13)
+        except hebrewcal.IllegalMonthError as e:
+            assert str(e).startswith('bad month number 13;')
