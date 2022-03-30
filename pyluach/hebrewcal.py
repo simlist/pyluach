@@ -4,7 +4,6 @@ year and month.
 It also has functions for getting the holiday or fast day for a given
 date.
 """
-from collections import deque
 from numbers import Number
 from itertools import repeat
 import calendar
@@ -334,18 +333,11 @@ class Month:
             transliteration.
     """
 
-    _monthnames = {
-        7: 'Tishrei', 8: 'Cheshvan', 9: 'Kislev', 10: 'Teves',
-        11: 'Shvat', 13: 'Adar Sheni', 1: 'Nissan', 2: 'Iyar',
-        3: 'Sivan', 4: 'Tamuz', 5: 'Av', 6: 'Elul'}
-
     def __init__(self, year, month):
         if year < 1:
             raise ValueError('Year is before creation.')
         self.year = year
-        leap = utils._is_leap(self.year)
-        yearlength = 13 if leap else 12
-        if month < 1 or month > yearlength:
+        if month < 1 or month > 12 + utils._is_leap(self.year):
             raise IllegalMonthError(month)
         self.month = month
         self.name = utils._month_name(self.year, self.month, False)
@@ -375,7 +367,7 @@ class Month:
         try:
             if other <= leftover_months:
                 return Month(self.year, yearmonths[index + other])
-            return Month(self.year + 1, 7).__add__(other - 1 - leftover_months)
+            return Month(self.year + 1, 7).__add__(other - (leftover_months+1))
         except (AttributeError, TypeError):
             return NotImplemented
 
@@ -383,13 +375,9 @@ class Month:
         if isinstance(other, Number):
             yearmonths = list(Year(self.year))
             index = yearmonths.index(self.month)
-            leftover_months = index
-            if other <= leftover_months:
+            if other <= index:
                 return Month(self.year, yearmonths[index - other])
-            return Month(
-                self.year - 1,
-                deque(Year(self.year - 1), maxlen=1).pop()
-            ).__sub__(other - 1 - leftover_months)
+            return Month(self.year - 1, 6).__sub__(other - (index+1))
             # Recursive call on the last month of the previous year.
         try:
             return abs(self._elapsed_months() - other._elapsed_months())
@@ -712,7 +700,10 @@ class Calendar(calendar.Calendar):
         ndays = len(currmonth)
         days_before = (day1 - self.firstweekday) % 7
         days_after = (self.firstweekday - day1 - ndays) % 7
-        prevmonth = currmonth - 1
+        try:
+            prevmonth = currmonth - 1
+        except ValueError:
+            prevmonth = currmonth
         y, m = _year_and_month(prevmonth)
         end = len(prevmonth) + 1
         for d in range(end - days_before, end):
