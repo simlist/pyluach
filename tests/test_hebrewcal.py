@@ -434,3 +434,31 @@ class TestFasts:
         for fast in fasts:
             assert holiday(fast) == '9 of Av'
         assert holiday(dates.HebrewDate(5778, 5, 9)) is None
+
+
+@fixture
+def cal():
+    return hebrewcal.Calendar()
+
+
+class TestCalendar:
+
+    def test_itermonthdates(self, cal):
+        adar2 = list(cal.itermonthdates(5782, 13))
+        assert adar2[0] == dates.HebrewDate(5782, 12, 26)
+        assert adar2[-1] == dates.HebrewDate(5782, 1, 1)
+
+    def test_minyear(self, cal):
+        list(cal.itermonthdates(1, 1))
+
+    def test_itermonthdays4(self, cal):
+        nissan = list(cal.itermonthdays4(5782, 1))
+        assert nissan[0] == (5782, 13, 24, 1)
+        assert nissan[-1] == (5782, 2, 6, 7)
+
+    def test_itermonthdays(self):
+        for firstweekday in range(1, 8):
+            cal = hebrewcal.Calendar(firstweekday)
+            for y, m in [(1, 7), (6000, 12)]:
+                days = list(cal.itermonthdays(y, m))
+                assert len(days) in [35, 42]

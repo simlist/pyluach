@@ -6,6 +6,7 @@ date.
 """
 from collections import deque
 from numbers import Number
+from itertools import repeat
 import calendar
 
 from pyluach.dates import HebrewDate
@@ -591,29 +592,222 @@ def _to_pyweekday(weekday):
 
 
 def _from_pyweekday(pyweekday):
-    return (pyweekday+2) % 7
+    return (pyweekday+2) % 7 or 7
 
 
-def _weekday(year, month, day):
-    return HebrewDate(year, month, day).weekday()
-
-
-def _month_range(year, month):
-    month = Month(year, month)
-    return _to_pyweekday(month.starting_weekday), len(month)
+def _year_and_month(month):
+    return month.year, month.month
 
 
 class Calendar(calendar.Calendar):
-    """Calendar class."""
+    """Calendar base class.
+
+    This class extends the python library calendar.Calendar class for
+    the Hebrew calendar. Other than returning data for the Hebrew
+    calendar, the weekdays are 1 for Sunday through 7 for Shabbos.
+
+    Parameters
+    ----------
+    firstweekday : int, optional
+        The weekday to start each week with. Default is `1` for Sunday.
+    """
     def __init__(self, firstweekday=1):
         if firstweekday < 1 or firstweekday > 7:
             raise IllegalWeekdayError(firstweekday)
-        pyfirstweekday = _to_pyweekday(firstweekday)
-        super().__init__(pyfirstweekday)
+        super().__init__(_to_pyweekday(firstweekday))
 
-    def _first_day(self, year, month):
-        starting_date = HebrewDate(year, month, 1)
-        starting_weekday = starting_date.weekday()
-        if starting_weekday == self.firstweekday:
-            return starting_date
-        return starting_date - (starting_weekday - self.firstweekday) % 7
+    def iterweekdays(self):
+        """Return one week of weekday numbers.
+        The numbers start with the configured first one.
+
+        Yields
+        ------
+        int
+            The next weekday with 1 for Sunday through seven for Saturday.
+            The iterator starts with the ``Calendar`` object's configured
+            first weekday ie. if configured to start with Monday it will
+            first yield `2` and end with `1`.
+        """
+        for i in super().iterweekdays():
+            yield _from_pyweekday(i)
+
+    def itermonthdates(self, year, month):
+        """Yield dates for one month.
+        The iterator will always iterate through complete weeks, so it
+        will yield dates outside the specified month.
+
+        Parameters
+        ----------
+        year : int
+        month : int
+          The Hebrew month starting with 1 for Nissan through 13 for
+          Adar Sheni if necessary.
+
+        Yields
+        ------
+        ``HebrewDate``
+            The next Hebrew Date of the month starting with the first
+            date of the week the first of the month falls in, and ending
+            with the last date of the week that the last day of the month
+            falls in.
+        """
+        for y, m, d in self.itermonthdays3(year, month):
+            yield HebrewDate(y, m, d)
+
+    def itermonthdays(self, year, month):
+        """Like ``itermonthdates()`` but will yield day numbers.
+        For days outside the specified month the day number is 0.
+
+        Parameters
+        ----------
+        year : int
+        month : int
+
+        Yields
+        ------
+        int
+            The day of the month or 0 if the date is before or after the
+            month.
+        """
+        currmonth = Month(year, month)
+        day1 = _to_pyweekday(currmonth.starting_weekday())
+        ndays = len(currmonth)
+        days_before = (day1 - self.firstweekday) % 7
+        yield from repeat(0, days_before)
+        yield from range(1, ndays + 1)
+        days_after = (self.firstweekday - day1 - ndays) % 7
+        yield from repeat(0, days_after)
+
+    def itermonthdays2(self, year, month):
+        """Return iterator for the days and weekdays of the month.
+
+        Parameters
+        ----------
+        year : int
+        month : int
+
+        Yields
+        ------
+        tuple of ints
+            A tuple of ints in the form ``(day of month, weekday)``.
+        """
+        for d, i in super().itermonthdays2(year, month):
+            yield d, _from_pyweekday(i)
+
+    def itermonthdays3(self, year, month):
+        """Return iterator for the year, month, and day of the month.
+
+        Parameters
+        ----------
+        year : int
+        month : int
+
+        Yields
+        ------
+        tuple of ints
+            A tuple of ints in the form ``(year, month, day)``.
+        """
+        currmonth = Month(year, month)
+        day1 = _to_pyweekday(currmonth.starting_weekday())
+        ndays = len(currmonth)
+        days_before = (day1 - self.firstweekday) % 7
+        days_after = (self.firstweekday - day1 - ndays) % 7
+        prevmonth = currmonth - 1
+        y, m = _year_and_month(prevmonth)
+        end = len(prevmonth) + 1
+        for d in range(end - days_before, end):
+            yield y, m, d
+        for d in range(1, ndays + 1):
+            yield year, month, d
+        y, m = _year_and_month(currmonth + 1)
+        for d in range(1, days_after + 1):
+            yield y, m, d
+
+    def itermonthdays4(self, year, month):
+        """Return iterator for the year, month, day, and weekday
+
+        Parameters
+        ----------
+        year : int
+        month : int
+
+        Yields
+        ------
+        tuple of ints
+            A tuple of ints in the form ``(year, month, day, weekday)``.
+        """
+        for y, m, d, i in super().itermonthdays4(year, month):
+            yield y, m, d, _from_pyweekday(i)
+
+    def yeardatescalendar(self, year, width=3):
+        """Return data of specified year ready for formatting.
+
+        Parameters
+        ----------
+        year : int
+        width : int, optional
+            The number of months per row. Default is 3.
+
+        Returns
+        ------
+        list of lists of lists of lists of ``HebrewDates``
+            Returns a list of month rows. Each month row contains a list
+            of up to `width` months. Each month contains either 5 or 6
+            weeks, and each week contains 1-7 days. Days are
+            ``HebrewDate`` objects.
+        """
+        months = [
+            self.monthdatescalendar(year, m.month)
+            for m in Year(year).itermonths()
+        ]
+        return [months[i:i+width] for i in range(0, len(months), width)]
+
+    def yeardays2calendar(self, year, width=3):
+        """Return the data of the specified year ready for formatting.
+
+        This method is similar to the ``yeardatescalendar`` except the
+        entries in the week lists are (day number, weekday number) tuples.
+        Parameters
+        ----------
+        year : int
+        width : int, optional
+            The number of months per row. Default is 3.
+
+        Returns
+        -------
+        list of lists of lists of lists of tuples
+            Returns a list of month rows. Each month row contains a list
+            of up to `width` months. Each month contains between 4 and 6
+            weeks, and each week contains 1-7 days. Days are tuples with
+            the form ``(day number, weekday number)``.
+        """
+        months = [
+            self.monthdays2calendar(year, m.month)
+            for m in Year(year).itermonths()
+        ]
+        return [months[i:i+width] for i in range(0, len(months), width)]
+
+    def yeardayscalendar(self, year, width=3):
+        """Return the data of the specified year ready for formatting.
+
+        This method is similar to the ``yeardatescalendar`` except the
+        entries in the week lists are day numbers.
+        Parameters
+        ----------
+        year : int
+        width : int, optional
+            The number of months per row. Default is 3.
+
+        Returns
+        -------
+        list of lists of lists of lists of ints
+            Returns a list of month rows. Each month row contains a list
+            of up to `width` months. Each month contains between 4 and 6
+            weeks, and each week contains 1-7 days. Each day is the day of
+            the month as an int.
+        """
+        months = [
+            self.monthdayscalendar(year, m.month)
+            for m in Year(year).itermonths()
+        ]
+        return [months[i:i+width] for i in range(0, len(months), width)]
