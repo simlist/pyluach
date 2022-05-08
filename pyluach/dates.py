@@ -494,6 +494,23 @@ class GregorianDate(BaseDate, CalendarDateMixin):
             raise ValueError(f'Given month has {monthlength} days.')
         super().__init__(year, month, day, jd)
 
+    def __format__(self, fmt):
+        return self.strftime(fmt)
+
+    def strftime(self, fmt):
+        """Wraps :py:meth:`datetime.date.strftime` method.
+
+        Parameters
+        ----------
+        fmt : str
+            The format string.
+
+        Returns
+        -------
+        str
+        """
+        return self.to_pydate().strftime(fmt)
+
     @property
     def jd(self):
         """Return the corresponding Julian day number.
@@ -662,6 +679,74 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         if day < 1 or day > monthlength:
             raise ValueError(f'Given month has {monthlength} days.')
         super().__init__(year, month, day, jd)
+
+    def __format__(self, fmt):
+        new = []
+        i = 0
+        while i < len(fmt):
+            if fmt[i] != '%':
+                new.append(fmt[i])
+            else:
+                i += 1
+                try:
+                    curr = fmt[i]
+                except IndexError as e:
+                    raise ValueError(
+                        'Format string cannot end with single "%".'
+                    ) from e
+                if curr == '%':
+                    new.append('%')
+                elif curr == 'h':
+                    i += 1
+                    try:
+                        curr = fmt[i]
+                    except IndexError as e:
+                        raise ValueError(
+                            'Format string cannot end with "%h".'
+                        ) from e
+                    if curr == 'a':
+                        new.append(gematria._num_to_str(self.weekday()))
+                    elif curr == 'A':
+                        new.append(utils.WEEKDAYS[self.weekday()])
+                    elif curr == 'd':
+                        new.append(self.hebrew_day())
+                    elif curr == 'B':
+                        new.append(self.month_name(True))
+                    elif curr.casefold() == 'y':
+                        new.append(self.hebrew_year(curr == 'Y'))
+                    else:
+                        raise ValueError('Invalid format string.')
+                elif curr == '-':
+                    i += 1
+                    try:
+                        curr = fmt[i]
+                    except IndexError as e:
+                        raise ValueError(
+                            'Format string cannot end with "%-'
+                        ) from e
+                    if curr == 'd':
+                        new.append(str(self.day))
+                    elif curr == 'm':
+                        new.append(str(self.month))
+                    else:
+                        raise ValueError('Invalid format string.')
+                else:
+                    if curr.casefold() == 'a':
+                        new.append(self.to_pydate().strftime(f'%{curr}'))
+                    elif curr == 'w':
+                        new.append(str(self.weekday()))
+                    elif curr == 'd':
+                        new.append(format(self.day, '02d'))
+                    elif curr == 'B':
+                        new.append(self.month_name(False))
+                    elif curr == 'm':
+                        new.append(format(self.month, '02d'))
+                    elif curr.casefold() == 'y':
+                        new.append(date(self.year, 1, 1).strftime(f'%{curr}'))
+                    else:
+                        raise ValueError('Invalid format string.')
+            i += 1
+        return ''.join(new)
 
     @property
     def jd(self):
