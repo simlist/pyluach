@@ -31,6 +31,17 @@ FESTIVALS_HEBREW = [
 ]
 
 
+WEEKDAYS = {
+    1: 'ראשון',
+    2: 'שני',
+    3: 'שלישי',
+    4: 'רביעי',
+    5: 'חמישי',
+    6: 'שישי',
+    7: 'שבת'
+}
+
+
 def _is_leap(year):
     if (((7*year) + 1) % 19) < 7:
         return True
