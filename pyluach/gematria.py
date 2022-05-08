@@ -47,7 +47,7 @@ def _get_letters(num):
     return letters.replace('יה', 'טו').replace('יו', 'טז')
 
 
-def _num_to_str(num, thousands=False):
+def _num_to_str(num, thousands=False, withgershayim=True):
     """Return gematria string for number.
 
     Parameters
@@ -63,8 +63,12 @@ def _num_to_str(num, thousands=False):
     str
         The Hebrew representation of the number.
     """
-    letters = _stringify_gematria(_get_letters(num))
+    letters = _get_letters(num)
+    if withgershayim:
+        letters = _stringify_gematria(letters)
     if thousands:
-        thousand = ''.join([_get_letters(num // 1000), '׳'])
+        thousand = _get_letters(num // 1000)
+        if withgershayim:
+            thousand = ''.join([thousand, '׳'])
         letters = ''.join([thousand, letters])
     return letters
