@@ -498,7 +498,10 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         return self.strftime(fmt)
 
     def strftime(self, fmt):
-        """Wraps :py:meth:`datetime.date.strftime` method.
+        """Return formatted date.
+
+        Wraps :py:meth:`datetime.date.strftime` method and uses the same
+        format options.
 
         Parameters
         ----------
@@ -633,6 +636,28 @@ class GregorianDate(BaseDate, CalendarDateMixin):
 
 class HebrewDate(BaseDate, CalendarDateMixin):
     """A class for manipulating Hebrew dates.
+
+    The following format options are available similar to strftime:
+
+    ====== ======= ===========================================================
+    Format Example Meaning
+    ====== ======= ===========================================================
+    %a     Sun     Weekday as locale's abbreviated name
+    %A     Sunday  Weekday as locale's full name
+    %w     1       Weekday as decimal number 1-7 Sunday-Shabbos
+    %d     07      Day of the month as a 0-padded 2 digit decimal number
+    %-d    7       Day of the month as a decimal number
+    %B     Iyar    Month name transliterated into English
+    %m     02      Month as a 0-padded 2 digit decimal number
+    %-m    2       Month as a decimal number
+    %ha    א׳      Weekday as a Hebrew numeral
+    %hA    ראשון   Weekday name in Hebrew
+    %hd    ז       Day of month as Hebrew numeral
+    %hB    אייר    Name of month in Hebrew
+    %hy    תשפ״ב   Year in hebrew numerals without the thousands place
+    %hY    ה'תשפ״ב Year in hebrew numerals with the thousands place
+    %%     %       A literal '%' character
+    ====== ======= ===========================================================
 
     Parameters
     ----------
