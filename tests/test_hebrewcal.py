@@ -44,6 +44,11 @@ class TestYear:
         assert year - (year - 1) == 1
         assert year - (year + 2) == 2
 
+    def test_monthscount(self):
+        year = Year(5782)
+        assert year.monthscount() == 13
+        assert (year + 1).monthscount() == 12
+
     def test_iterdays(self):
         year = Year(5778)
         yearlist = list(year.iterdays())
@@ -437,16 +442,26 @@ class TestFasts:
         assert holiday(dates.HebrewDate(5778, 5, 9)) is None
 
 
+def test_to_hebrew_numeral():
+    assert hebrewcal.to_hebrew_numeral(5782) == 'תשפ״ב'
+
+
 @fixture
 def cal():
-    return hebrewcal.Calendar()
+    return hebrewcal.HebrewCalendar()
 
 
 class TestCalendar:
 
+    def test_setfirstweekday(self, cal):
+        cal.firstweekday = 2
+        assert cal.firstweekday == 2
+        assert cal._firstpyweekday == 0
+        cal.firstweekday = 1
+
     def test_iterweekdays(self):
         for startingweekday in range(1, 8):
-            cal = hebrewcal.Calendar(startingweekday)
+            cal = hebrewcal.HebrewCalendar(startingweekday)
             weekdays = list(cal.iterweekdays())
             assert len(weekdays) == 7
             assert weekdays[0] == startingweekday
@@ -471,7 +486,7 @@ class TestCalendar:
 
     def test_itermonthdays(self):
         for firstweekday in range(1, 8):
-            cal = hebrewcal.Calendar(firstweekday)
+            cal = hebrewcal.HebrewCalendar(firstweekday)
             for y, m in [(1, 7), (6000, 12)]:
                 days = list(cal.itermonthdays(y, m))
                 assert len(days) in [35, 42]
@@ -481,15 +496,32 @@ class TestCalendar:
         assert tishrei[0] == (0, 1)
         assert tishrei[-1] == (0, 7)
 
+    def test_yeardatescalendar(self, cal):
+        year = cal.yeardatescalendar(5783, 4)
+        assert len(year) == 3
+        assert len(year[1]) == 4
+        assert year[2][3][4][6] == dates.HebrewDate(5784, 7, 1)
+
+    def test_yeardays2calendar(self, cal):
+        year = cal.yeardays2calendar(5784)
+        assert len(year) == 5
+        assert len(year[4]) == 1
+        assert year[1][2][5][6] == (0, 7)
+        assert year[2][0][2][0] == (14, 1)
+
+    def test_yeardayscalendar(self, cal):
+        year = cal.yeardayscalendar(5784)
+        assert year[2][0][2][0] == 14
+
     def test_errors(self):
         with raises(hebrewcal.IllegalWeekdayError):
-            hebrewcal.Calendar(0)
+            hebrewcal.HebrewCalendar(0)
         with raises(hebrewcal.IllegalWeekdayError):
-            hebrewcal.Calendar(8)
+            hebrewcal.HebrewCalendar(8)
 
     def test_error_message(self):
         try:
-            hebrewcal.Calendar(0)
+            hebrewcal.HebrewCalendar(0)
         except hebrewcal.IllegalWeekdayError as e:
             assert str(e).startswith('bad weekday number 0;')
         try:
