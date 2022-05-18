@@ -19,6 +19,7 @@ Features
 * Rich comparisons between dates
 * Finding the weekday of a given date
 * Finding the weekly Parsha reading of a given date
+* Generating and rendering Hebrew calendars in text and HTML
 
 Installation
 -------------
