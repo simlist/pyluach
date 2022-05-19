@@ -5,9 +5,10 @@ atomicwrites==1.4.0
 attrs==19.3.0
 Babel==2.9.1
 backcall==0.2.0
+beautifulsoup4==4.10.0
 black==22.1.0
 bleach==3.3.0
-build==0.4.0
+build==0.7.0
 certifi==2020.4.5.1
 cffi==1.14.5
 chardet==3.0.4
@@ -43,7 +44,7 @@ pep517==0.10.0
 pep8==1.7.1
 pexpect==4.8.0
 pickleshare==0.7.5
-pkginfo==1.5.0.1
+pkginfo==1.8.2
 platformdirs==2.5.0
 pluggy==0.13.1
 prompt-toolkit==3.0.18
@@ -58,6 +59,7 @@ pylint==2.12.2
 pyparsing==2.4.7
 pytest==5.4.2
 pytest-cache==1.0
+pytest-cov==3.0.0
 pytest-flakes==4.0.5
 pytest-pep8==1.0.6
 pytest-pylint==0.18.0
@@ -70,6 +72,7 @@ rfc3986==1.5.0
 SecretStorage==3.3.1
 six==1.15.0
 snowballstemmer==2.0.0
+soupsieve==2.3.1
 Sphinx==3.0.3
 sphinx-rtd-theme==0.4.3
 sphinxcontrib-applehelp==1.0.2
@@ -83,7 +86,7 @@ toml==0.10.2
 tomli==2.0.1
 tqdm==4.46.0
 traitlets==5.0.5
-twine==3.4.1
+twine==3.8.0
 typing-extensions==4.1.0
 urllib3==1.26.5
 wcwidth==0.1.9
