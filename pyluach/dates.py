@@ -307,12 +307,9 @@ class JulianDay(BaseDate):
     ----------
     day : float
         The Julian Day Number at midnight (as *n*.5)
-    jd : float
-        Alias for day.
     """
 
     def __init__(self, day):
-        """Initialize a JulianDay instance."""
         if day-int(day) < .5:
             self.day = int(day) - .5
         else:
@@ -338,6 +335,12 @@ class JulianDay(BaseDate):
 
     @property
     def jd(self):
+        """"Return julian day.
+
+        Returns
+        -------
+        float
+        """
         return self.day
 
     @staticmethod
@@ -471,8 +474,6 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     year : int
     month : int
     day : int
-    jd : float(property)
-      The corresponding Julian Day Number at midnight (as *n*.5).
 
     Warnings
     --------
