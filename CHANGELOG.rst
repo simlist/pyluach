@@ -6,6 +6,11 @@ This document records all notable changes to `pyluach <https://github.com/simlis
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 
+`1.4.2`_ (2022-05-20)
+---------------------
+* Fixed bug in Month comparisons when one month is before Nissan and one
+  is not
+
 `1.4.1`_ (2022-03-25)
 ---------------------
 * Fixed mistakes in docstring and error message.
@@ -54,6 +59,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Initial public release
 
 
+.. _`1.4.2`: https://github.com/simlist/pyluach/compare/v1.4.1...v1.4.2
 .. _`1.4.1`: https://github.com/simlist/pyluach/compare/v1.4.0...v1.4.1
 .. _`1.4.0`: https://github.com/simlist/pyluach/compare/v1.3.0...v1.4.0
 .. _`1.3.0`: https://github.com/simlist/pyluach/compare/v1.2.1...v1.3.0
