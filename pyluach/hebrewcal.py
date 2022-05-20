@@ -182,9 +182,9 @@ class Year:
         return utils._days_in_year(self.year)
 
     def __eq__(self, other):
-        if isinstance(other, Year) and self.year == other.year:
-            return True
-        return False
+        if isinstance(other, Year):
+            return self.year == other.year
+        return NotImplemented
 
     def __add__(self, other):
         """Add int to year."""
@@ -207,24 +207,24 @@ class Year:
             return NotImplemented
 
     def __gt__(self, other):
-        if self.year > other.year:
-            return True
-        return False
+        if isinstance(other, Year):
+            return self.year > other.year
+        return NotImplemented
 
     def __ge__(self, other):
-        if self == other or self > other:
-            return True
-        return False
+        if isinstance(other, Year):
+            return (self == other or self > other)
+        return NotImplemented
 
     def __lt__(self, other):
-        if self.year < other.year:
-            return True
-        return False
+        if isinstance(other, Year):
+            return self.year < other.year
+        return NotImplemented
 
     def __le__(self, other):
-        if self < other or self == other:
-            return True
-        return False
+        if isinstance(other, Year):
+            return (self < other or self == other)
+        return NotImplemented
 
     def __iter__(self):
         """Yield integer for each month in year."""
@@ -374,12 +374,9 @@ class Month:
             yield day
 
     def __eq__(self, other):
-        if(
-           isinstance(other, Month)
-           and self.year == other.year
-           and self.month == other.month):
-            return True
-        return False
+        if isinstance(other, Month):
+            return (self.year == other.year and self.month == other.month)
+        return NotImplemented
 
     def __add__(self, other):
         yearmonths = list(Year(self.year))
@@ -406,28 +403,36 @@ class Month:
             return NotImplemented
 
     def __gt__(self, other):
-        return (
-            self.year > other.year
-            or (
-                self.year == other.year
-                and self._month_number() > other._month_number()
+        if isinstance(other, Month):
+            return (
+                self.year > other.year
+                or (
+                    self.year == other.year
+                    and self._month_number() > other._month_number()
+                )
             )
-        )
+        return NotImplemented
 
     def __ge__(self, other):
-        return self > other or self == other
+        if isinstance(other, Month):
+            return self > other or self == other
+        return NotImplemented
 
     def __lt__(self, other):
-        return (
-            self.year < other.year
-            or (
-                self.year == other.year
-                and self._month_number() < other._month_number()
+        if isinstance(other, Month):
+            return (
+                self.year < other.year
+                or (
+                    self.year == other.year
+                    and self._month_number() < other._month_number()
+                )
             )
-        )
+        return NotImplemented
 
     def __le__(self, other):
-        return self < other or self == other
+        if isinstance(other, Month):
+            return (self < other or self == other)
+        return NotImplemented
 
     @classmethod
     def from_date(cls, date):
@@ -460,6 +465,10 @@ class Month:
             The Hebrew month the given date occurs in
         """
         return cls.from_date(HebrewDate.from_pydate(pydate))
+
+    def _month_number(self):
+        """Return month number 1-12 or 13, Tishrei - Elul."""
+        return list(Year(self.year)).index(self.month) + 1
 
     def month_name(self, hebrew=False):
         """Return the name of the month.
@@ -505,10 +514,6 @@ class Month:
             through Saturday as 7.
         """
         return HebrewDate(self.year, self.month, 1).weekday()
-
-    def _month_number(self):
-        """Return month number 1-12 or 13, Tishrei - Elul."""
-        return list(Year(self.year)).index(self.month) + 1
 
     def _elapsed_months(self):
         """Return number of months elapsed from beginning of calendar"""
