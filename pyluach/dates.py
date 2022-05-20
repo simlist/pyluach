@@ -53,7 +53,6 @@ class BaseDate(abc.ABC):
     @abc.abstractmethod
     def jd(self):
         """Return julian day number."""
-        pass
 
     @abc.abstractmethod
     def to_heb(self):
@@ -63,7 +62,6 @@ class BaseDate(abc.ABC):
         -------
         HebrewDate
         """
-        pass
 
     def __hash__(self):
         return hash(repr(self))
