@@ -13,6 +13,10 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Added strftime method and __format__ method to dates.GregorianDate.
 * Added __format__ method to dates.HebrewDate.
 * Added monthcount method to hebrewcal.Year.
+* Removed deprecated hebrewcal.Month.name attribute
+* Implemented HebrewCalendar classes for rendering calendars similar to
+  Calendar classes in the standard library calendar module
+* Fixed bug in Month comparison operators
 
 `1.4.2`_ (2022-05-20)
 ---------------------
