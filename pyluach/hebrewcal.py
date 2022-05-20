@@ -353,14 +353,6 @@ class Month:
     month : int
         The month as an integer starting with 7 for Tishrei through 13
         if necessary for Adar Sheni and then 1-6 for Nissan - Elul.
-    name : str
-        The name of the month.
-
-        .. deprecated:: 1.3.0
-            `name` attribute will be removed in pyluach 2.0.0, it is replaced
-            by `month_name` method, because the latter allows a `hebrew`
-            parameter. The month_name also uses slightly different
-            transliteration.
     """
 
     def __init__(self, year, month):
@@ -370,7 +362,6 @@ class Month:
         if month < 1 or month > 12 + utils._is_leap(self.year):
             raise IllegalMonthError(month)
         self.month = month
-        self.name = utils._month_name(self.year, self.month, False)
 
     def __repr__(self):
         return f'Month({self.year}, {self.month})'
