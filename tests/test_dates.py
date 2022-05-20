@@ -34,12 +34,15 @@ class TestClassesSanity:
                 assert jd.day == conf.day
             else:
                 assert abs(jd.day - conf.day) <= 1
+        bce = GregorianDate(-100, 1, 1)
+        assert abs(bce.to_heb().to_greg() - bce) <= 1
 
     def test_heb_sanity(self):
         for i in range(347998, 2460000, 117):
             jd = dates.JulianDay(i)
             conf = jd.to_heb().to_jd()
             assert jd.day == conf.day
+        firstday = HebrewDate(1, 7, 1)
 
 
 class TestClassesConversion:
