@@ -383,30 +383,28 @@ class Month:
             ) from e
 
     def __gt__(self, other):
-        if (
+        return (
             self.year > other.year
-            or (self.year == other.year and self.month > other.month)
-        ):
-            return True
-        return False
+            or (
+                self.year == other.year
+                and self._month_number() > other._month_number()
+            )
+        )
 
     def __ge__(self, other):
-        if self > other or self == other:
-            return True
-        return False
+        return self > other or self == other
 
     def __lt__(self, other):
-        if (
+        return (
             self.year < other.year
-            or (self.year == other.year and self.month < other.month)
-        ):
-            return True
-        return False
+            or (
+                self.year == other.year
+                and self._month_number() < other._month_number()
+            )
+        )
 
     def __le__(self, other):
-        if self < other or self == other:
-            return True
-        return False
+        return self < other or self == other
 
     @classmethod
     def from_date(cls, date):
@@ -484,6 +482,10 @@ class Month:
             through Saturday as 7.
         """
         return HebrewDate(self.year, self.month, 1).weekday()
+
+    def _month_number(self):
+        """Return month number 1-12 or 13, Tishrei - Elul."""
+        return list(Year(self.year)).index(self.month) + 1
 
     def _elapsed_months(self):
         """Return number of months elapsed from beginning of calendar"""
