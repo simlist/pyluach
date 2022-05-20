@@ -242,28 +242,28 @@ class TestCompareMonth:
         assert (months[1] > months[2]) is False
         assert months[3] > months[1]
         assert (months[2] > months[3]) is False
-        assert months[1] > Month(6780, 12)
+        assert months[1] > Month(5780, 12)
 
     def test_month_ge(self, months):
         assert copy(months[1]) >= months[1]
         assert months[2] >= months[1]
         assert (months[2] >= months[3]) is False
-        assert months[1] >= Month(6780, 12)
+        assert months[1] >= Month(5780, 12)
 
     def test_month_lt(self, months):
         assert (copy(months[2]) < months[2]) is False
         assert months[1] < months[2]
         assert months[2] < months[3]
         assert (months[3] < months[1]) is False
-        assert Month(6780, 12) < months[1]
+        assert Month(5780, 12) < months[1]
 
     def test_month_le(self, months):
         assert copy(months[2]) <= months[2]
         assert months[1] <= months[2]
         assert (months[3] <= months[2]) is False
-        assert Month(6780, 12) <= months[1]
+        assert Month(5780, 12) <= months[1]
 
-    def rest_month_ne(self, months):
+    def test_month_ne(self, months):
         assert months[2] != months[1]
         assert months[3] != months[1]
         assert (copy(months[1]) != months[1]) is False
