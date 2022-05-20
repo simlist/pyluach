@@ -3,11 +3,11 @@ manipulating several date types.
 
 Contents
 --------
-* :class:`~pyluach.dates.BaseDate`
-* :class:`~pyluach.dates.CalendarDateMixin`
-* :class:`~pyluach.dates.JulianDay`
-* :class:`~pyluach.dates.GregorianDate`
-* :class:`~pyluach.dates.HebrewDate`
+* :class:`BaseDate`
+* :class:`CalendarDateMixin`
+* :class:`JulianDay`
+* :class:`GregorianDate`
+* :class:`HebrewDate`
 
 Note
 ----
@@ -43,9 +43,8 @@ class BaseDate(abc.ABC):
     date1 >=, <= date2   True if both are True
     ===================  =============================================
 
-    Any child of BaseDate that implements a `jd` attribute
-    representing the Julian Day of that date can be compared to and
-    diffed with any other valid date type.
+    Any subclass of ``BaseDate`` can be compared to and diffed with any other
+    subclass date.
     """
 
     _error_string = 'An error has occured.'
@@ -54,6 +53,17 @@ class BaseDate(abc.ABC):
     @abc.abstractmethod
     def jd(self):
         """Return julian day number."""
+        pass
+
+    @abc.abstractmethod
+    def to_heb(self):
+        """Return Hebrew Date.
+
+        Returns
+        -------
+        HebrewDate
+        """
+        pass
 
     def __hash__(self):
         return hash(repr(self))
@@ -254,7 +264,6 @@ class CalendarDateMixin(abc.ABC):
     """
 
     def __init__(self, year, month, day, jd=None):
-        """Initialize a calendar date."""
         self.year = year
         self.month = month
         self.day = day

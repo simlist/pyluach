@@ -117,8 +117,8 @@ def getparsha(date, israel=False):
 
     Parameters
     ----------
-    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
-      This date does not have to be a Shabbos.
+    date : ~pyluach.dates.BaseDate
+      Any subclass of ``BaseDate``. This date does not have to be a Shabbos.
 
     israel : bool, optional
       ``True`` if you want the parsha according to the Israel schedule
@@ -143,16 +143,16 @@ def getparsha_string(date, israel=False, hebrew=False):
 
     Parameters
     ----------
-    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
-      This date does not have to be a Shabbos.
+    date : ~pyluach.dates.BaseDate
+      Any subclass of ``BaseDate``. The date does not have to be a Shabbos.
 
     israel : bool, optional
       ``True`` if you want the parsha according to the Israel schedule
-      (with only one day of Yom Tov). Defaults to ``False``.
+      (with only one day of Yom Tov). Default is ``False``.
 
     hebrew : bool, optional
       ``True`` if you want the name of the parsha in Hebrew.
-      Defaults to ``False``.
+      Default is ``False``.
 
     Returns
     -------
