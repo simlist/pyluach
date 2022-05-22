@@ -1,9 +1,6 @@
 Welcome to pyluach's documentation!
 ===================================
 
-.. automodule:: pyluach
-   :members:
-
 .. include:: ../README.rst
 
 .. toctree::
