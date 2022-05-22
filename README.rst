@@ -88,7 +88,9 @@ Examples
 
 Contact
 --------
-For questions and comments contact me at simlist@gmail.com.
+For questions and comments please `raise an issue in github
+<https://github.com/simlist/pyluach/issues>` or contact me at
+simlist@gmail.com.
 
 License
 --------
