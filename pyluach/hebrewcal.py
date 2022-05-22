@@ -203,8 +203,8 @@ class Year:
 
         Parameters
         ----------
-        date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
-            Any one of the ``pyluach`` date types.
+        date : ~pyluach.dates.BaseDate
+            Any subclass of ``BaseDate``.
 
         Returns
         -------
@@ -218,7 +218,7 @@ class Year:
 
         Parameters
         ----------
-        pydate : ``datetime.date``
+        pydate : datetime.date
             A python standard library date object
 
         Returns
