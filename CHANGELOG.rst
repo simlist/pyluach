@@ -16,7 +16,6 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Removed deprecated hebrewcal.Month.name attribute
 * Implemented HebrewCalendar classes for rendering calendars similar to
   Calendar classes in the standard library calendar module
-* Fixed bug in Month comparison operators
 
 `1.4.2`_ (2022-05-20)
 ---------------------
