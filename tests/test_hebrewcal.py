@@ -97,6 +97,7 @@ class TestYearComparisons:
         assert (years[1] == years[2]) is False
         assert years[2] != years[1]
         assert (copy(years[2]) != years[2]) is False
+        assert years[1] != 5778
 
     def test_year_gt(self, years):
         assert years[2] > years[1]
@@ -116,6 +117,12 @@ class TestYearComparisons:
         assert copy(years[1]) <= years[1]
         assert years[1] <= years[2]
         assert (years[2] <= years[1]) is False
+
+    def test_errors(self, years):
+        with raises(TypeError):
+            years[1] > 5778
+        with raises(TypeError):
+            years[1] < '5778'
 
 
 class TestMonth:
@@ -275,6 +282,13 @@ class TestCompareMonth:
         assert months[2] != months[1]
         assert months[3] != months[1]
         assert (copy(months[1]) != months[1]) is False
+        assert months[3] != 3
+
+    def test_month_errors(self, months):
+        with raises(TypeError):
+            months[1] > 5
+        with raises(TypeError):
+            assert months[2] <= '5'
 
 
 class TestHoliday:
