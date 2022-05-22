@@ -42,7 +42,6 @@ class TestClassesSanity:
             jd = dates.JulianDay(i)
             conf = jd.to_heb().to_jd()
             assert jd.day == conf.day
-        firstday = HebrewDate(1, 7, 1)
 
 
 class TestClassesConversion:
