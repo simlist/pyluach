@@ -89,7 +89,7 @@ Examples
 Contact
 --------
 For questions and comments please `raise an issue in github
-<https://github.com/simlist/pyluach/issues>` or contact me at
+<https://github.com/simlist/pyluach/issues>`_ or contact me at
 simlist@gmail.com.
 
 License
