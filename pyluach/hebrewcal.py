@@ -7,7 +7,6 @@ for getting the holiday or fast day for a given date, and classes adapting
 from numbers import Number
 from itertools import repeat
 import calendar
-from pyluach import gematria
 
 from pyluach.dates import HebrewDate
 from pyluach import utils
@@ -54,87 +53,6 @@ class IllegalWeekdayError(ValueError):
             f'bad weekday number {self.weekday}; '
             f'must be 1 (Sunday) to 7 (Saturday)'
         )
-
-
-def fast_day(date, hebrew=False):
-    """Return name of fast day or None.
-
-    Parameters
-    ----------
-    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
-      Any date that implements a ``to_heb()`` method which returns a
-      ``HebrewDate`` can be used.
-
-    hebrew : bool, optional
-      ``True`` if you want the fast_day name in Hebrew letters. Default
-      is ``False``, which returns the name transliterated into English.
-
-    Returns
-    -------
-    str or ``None``
-      The name of the fast day or ``None`` if the given date is not
-      a fast day.
-    """
-    return _fast_day_string(date, hebrew)
-
-
-def festival(date, israel=False, hebrew=False, include_working_days=True):
-    """Return Jewish festival of given day.
-
-    This method will return all major and minor religous
-    Jewish holidays not including fast days.
-
-    Parameters
-    ----------
-    date : ~pyluach.dates.BaseDate
-      Any subclass of ``BaseDate`` can be used.
-
-    israel : bool, optional
-      ``True`` if you want the festivals according to the Israel
-      schedule. Defaults to ``False``.
-
-    hebrew : bool, optional
-      ``True`` if you want the festival name in Hebrew letters. Default
-      is ``False``, which returns the name transliterated into English.
-
-    include_working_days : bool, optional
-      ``True`` to include festival days on which melacha (work) is
-      allowed; ie. Pesach Sheni, Chol Hamoed, etc.
-      Default is ``True``.
-
-    Returns
-    -------
-    str or ``None``
-      The name of the festival or ``None`` if the given date is not
-      a Jewish festival.
-    """
-    return _festival_string(date, israel, hebrew, include_working_days)
-
-
-def holiday(date, israel=False, hebrew=False):
-    """Return Jewish holiday of given date.
-
-    The holidays include the major and minor religious Jewish
-    holidays including fast days.
-
-    Parameters
-    ----------
-    date : ~pyluach.dates.BaseDate
-        Any subclass of ``BaseDate`` can be used.
-    israel : bool, optional
-        ``True`` if you want the holidays according to the israel
-        schedule. Default is ``False``.
-    hebrew : bool, optional
-        ``True`` if you want the holiday name in Hebrew letters. Default
-        is ``False``, which returns the name transliterated into English.
-
-    Returns
-    -------
-    str or ``None``
-      The name of the holiday or ``None`` if the given date is not
-      a Jewish holiday.
-    """
-    return _holiday(date, israel, hebrew)
 
 
 class Year:
@@ -212,9 +130,7 @@ class Year:
         return NotImplemented
 
     def __ge__(self, other):
-        if isinstance(other, Year):
-            return (self == other or self > other)
-        return NotImplemented
+        return (self == other or self > other)
 
     def __lt__(self, other):
         if isinstance(other, Year):
@@ -222,9 +138,7 @@ class Year:
         return NotImplemented
 
     def __le__(self, other):
-        if isinstance(other, Year):
-            return (self < other or self == other)
-        return NotImplemented
+        return (self < other or self == other)
 
     def __iter__(self):
         """Yield integer for each month in year."""
@@ -414,9 +328,7 @@ class Month:
         return NotImplemented
 
     def __ge__(self, other):
-        if isinstance(other, Month):
-            return self > other or self == other
-        return NotImplemented
+        return self > other or self == other
 
     def __lt__(self, other):
         if isinstance(other, Month):
@@ -430,9 +342,7 @@ class Month:
         return NotImplemented
 
     def __le__(self, other):
-        if isinstance(other, Month):
-            return (self < other or self == other)
-        return NotImplemented
+        return (self < other or self == other)
 
     @classmethod
     def from_date(cls, date):
@@ -631,7 +541,7 @@ def to_hebrew_numeral(num, thousands=False, withgershayim=True):
     str
         The Hebrew numeral representation of the number.
     """
-    return gematria._num_to_str(num, thousands, withgershayim)
+    return _num_to_str(num, thousands, withgershayim)
 
 
 class HebrewCalendar(calendar.Calendar):
@@ -1163,7 +1073,7 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
         if day == 0:
             return f'<td class="{self.cssclass_noday}">&nbsp;</td>'
         if self.hebrewnumerals:
-            day = gematria._num_to_str(day, withgershayim=False)
+            day = to_hebrew_numeral(day, withgershayim=False)
         return f'<td class="{self.cssclasses[pyweekday]}">{day}</td>'
 
     def formatweekday(self, day):
@@ -1302,3 +1212,84 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
             a('</tr>')
         a('</table>')
         return ''.join(v)
+
+
+def fast_day(date, hebrew=False):
+    """Return name of fast day or None.
+
+    Parameters
+    ----------
+    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+      Any date that implements a ``to_heb()`` method which returns a
+      ``HebrewDate`` can be used.
+
+    hebrew : bool, optional
+      ``True`` if you want the fast_day name in Hebrew letters. Default
+      is ``False``, which returns the name transliterated into English.
+
+    Returns
+    -------
+    str or ``None``
+      The name of the fast day or ``None`` if the given date is not
+      a fast day.
+    """
+    return _fast_day_string(date, hebrew)
+
+
+def festival(date, israel=False, hebrew=False, include_working_days=True):
+    """Return Jewish festival of given day.
+
+    This method will return all major and minor religous
+    Jewish holidays not including fast days.
+
+    Parameters
+    ----------
+    date : ~pyluach.dates.BaseDate
+      Any subclass of ``BaseDate`` can be used.
+
+    israel : bool, optional
+      ``True`` if you want the festivals according to the Israel
+      schedule. Defaults to ``False``.
+
+    hebrew : bool, optional
+      ``True`` if you want the festival name in Hebrew letters. Default
+      is ``False``, which returns the name transliterated into English.
+
+    include_working_days : bool, optional
+      ``True`` to include festival days on which melacha (work) is
+      allowed; ie. Pesach Sheni, Chol Hamoed, etc.
+      Default is ``True``.
+
+    Returns
+    -------
+    str or ``None``
+      The name of the festival or ``None`` if the given date is not
+      a Jewish festival.
+    """
+    return _festival_string(date, israel, hebrew, include_working_days)
+
+
+def holiday(date, israel=False, hebrew=False):
+    """Return Jewish holiday of given date.
+
+    The holidays include the major and minor religious Jewish
+    holidays including fast days.
+
+    Parameters
+    ----------
+    date : ~pyluach.dates.BaseDate
+        Any subclass of ``BaseDate`` can be used.
+    israel : bool, optional
+        ``True`` if you want the holidays according to the israel
+        schedule. Default is ``False``.
+    hebrew : bool, optional
+        ``True`` if you want the holiday name in Hebrew letters. Default
+        is ``False``, which returns the name transliterated into English.
+
+    Returns
+    -------
+    str or ``None``
+      The name of the holiday or ``None`` if the given date is not
+      a Jewish holiday.
+    """
+    return _holiday(date, israel, hebrew)
