@@ -52,7 +52,12 @@ class BaseDate(abc.ABC):
     @property
     @abc.abstractmethod
     def jd(self):
-        """Return julian day number."""
+        """Return julian day number.
+
+        Returns
+        -------
+        float
+        """
 
     @abc.abstractmethod
     def to_heb(self):
@@ -158,9 +163,9 @@ class BaseDate(abc.ABC):
 
         Returns
         -------
-        ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
+        JulianDay, GregorianDate, or HebrewDate
             `self` if the date is Shabbos or else the following Shabbos as
-            the same date type as operated on.
+            the same date type as called from.
 
         Examples
         --------
@@ -184,7 +189,7 @@ class BaseDate(abc.ABC):
 
         Returns
         -------
-        str or ``None``
+        str or None
             The name of the fast day or ``None`` if the date is not
             a fast day.
         """
@@ -211,7 +216,7 @@ class BaseDate(abc.ABC):
 
         Returns
         -------
-        str or ``None``
+        str or None
             The name of the festival or ``None`` if the given date is not
             a Jewish festival.
         """
@@ -236,7 +241,7 @@ class BaseDate(abc.ABC):
 
         Returns
         -------
-        str or ``None``
+        str or None
             The name of the holiday or ``None`` if the given date is not
             a Jewish holiday.
         """
@@ -294,7 +299,7 @@ class CalendarDateMixin(abc.ABC):
 
         Returns
         -------
-        Dict
+        dict
             A dictionary in the form
             ``{'year': int, 'month': int, 'day': int}``.
         """
@@ -329,16 +334,6 @@ class JulianDay(BaseDate):
 
     def __str__(self):
         return str(self.day)
-
-    def weekday(self):
-        """Return weekday of date.
-
-        Returns
-        -------
-        int
-            The weekday with Sunday as 1 through Saturday as 7.
-        """
-        return (int(self.day+.5) + 1) % 7 + 1
 
     @property
     def jd(self):
