@@ -168,10 +168,9 @@ class Year:
 
         Yields
         ------
-        ``Month``
+        Month
             The next month in the Hebrew calendar year as a
-            ``luachcal.hebrewcal.Month`` instance beginning with
-            Tishrei and ending with Elul.
+            ``Month`` instance beginning with Tishrei through Elul.
         """
         for month in self:
             yield Month(self.year, month)
@@ -193,7 +192,7 @@ class Year:
 
         Yields
         ------
-        ~pyluach.dates.HebrewDate
+        pyluach.dates.HebrewDate
             The next date of the Hebrew calendar year starting with
             the first of Tishrei.
         """
@@ -239,7 +238,7 @@ class Year:
         ----------
         thousands: bool, optional
             ``True`` to prefix the year with the thousands place.
-            default is ``False``.
+            Default is ``False``.
 
         Examples
         --------
@@ -447,7 +446,7 @@ class Month:
 
         Yields
         ------
-        ~pyluach.dates.HebrewDate
+        pyluach.dates.HebrewDate
             The next Hebrew date of the month.
         """
         for day in self:
@@ -459,7 +458,8 @@ class Month:
         Returns
         -------
         dict
-            A dictionary in the form {weekday: int, hours: int, parts: int}
+            A dictionary in the form
+            ``{weekday: int, hours: int, parts: int}``
 
         Note
         -----
@@ -605,7 +605,7 @@ class HebrewCalendar(calendar.Calendar):
 
     @property
     def firstweekday(self):
-        """Return the weekday the weeks should start with.
+        """Get and set the weekday the weeks should start with.
 
         Returns
         -------
@@ -649,7 +649,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Yields
         ------
-        ~pyluach.dates.HebrewDate
+        pyluach.dates.HebrewDate
             The next Hebrew Date of the month starting with the first
             date of the week the first of the month falls in, and ending
             with the last date of the week that the last day of the month
@@ -803,6 +803,7 @@ class HebrewCalendar(calendar.Calendar):
 
         This method is similar to the ``yeardatescalendar`` except the
         entries in the week lists are day numbers.
+
         Parameters
         ----------
         year : int
@@ -1014,7 +1015,9 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
 
 
 class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
-    """Adapts calendar.HTMLCalendar for Hebrew calendar.
+    """Class to generate html calendars .
+
+    Adapts :py:class:`calendar.HTMLCalendar` for the Hebrew calendar.
 
     Parameters
     ----------
@@ -1227,9 +1230,8 @@ def fast_day(date, hebrew=False):
 
     Parameters
     ----------
-    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
-      Any date that implements a ``to_heb()`` method which returns a
-      ``HebrewDate`` can be used.
+    date : ~pyluach.dates.BaseDate
+      Any date instance from a subclass of ``BaseDate`` can be used.
 
     hebrew : bool, optional
       ``True`` if you want the fast_day name in Hebrew letters. Default
@@ -1237,7 +1239,7 @@ def fast_day(date, hebrew=False):
 
     Returns
     -------
-    str or ``None``
+    str or None
       The name of the fast day or ``None`` if the given date is not
       a fast day.
     """
@@ -1270,7 +1272,7 @@ def festival(date, israel=False, hebrew=False, include_working_days=True):
 
     Returns
     -------
-    str or ``None``
+    str or None
       The name of the festival or ``None`` if the given date is not
       a Jewish festival.
     """
@@ -1296,7 +1298,7 @@ def holiday(date, israel=False, hebrew=False):
 
     Returns
     -------
-    str or ``None``
+    str or None
       The name of the holiday or ``None`` if the given date is not
       a Jewish holiday.
     """
