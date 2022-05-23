@@ -843,177 +843,6 @@ class HebrewCalendar(calendar.Calendar):
         return super().monthdatescalendar(year, month)
 
 
-class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
-    """Subclass of HebrewCalendar that outputs a plaintext calendar.
-
-    ``HebrewTextCalendar`` adapts :py:class:`calendar.TextCalendar` for the
-    Hebrew calendar.
-
-    Parameters
-    ----------
-    firstweekday : int, optional
-        The weekday to start each week with. Default is ``1`` for Sunday.
-    hebrewnumerals : bool, optional
-        Default is ``True``, which shows the day of the month with Hebrew
-        numerals. ``False`` shows the day of the month as a number.
-    hebrewweekdays : bool, optional
-        ``True`` to show the weekday in Hebrew. Default is ``False``,
-        which shows the weekday in English.
-    hebrewmonths : bool, optional
-        ``True`` to show the month name in Hebrew. Default is ``False``,
-        which shows the month name transliterated into English.
-    hebrewyear : bool, optional
-        ``True`` to show the year in Hebrew numerals. Default is ``False``,
-        which shows the year as a number.
-
-    Attributes
-    ----------
-    hebrewnumerals : bool
-    hebrewweekdays : bool
-    hebrewmonths : bool
-    hebrewyear : bool
-
-    Note
-    ----
-    This class generates plain text calendars. Any program that adds
-    any formatting may distort the calendars when using any Hebrew
-    characters.
-    """
-
-    def formatday(self, day, weekday, width):
-        """Return a formatted day.
-
-        Extends calendar.TextCalendar formatday method.
-
-        Parameters
-        ----------
-        day : int
-            The day of the month.
-        weekday : int
-            The weekday 1-7 Sunday-Shabbos.
-        width : int
-            The width of the day column.
-
-        Returns
-        -------
-        str
-        """
-        if self.hebrewnumerals:
-            if day == 0:
-                s = ''
-            else:
-                s = f'{to_hebrew_numeral(day, withgershayim=False):>2}'
-            return s.center(width)
-        return super().formatday(day, weekday, width)
-
-    def formatweekday(self, day, width):
-        """Return formatted weekday.
-
-        Extends calendar.TextCalendar formatweekday method.
-
-        Parameters
-        ----------
-        day : int
-            The weekday 1-7 Sunday-Shabbos.
-        width : int
-            The width of the day column.
-
-        Returns
-        -------
-        str
-        """
-        if self.hebrewweekdays:
-            if width < 5:
-                name = to_hebrew_numeral(day)
-            else:
-                name = utils.WEEKDAYS[day]
-            return name[:width].center(width)
-        return super().formatweekday(_to_pyweekday(day), width)
-
-    def formatmonthname(
-        self, theyear, themonth, width=0, withyear=True
-    ):
-        """Return formatted month name.
-
-        Parameters
-        ----------
-        theyear : int
-        themonth : int
-            1-12 or 13 for Nissan-Adar Sheni
-        width : int, optional
-            The number of columns per day. Default is 0
-        withyear : bool, optional
-            Default is ``True`` to include the year with the month name.
-
-        Returns
-        -------
-        str
-        """
-        s = Month(theyear, themonth).month_name(self.hebrewmonths)
-        if withyear:
-            if self.hebrewyear:
-                year = to_hebrew_numeral(theyear)
-            else:
-                year = theyear
-            s = f'{s} {year}'
-        return s.center(width)
-
-    def formatyear(self, theyear, w=2, l=1, c=6, m=3):
-        """Return a year's calendar as a multi-line string.
-
-        Parameters
-        ----------
-        theyear : int
-        w : int, optional
-            The date column width. Default is 2
-        l : int, optional
-            The number of lines per week. Default is 1.
-        c : int, optional
-            The number of columns in between each month. Default is 6
-        m : int, optional
-            The number of months per row. Default is 3.
-
-        Returns
-        -------
-        str
-        """
-        w = max(2, w)
-        l = max(1, l)
-        c = max(2, c)
-        colwidth = (w + 1) * 7 - 1
-        v = []
-        a = v.append
-        a(repr(theyear).center(colwidth*m+c*(m-1)).rstrip())
-        a('\n'*l)
-        header = self.formatweekheader(w)
-        yearmonths = list(Year(theyear))
-        for (i, row) in enumerate(self.yeardays2calendar(theyear, m)):
-            # months in this row
-            months = range(m*i+1, min(m*(i+1)+1, len(yearmonths)+1))
-            a('\n'*l)
-            names = (
-                self.formatmonthname(theyear, yearmonths[k-1], colwidth, False)
-                for k in months
-            )
-            a(calendar.formatstring(names, colwidth, c).rstrip())
-            a('\n'*l)
-            headers = (header for k in months)
-            a(calendar.formatstring(headers, colwidth, c).rstrip())
-            a('\n'*l)
-            # max number of weeks for this row
-            height = max(len(cal) for cal in row)
-            for j in range(height):
-                weeks = []
-                for cal in row:
-                    if j >= len(cal):
-                        weeks.append('')
-                    else:
-                        weeks.append(self.formatweek(cal[j], w))
-                a(calendar.formatstring(weeks, colwidth, c).rstrip())
-                a('\n' * l)
-        return ''.join(v)
-
-
 class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
     """Class to generate html calendars .
 
@@ -1222,6 +1051,177 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
                 a('</td>')
             a('</tr>')
         a('</table>')
+        return ''.join(v)
+
+
+class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
+    """Subclass of HebrewCalendar that outputs a plaintext calendar.
+
+    ``HebrewTextCalendar`` adapts :py:class:`calendar.TextCalendar` for the
+    Hebrew calendar.
+
+    Parameters
+    ----------
+    firstweekday : int, optional
+        The weekday to start each week with. Default is ``1`` for Sunday.
+    hebrewnumerals : bool, optional
+        Default is ``True``, which shows the day of the month with Hebrew
+        numerals. ``False`` shows the day of the month as a number.
+    hebrewweekdays : bool, optional
+        ``True`` to show the weekday in Hebrew. Default is ``False``,
+        which shows the weekday in English.
+    hebrewmonths : bool, optional
+        ``True`` to show the month name in Hebrew. Default is ``False``,
+        which shows the month name transliterated into English.
+    hebrewyear : bool, optional
+        ``True`` to show the year in Hebrew numerals. Default is ``False``,
+        which shows the year as a number.
+
+    Attributes
+    ----------
+    hebrewnumerals : bool
+    hebrewweekdays : bool
+    hebrewmonths : bool
+    hebrewyear : bool
+
+    Note
+    ----
+    This class generates plain text calendars. Any program that adds
+    any formatting may distort the calendars when using any Hebrew
+    characters.
+    """
+
+    def formatday(self, day, weekday, width):
+        """Return a formatted day.
+
+        Extends calendar.TextCalendar formatday method.
+
+        Parameters
+        ----------
+        day : int
+            The day of the month.
+        weekday : int
+            The weekday 1-7 Sunday-Shabbos.
+        width : int
+            The width of the day column.
+
+        Returns
+        -------
+        str
+        """
+        if self.hebrewnumerals:
+            if day == 0:
+                s = ''
+            else:
+                s = f'{to_hebrew_numeral(day, withgershayim=False):>2}'
+            return s.center(width)
+        return super().formatday(day, weekday, width)
+
+    def formatweekday(self, day, width):
+        """Return formatted weekday.
+
+        Extends calendar.TextCalendar formatweekday method.
+
+        Parameters
+        ----------
+        day : int
+            The weekday 1-7 Sunday-Shabbos.
+        width : int
+            The width of the day column.
+
+        Returns
+        -------
+        str
+        """
+        if self.hebrewweekdays:
+            if width < 5:
+                name = to_hebrew_numeral(day)
+            else:
+                name = utils.WEEKDAYS[day]
+            return name[:width].center(width)
+        return super().formatweekday(_to_pyweekday(day), width)
+
+    def formatmonthname(
+        self, theyear, themonth, width=0, withyear=True
+    ):
+        """Return formatted month name.
+
+        Parameters
+        ----------
+        theyear : int
+        themonth : int
+            1-12 or 13 for Nissan-Adar Sheni
+        width : int, optional
+            The number of columns per day. Default is 0
+        withyear : bool, optional
+            Default is ``True`` to include the year with the month name.
+
+        Returns
+        -------
+        str
+        """
+        s = Month(theyear, themonth).month_name(self.hebrewmonths)
+        if withyear:
+            if self.hebrewyear:
+                year = to_hebrew_numeral(theyear)
+            else:
+                year = theyear
+            s = f'{s} {year}'
+        return s.center(width)
+
+    def formatyear(self, theyear, w=2, l=1, c=6, m=3):
+        """Return a year's calendar as a multi-line string.
+
+        Parameters
+        ----------
+        theyear : int
+        w : int, optional
+            The date column width. Default is 2
+        l : int, optional
+            The number of lines per week. Default is 1.
+        c : int, optional
+            The number of columns in between each month. Default is 6
+        m : int, optional
+            The number of months per row. Default is 3.
+
+        Returns
+        -------
+        str
+        """
+        w = max(2, w)
+        l = max(1, l)
+        c = max(2, c)
+        colwidth = (w + 1) * 7 - 1
+        v = []
+        a = v.append
+        a(repr(theyear).center(colwidth*m+c*(m-1)).rstrip())
+        a('\n'*l)
+        header = self.formatweekheader(w)
+        yearmonths = list(Year(theyear))
+        for (i, row) in enumerate(self.yeardays2calendar(theyear, m)):
+            # months in this row
+            months = range(m*i+1, min(m*(i+1)+1, len(yearmonths)+1))
+            a('\n'*l)
+            names = (
+                self.formatmonthname(theyear, yearmonths[k-1], colwidth, False)
+                for k in months
+            )
+            a(calendar.formatstring(names, colwidth, c).rstrip())
+            a('\n'*l)
+            headers = (header for k in months)
+            a(calendar.formatstring(headers, colwidth, c).rstrip())
+            a('\n'*l)
+            # max number of weeks for this row
+            height = max(len(cal) for cal in row)
+            for j in range(height):
+                weeks = []
+                for cal in row:
+                    if j >= len(cal):
+                        weeks.append('')
+                    else:
+                        weeks.append(self.formatweek(cal[j], w))
+                a(calendar.formatstring(weeks, colwidth, c).rstrip())
+                a('\n' * l)
         return ''.join(v)
 
 
