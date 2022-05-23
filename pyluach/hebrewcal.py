@@ -130,7 +130,9 @@ class Year:
         return NotImplemented
 
     def __ge__(self, other):
-        return (self == other or self > other)
+        if isinstance(other, Year):
+            return self > other or self == other
+        return NotImplemented
 
     def __lt__(self, other):
         if isinstance(other, Year):
@@ -138,7 +140,9 @@ class Year:
         return NotImplemented
 
     def __le__(self, other):
-        return (self < other or self == other)
+        if isinstance(other, Year):
+            return self < other or self == other
+        return NotImplemented
 
     def __iter__(self):
         """Yield integer for each month in year."""
@@ -328,7 +332,9 @@ class Month:
         return NotImplemented
 
     def __ge__(self, other):
-        return self > other or self == other
+        if isinstance(other, Month):
+            return self > other or self == other
+        return NotImplemented
 
     def __lt__(self, other):
         if isinstance(other, Month):
@@ -342,7 +348,9 @@ class Month:
         return NotImplemented
 
     def __le__(self, other):
-        return (self < other or self == other)
+        if isinstance(other, Month):
+            return self < other or self == other
+        return NotImplemented
 
     @classmethod
     def from_date(cls, date):

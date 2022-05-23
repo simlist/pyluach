@@ -122,7 +122,11 @@ class TestYearComparisons:
         with raises(TypeError):
             years[1] > 5778
         with raises(TypeError):
+            years[1] >= 0
+        with raises(TypeError):
             years[1] < '5778'
+        with raises(TypeError):
+            years[1] <= 10000
 
 
 class TestMonth:
@@ -289,6 +293,10 @@ class TestCompareMonth:
             months[1] > 5
         with raises(TypeError):
             assert months[2] <= '5'
+        with raises(TypeError):
+            assert months[1] >= 0
+        with raises(TypeError):
+            assert months[3] < 100
 
 
 class TestHoliday:
