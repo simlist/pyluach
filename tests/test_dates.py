@@ -307,11 +307,11 @@ class TestFormat:
         with pytest.raises(ValueError):
             format(date, ' %')
         with pytest.raises(ValueError):
-            format(date, '%h')
+            format(date, '%*')
         with pytest.raises(ValueError):
             format(date, '%z')
         with pytest.raises(ValueError):
-            format(date, '%hz')
+            format(date, '%*z')
         with pytest.raises(ValueError):
             format(date, '%-')
         with pytest.raises(ValueError):
@@ -323,22 +323,22 @@ class TestFormat:
         a = pydate.strftime('%a')
         ha = 'ה׳'
         hA = 'חמישי'
-        assert format(date, 'w: %w %a %A %ha %hA') == f'w: 5 {a} {A} {ha} {hA}'
+        assert format(date, 'w: %w %a %A %*a %*A') == f'w: 5 {a} {A} {ha} {hA}'
 
     def test_format_month(self, date):
         month = hebrewcal.Month(5782, 2)
         B = month.month_name(False)
         hB = month.month_name(True)
-        assert format(date, 'm: %m %-m %B %hB') == f'm: 02 2 {B} {hB}'
+        assert format(date, 'm: %m %-m %B %*B') == f'm: 02 2 {B} {hB}'
 
     def test_format_day(self, date):
-        assert format(date, 'd: %d %-d %hd %%') == 'd: 18 18 י״ח %'
+        assert format(date, 'd: %d %-d %*d %%') == 'd: 18 18 י״ח %'
         assert format(date - 9, '%d %-d') == '09 9'
 
     def test_format_year(self, date):
         hy = 'תשפ״ב'
         hY = 'ה׳תשפ״ב'
-        assert format(date, '%Y %y %hy %hY') == f'5782 82 {hy} {hY}'
+        assert format(date, '%Y %y %*y %*Y') == f'5782 82 {hy} {hY}'
 
     def test_format_greg(self):
         date = GregorianDate(2022, 5, 8)

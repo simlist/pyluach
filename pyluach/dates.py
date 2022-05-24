@@ -653,12 +653,12 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     %B     Iyar    Month name transliterated into English
     %m     02      Month as a 0-padded 2 digit decimal number
     %-m    2       Month as a decimal number
-    %ha    א׳      Weekday as a Hebrew numeral
-    %hA    ראשון   Weekday name in Hebrew
-    %hd    ז       Day of month as Hebrew numeral
-    %hB    אייר    Name of month in Hebrew
-    %hy    תשפ״ב   Year in hebrew numerals without the thousands place
-    %hY    ה'תשפ״ב Year in hebrew numerals with the thousands place
+    %*a    א׳      Weekday as a Hebrew numeral
+    %*A    ראשון   Weekday name in Hebrew
+    %*d    ז       Day of month as Hebrew numeral
+    %*B    אייר    Name of month in Hebrew
+    %*y    תשפ״ב   Year in hebrew numerals without the thousands place
+    %*Y    ה'תשפ״ב Year in hebrew numerals with the thousands place
     %%     %       A literal '%' character
     ====== ======= ===========================================================
 
@@ -724,13 +724,13 @@ class HebrewDate(BaseDate, CalendarDateMixin):
                     ) from e
                 if curr == '%':
                     new.append('%')
-                elif curr == 'h':
+                elif curr == '*':
                     i += 1
                     try:
                         curr = fmt[i]
                     except IndexError as e:
                         raise ValueError(
-                            'Format string cannot end with "%h".'
+                            'Format string cannot end with "%*".'
                         ) from e
                     if curr == 'a':
                         new.append(gematria._num_to_str(self.weekday()))
