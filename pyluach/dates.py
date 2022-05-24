@@ -655,7 +655,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     %-m    2       Month as a decimal number
     %*a    א׳      Weekday as a Hebrew numeral
     %*A    ראשון   Weekday name in Hebrew
-    %*d    ז       Day of month as Hebrew numeral
+    %*d    ז׳, ט״ז Day of month as Hebrew numeral
+    %*-d   א, טו   Day of month without gershayim
     %*B    אייר    Name of month in Hebrew
     %*y    תשפ״ב   Year in hebrew numerals without the thousands place
     %*Y    ה'תשפ״ב Year in hebrew numerals with the thousands place
@@ -732,7 +733,21 @@ class HebrewDate(BaseDate, CalendarDateMixin):
                         raise ValueError(
                             'Format string cannot end with "%*".'
                         ) from e
-                    if curr == 'a':
+                    if curr == '-':
+                        i += 1
+                        try:
+                            curr = fmt[i]
+                        except IndexError as e:
+                            raise ValueError(
+                                'Format string cannot end with "%*-"'
+                            ) from e
+                        if curr == 'd':
+                            new.append(gematria._num_to_str(
+                                self.day, withgershayim=False
+                            ))
+                        else:
+                            raise ValueError('Invalid format string.')
+                    elif curr == 'a':
                         new.append(gematria._num_to_str(self.weekday()))
                     elif curr == 'A':
                         new.append(utils.WEEKDAYS[self.weekday()])
@@ -750,7 +765,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
                         curr = fmt[i]
                     except IndexError as e:
                         raise ValueError(
-                            'Format string cannot end with "%-'
+                            'Format string cannot end with "%-"'
                         ) from e
                     if curr == 'd':
                         new.append(str(self.day))

@@ -309,6 +309,10 @@ class TestFormat:
         with pytest.raises(ValueError):
             format(date, '%*')
         with pytest.raises(ValueError):
+            format(date, '%*-')
+        with pytest.raises(ValueError):
+            format(date, '%*-h')
+        with pytest.raises(ValueError):
             format(date, '%z')
         with pytest.raises(ValueError):
             format(date, '%*z')
@@ -332,8 +336,10 @@ class TestFormat:
         assert format(date, 'm: %m %-m %B %*B') == f'm: 02 2 {B} {hB}'
 
     def test_format_day(self, date):
-        assert format(date, 'd: %d %-d %*d %%') == 'd: 18 18 י״ח %'
+        assert format(date, 'd: %d %-d %%') == 'd: 18 18 %'
         assert format(date - 9, '%d %-d') == '09 9'
+        assert format(date, '%*d %*-d') == 'י״ח יח'
+        assert format(date + 2, '%*d - %*-d') == 'כ׳ - כ'
 
     def test_format_year(self, date):
         hy = 'תשפ״ב'
