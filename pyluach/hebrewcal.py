@@ -3,6 +3,17 @@
 It contains classes for representing a Hebrew year and month, functions
 for getting the holiday or fast day for a given date, and classes adapting
 :py:mod:`calendar` classes to render Hebrew calendars.
+
+Contents
+--------
+* :class:`Year`
+* :class:`Month`
+* :class:`HebrewCalendar`
+* :class:`HebrewHTMLCalendar`
+* :class:`HebrewTextCalendar`
+* :func:`fast_day`
+* :func:`festival`
+* :func:`holiday`
 """
 from numbers import Number
 from itertools import repeat
