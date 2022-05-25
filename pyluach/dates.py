@@ -40,7 +40,6 @@ class BaseDate(abc.ABC):
     date1 < date2        True if date1 occurs earlier than date2
     date1 == date2       True if date1 occurs on the same day as date2
     date1 != date2       True if ``date1 == date2`` is False
-    date1 >=, <= date2   True if both are True
     ===================  =============================================
 
     Any subclass of ``BaseDate`` can be compared to and diffed with any other
@@ -371,6 +370,13 @@ class JulianDay(BaseDate):
         JulianDay
             A JulianDay instance representing the current Julian day from
             the timestamp.
+
+        Warning
+        -------
+        Julian Days change at noon, but pyluach treats them as if they
+        change at midnight, so at midnight this method will return
+        ``JulianDay(n.5)`` until the following midnight when it will
+        return ``JulianDay(n.5 + 1)``.
         """
         return GregorianDate.today().to_jd()
 
@@ -847,12 +853,13 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         HebrewDate
             The current Hebrew date from the computer's timestamp.
 
-        Notes
-        -----
-        This method coverts the Gregorian date from the time stamp to
-        a Hebrew date, so if it is after nightfall but before
-        midnight you will have to add one day, ie.
-        ``today = HebrewDate.today() + 1``.
+        Warning
+        -------
+        When a Hebrew date changes is dependent on location but this
+        class is not location aware, so the Hebrew date is treated as if
+        it changes at midnight. If it's after nightfall but before
+        midnight, to get the true Hebrew date do
+        ``HebrewDate.today() + 1``.
         """
         return GregorianDate.today().to_heb()
 
