@@ -16,7 +16,8 @@ Note
 The algorithm is based on Dr. Irv Bromberg's, University of Toronto at
 http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
 
-All parsha names are transliterated into the American Ashkenazik pronunciation.
+All English parsha names are transliterated into the American Ashkenazik
+pronunciation.
 
 
 Attributes
@@ -156,7 +157,7 @@ def getparsha_string(date, israel=False, hebrew=False):
 
     Returns
     -------
-    str or ``None``
+    str or None
       The name of the parsha separated by a comma and space if it is a
       double parsha or ``None`` if there is no parsha that Shabbos
       (ie. it's yom tov).
@@ -185,7 +186,7 @@ def iterparshios(year, israel=False):
 
     Yields
     ------
-    list of ints or ``None``
+    list of ints or None
       A list of the numbers of the parshios for the next Shabbos in the
       given year. Yields ``None`` for a Shabbos that doesn't have its
       own parsha (i.e. it occurs on a yom tov).
@@ -209,8 +210,8 @@ def parshatable(year, israel=False):
 
     Returns
     -------
-    OrderedDict
-      An ordered dictionary with the date of each Shabbos
+    ~collections.OrderedDict
+      An ordered dictionary with the ``HebrewDate`` of each Shabbos
       as the key mapped to the parsha as a list of ints, or ``None`` for a
       Shabbos with no parsha.
     """
