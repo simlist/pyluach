@@ -19,7 +19,8 @@ Features
 * Rich comparisons between dates
 * Finding the weekday of a given date
 * Finding the weekly Parsha reading of a given date
-* Generating and rendering Hebrew calendars in text and HTML
+* Getting the holiday occuring on a given date
+* Generating and rendering Hebrew calendars in html and text
 
 Installation
 -------------
