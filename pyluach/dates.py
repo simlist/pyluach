@@ -247,7 +247,7 @@ class BaseDate(abc.ABC):
         return utils._holiday(self, israel, hebrew)
 
 
-class CalendarDateMixin(abc.ABC):
+class CalendarDateMixin:
     """CalendarDateMixin is a mixin for Hebrew and Gregorian dates.
 
     Parameters
@@ -855,10 +855,10 @@ class HebrewDate(BaseDate, CalendarDateMixin):
 
         Warning
         -------
-        When a Hebrew date changes is dependent on location but this
-        class is not location aware, so the Hebrew date is treated as if
-        it changes at midnight. If it's after nightfall but before
-        midnight, to get the true Hebrew date do
+        THe time a Hebrew date changes is dependent on location, but
+        ``HebrewDate`` is not location aware, so the Hebrew date is
+        treated as if it changes at midnight. If it's after nightfall but
+        before midnight, to get the true Hebrew date do
         ``HebrewDate.today() + 1``.
         """
         return GregorianDate.today().to_heb()
