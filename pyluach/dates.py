@@ -918,7 +918,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         """
         return gematria._num_to_str(self.day, withgershayim=withgershayim)
 
-    def hebrew_year(self, thousands=False):
+    def hebrew_year(self, thousands=False, withgershayim=True):
         """Return the year in Hebrew letters.
 
         Parameters
@@ -926,12 +926,16 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         thousands : bool
             ``True`` to prefix the year with a letter for the
             thousands place, ie. 'ה׳תשפ״א'. Default is ``False``.
+        withgershayim : bool, optional
+            Default is ``True`` which includes a geresh after the thousands
+            place if applicable and a gershayim before the last character
+            of the year.
 
         Returns
         -------
         str
         """
-        return gematria._num_to_str(self.year, thousands)
+        return gematria._num_to_str(self.year, thousands, withgershayim)
 
     def hebrew_date_string(self, thousands=False):
         """Return a Hebrew string representation of the date.
