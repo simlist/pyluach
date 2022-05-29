@@ -29,24 +29,22 @@ class BaseDate(abc.ABC):
     It provides the following arithmetic and comparison operators
     common to all child date types.
 
-    ===================  =============================================
+    ===================  =================================================
     Operation            Result
-    ===================  =============================================
+    ===================  =================================================
     d2 = date1 + int     New date ``int`` days after date1
     d2 = date1 - int     New date ``int`` days before date1
-    int = date1 - date2  Integer equal to the absolute value of the
-                         difference between date1 and date2
+    int = date1 - date2  Positive integer equal to the duration from date1
+                         to date2
     date1 > date2        True if date1 occurs later than date2
     date1 < date2        True if date1 occurs earlier than date2
     date1 == date2       True if date1 occurs on the same day as date2
     date1 != date2       True if ``date1 == date2`` is False
-    ===================  =============================================
+    ===================  =================================================
 
     Any subclass of ``BaseDate`` can be compared to and diffed with any other
     subclass date.
     """
-
-    _error_string = 'An error has occured.'
 
     @property
     @abc.abstractmethod
@@ -56,6 +54,7 @@ class BaseDate(abc.ABC):
         Returns
         -------
         float
+            The Julian day number at midnight (as ``n.5``).
         """
 
     @abc.abstractmethod
@@ -86,49 +85,37 @@ class BaseDate(abc.ABC):
 
     def __eq__(self, other):
         try:
-            if self.jd == other.jd:
-                return True
-            return False
+            return self.jd == other.jd
         except AttributeError:
             return NotImplemented
 
     def __ne__(self, other):
         try:
-            if self.jd != other.jd:
-                return True
-            return False
+            return self.jd != other.jd
         except AttributeError:
             return NotImplemented
 
     def __lt__(self, other):
         try:
-            if self.jd < other.jd:
-                return True
-            return False
+            return self.jd < other.jd
         except AttributeError:
             return NotImplemented
 
     def __gt__(self, other):
         try:
-            if self.jd > other.jd:
-                return True
-            return False
+            return self.jd > other.jd
         except AttributeError:
             return NotImplemented
 
     def __le__(self, other):
         try:
-            if self.jd <= other.jd:
-                return True
-            return False
+            return self.jd <= other.jd
         except AttributeError:
             return NotImplemented
 
     def __ge__(self, other):
         try:
-            if self.jd >= other.jd:
-                return True
-            return False
+            return self.jd >= other.jd
         except AttributeError:
             return NotImplemented
 
@@ -262,7 +249,7 @@ class CalendarDateMixin:
     month : int
     day : int
     jd : float
-        The equivelant Julian day at midnight.
+        The equivalent Julian day at midnight.
     """
 
     def __init__(self, year, month, day, jd=None):
@@ -325,8 +312,6 @@ class JulianDay(BaseDate):
             self.day = int(day) - .5
         else:
             self.day = int(day) + .5
-        self._error_string = """Only a date with a "jd" attribute can
-            be compared to a Julian Day instance."""
 
     def __repr__(self):
         return f'JulianDay({self.day})'
@@ -336,7 +321,7 @@ class JulianDay(BaseDate):
 
     @property
     def jd(self):
-        """"Return julian day.
+        """Return julian day.
 
         Returns
         -------
@@ -526,11 +511,6 @@ class GregorianDate(BaseDate, CalendarDateMixin):
     @property
     def jd(self):
         """Return the corresponding Julian day number.
-
-        This property retrieves the corresponding Julian Day as a float
-        if it was passed into the init method or already calculated, and
-        if it wasn't, it calculates it and saves it for later retrievals
-        and returns it.
 
         Returns
         -------
@@ -748,9 +728,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
                                 'Format string cannot end with "%*-"'
                             ) from e
                         if curr == 'd':
-                            new.append(gematria._num_to_str(
-                                self.day, withgershayim=False
-                            ))
+                            new.append(self.hebrew_day(False))
                         else:
                             raise ValueError('Invalid format string.')
                     elif curr == 'a':
@@ -800,11 +778,6 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     @property
     def jd(self):
         """Return the corresponding Julian day number.
-
-        This property retrieves the corresponding Julian Day as a float
-        if it was passed into the init method or already calculated, and
-        if it wasn't, it calculates it, saves it for later retrievals,
-        and returns it.
 
         Returns
         -------
@@ -897,8 +870,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         return self
 
     def month_name(self, hebrew=False):
-        """
-        Return the name of the month.
+        """Return the name of the month.
 
         Parameters
         ----------
@@ -913,16 +885,32 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         """
         return utils._month_name(self.year, self.month, hebrew)
 
-    def hebrew_day(self):
+    def hebrew_day(self, withgershayim=True):
         """Return the day of the month in Hebrew letters.
+
+        Parameters
+        ----------
+        withgershayim : bool, optional
+            Default is ``True`` which includes a geresh with a single
+            character and gershayim between two characters.
 
         Returns
         -------
         str
             The day of the month in Hebrew letters. For
             example 'א׳' for 1, 'ט״ו' for 15.
+
+        Examples
+        --------
+        >>> date = HebrewDate(5782, 3, 6)
+        >>> date.hebrew_day()
+        'ו׳'
+        >>> date.hebrew_day(False)
+        'ו'
+        >>> HebrewDate(5783, 12, 14).hebrew_day()
+        'י״ד'
         """
-        return gematria._num_to_str(self.day)
+        return gematria._num_to_str(self.day, withgershayim=withgershayim)
 
     def hebrew_year(self, thousands=False):
         """Return the year in Hebrew letters.
