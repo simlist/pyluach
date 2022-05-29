@@ -12,9 +12,11 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
   keys for dicts.
 * Added strftime method and __format__ method to dates.GregorianDate.
 * Added __format__ method to dates.HebrewDate.
+* Added withgershayim parameter to HebrewDate hebrew_day() and
+  hebrew_year() methods
 * Added monthcount method to hebrewcal.Year.
 * Removed deprecated hebrewcal.Month.name attribute
-* Implemented HebrewCalendar classes for rendering calendars similar to
+* Implemented HebrewCalendar classes for generating calendars similar to
   Calendar classes in the standard library calendar module
 
 `1.4.2`_ (2022-05-20)
