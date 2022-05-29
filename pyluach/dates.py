@@ -644,8 +644,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     %*d    ז׳, ט״ז Day of month as Hebrew numeral
     %*-d   א, טו   Day of month without gershayim
     %*B    אייר    Name of month in Hebrew
-    %*y    תשפ״ב   Year in hebrew numerals without the thousands place
-    %*Y    ה'תשפ״ב Year in hebrew numerals with the thousands place
+    %*y    תשפ״ב   Year in Hebrew numerals without the thousands place
+    %*Y    ה'תשפ״ב Year in Hebrew numerals with the thousands place
     %%     %       A literal '%' character
     ====== ======= ===========================================================
 
