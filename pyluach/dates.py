@@ -838,7 +838,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
 
         Warning
         -------
-        THe time a Hebrew date changes is dependent on location, but
+        The time a Hebrew date changes is dependent on location, but
         ``HebrewDate`` is not location aware, so the Hebrew date is
         treated as if it changes at midnight. If it's after nightfall but
         before midnight, to get the true Hebrew date do
@@ -907,8 +907,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         Returns
         -------
         str
-            The day of the month in Hebrew letters. For
-            example 'א׳' for 1, 'ט״ו' for 15.
+            The day of the month in Hebrew letters.
 
         Examples
         --------
