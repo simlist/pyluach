@@ -649,6 +649,12 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     %%     %       A literal '%' character
     ====== ======= ===========================================================
 
+    Example
+    -------
+    >>> date = HebrewDate(5783, 1, 15)
+    >>> f'Today's date is {date:%a - %*-d %*B, %*y}
+    'Today's date is Thu - טו אייר, תשפ"ג'
+
     Parameters
     ----------
     year : int
