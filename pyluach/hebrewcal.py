@@ -605,7 +605,7 @@ class HebrewCalendar(calendar.Calendar):
         self, firstweekday=1, hebrewnumerals=True, hebrewweekdays=False,
         hebrewmonths=False, hebrewyear=False
     ):
-        if not (1 <= firstweekday <= 7):
+        if not 1 <= firstweekday <= 7:
             raise IllegalWeekdayError(firstweekday)
         self._firstweekday = firstweekday
         self._firstpyweekday = _to_pyweekday(firstweekday)
