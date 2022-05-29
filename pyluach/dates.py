@@ -658,17 +658,14 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     Parameters
     ----------
     year : int
-        The Hebrew year. If the year is less than 1 it will raise a
-        ValueError.
+        The Hebrew year.
 
     month : int
-        The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
-        If there is a second Adar in the year it is represented as 13.
-        A month below 1 or above the last month will raise a ValueError.
+        The Hebrew month starting with Nissan as 1 (and Tishrei as 7). If
+        there is a second Adar in the year it is has a value of 13.
 
     day : int
-        The Hebrew day of the month. An invalid day will raise a
-        ValueError.
+        The Hebrew day of the month.
 
     jd : float, optional
         This parameter should not be assigned manually.
@@ -678,9 +675,16 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     year : int
     month : int
         The Hebrew month starting with Nissan as 1 (and Tishrei as 7).
-        If there is a second Adar it is represented as 13.
+        If there is a second Adar it has a value of 13.
     day : int
         The day of the month.
+
+    Raises
+    ------
+    ValueError
+        If the year is less than 1, if the month is less than 1 or greater
+        than the last month, or if the day does not exist in the month a
+        ``ValueError`` will be raised.
     """
 
     def __init__(self, year, month, day, jd=None):
@@ -691,7 +695,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         specific to hebrew dates.
         """
         if year < 1:
-            raise ValueError('Date supplied is before creation.')
+            raise ValueError('Year must be >= 1.')
         if month < 1 or month > 13:
             raise ValueError(f'{month} is an invalid month.')
         if (not utils._is_leap(year)) and month == 13:
