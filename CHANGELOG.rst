@@ -5,7 +5,7 @@ Change Log
 This document records all notable changes to `pyluach <https://github.com/simlist/pyluach>`_.
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
-`2.0.0`_ (2022-??-??)
+`2.0.0`_ (2022-05-29)
 ---------------------
 * Changed equality comparers to compare object identity on unmatched types.
 * Equal dates of different types will no longer be considered identical
