@@ -192,14 +192,14 @@ class Year:
         Yields
         ------
         int
-            An integer beginning with 1 representing the next day of
+            An integer beginning with 1 for the the next day of
             the year.
         """
         for day in range(1, len(self) + 1):
             yield day
 
     def iterdates(self):
-        """Yield HebrewDate instance for each day of the year.
+        """Iterate through each Hebrew date of the year.
 
         Yields
         ------
@@ -285,7 +285,7 @@ class Month:
 
     def __init__(self, year, month):
         if year < 1:
-            raise ValueError('Year is before creation.')
+            raise ValueError('Year must be >= 1.')
         self.year = year
         if month < 1 or month > 12 + utils._is_leap(self.year):
             raise IllegalMonthError(month)
@@ -453,7 +453,7 @@ class Month:
         return months_elapsed
 
     def iterdates(self):
-        """Return iterator that yields an instance of HebrewDate.
+        """Iterate through the Hebrew dates of the month.
 
         Yields
         ------
@@ -490,7 +490,7 @@ class Month:
         return {'weekday': weekday, 'hours': hours % 24, 'parts': parts % 1080}
 
     def molad_announcement(self):
-        """Return the months molad in the announcement form.
+        """Return the month's molad in the announcement form.
 
         Returns a dictionary in the form that the molad is traditionally
         announced. The weekday is adjusted to change at midnight and
@@ -575,8 +575,8 @@ class HebrewCalendar(calendar.Calendar):
     firstweekday : int, optional
         The weekday to start each week with. Default is ``1`` for Sunday.
     hebrewnumerals : bool, optional
-        Default is ``True``, which shows the day of the month with Hebrew
-        numerals. ``False`` shows the day of the month as a number.
+        Default is ``True``, which shows the days of the month with Hebrew
+        numerals. ``False`` shows the days of the month as a decimal number.
     hebrewweekdays : bool, optional
         ``True`` to show the weekday in Hebrew. Default is ``False``,
         which shows the weekday in English.
@@ -585,7 +585,7 @@ class HebrewCalendar(calendar.Calendar):
         which shows the month name transliterated into English.
     hebrewyear : bool, optional
         ``True`` to show the year in Hebrew numerals. Default is ``False``,
-        which shows the year as a number.
+        which shows the year as a decimal number.
 
     Attributes
     ----------
@@ -864,8 +864,8 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
     firstweekday : int, optional
         The weekday to start each week with. Default is ``1`` for Sunday.
     hebrewnumerals : bool, optional
-        Default is ``True``, which shows the day of the month with Hebrew
-        numerals. ``False`` shows the day of the month as a number.
+        Default is ``True``, which shows the days of the month with Hebrew
+        numerals. ``False`` shows the days of the month as a decimal number.
     hebrewweekdays : bool, optional
         ``True`` to show the weekday in Hebrew. Default is ``False``,
         which shows the weekday in English.
@@ -874,7 +874,7 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
         which shows the month name transliterated into English.
     hebrewyear : bool, optional
         ``True`` to show the year in Hebrew numerals. Default is ``False``,
-        which shows the year as a number.
+        which shows the year as a decimal number.
     rtl : bool, optional
         ``True``  to arrange the months and the days of the month from
         right to left. Default is ``False``.
@@ -959,7 +959,7 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
         -------
         int or str
             If ``self.hebrewyear`` is ``True`` return the year as a Hebrew
-            numeral str, else return `theyear` as is.
+            numeral, else return `theyear` as is.
         """
         if self.hebrewyear:
             return to_hebrew_numeral(theyear)
@@ -1076,8 +1076,8 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
     firstweekday : int, optional
         The weekday to start each week with. Default is ``1`` for Sunday.
     hebrewnumerals : bool, optional
-        Default is ``True``, which shows the day of the month with Hebrew
-        numerals. ``False`` shows the day of the month as a number.
+        Default is ``True``, which shows the days of the month with Hebrew
+        numerals. ``False`` shows the days of the month as a decimal number.
     hebrewweekdays : bool, optional
         ``True`` to show the weekday in Hebrew. Default is ``False``,
         which shows the weekday in English.
@@ -1086,7 +1086,7 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
         which shows the month name transliterated into English.
     hebrewyear : bool, optional
         ``True`` to show the year in Hebrew numerals. Default is ``False``,
-        which shows the year as a number.
+        which shows the year as a decimal number.
 
     Attributes
     ----------
@@ -1098,8 +1098,8 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
     Note
     ----
     This class generates plain text calendars. Any program that adds
-    any formatting may distort the calendars when using any Hebrew
-    characters.
+    any formatting may misrender the calendars especially when using any
+    Hebrew characters.
     """
 
     def formatday(self, day, weekday, width):

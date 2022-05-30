@@ -838,10 +838,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
 
         Warning
         -------
-        The time a Hebrew date changes is dependent on location, but
-        ``HebrewDate`` is not location aware, so the Hebrew date is
-        treated as if it changes at midnight. If it's after nightfall but
-        before midnight, to get the true Hebrew date do
+        Pyluach treats Hebrew dates as if they change at midnight. If it's
+        after nightfall but before midnight, to get the true Hebrew date do
         ``HebrewDate.today() + 1``.
         """
         return GregorianDate.today().to_heb()
