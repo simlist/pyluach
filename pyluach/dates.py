@@ -652,8 +652,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     Example
     -------
     >>> date = HebrewDate(5783, 1, 15)
-    >>> f'Today's date is {date:%a - %*-d %*B, %*y}'
-    'Today's date is Thu - טו אייר, תשפ"ג'
+    >>> f'Today is {date:%a - %*-d %*B, %*y}'
+    'Today is Thu - טו אייר, תשפ"ג'
 
     Parameters
     ----------
