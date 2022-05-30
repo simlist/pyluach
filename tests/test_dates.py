@@ -276,6 +276,11 @@ def test_is_leap():
     assert GregorianDate(2021, 10, 26).is_leap() is False
 
 
+def test_hebrew_year():
+    date = HebrewDate(5783, 12, 14)
+    assert date.hebrew_year(True, False) == 'התשפג'
+
+
 def test_hebrew_date_string():
     date = HebrewDate(5782, 7, 1)
     assert date.hebrew_date_string() == 'א׳ תשרי תשפ״ב'
