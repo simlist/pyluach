@@ -16,7 +16,7 @@ setup(
         Gregorian-Hebrew calendar conversions, getting the weekly
         parsha, and other Jewish calendar related calculations."""),
     long_description=long_description,
-    python_requires=">=3.6",
+    python_requires='>=3.7',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
