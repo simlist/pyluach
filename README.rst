@@ -19,6 +19,8 @@ Features
 * Rich comparisons between dates
 * Finding the weekday of a given date
 * Finding the weekly Parsha reading of a given date
+* Getting the holiday occuring on a given date
+* Generating html and text Hebrew calendars
 
 Installation
 -------------
@@ -33,7 +35,7 @@ Examples
 ::
 
     >>> from pyluach import dates, hebrewcal, parshios
-    
+
     >>> today = dates.HebrewDate.today()
     >>> lastweek_gregorian = (today - 7).to_greg()
     >>> lastweek_gregorian < today
@@ -60,7 +62,7 @@ Examples
     'ראש השנה'
     >>> (rosh_hashana + 3).holiday()
     None
-    
+
     >>> month = hebrewcal.Month(5781, 10)
     >>> month.month_name()
     'Teves'
@@ -87,7 +89,9 @@ Examples
 
 Contact
 --------
-For questions and comments contact me at simlist@gmail.com.
+For questions and comments please `raise an issue in github
+<https://github.com/simlist/pyluach/issues>`_ or contact me at
+simlist@gmail.com.
 
 License
 --------

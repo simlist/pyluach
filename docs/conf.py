@@ -20,7 +20,7 @@ copyright = '2016, MS List'
 author = 'MS List'
 
 # The full version, including alpha/beta/rc tags
-release = '1.4.2'
+release = '2.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -32,6 +32,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
     'sphinx_rtd_theme',
 ]
@@ -49,6 +50,9 @@ autodoc_member_order = 'bysource'
 
 # Autosummary settings
 autosummary_generate = True
+
+# Intersphinx settings
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

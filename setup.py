@@ -5,7 +5,7 @@ with open('README.rst', 'r', encoding='utf-8') as readme:
 
 setup(
     name='pyluach',
-    version='1.4.2',
+    version='2.0.0',
     author='MS List',
     author_email='simlist@gmail.com',
     packages=['pyluach', ],
@@ -24,7 +24,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',

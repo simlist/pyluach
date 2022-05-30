@@ -3,7 +3,7 @@ from operator import gt, lt, eq, ne, ge, le, add, sub
 
 import pytest
 
-from pyluach import dates, utils
+from pyluach import dates, hebrewcal, utils
 from pyluach.dates import HebrewDate, GregorianDate, JulianDay
 
 
@@ -34,6 +34,8 @@ class TestClassesSanity:
                 assert jd.day == conf.day
             else:
                 assert abs(jd.day - conf.day) <= 1
+        bce = GregorianDate(-100, 1, 1)
+        assert abs(bce.to_heb().to_greg() - bce) <= 1
 
     def test_heb_sanity(self):
         for i in range(347998, 2460000, 117):
@@ -145,10 +147,12 @@ class TestErrors:
     def test_comparer_errors(self):
         day1 = dates.HebrewDate(5777, 12, 10)
         for date in [day1, day1.to_greg(), day1.to_jd()]:
-            for comparer in [gt, lt, eq, ne, ge, le]:
+            for comparer in [gt, lt, ge, le]:
                 for value in [1, 0, 'hello', None, '']:
                     with pytest.raises(TypeError):
                         comparer(date, value)
+        assert (day1 == 5) is False
+        assert (day1 != 'h') is True
 
     def test_operator_errors(self):
         day = dates.GregorianDate(2016, 11, 20)
@@ -272,6 +276,11 @@ def test_is_leap():
     assert GregorianDate(2021, 10, 26).is_leap() is False
 
 
+def test_hebrew_year():
+    date = HebrewDate(5783, 12, 14)
+    assert date.hebrew_year(True, False) == 'התשפג'
+
+
 def test_hebrew_date_string():
     date = HebrewDate(5782, 7, 1)
     assert date.hebrew_date_string() == 'א׳ תשרי תשפ״ב'
@@ -290,3 +299,59 @@ def test_month_name():
 def test_month_length():
     with pytest.raises(ValueError):
         utils._month_length(5782, 14)
+
+
+@pytest.fixture
+def date():
+    return HebrewDate(5782, 2, 18)
+
+
+class TestFormat:
+
+    def test_errors(self, date):
+        with pytest.raises(ValueError):
+            format(date, ' %')
+        with pytest.raises(ValueError):
+            format(date, '%*')
+        with pytest.raises(ValueError):
+            format(date, '%*-')
+        with pytest.raises(ValueError):
+            format(date, '%*-h')
+        with pytest.raises(ValueError):
+            format(date, '%z')
+        with pytest.raises(ValueError):
+            format(date, '%*z')
+        with pytest.raises(ValueError):
+            format(date, '%-')
+        with pytest.raises(ValueError):
+            format(date, '%-z')
+
+    def test_format_weekday(self, date):
+        pydate = date.to_pydate()
+        A = pydate.strftime('%A')
+        a = pydate.strftime('%a')
+        ha = 'ה׳'
+        hA = 'חמישי'
+        assert format(date, 'w: %w %a %A %*a %*A') == f'w: 5 {a} {A} {ha} {hA}'
+
+    def test_format_month(self, date):
+        month = hebrewcal.Month(5782, 2)
+        B = month.month_name(False)
+        hB = month.month_name(True)
+        assert format(date, 'm: %m %-m %B %*B') == f'm: 02 2 {B} {hB}'
+
+    def test_format_day(self, date):
+        assert format(date, 'd: %d %-d %%') == 'd: 18 18 %'
+        assert format(date - 9, '%d %-d') == '09 9'
+        assert format(date, '%*d %*-d') == 'י״ח יח'
+        assert format(date + 2, '%*d - %*-d') == 'כ׳ - כ'
+
+    def test_format_year(self, date):
+        hy = 'תשפ״ב'
+        hY = 'ה׳תשפ״ב'
+        assert format(date, '%Y %y %*y %*Y') == f'5782 82 {hy} {hY}'
+
+    def test_format_greg(self):
+        date = GregorianDate(2022, 5, 8)
+        assert format(date, '%y') == '22'
+        assert date.strftime('%Y') == '2022'

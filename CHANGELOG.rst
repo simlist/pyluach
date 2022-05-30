@@ -5,6 +5,19 @@ Change Log
 This document records all notable changes to `pyluach <https://github.com/simlist/pyluach>`_.
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
+`2.0.0`_ (2022-??-??)
+---------------------
+* Changed equality comparers to compare object identity on unmatched types.
+* Equal dates of different types will no longer be considered identical
+  keys for dicts.
+* Added strftime method and __format__ method to dates.GregorianDate.
+* Added __format__ method to dates.HebrewDate.
+* Added withgershayim parameter to HebrewDate hebrew_day() and
+  hebrew_year() methods
+* Added monthcount method to hebrewcal.Year.
+* Removed deprecated hebrewcal.Month.name attribute
+* Implemented HebrewCalendar classes for generating calendars similar to
+  Calendar classes in the standard library calendar module
 
 `1.4.2`_ (2022-05-20)
 ---------------------
@@ -55,10 +68,10 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 `1.0.1`_ (2019-03-02)
 ---------------------
-
 * Initial public release
 
 
+.. _`2.0.0`: https://github.com/simlist/pyluach/compare/v1.4.2...v2.0.0
 .. _`1.4.2`: https://github.com/simlist/pyluach/compare/v1.4.1...v1.4.2
 .. _`1.4.1`: https://github.com/simlist/pyluach/compare/v1.4.0...v1.4.1
 .. _`1.4.0`: https://github.com/simlist/pyluach/compare/v1.3.0...v1.4.0

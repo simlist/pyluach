@@ -31,6 +31,17 @@ FESTIVALS_HEBREW = [
 ]
 
 
+WEEKDAYS = {
+    1: 'ראשון',
+    2: 'שני',
+    3: 'שלישי',
+    4: 'רביעי',
+    5: 'חמישי',
+    6: 'שישי',
+    7: 'שבת'
+}
+
+
 def _is_leap(year):
     if (((7*year) + 1) % 19) < 7:
         return True
@@ -41,7 +52,7 @@ def _elapsed_months(year):
     return (235 * year - 234) // 19
 
 
-@lru_cache(maxsize=100)
+@lru_cache(maxsize=10)
 def _elapsed_days(year):
     months_elapsed = _elapsed_months(year)
     parts_elapsed = 204 + 793*(months_elapsed%1080)
