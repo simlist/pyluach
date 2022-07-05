@@ -157,11 +157,7 @@ class Year:
 
     def __iter__(self):
         """Yield integer for each month in year."""
-        months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
-        if not self.leap:
-            months.remove(13)
-        for month in months:
-            yield month
+        yield from utils._monthslist(self.year)
 
     def monthscount(self):
         """Return number of months in the year.
@@ -307,24 +303,16 @@ class Month:
         return NotImplemented
 
     def __add__(self, other):
-        yearmonths = list(Year(self.year))
-        index = yearmonths.index(self.month)
-        leftover_months = len(yearmonths[index + 1:])
         try:
-            if other <= leftover_months:
-                return Month(self.year, yearmonths[index + other])
-            return Month(self.year + 1, 7).__add__(other - (leftover_months+1))
+            year, month = utils._add_months(self.year, self.month, other)
+            return Month(year, month)
         except (AttributeError, TypeError):
             return NotImplemented
 
     def __sub__(self, other):
         if isinstance(other, Number):
-            yearmonths = list(Year(self.year))
-            index = yearmonths.index(self.month)
-            if other <= index:
-                return Month(self.year, yearmonths[index - other])
-            return Month(self.year - 1, 6).__sub__(other - (index+1))
-            # Recursive call on the last month of the previous year.
+            year, month = utils._subtract_months(self.year, self.month, other)
+            return Month(year, month)
         try:
             return abs(self._elapsed_months() - other._elapsed_months())
         except AttributeError:
