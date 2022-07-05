@@ -5,7 +5,7 @@ with open('README.rst', 'r', encoding='utf-8') as readme:
 
 setup(
     name='pyluach',
-    version='2.0.2',
+    version='2.1.0',
     author='MS List',
     author_email='simlist@gmail.com',
     packages=['pyluach', ],
