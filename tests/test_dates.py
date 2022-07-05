@@ -356,3 +356,23 @@ class TestFormat:
         date = GregorianDate(2022, 5, 8)
         assert format(date, '%y') == '22'
         assert date.strftime('%Y') == '2022'
+
+
+def test_add_years():
+    date = HebrewDate(5782, 12, 30)
+    assert date.add_years(1) == HebrewDate(5783, 12, 29)
+    assert date.add_years(1, round_forward=True) == HebrewDate(5783, 1, 1)
+    date = HebrewDate(5782, 13, 1)
+    assert date.add_years(1) == HebrewDate(5783, 12, 1)
+    date = HebrewDate(5783, 12, 29)
+    assert date.add_years(-1) == HebrewDate(5782, 13, 29)
+
+
+def test_add_months():
+    date = HebrewDate(5782, 12, 30)
+    assert date.add_months(1) == HebrewDate(5782, 13, 29)
+    assert date.add_months(1, True) == HebrewDate(5782, 1, 1)
+    assert date.add_months(27) == HebrewDate(5784, 1, 30)
+    assert date.add_months(27, True) == HebrewDate(5784, 1, 30)
+    assert date.add_months(-6) == HebrewDate(5781, 6, 29)
+    assert date.add_months(-6, True) == HebrewDate(5782, 7, 1)

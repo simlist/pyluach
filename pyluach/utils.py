@@ -126,6 +126,30 @@ def _month_name(year, month, hebrew):
     return MONTH_NAMES[index]
 
 
+def _monthslist(year):
+    months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
+    if not _is_leap(year):
+        months.remove(13)
+    return months
+
+
+def _add_months(year, month, num):
+    monthslist = _monthslist(year)
+    index = monthslist.index(month)
+    months_remaining = len(monthslist[index+1:])
+    if num <= months_remaining:
+        return (year, monthslist[index + num])
+    return _add_months(year + 1, 7, num - months_remaining - 1)
+
+
+def _subtract_months(year, month, num):
+    monthslist = _monthslist(year)
+    index = monthslist.index(month)
+    if num <= index:
+        return (year, monthslist[index - num])
+    return _subtract_months(year - 1, 6, num - (index+1))
+
+
 def _fast_day(date):
     """Return name of fast day or None.
 
