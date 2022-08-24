@@ -376,3 +376,10 @@ def test_add_months():
     assert date.add_months(27, True) == HebrewDate(5784, 1, 30)
     assert date.add_months(-6) == HebrewDate(5781, 6, 29)
     assert date.add_months(-6, True) == HebrewDate(5782, 7, 1)
+
+
+def test_replace():
+    date = HebrewDate(5782, 4, 20)
+    assert date.replace(year=5783) == HebrewDate(5783, 4, 20)
+    assert date.replace(month=12) == HebrewDate(5782, 12, 20)
+    assert date.replace(day=1) == HebrewDate(5782, 4, 1)
