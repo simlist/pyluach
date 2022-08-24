@@ -417,6 +417,8 @@ class TestHoliday:
         assert holiday(shavuos, True) == 'Shavuos'
         assert holiday(shavuos + 1, True) is None
         assert festival(shavuos + 1, include_working_days=False) == 'Shavuos'
+        not_shavuos = dates.HebrewDate(5782, 4, 7)
+        assert festival(not_shavuos) is None
 
     def test_tubeav(self):
         tubeav = dates.HebrewDate(5779, 5, 15)

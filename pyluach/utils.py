@@ -253,7 +253,7 @@ def _festival(date, israel=False, include_working_days=True):
         return 11
     elif month == 2 and day == 18 and include_working_days:
         return 12
-    elif month == 3 and day == 6 or (not israel and day == 7):
+    elif month == 3 and (day == 6 or (not israel and day == 7)):
         return 13
     elif month == 5 and day == 15 and include_working_days:
         return 14
