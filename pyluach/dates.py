@@ -291,6 +291,33 @@ class CalendarDateMixin:
         """
         return {'year': self.year, 'month': self.month, 'day': self.day}
 
+    def replace(self, year=None, month=None, day=None):
+        """Return new date with new values for the specified field.
+
+        Parameters
+        ----------
+        year : int, optional
+        month: int, optional
+        day : int, optional
+
+        Returns
+        -------
+        CalendarDateMixin
+            Any date that inherits from CalendarDateMixin
+            (``GregorianDate``, ````HebrewDate``).
+
+        Raises
+        ValueError
+            Raises a ``ValueError`` if the date does not exist.
+        """
+        if year is None:
+            year = self.year
+        if month is None:
+            month = self.month
+        if day is None:
+            day = self.day
+        return type(self)(year, month, day)
+
 
 class JulianDay(BaseDate):
     """A JulianDay object represents a Julian Day at midnight.
@@ -413,10 +440,7 @@ class JulianDay(BaseDate):
             year -= 1
             first_day = utils._elapsed_days(year)
 
-        months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
-        if not utils._is_leap(year):
-            months.remove(13)
-
+        months = utils._monthslist(year)
         days_remaining = jd - first_day
         for month in months:
             if days_remaining >= utils._month_length(year, month):
