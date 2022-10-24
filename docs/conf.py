@@ -20,7 +20,7 @@ copyright = '2016, MS List'
 author = 'MS List'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0.1'
+release = '2.0.2'
 
 
 # -- General configuration ---------------------------------------------------
