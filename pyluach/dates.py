@@ -79,7 +79,7 @@ class BaseDate(abc.ABC):
         try:
             if isinstance(other, Number):
                 return JulianDay(self.jd - other)._to_x(self)
-            return abs(self.jd - other.jd)
+            return int(abs(self.jd - other.jd))
         except (AttributeError, TypeError):
             return NotImplemented
 

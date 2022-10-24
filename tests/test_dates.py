@@ -93,6 +93,7 @@ class TestOperators:
                     today = cal.today()
                     difference = (cal2.today() - delta) - today
                     assert delta == difference
+                    assert isinstance(difference, int)
 
 
 class TestComparisons:
