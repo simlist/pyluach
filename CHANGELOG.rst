@@ -5,6 +5,10 @@ Change Log
 This document records all notable changes to `pyluach <https://github.com/simlist/pyluach>`_.
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
+`2.0.2`_ (2022-10-24)
+---------------------
+* Fix subtracting date from date returning float instead of int.
+
 `2.0.1`_ (2022-08-24)
 ---------------------
 * Fix issue (`#24`_) where Shavuos is returned in most months on day 7.
@@ -75,6 +79,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Initial public release
 
 
+.. _`2.0.2`: https://github.com/simlist/pyluach/compare/v2.0.1...v2.0.2
 .. _`2.0.1`: https://github.com/simlist/pyluach/compare/v2.0.0...v2.0.1
 .. _`2.0.0`: https://github.com/simlist/pyluach/compare/v1.4.2...v2.0.0
 .. _`1.4.2`: https://github.com/simlist/pyluach/compare/v1.4.1...v1.4.2
