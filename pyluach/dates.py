@@ -308,7 +308,7 @@ class CalendarDateMixin:
 
         Raises
         ValueError
-            Raises a ``ValueError`` if the date does not exist.
+            Raises a ``ValueError`` if the new date does not exist.
         """
         if year is None:
             year = self.year
@@ -987,70 +987,93 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         year = self.hebrew_year(thousands)
         return f'{day} {month} {year}'
 
-    def add_years(self, years, adar1=False, round_forward=False):
-        """Add years to date (or subtract from date).
+    def add(self, years=0, months=0, days=0, adar1=False, round_forward=False):
+        """Add years, months, and days to date.
 
         Parameters
         ----------
-        years : int
-            The number of years to add. If it's a negative
-            number it will subtract.
+        years : int, optional
+            The number of years to add. Default is 0.
+        months : int, optional
+            The number of months to add. Default is 0.
+        days : int, optional
+            The number of days to add. Default is 0.
         adar1 : bool, optional
             True to return a date in Adar Aleph if `self` is in a regular
-            Adar and the destination year is leap year. Default is
+            Adar and after adding the years it's leap year. Default is
             ``False`` which will return the date in Adar Beis.
         round_forward : bool, optional
             ``True`` to give the first date of the next month if `self` is
-            the 30th of the month and there are only 29 days in the month
-            in the destination year. Default is ``False`` which returns the
-            29th.
+            the 30th of the month, and there are only 29 days in the
+            destination month. Default is ``False`` which returns the 29th.
 
         Returns
         -------
         HebrewDate
+
+        Note
+        ----
+        This method first adds the `years`. If the starting month doesn't
+        exist in the resulting year, it adjusts it based on the `adar1`
+        argument, then it adds the `months`. If the starting day doesn't
+        exist in that month it adjusts it based on the `round_forward`
+        argument, then it adds the `days`.
         """
-        newyear = self.year + years
-        newmonth = self.month
-        if self.month == 13 and not utils._is_leap(newyear):
-            newmonth = 12
-        elif self.month == 12 and not utils._is_leap(self.year):
-            if utils._is_leap(newyear) and not adar1:
-                newmonth = 13
-        if self.day > utils._month_length(newyear, newmonth):
-            newdate = HebrewDate(newyear, newmonth, self.day - 1)
-            if round_forward:
-                return newdate + 1
-            return newdate
-        return HebrewDate(newyear, newmonth, self.day)
-
-    def add_months(self, months, round_forward=False):
-        """Add months to date (or subtract from date).
-
-        Parameters
-        ----------
-        months : int
-            The number of months to add. If it's a negative
-            number it will subtract.
-        round_forward : bool, optional
-            ``True`` to give the first date of the next month if `self` is
-            the 30th of the month and there are only 29 days in the
-            destination month. Default is ``False`` which returns the
-            29th.
-
-        Returns
-        -------
-        HebrewDate
-        """
-        if months > 0:
-            year, month = utils._add_months(self.year, self.month, months)
+        year = self.year + years
+        month = self.month
+        if self.month == 13 and not utils._is_leap(year):
+            month = 12
+        elif (
+            self.month == 12
+            and not utils._is_leap(self.year)
+            and utils._is_leap(year)
+            and not adar1
+        ):
+            month = 13
+        if months >= 0:
+            year, month = utils._add_months(year, month, months)
         else:
-            year, month = utils._subtract_months(
-                self.year, self.month, -months
-            )
+            year, month = utils._subtract_months(year, month, -months)
         if utils._month_length(year, month) < self.day:
             date = HebrewDate(year, month, 29)
             if round_forward:
                 date += 1
         else:
             date = HebrewDate(year, month, self.day)
-        return date
+        return date + days
+
+    def subtract(
+        self, years=0, months=0, days=0, adar1=False, round_forward=False
+    ):
+        """Subtract years, months, and days from date.
+
+        Parameters
+        ----------
+        years : int, optional
+            The number of years to subtract. Default is 0.
+        months : int, optional
+            The number of months to subtract. Default is 0.
+        days : int, optional
+            The number of days to subtract. Default is 0.
+        adar1 : bool, optional
+            True to return a date in Adar Aleph if `self` is in a regular
+            Adar and the destination year is leap year. Default is
+            ``False`` which will return the date in Adar Beis.
+        round_forward : bool, optional
+            ``True`` to give the first date of the next month if `self` is
+            the 30th of the month, and there are only 29 days in the
+            destination month. Default is ``False`` which returns the 29th.
+
+        Returns
+        -------
+        HebrewDate
+
+        Note
+        ----
+        This method first adds the `years`. If the starting month doesn't
+        exist in the resulting year, it adjusts it based on the `adar1`
+        argument, then it adds the `months`. If the starting day doesn't
+        exist in that month it adjusts it based on the `round_forward`
+        argument, then it adds the `days`.
+        """
+        return self.add(-years, -months, -days, adar1, round_forward)

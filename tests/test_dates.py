@@ -360,22 +360,30 @@ class TestFormat:
 
 def test_add_years():
     date = HebrewDate(5782, 12, 30)
-    assert date.add_years(1) == HebrewDate(5783, 12, 29)
-    assert date.add_years(1, round_forward=True) == HebrewDate(5783, 1, 1)
+    assert date.add(years=1) == HebrewDate(5783, 12, 29)
+    assert date.add(years=1, round_forward=True) == HebrewDate(5783, 1, 1)
     date = HebrewDate(5782, 13, 1)
-    assert date.add_years(1) == HebrewDate(5783, 12, 1)
+    assert date.add(years=1) == HebrewDate(5783, 12, 1)
     date = HebrewDate(5783, 12, 29)
-    assert date.add_years(-1) == HebrewDate(5782, 13, 29)
+    assert date.add(years=-1) == HebrewDate(5782, 13, 29)
 
 
-def test_add_months():
+def test_add():
     date = HebrewDate(5782, 12, 30)
-    assert date.add_months(1) == HebrewDate(5782, 13, 29)
-    assert date.add_months(1, True) == HebrewDate(5782, 1, 1)
-    assert date.add_months(27) == HebrewDate(5784, 1, 30)
-    assert date.add_months(27, True) == HebrewDate(5784, 1, 30)
-    assert date.add_months(-6) == HebrewDate(5781, 6, 29)
-    assert date.add_months(-6, True) == HebrewDate(5782, 7, 1)
+    assert date.add(months=1) == HebrewDate(5782, 13, 29)
+    assert date.add(months=1, round_forward=True) == HebrewDate(5782, 1, 1)
+    assert date.add(months=27) == HebrewDate(5784, 1, 30)
+    assert date.add(months=27, round_forward=True) == HebrewDate(5784, 1, 30)
+    date = HebrewDate(5781, 7, 28)
+    assert date.add(years=2, months=1, days=2) == HebrewDate(5783, 8, 30)
+
+
+def test_subtract():
+    date = HebrewDate(5782, 12, 30)
+    assert date.subtract(months=6) == HebrewDate(5781, 6, 29)
+    assert (
+        date.subtract(months=6, round_forward=True) == HebrewDate(5782, 7, 1)
+    )
 
 
 def test_replace():
@@ -383,3 +391,5 @@ def test_replace():
     assert date.replace(year=5783) == HebrewDate(5783, 4, 20)
     assert date.replace(month=12) == HebrewDate(5782, 12, 20)
     assert date.replace(day=1) == HebrewDate(5782, 4, 1)
+    with pytest.raises(ValueError):
+        HebrewDate(5783, 12, 20).replace(month=13)
