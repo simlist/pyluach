@@ -15,6 +15,7 @@ Welcome to pyluach's documentation!
    dates
    hebrewcal
    parshios
+   changelog
 
 Indices and tables
 ==================
