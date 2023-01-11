@@ -1,0 +1,43 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "pyluach"
+version = "2.1.0"
+authors = [
+  {name = "MS List", email = "simlist@gmail.com"}
+]
+license = {file = "license.txt"}
+description= """Pyluach is a Python package for manipulating Hebrew dates,
+    Gregorian-Hebrew calendar conversions, getting the weekly
+    parsha, and other Jewish calendar related calculations."""
+readme = "README.rst"
+requires-python = ">=3.7"
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+keywords = [
+    'hebrew', 'calendar', 'jewish', 'luach', 'gregorian', 'julian',
+    'days', 'dates', 'date', 'conversion', 'parsha', 'holiday'
+]
+
+[project.optional-dependencies]
+test = ["pytest >=7.1.2", "pytest-cov"]
+doc = ["sphinx", "sphinx_rtd_theme"]
+
+[project.urls]
+Documentation = "https://readthedocs.org/projects/pyluach/"
+Source = "https://github.com/simlist/pyluach"
+
+[tool.flit.sdist]
+include = ["pyluach"]
