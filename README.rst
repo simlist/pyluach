@@ -8,8 +8,7 @@ pyluach
 .. image:: https://coveralls.io/repos/github/simlist/pyluach/badge.svg?branch=master
     :target: https://coveralls.io/github/simlist/pyluach?branch=master
 
-Pyluach is a Python package for manipulating Hebrew (Jewish) calendar dates and
-Hebrew-Gregorian conversions.
+Pyluach is a Python package for dealing with Hebrew (Jewish) calendar dates.
 
 Features
 ---------
