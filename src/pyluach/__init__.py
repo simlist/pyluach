@@ -1,5 +1,5 @@
-"""Pyluach is a Python package for manipulating Hebrew calendar dates
-and Hebrew-Gregorian conversions."""
+"""A Python package for dealing with Hebrew (Jewish) calendar dates.
+"""
 
 
 __version__ = '2.1.0'
