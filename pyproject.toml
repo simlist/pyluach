@@ -9,9 +9,7 @@ authors = [
   {name = "MS List", email = "simlist@gmail.com"}
 ]
 license = {file = "license.txt"}
-description= """Pyluach is a Python package for manipulating Hebrew dates,
-    Gregorian-Hebrew calendar conversions, getting the weekly
-    parsha, and other Jewish calendar related calculations."""
+dynamic = ["description"]
 readme = "README.rst"
 requires-python = ">=3.7"
 classifiers=[
@@ -32,12 +30,18 @@ keywords = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest >=7.1.2", "pytest-cov"]
-doc = ["sphinx", "sphinx_rtd_theme"]
+test = [
+  "pytest >=7.1.2",
+  "pytest-cov",
+  "pytest-flakes",
+  "pytest-flake8",
+  "beautifulsoup4"
+]
+doc = ["sphinx == 4.5.0", "sphinx_rtd_theme"]
 
 [project.urls]
 Documentation = "https://readthedocs.org/projects/pyluach/"
 Source = "https://github.com/simlist/pyluach"
 
 [tool.flit.sdist]
-include = ["pyluach"]
+exclude = ["tests", "docs", ".github", "requirements.txt", ".gitignore"]
