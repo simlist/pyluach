@@ -1030,9 +1030,9 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             and not adar1
         ):
             month = 13
-        if months >= 0:
+        if months > 0:
             year, month = utils._add_months(year, month, months)
-        else:
+        elif months < 0:
             year, month = utils._subtract_months(year, month, -months)
         if utils._month_length(year, month) < self.day:
             date = HebrewDate(year, month, 29)
