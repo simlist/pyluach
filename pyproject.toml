@@ -31,10 +31,9 @@ keywords = [
 
 [project.optional-dependencies]
 test = [
-  "pytest >=7.1.2",
+  "pytest",
   "pytest-cov",
-  "pytest-flakes",
-  "pytest-flake8",
+  "flake8",
   "beautifulsoup4"
 ]
 doc = ["sphinx == 4.5.0", "sphinx_rtd_theme"]
