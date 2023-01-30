@@ -376,6 +376,7 @@ def test_add():
     assert date.add(months=27, round_forward=True) == HebrewDate(5784, 1, 30)
     date = HebrewDate(5781, 7, 28)
     assert date.add(years=2, months=1, days=2) == HebrewDate(5783, 8, 30)
+    assert date.add(years=3, months=2, days=2) == HebrewDate(5784, 10, 1)
 
 
 def test_subtract():
