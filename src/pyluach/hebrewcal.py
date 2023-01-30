@@ -1168,7 +1168,7 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
             s = f'{s} {year}'
         return s.center(width)
 
-    def formatyear(self, theyear, w=2, l=1, c=6, m=3):
+    def formatyear(self, theyear, w=2, l=1, c=6, m=3):  # noqa: E741
         """Return a year's calendar as a multi-line string.
 
         Parameters
@@ -1188,7 +1188,7 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
         str
         """
         w = max(2, w)
-        l = max(1, l)
+        l = max(1, l)  # noqa: E741
         c = max(2, c)
         colwidth = (w + 1) * 7 - 1
         v = []
