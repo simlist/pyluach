@@ -360,8 +360,8 @@ class TestFormat:
 
 def test_add_years():
     date = HebrewDate(5782, 12, 30)
-    assert date.add(years=1) == HebrewDate(5783, 12, 29)
-    assert date.add(years=1, round_forward=True) == HebrewDate(5783, 1, 1)
+    assert date.add(years=1, round_earlier=True) == HebrewDate(5783, 12, 29)
+    assert date.add(years=1) == HebrewDate(5783, 1, 1)
     date = HebrewDate(5782, 13, 1)
     assert date.add(years=1) == HebrewDate(5783, 12, 1)
     date = HebrewDate(5783, 12, 29)
@@ -370,10 +370,10 @@ def test_add_years():
 
 def test_add():
     date = HebrewDate(5782, 12, 30)
-    assert date.add(months=1) == HebrewDate(5782, 13, 29)
-    assert date.add(months=1, round_forward=True) == HebrewDate(5782, 1, 1)
+    assert date.add(months=1, round_earlier=True) == HebrewDate(5782, 13, 29)
+    assert date.add(months=1) == HebrewDate(5782, 1, 1)
     assert date.add(months=27) == HebrewDate(5784, 1, 30)
-    assert date.add(months=27, round_forward=True) == HebrewDate(5784, 1, 30)
+    assert date.add(months=27, round_earlier=True) == HebrewDate(5784, 1, 30)
     date = HebrewDate(5781, 7, 28)
     assert date.add(years=2, months=1, days=2) == HebrewDate(5783, 8, 30)
     assert date.add(years=3, months=2, days=2) == HebrewDate(5784, 10, 1)
@@ -381,9 +381,11 @@ def test_add():
 
 def test_subtract():
     date = HebrewDate(5782, 12, 30)
-    assert date.subtract(months=6) == HebrewDate(5781, 6, 29)
     assert (
-        date.subtract(months=6, round_forward=True) == HebrewDate(5782, 7, 1)
+        date.subtract(months=6, round_earlier=True) == HebrewDate(5781, 6, 29)
+    )
+    assert (
+        date.subtract(months=6) == HebrewDate(5782, 7, 1)
     )
 
 
