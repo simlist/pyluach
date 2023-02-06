@@ -1,4 +1,4 @@
-"""The utils module contains functions to be shared between modules.
+"""The utils module contains shared functions and constants.
 
 They are to be used internally.
 """
