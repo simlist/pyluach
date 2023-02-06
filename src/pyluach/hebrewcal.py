@@ -624,7 +624,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Yields
         ------
-        int
+        :obj:`int`
             The next weekday with 1-7 for Sunday - Shabbos.
             The iterator starts with the ``HebrewCalendar`` object's
             configured first weekday ie. if configured to start with
@@ -648,7 +648,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Yields
         ------
-        pyluach.dates.HebrewDate
+        :obj:`pyluach.dates.HebrewDate`
             The next Hebrew Date of the month starting with the first
             date of the week the first of the month falls in, and ending
             with the last date of the week that the last day of the month
@@ -668,7 +668,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Yields
         ------
-        int
+        :obj:`int`
             The day of the month or 0 if the date is before or after the
             month.
         """
@@ -691,7 +691,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Yields
         ------
-        tuple of ints
+        :obj:`tuple` of :obj:`int`
             A tuple of ints in the form ``(day of month, weekday)``.
         """
         for i, d in enumerate(
@@ -709,7 +709,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Yields
         ------
-        tuple of ints
+        :obj:`tuple` of :obj:`int`
             A tuple of ints in the form ``(year, month, day)``.
         """
         currmonth = Month(year, month)
@@ -741,7 +741,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Yields
         ------
-        tuple of ints
+        :obj:`tuple` of :obj:`int`
             A tuple of ints in the form ``(year, month, day, weekday)``.
         """
         for i, (y, m, d) in enumerate(self.itermonthdays3(year, month)):
@@ -758,7 +758,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Returns
         ------
-        list of lists of lists of lists of ``HebrewDates``
+        :obj:`list` of list of list of list of :obj:`pyluach.dates.HebrewDate`
             Returns a list of month rows. Each month row contains a list
             of up to `width` months. Each month contains either 5 or 6
             weeks, and each week contains 7 days. Days are ``HebrewDate``
@@ -785,7 +785,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Returns
         -------
-        list of lists of lists of lists of tuples
+        :obj:`list` of list of list of list of :obj:`tuple`
             Returns a list of month rows. Each month row contains a list
             of up to `width` months. Each month contains between 4 and 6
             weeks, and each week contains 1-7 days. Days are tuples with
@@ -811,7 +811,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Returns
         -------
-        list of lists of lists of lists of ints
+        :obj:`list` of list of list of list of :obj:`int`
             Returns a list of month rows. Each month row contains a list
             of up to `width` months. Each month contains either 5 or 6
             weeks, and each week contains 1-7 days. Each day is the day of
@@ -835,7 +835,7 @@ class HebrewCalendar(calendar.Calendar):
 
         Returns
         -------
-        list of lists of HebrewDate
+        :obj:`list` of list of :obj:`pyluach.dates.HebrewDate`
             List of weeks in the month containing 7 ``HebrewDate``
             instances each.
         """
