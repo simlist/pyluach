@@ -4,7 +4,7 @@ from operator import gt, lt, eq, ne, ge, le, add, sub
 import pytest
 
 from pyluach import dates, hebrewcal, utils
-from pyluach.dates import HebrewDate, GregorianDate, JulianDay
+from pyluach.dates import HebrewDate, GregorianDate, JulianDay, Rounding
 
 
 KNOWN_VALUES = {(2009, 8, 21): (5769, 6, 1),
@@ -360,7 +360,10 @@ class TestFormat:
 
 def test_add_years():
     date = HebrewDate(5782, 12, 30)
-    assert date.add(years=1, round_earlier=True) == HebrewDate(5783, 12, 29)
+    assert (
+        date.add(years=1, rounding=Rounding.PREVIOUS_DAY)
+        == HebrewDate(5783, 12, 29)
+    )
     assert date.add(years=1) == HebrewDate(5783, 1, 1)
     date = HebrewDate(5782, 13, 1)
     assert date.add(years=1) == HebrewDate(5783, 12, 1)
@@ -370,23 +373,34 @@ def test_add_years():
 
 def test_add():
     date = HebrewDate(5782, 12, 30)
-    assert date.add(months=1, round_earlier=True) == HebrewDate(5782, 13, 29)
+    assert (
+        date.add(months=1, rounding=Rounding.PREVIOUS_DAY)
+        == HebrewDate(5782, 13, 29)
+    )
     assert date.add(months=1) == HebrewDate(5782, 1, 1)
     assert date.add(months=27) == HebrewDate(5784, 1, 30)
-    assert date.add(months=27, round_earlier=True) == HebrewDate(5784, 1, 30)
+    assert (
+        date.add(months=27, rounding=Rounding.PREVIOUS_DAY)
+        == HebrewDate(5784, 1, 30)
+    )
     date = HebrewDate(5781, 7, 28)
     assert date.add(years=2, months=1, days=2) == HebrewDate(5783, 8, 30)
     assert date.add(years=3, months=2, days=2) == HebrewDate(5784, 10, 1)
 
 
+def test_add_error():
+    date = HebrewDate(5783, 11, 30)
+    with pytest.raises(TypeError):
+        date.add(months=1, rounding='Rounding.PREVIOUS_DAY')
+
+
 def test_subtract():
     date = HebrewDate(5782, 12, 30)
     assert (
-        date.subtract(months=6, round_earlier=True) == HebrewDate(5781, 6, 29)
+        date.subtract(months=6, rounding=Rounding.PREVIOUS_DAY)
+        == HebrewDate(5781, 6, 29)
     )
-    assert (
-        date.subtract(months=6) == HebrewDate(5782, 7, 1)
-    )
+    assert date.subtract(months=6) == HebrewDate(5782, 7, 1)
 
 
 def test_replace():

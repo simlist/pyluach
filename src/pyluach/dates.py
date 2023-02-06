@@ -3,6 +3,7 @@ manipulating several date types.
 
 Contents
 --------
+* :class:`Rounding`
 * :class:`BaseDate`
 * :class:`CalendarDateMixin`
 * :class:`JulianDay`
@@ -18,9 +19,27 @@ only. No attributes should be changed once they're created.
 import abc
 from datetime import date
 from numbers import Number
+from enum import Enum, auto
 
 from pyluach import utils
 from pyluach import gematria
+
+
+class Rounding(Enum):
+    """Enumerator to provide options for rounding Hebrew dates.
+
+    Attributes
+    ----------
+    PREVIOUS_DAY
+        If the day is the 30th and the month only has 29 days, round to
+        the 29th of the month.
+    NEXT_DAY
+        If the day is the 30th and the month only has 29 days, round to
+        the 1st of the next month.
+
+    """
+    PREVIOUS_DAY = auto()
+    NEXT_DAY = auto()
 
 
 class BaseDate(abc.ABC):
@@ -987,7 +1006,14 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         year = self.hebrew_year(thousands)
         return f'{day} {month} {year}'
 
-    def add(self, years=0, months=0, days=0, adar1=False, round_earlier=False):
+    def add(
+        self,
+        years=0,
+        months=0,
+        days=0,
+        adar1=False,
+        rounding=Rounding.NEXT_DAY
+    ):
         """Add years, months, and days to date.
 
         Parameters
@@ -1002,11 +1028,11 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             True to return a date in Adar Aleph if `self` is in a regular
             Adar and after adding the years it's leap year. Default is
             ``False`` which will return the date in Adar Beis.
-        round_earlier : bool, optional
-            ``True`` to give the last day of the month if `self` is
-            the 30th of the month, and there are only 29 days in the
-            destination month. Default is ``False`` which returns the
-            first day of the next month.
+        rounding : Rounding, optional
+            :obj:`Rounding.PREVIOUS_DAY` to give the last day of the month if
+            `self` is the 30th of the month, and there are only 29 days
+            in the destination month. Default is :obj:`Rounding.NEXT_DAY`
+            which returns the first day of the next month.
 
         Returns
         -------
@@ -1017,8 +1043,16 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         This method first adds the `years`. If the starting month doesn't
         exist in the resulting year, it adjusts it based on the `adar1`
         argument, then it adds the `months`. If the starting day doesn't
-        exist in that month it adjusts it based on the `round_earlier`
+        exist in that month it adjusts it based on the `rounding`
         argument, then it adds the `days`.
+
+        Examples
+        --------
+        >>> date = HebrewDate(5783, 11, 30)
+        >>> date.add(months=1)
+        HebrewDate(5783, 1, 1)
+        >>> date.add(months=1, rounding=Rounding.PREVIOUS_DAY)
+        HebrewDate(5783, 12, 29)
         """
         year = self.year + years
         month = self.month
@@ -1037,14 +1071,24 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             year, month = utils._subtract_months(year, month, -months)
         if utils._month_length(year, month) < self.day:
             date = HebrewDate(year, month, 29)
-            if not round_earlier:
+            if rounding is Rounding.NEXT_DAY:
                 date += 1
+            elif not isinstance(rounding, Rounding):
+                raise TypeError(
+                    'The rounding argument can only be a member of the'
+                    ' dates.Rounding enum.'
+                )
         else:
             date = HebrewDate(year, month, self.day)
         return date + days
 
     def subtract(
-        self, years=0, months=0, days=0, adar1=False, round_earlier=False
+        self,
+        years=0,
+        months=0,
+        days=0,
+        adar1=False,
+        rounding=Rounding.NEXT_DAY
     ):
         """Subtract years, months, and days from date.
 
@@ -1060,11 +1104,11 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             True to return a date in Adar Aleph if `self` is in a regular
             Adar and the destination year is leap year. Default is
             ``False`` which will return the date in Adar Beis.
-        round_earlier : bool, optional
-            ``True`` to give the last day of the month if `self` is
-            the 30th of the month, and there are only 29 days in the
-            destination month. Default is ``False`` which returns the
-            first day of the next month.
+        rounding : Rounding, optional
+            :obj:`Rounding.PREVIOUS_DAY` to give the last day of the month if
+            `self` is the 30th of the month, and there are only 29 days
+            in the destination month. Default is :obj:`Rounding.NEXT_DAY`
+            which returns the first day of the next month.
 
         Returns
         -------
@@ -1075,7 +1119,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         This method first adds the `years`. If the starting month doesn't
         exist in the resulting year, it adjusts it based on the `adar1`
         argument, then it adds the `months`. If the starting day doesn't
-        exist in that month it adjusts it based on the `round_forward`
+        exist in that month it adjusts it based on the `rounding`
         argument, then it adds the `days`.
         """
-        return self.add(-years, -months, -days, adar1, round_earlier)
+        return self.add(-years, -months, -days, adar1, rounding)
