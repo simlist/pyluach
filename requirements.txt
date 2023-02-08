@@ -10,7 +10,7 @@ cffi==1.15.0
 charset-normalizer==2.0.12
 commonmark==0.9.1
 coverage==6.3.3
-cryptography==37.0.2
+cryptography==39.0.1
 dill==0.3.5.1
 docutils==0.17.1
 execnet==1.9.0
