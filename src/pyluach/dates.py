@@ -36,10 +36,13 @@ class Rounding(Enum):
     NEXT_DAY
         If the day is the 30th and the month only has 29 days, round to
         the 1st of the next month.
-
+    EXCEPTION
+        If the day is the 30th and the month only has 29 days, raise a
+        ValueError.
     """
     PREVIOUS_DAY = auto()
     NEXT_DAY = auto()
+    EXCEPTION = auto()
 
 
 class BaseDate(abc.ABC):
@@ -1029,10 +1032,12 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             Adar and after adding the years it's leap year. Default is
             ``False`` which will return the date in Adar Beis.
         rounding : Rounding, optional
-            :obj:`Rounding.PREVIOUS_DAY` to give the last day of the month if
-            `self` is the 30th of the month, and there are only 29 days
-            in the destination month. Default is :obj:`Rounding.NEXT_DAY`
-            which returns the first day of the next month.
+            Choose what to do if self is the 30th day of the month, and
+            there are only 29 days in the destination month.
+            :obj:`Rounding.NEXT_DAY` to return the first day of the next
+            month. :obj:`Rounding.PREVIOUS_DAY` to return the last day of
+            the month. :obj:`Rounding.EXCEPTION` to raise a ValueError.
+            Default is :obj:`Rounding.NEXT_DAY`.
 
         Returns
         -------
@@ -1071,6 +1076,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             year, month = utils._subtract_months(year, month, -months)
         if utils._month_length(year, month) < self.day:
             date = HebrewDate(year, month, 29)
+            if rounding is Rounding.EXCEPTION:
+                raise ValueError(f'{date:%B} {year} has only 29 days.')
             if rounding is Rounding.NEXT_DAY:
                 date += 1
             elif not isinstance(rounding, Rounding):
@@ -1105,10 +1112,12 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             Adar and the destination year is leap year. Default is
             ``False`` which will return the date in Adar Beis.
         rounding : Rounding, optional
-            :obj:`Rounding.PREVIOUS_DAY` to give the last day of the month if
-            `self` is the 30th of the month, and there are only 29 days
-            in the destination month. Default is :obj:`Rounding.NEXT_DAY`
-            which returns the first day of the next month.
+            Choose what to do if self is the 30th day of the month, and
+            there are only 29 days in the destination month.
+            :obj:`Rounding.NEXT_DAY` to return the first day of the next
+            month. :obj:`Rounding.PREVIOUS_DAY` to return the last day of
+            the month. :obj:`Rounding.EXCEPTION` to raise a ValueError.
+            Default is :obj:`Rounding.NEXT_DAY`.
 
         Returns
         -------

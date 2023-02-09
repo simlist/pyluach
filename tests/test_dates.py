@@ -383,6 +383,8 @@ def test_add():
         date.add(months=27, rounding=Rounding.PREVIOUS_DAY)
         == HebrewDate(5784, 1, 30)
     )
+    with pytest.raises(ValueError):
+        date.add(months=1, rounding=Rounding.EXCEPTION)
     date = HebrewDate(5781, 7, 28)
     assert date.add(years=2, months=1, days=2) == HebrewDate(5783, 8, 30)
     assert date.add(years=3, months=2, days=2) == HebrewDate(5784, 10, 1)
