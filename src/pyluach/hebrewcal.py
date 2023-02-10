@@ -8,6 +8,7 @@ Contents
 --------
 * :class:`Year`
 * :class:`Month`
+* :func:`to_hebrew_numeral`
 * :class:`HebrewCalendar`
 * :class:`HebrewHTMLCalendar`
 * :class:`HebrewTextCalendar`
@@ -175,7 +176,7 @@ class Year:
 
         Yields
         ------
-        Month
+        :obj:`Month`
             The next month in the Hebrew calendar year as a
             ``Month`` instance beginning with Tishrei through Elul.
         """
@@ -187,7 +188,7 @@ class Year:
 
         Yields
         ------
-        int
+        :obj:`int`
             An integer beginning with 1 for the the next day of
             the year.
         """
@@ -199,7 +200,7 @@ class Year:
 
         Yields
         ------
-        pyluach.dates.HebrewDate
+        :obj:`pyluach.dates.HebrewDate`
             The next date of the Hebrew calendar year starting with
             the first of Tishrei.
         """
@@ -445,7 +446,7 @@ class Month:
 
         Yields
         ------
-        pyluach.dates.HebrewDate
+        :obj:`pyluach.dates.HebrewDate`
             The next Hebrew date of the month.
         """
         for day in self:
