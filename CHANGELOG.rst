@@ -8,6 +8,8 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 Unreleased `2.1.0`_ (2023-0?-??)
 ================================
 * Added ``add`` and ``subtract`` methods to ``dates.HebrewDate``.
+* Added missing documentation for `%y` and `%Y` in formatting
+  ``HebrewDate``.
 
 `2.0.2`_ (2022-10-24)
 =====================
