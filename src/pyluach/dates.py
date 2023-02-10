@@ -685,6 +685,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     %B     Iyar    Month name transliterated into English
     %m     02      Month as a 0-padded 2 digit decimal number
     %-m    2       Month as a decimal number
+    %y     82, 01  Year without century as a zero-padded decimal number
+    %Y     5782    Year as a decimal number
     %*a    א׳      Weekday as a Hebrew numeral
     %*A    ראשון   Weekday name in Hebrew
     %*d    ז׳, ט״ז Day of month as Hebrew numeral
@@ -1077,7 +1079,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
         if utils._month_length(year, month) < self.day:
             date = HebrewDate(year, month, 29)
             if rounding is Rounding.EXCEPTION:
-                raise ValueError(f'{date:%B} {year} has only 29 days.')
+                raise ValueError(f'{date:%B %Y} has only 29 days.')
             if rounding is Rounding.NEXT_DAY:
                 date += 1
             elif not isinstance(rounding, Rounding):
