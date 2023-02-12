@@ -127,7 +127,7 @@ def getparsha(date, israel=False):
 
     Returns
     -------
-    list of ints or ``None``
+    list of int or None
       A list of the numbers of the parshios for the Shabbos of the given date,
       beginning with 0 for Beraishis, or ``None`` if the Shabbos doesn't
       have a parsha (i.e. it's on Yom Tov).
@@ -186,7 +186,7 @@ def iterparshios(year, israel=False):
 
     Yields
     ------
-    list of ints or None
+    :obj:`list` of :obj:`int` or :obj:`None`
       A list of the numbers of the parshios for the next Shabbos in the
       given year. Yields ``None`` for a Shabbos that doesn't have its
       own parsha (i.e. it occurs on a yom tov).
