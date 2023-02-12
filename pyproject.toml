@@ -4,12 +4,11 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pyluach"
-version = "2.1.0"
 authors = [
   {name = "MS List", email = "simlist@gmail.com"}
 ]
 license = {file = "license.txt"}
-dynamic = ["description"]
+dynamic = ["description", "version"]
 readme = "README.rst"
 requires-python = ">=3.7"
 classifiers=[
