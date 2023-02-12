@@ -1047,11 +1047,11 @@ class HebrewDate(BaseDate, CalendarDateMixin):
 
         Note
         ----
-        This method first adds the `years`. If the starting month doesn't
-        exist in the resulting year, it adjusts it based on the `adar1`
-        argument, then it adds the `months`. If the starting day doesn't
-        exist in that month it adjusts it based on the `rounding`
-        argument, then it adds the `days`.
+        This method first adds the `years`. If the starting month is
+        Adar and the destination year has two Adars, it chooses which
+        one based on the `adar1` argument, then it adds the `months`. If
+        the starting day doesn't exist in that month it adjusts it based
+        on the `rounding` argument, then it adds the `days`.
 
         Examples
         --------
@@ -1127,10 +1127,11 @@ class HebrewDate(BaseDate, CalendarDateMixin):
 
         Note
         ----
-        This method first adds the `years`. If the starting month doesn't
-        exist in the resulting year, it adjusts it based on the `adar1`
-        argument, then it adds the `months`. If the starting day doesn't
-        exist in that month it adjusts it based on the `rounding`
-        argument, then it adds the `days`.
+        This method first subtracts the `years`. If the starting month
+        is Adar and the destination year has two Adars, it chooses which
+        one based on the `adar1` argument, then it subtracts the
+        `months`. If the starting day doesn't exist in that month it
+        adjusts it based on the `rounding` argument, then it subtracts
+        the `days`.
         """
         return self.add(-years, -months, -days, adar1, rounding)
