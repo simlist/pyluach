@@ -44,7 +44,8 @@ napoleon_include_special_with_doc = False
 autodoc_default_options = {
     'members': True,
     'inherited-members': True,
-    'show-inheritance': True
+    'show-inheritance': True,
+    'member-order': 'bysource'
 }
 autodoc_member_order = 'bysource'
 
