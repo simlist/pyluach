@@ -28,6 +28,9 @@ from pyluach import gematria
 class Rounding(Enum):
     """Enumerator to provide options for rounding Hebrew dates.
 
+    This provides constants to use as arguments for functions. It
+    should not be instantiated.
+
     Attributes
     ----------
     PREVIOUS_DAY

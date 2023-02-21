@@ -8,6 +8,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 `2.1.0`_ (2023-02-12)
 ================================
 * Added ``add`` and ``subtract`` methods to ``dates.HebrewDate``.
+* Added ``replace`` method to ``CalendarDateMixin``.
 * Added missing documentation for `%y` and `%Y` in formatting
   ``HebrewDate``.
 
