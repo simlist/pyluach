@@ -29,6 +29,30 @@ class Days(Enum):
     NINTH_OF_AV = '9 of Av'
 
 
+_days_hebrew = {
+    Days.ROSH_HASHANA: 'ראש השנה',
+    Days.YOM_KIPPUR: 'יום כיפור',
+    Days.SUCCOS: 'סוכות',
+    Days.SHMINI_ATZERES: 'שמיני עצרת',
+    Days.SIMCHAS_TORAH: 'שמחת תורה',
+    Days.CHANUKA: 'חנוכה',
+    Days.TU_BSHVAT: 'ט״ו בשבט',
+    Days.PURIM_KATAN: 'פורים קטן',
+    Days.PURIM: 'פורים',
+    Days.SHUSHAN_PURIM: 'שושן פורים',
+    Days.PESACH: 'פסח',
+    Days.PESACH_SHENI: 'פסח שני',
+    Days.LAG_BAOMER: 'ל״ג בעומר',
+    Days.SHAVUOS: 'שבועות',
+    Days.TU_BAV: 'ט״ו באב',
+    Days.TZOM_GEDALIA: 'צום גדליה',
+    Days.TENTH_OF_TEVES: 'י׳ בטבת',
+    Days.TAANIS_ESTHER: 'תענית אסתר',
+    Days.SEVENTEENTH_OF_TAMUZ: 'י״ז בתמוז',
+    Days.NINTH_OF_AV: 'ט׳ באב'
+}
+
+
 MONTH_NAMES = [
     'Nissan', 'Iyar', 'Sivan', 'Tammuz', 'Av', 'Elul', 'Tishrei', 'Cheshvan',
     'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 1', 'Adar 2']
@@ -47,6 +71,7 @@ FESTIVALS = [
     'Rosh Hashana', 'Yom Kippur', 'Succos', 'Shmini Atzeres', 'Simchas Torah',
     'Chanuka', "Tu B'shvat", 'Purim Katan', 'Purim', 'Shushan Purim',
     'Pesach', 'Pesach Sheni', "Lag Ba'omer", 'Shavuos', "Tu B'av"]
+
 
 FESTIVALS_HEBREW = [
     'ראש השנה', 'יום כיפור', 'סוכות', 'שמיני עצרת', 'שמחת תורה', 'חנוכה',
@@ -198,18 +223,18 @@ def _fast_day(date):
 
     if month == 7:
         if (weekday == 1 and day == 4) or (weekday != 7 and day == 3):
-            return 0
+            return Days.TZOM_GEDALIA
     elif month == 10 and day == 10:
-        return 1
+        return Days.TENTH_OF_TEVES
     elif month == adar:
         if (weekday == 5 and day == 11) or weekday != 7 and day == 13:
-            return 2
+            return Days.TAANIS_ESTHER
     elif month == 4:
         if (weekday == 1 and day == 18) or (weekday != 7 and day == 17):
-            return 3
+            return Days.SEVENTEENTH_OF_TAMUZ
     elif month == 5:
         if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
-            return 4
+            return Days.NINTH_OF_AV
     return None
 
 
@@ -218,8 +243,22 @@ def _fast_day_string(date, hebrew=False):
     if fast is None:
         return None
     if hebrew:
-        return FAST_DAYS_HEBREW[fast]
-    return FAST_DAYS[fast]
+        return _days_hebrew[fast]
+    return fast.value
+
+
+def _first_day_of_holiday(holiday):
+    if holiday is Days.ROSH_HASHANA:
+        return (7, 1)
+    if holiday is Days.SUCCOS:
+        return (7, 15)
+    if holiday is Days.CHANUKA:
+        return (9, 25)
+    if holiday is Days.PESACH:
+        return (1, 15)
+    if holiday is Days.SHAVUOS:
+        return (3, 6)
+    return None
 
 
 def _festival(date, israel=False, include_working_days=True):
@@ -255,40 +294,40 @@ def _festival(date, israel=False, include_working_days=True):
     day = date.day
     if month == 7:
         if day in [1, 2]:
-            return 0
+            return Days.ROSH_HASHANA
         if day == 10:
-            return 1
+            return Days.YOM_KIPPUR
         if (
             not include_working_days
             and (day in range(17, 22) or (israel and day == 16))
         ):
             return None
         if day in range(15, 22):
-            return 2
+            return Days.SUCCOS
         if day == 22:
-            return 3
+            return Days.SHMINI_ATZERES
         if day == 23 and not israel:
-            return 4
+            return Days.SIMCHAS_TORAH
     elif month in [9, 10] and include_working_days:
         kislev_length = _month_length(year, 9)
         if (
             month == 9 and day in range(25, kislev_length + 1)
             or month == 10 and day in range(1, 8 - (kislev_length - 25))
         ):
-            return 5
+            return Days.CHANUKA
     elif month == 11 and day == 15 and include_working_days:
-        return 6
+        return Days.TU_BSHVAT
     elif month == 12 and include_working_days:
         leap = _is_leap(year)
         if day == 14:
-            return 7 if leap else 8
+            return Days.PURIM_KATAN if leap else Days.PURIM
         if day == 15 and not leap:
-            return 9
+            return Days.SHUSHAN_PURIM
     elif month == 13 and include_working_days:
         if day == 14:
-            return 8
+            return Days.PURIM
         if day == 15:
-            return 9
+            return Days.SHUSHAN_PURIM
     elif month == 1:
         if (
             not include_working_days
@@ -296,56 +335,27 @@ def _festival(date, israel=False, include_working_days=True):
         ):
             return None
         if day in range(15, 22 if israel else 23):
-            return 10
+            return Days.PESACH
     elif month == 2 and day == 14 and include_working_days:
-        return 11
+        return Days.PESACH_SHENI
     elif month == 2 and day == 18 and include_working_days:
-        return 12
+        return Days.LAG_BAOMER
     elif month == 3 and (day == 6 or (not israel and day == 7)):
-        return 13
+        return Days.SHAVUOS
     elif month == 5 and day == 15 and include_working_days:
-        return 14
+        return Days.TU_BAV
     return None
 
 
 def _festival_string(
-        date, israel=False, hebrew=False, include_working_days=True):
+    date,
+    israel=False,
+    hebrew=False,
+    include_working_days=True,
+):
     festival = _festival(date, israel, include_working_days)
     if festival is None:
         return None
     if hebrew:
-        return FESTIVALS_HEBREW[festival]
-    return FESTIVALS[festival]
-
-
-def _holiday(date, israel=False, hebrew=False):
-    """Return Jewish holiday of given date.
-
-    The holidays include the major and minor religious Jewish
-    holidays including fast days.
-
-    Parameters
-    ----------
-    date : ``HebrewDate``, ``GregorianDate``, or ``JulianDay``
-      Any date that implements a ``to_heb()`` method which returns a
-      ``HebrewDate`` can be used.
-
-    israel : bool, optional
-      ``True`` if you want the holidays according to the israel
-      schedule. Defaults to ``False``.
-
-    hebrew : bool, optional
-    ``True`` if you want the holiday name in Hebrew letters. Default is
-    ``False``.
-
-    Returns
-    -------
-    str or ``None``
-      The name of the holiday or ``None`` if the given date is not
-      a Jewish holiday.
-    """
-    festival = _festival_string(date, israel, hebrew)
-    if festival is not None:
-        return festival
-    fast = _fast_day_string(date, hebrew)
-    return fast
+        return _days_hebrew[festival]
+    return festival.value
