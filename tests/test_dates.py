@@ -257,6 +257,9 @@ class TestHolidayMethods:
         assert date.festival(hebrew=True) == 'חנוכה'
         assert date.festival(include_working_days=False) is None
 
+    def test_day_of_holiday(self):
+        assert HebrewDate(5783, 12, 14)._day_of_holiday(israel=False) == ''
+
 
 def test_to_pydate():
     day = HebrewDate(5778, 6, 1)
