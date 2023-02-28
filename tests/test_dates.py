@@ -259,6 +259,9 @@ class TestHolidayMethods:
 
     def test_day_of_holiday(self):
         assert HebrewDate(5783, 12, 14)._day_of_holiday(israel=False) == ''
+        # shavuos = HebrewDate(5783, 3, 6)
+        # assert shavuos.holiday(prefix_day=True) == '1 Shavuos'
+        # assert shavuos.holiday(israel=True, prefix_day=True) == 'Shavuos'
 
 
 def test_to_pydate():

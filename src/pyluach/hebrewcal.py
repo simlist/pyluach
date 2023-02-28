@@ -1249,7 +1249,7 @@ def festival(
     israel=False,
     hebrew=False,
     include_working_days=True,
-    include_day=False
+    prefix_day=False
 ):
     """Return Jewish festival of given day.
 
@@ -1271,7 +1271,7 @@ def festival(
         ``True`` to include festival days on which melacha (work) is
         allowed; ie. Pesach Sheni, Chol Hamoed, etc.
         Default is ``True``.
-    include_day : bool, optional
+    prefix_day : bool, optional
         ``True`` to prefix multi day festivals with the day of the
         festival. Default is ``False``.
 
@@ -1279,12 +1279,12 @@ def festival(
     --------
     >>> from pyluach.dates import HebrewDate
     pesach = HebrewDate(2023, 1, 15)
-    >>> festival(pesach, include_day=True)
+    >>> festival(pesach, prefix_day=True)
     '1 Pesach'
-    >>> festival(pesach, hebrew=True, include_day=True)
+    >>> festival(pesach, hebrew=True, prefix_day=True)
     'א׳ פסח'
     >>> shavuos = HebrewDate(5783, 3, 6)
-    >>> festival(shavuos, israel=True, include_day=True)
+    >>> festival(shavuos, israel=True, prefix_day=True)
     'Shavuos'
 
     Returns
@@ -1293,10 +1293,10 @@ def festival(
         The name of the festival or ``None`` if the given date is not
         a Jewish festival.
     """
-    return date.festival(israel, hebrew, include_working_days, include_day)
+    return date.festival(israel, hebrew, include_working_days, prefix_day)
 
 
-def holiday(date, israel=False, hebrew=False, include_day=False):
+def holiday(date, israel=False, hebrew=False, prefix_day=False):
     """Return Jewish holiday of given date.
 
     The holidays include the major and minor religious Jewish
@@ -1312,7 +1312,7 @@ def holiday(date, israel=False, hebrew=False, include_day=False):
     hebrew : bool, optional
         ``True`` if you want the holiday name in Hebrew letters. Default
         is ``False``, which returns the name transliterated into English.
-    include_day : bool, optional
+    prefix_day : bool, optional
         ``True`` to prefix multi day holidays with the day of the
         holiday. Default is ``False``.
 
@@ -1320,12 +1320,12 @@ def holiday(date, israel=False, hebrew=False, include_day=False):
     --------
     >>> from pyluach.dates import HebrewDate
     >>> pesach = HebrewDate(2023, 1, 15)
-    >>> holiday(pesach, include_day=True)
+    >>> holiday(pesach, prefix_day=True)
     '1 Pesach'
-    >>> holiday(pesach, hebrew=True, include_day=True)
+    >>> holiday(pesach, hebrew=True, prefix_day=True)
     'א׳ פסח'
     >>> taanis_esther = HebrewDate(5783, 12, 13)
-    >>> holiday(taanis_esther, include_day=True)
+    >>> holiday(taanis_esther, prefix_day=True)
     'Taanis Esther'
 
     Returns
@@ -1334,4 +1334,4 @@ def holiday(date, israel=False, hebrew=False, include_day=False):
         The name of the holiday or ``None`` if the given date is not
         a Jewish holiday.
     """
-    return date.holiday(israel, hebrew, include_day)
+    return date.holiday(israel, hebrew, prefix_day)

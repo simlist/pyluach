@@ -321,23 +321,23 @@ class TestHoliday:
             for included_days in [True, False]
         ))
         assert (
-            holiday(roshhashana, hebrew=True, include_day=True)
+            holiday(roshhashana, hebrew=True, prefix_day=True)
             == 'א׳ ראש השנה'
         )
-        assert festival(roshhashana + 1, include_day=True) == '2 Rosh Hashana'
+        assert festival(roshhashana + 1, prefix_day=True) == '2 Rosh Hashana'
 
     def test_yomkippur(self):
         yom_kippur = dates.HebrewDate(5775, 7, 10)
         assert holiday(yom_kippur) == 'Yom Kippur'
         assert holiday(yom_kippur, hebrew=True) == 'יום כיפור'
         assert festival(yom_kippur, include_working_days=False) == 'Yom Kippur'
-        assert holiday(yom_kippur, include_day=True) == 'Yom Kippur'
+        assert holiday(yom_kippur, prefix_day=True) == 'Yom Kippur'
 
     def test_succos(self):
         second_day = dates.HebrewDate(5782, 7, 16)
         day = dates.HebrewDate(5778, 7, 18)
         assert festival(day) == 'Succos'
-        assert holiday(day, hebrew=True, include_day=True) == 'ד׳ סוכות'
+        assert holiday(day, hebrew=True, prefix_day=True) == 'ד׳ סוכות'
         day2 = dates.HebrewDate(5778, 7, 23)
         assert festival(day2, israel=True, hebrew=True) is None
         assert festival(day, include_working_days=False) is None
@@ -354,14 +354,14 @@ class TestHoliday:
         shmini = dates.HebrewDate(5780, 7, 22)
         assert holiday(shmini, True) == 'Shmini Atzeres'
         assert holiday(shmini) == 'Shmini Atzeres'
-        assert holiday(shmini + 1, include_day=True) == 'Simchas Torah'
-        assert holiday(shmini + 1, israel=True, include_day=True) is None
+        assert holiday(shmini + 1, prefix_day=True) == 'Simchas Torah'
+        assert holiday(shmini + 1, israel=True, prefix_day=True) is None
 
     def test_chanuka(self):
         for year in [5778, 5787]:
             chanuka = dates.HebrewDate(year, 9, 25)
             assert (
-                festival(chanuka + 7, hebrew=True, include_day=True)
+                festival(chanuka + 7, hebrew=True, prefix_day=True)
                 == 'ח׳ חנוכה'
             )
             for i in range(8):
@@ -405,9 +405,9 @@ class TestHoliday:
             festival(pesach + 1, israel=True, include_working_days=False)
             is None
         )
-        assert holiday(pesach, include_day=True) == '1 Pesach'
+        assert holiday(pesach, prefix_day=True) == '1 Pesach'
         assert (
-            festival(pesach + 2, include_working_days=False, include_day=True)
+            festival(pesach + 2, include_working_days=False, prefix_day=True)
             is None
         )
 
@@ -436,7 +436,7 @@ class TestHoliday:
         not_shavuos = dates.HebrewDate(5782, 4, 7)
         assert festival(not_shavuos) is None
         assert (
-            festival(shavuos + 1, hebrew=True, include_day=True) == 'ב׳ שבועות'
+            festival(shavuos + 1, hebrew=True, prefix_day=True) == 'ב׳ שבועות'
         )
 
     def test_tubeav(self):

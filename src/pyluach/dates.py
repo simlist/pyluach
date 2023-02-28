@@ -201,12 +201,12 @@ class BaseDate(abc.ABC):
         -------
         str
         """
-        name = (
-            utils._fast_day_string(self)
-            or utils._festival_string(self, israel)
-        )
+        name = utils._festival_string(self, israel)
         if name is not None:
-            first_day = utils._first_day_of_holiday(utils.Days(name))
+            holiday = utils.Days(name)
+            # if holiday is utils.Days.SHAVUOS and israel:
+            #     return ''
+            first_day = utils._first_day_of_holiday(holiday)
             if first_day:
                 day = HebrewDate(self.year, *first_day) - self + 1
                 if hebrew:
@@ -236,7 +236,7 @@ class BaseDate(abc.ABC):
         israel=False,
         hebrew=False,
         include_working_days=True,
-        include_day=False
+        prefix_day=False
     ):
         """Return name of Jewish festival of date.
 
@@ -255,19 +255,19 @@ class BaseDate(abc.ABC):
             ``True`` to include festival days on which melacha (work) is
             allowed; ie. Pesach Sheni, Chol Hamoed, etc.
             Default is ``True``.
-        include_day : bool, optional
+        prefix_day : bool, optional
             ``True`` to prefix multi day festivals with the day of the
             festival. Default is ``False``.
 
         Examples
         --------
         >>> pesach = HebrewDate(2023, 1, 15)
-        >>> pesach.festival(include_day=True)
+        >>> pesach.festival(prefix_day=True)
         '1 Pesach'
-        >>> pesach.festival(hebrew=True, include_day=True)
+        >>> pesach.festival(hebrew=True, prefix_day=True)
         'א׳ פסח'
         >>> shavuos = HebrewDate(5783, 3, 6)
-        >>> shavuos.festival(israel=True, include_day=True)
+        >>> shavuos.festival(israel=True, prefix_day=True)
         'Shavuos'
 
         Returns
@@ -279,13 +279,13 @@ class BaseDate(abc.ABC):
         name = utils._festival_string(
             self, israel, hebrew, include_working_days
         )
-        if include_day and name is not None:
+        if prefix_day and name is not None:
             day = self._day_of_holiday(israel=israel, hebrew=hebrew)
             if day:
                 return f'{day} {name}'
         return name
 
-    def holiday(self, israel=False, hebrew=False, include_day=False):
+    def holiday(self, israel=False, hebrew=False, prefix_day=False):
         """Return name of Jewish holiday of the date.
 
         The holidays include the major and minor religious Jewish
@@ -299,19 +299,19 @@ class BaseDate(abc.ABC):
         hebrew : bool, optional
             ``True`` if you want the holiday name in Hebrew letters. Default is
             ``False``, which returns the name transliterated into English.
-        include_day : bool, optional
+        prefix_day : bool, optional
             ``True`` to prefix multi day holidays with the day of the
             holiday. Default is ``False``.
 
         Examples
         --------
         >>> pesach = HebrewDate(2023, 1, 15)
-        >>> pesach.holiday(include_day=True)
+        >>> pesach.holiday(prefix_day=True)
         '1 Pesach'
-        >>> pesach.holiday(hebrew=True, include_day=True)
+        >>> pesach.holiday(hebrew=True, prefix_day=True)
         'א׳ פסח'
         >>> taanis_esther = HebrewDate(5783, 12, 13)
-        >>> taanis_esther.holiday(include_day=True)
+        >>> taanis_esther.holiday(prefix_day=True)
         'Taanis Esther'
 
         Returns
@@ -322,7 +322,7 @@ class BaseDate(abc.ABC):
         """
         return (
             self.fast_day(hebrew=hebrew)
-            or self.festival(israel, hebrew, include_day=include_day)
+            or self.festival(israel, hebrew, prefix_day=prefix_day)
         )
 
 

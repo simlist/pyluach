@@ -7,7 +7,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
 `2.2.0`_(2023-02-??)
 ====================
-* Added `include_day` param to ``festival`` and ``holiday`` methods and
+* Added `prefix_day` param to ``festival`` and ``holiday`` methods and
   functions.
 
 `2.1.0`_ (2023-02-12)
