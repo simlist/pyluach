@@ -204,8 +204,8 @@ class BaseDate(abc.ABC):
         name = utils._festival_string(self, israel)
         if name is not None:
             holiday = utils.Days(name)
-            # if holiday is utils.Days.SHAVUOS and israel:
-            #     return ''
+            if holiday is utils.Days.SHAVUOS and israel:
+                return ''
             first_day = utils._first_day_of_holiday(holiday)
             if first_day:
                 day = HebrewDate(self.year, *first_day) - self + 1
