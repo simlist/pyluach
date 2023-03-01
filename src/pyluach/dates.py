@@ -260,6 +260,12 @@ class BaseDate(abc.ABC):
             ``True`` to prefix multi day festivals with the day of the
             festival. Default is ``False``.
 
+        Returns
+        -------
+        str or None
+            The name of the festival or ``None`` if the given date is not
+            a Jewish festival.
+
         Examples
         --------
         >>> pesach = HebrewDate(2023, 1, 15)
@@ -270,12 +276,6 @@ class BaseDate(abc.ABC):
         >>> shavuos = HebrewDate(5783, 3, 6)
         >>> shavuos.festival(israel=True, prefix_day=True)
         'Shavuos'
-
-        Returns
-        -------
-        str or None
-            The name of the festival or ``None`` if the given date is not
-            a Jewish festival.
         """
         name = utils._festival_string(
             self, israel, hebrew, include_working_days
@@ -304,6 +304,12 @@ class BaseDate(abc.ABC):
             ``True`` to prefix multi day holidays with the day of the
             holiday. Default is ``False``.
 
+        Returns
+        -------
+        str or None
+            The name of the holiday or ``None`` if the given date is not
+            a Jewish holiday.
+
         Examples
         --------
         >>> pesach = HebrewDate(2023, 1, 15)
@@ -314,12 +320,6 @@ class BaseDate(abc.ABC):
         >>> taanis_esther = HebrewDate(5783, 12, 13)
         >>> taanis_esther.holiday(prefix_day=True)
         'Taanis Esther'
-
-        Returns
-        -------
-        str or None
-            The name of the holiday or ``None`` if the given date is not
-            a Jewish holiday.
         """
         return (
             self.fast_day(hebrew=hebrew)
