@@ -5,13 +5,13 @@ Changelog
 This document records all notable changes to `pyluach <https://github.com/simlist/pyluach>`_.
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
-`2.2.0`_(2023-02-28)
-====================
+`2.2.0`_ (2023-02-28)
+=====================
 * Added `prefix_day` param to ``festival`` and ``holiday`` methods and
   functions.
 
 `2.1.0`_ (2023-02-12)
-================================
+=====================
 * Added ``add`` and ``subtract`` methods to ``dates.HebrewDate``.
 * Added ``replace`` method to ``CalendarDateMixin``.
 * Added missing documentation for `%y` and `%Y` in formatting
