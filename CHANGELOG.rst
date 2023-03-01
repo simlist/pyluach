@@ -5,7 +5,7 @@ Changelog
 This document records all notable changes to `pyluach <https://github.com/simlist/pyluach>`_.
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
-`2.2.0`_(2023-02-??)
+`2.2.0`_(2023-02-28)
 ====================
 * Added `prefix_day` param to ``festival`` and ``holiday`` methods and
   functions.
@@ -93,7 +93,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Initial public release
 
 
-.. _`2.2.0`: https://github.com/simlist/pyluach/compare/v2.0.2...v2.2.0
+.. _`2.2.0`: https://github.com/simlist/pyluach/compare/v2.1.0...v2.2.0
 .. _`2.1.0`: https://github.com/simlist/pyluach/compare/v2.0.2...v2.1.0
 .. _`2.0.2`: https://github.com/simlist/pyluach/compare/v2.0.1...v2.0.2
 .. _`2.0.1`: https://github.com/simlist/pyluach/compare/v2.0.0...v2.0.1
