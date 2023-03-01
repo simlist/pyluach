@@ -208,7 +208,8 @@ class BaseDate(abc.ABC):
                 return ''
             first_day = utils._first_day_of_holiday(holiday)
             if first_day:
-                day = HebrewDate(self.year, *first_day) - self + 1
+                year = self.to_heb().year
+                day = HebrewDate(year, *first_day) - self + 1
                 if hebrew:
                     day = gematria._num_to_str(day)
                 return str(day)

@@ -262,6 +262,9 @@ class TestHolidayMethods:
         shavuos = HebrewDate(5783, 3, 6)
         assert shavuos.holiday(prefix_day=True) == '1 Shavuos'
         assert shavuos.holiday(israel=True, prefix_day=True) == 'Shavuos'
+        shavuos_greg = shavuos.to_greg()
+        assert shavuos_greg.holiday(prefix_day=True) == '1 Shavuos'
+        assert shavuos.to_jd().holiday(prefix_day=True) == '1 Shavuos'
 
 
 def test_to_pydate():
