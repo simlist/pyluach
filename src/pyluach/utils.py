@@ -6,7 +6,7 @@ from functools import lru_cache
 from enum import Enum
 
 
-class Days(Enum):
+class _Days(Enum):
     ROSH_HASHANA = 'Rosh Hashana'
     YOM_KIPPUR = 'Yom Kippur'
     SUCCOS = 'Succos'
@@ -30,26 +30,26 @@ class Days(Enum):
 
 
 _days_hebrew = {
-    Days.ROSH_HASHANA: 'ראש השנה',
-    Days.YOM_KIPPUR: 'יום כיפור',
-    Days.SUCCOS: 'סוכות',
-    Days.SHMINI_ATZERES: 'שמיני עצרת',
-    Days.SIMCHAS_TORAH: 'שמחת תורה',
-    Days.CHANUKA: 'חנוכה',
-    Days.TU_BSHVAT: 'ט״ו בשבט',
-    Days.PURIM_KATAN: 'פורים קטן',
-    Days.PURIM: 'פורים',
-    Days.SHUSHAN_PURIM: 'שושן פורים',
-    Days.PESACH: 'פסח',
-    Days.PESACH_SHENI: 'פסח שני',
-    Days.LAG_BAOMER: 'ל״ג בעומר',
-    Days.SHAVUOS: 'שבועות',
-    Days.TU_BAV: 'ט״ו באב',
-    Days.TZOM_GEDALIA: 'צום גדליה',
-    Days.TENTH_OF_TEVES: 'י׳ בטבת',
-    Days.TAANIS_ESTHER: 'תענית אסתר',
-    Days.SEVENTEENTH_OF_TAMUZ: 'י״ז בתמוז',
-    Days.NINTH_OF_AV: 'ט׳ באב'
+    _Days.ROSH_HASHANA: 'ראש השנה',
+    _Days.YOM_KIPPUR: 'יום כיפור',
+    _Days.SUCCOS: 'סוכות',
+    _Days.SHMINI_ATZERES: 'שמיני עצרת',
+    _Days.SIMCHAS_TORAH: 'שמחת תורה',
+    _Days.CHANUKA: 'חנוכה',
+    _Days.TU_BSHVAT: 'ט״ו בשבט',
+    _Days.PURIM_KATAN: 'פורים קטן',
+    _Days.PURIM: 'פורים',
+    _Days.SHUSHAN_PURIM: 'שושן פורים',
+    _Days.PESACH: 'פסח',
+    _Days.PESACH_SHENI: 'פסח שני',
+    _Days.LAG_BAOMER: 'ל״ג בעומר',
+    _Days.SHAVUOS: 'שבועות',
+    _Days.TU_BAV: 'ט״ו באב',
+    _Days.TZOM_GEDALIA: 'צום גדליה',
+    _Days.TENTH_OF_TEVES: 'י׳ בטבת',
+    _Days.TAANIS_ESTHER: 'תענית אסתר',
+    _Days.SEVENTEENTH_OF_TAMUZ: 'י״ז בתמוז',
+    _Days.NINTH_OF_AV: 'ט׳ באב'
 }
 
 
@@ -223,18 +223,18 @@ def _fast_day(date):
 
     if month == 7:
         if (weekday == 1 and day == 4) or (weekday != 7 and day == 3):
-            return Days.TZOM_GEDALIA
+            return _Days.TZOM_GEDALIA
     elif month == 10 and day == 10:
-        return Days.TENTH_OF_TEVES
+        return _Days.TENTH_OF_TEVES
     elif month == adar:
         if (weekday == 5 and day == 11) or weekday != 7 and day == 13:
-            return Days.TAANIS_ESTHER
+            return _Days.TAANIS_ESTHER
     elif month == 4:
         if (weekday == 1 and day == 18) or (weekday != 7 and day == 17):
-            return Days.SEVENTEENTH_OF_TAMUZ
+            return _Days.SEVENTEENTH_OF_TAMUZ
     elif month == 5:
         if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
-            return Days.NINTH_OF_AV
+            return _Days.NINTH_OF_AV
     return None
 
 
@@ -248,15 +248,15 @@ def _fast_day_string(date, hebrew=False):
 
 
 def _first_day_of_holiday(holiday):
-    if holiday is Days.ROSH_HASHANA:
+    if holiday is _Days.ROSH_HASHANA:
         return (7, 1)
-    if holiday is Days.SUCCOS:
+    if holiday is _Days.SUCCOS:
         return (7, 15)
-    if holiday is Days.CHANUKA:
+    if holiday is _Days.CHANUKA:
         return (9, 25)
-    if holiday is Days.PESACH:
+    if holiday is _Days.PESACH:
         return (1, 15)
-    if holiday is Days.SHAVUOS:
+    if holiday is _Days.SHAVUOS:
         return (3, 6)
     return None
 
@@ -294,40 +294,40 @@ def _festival(date, israel=False, include_working_days=True):
     day = date.day
     if month == 7:
         if day in [1, 2]:
-            return Days.ROSH_HASHANA
+            return _Days.ROSH_HASHANA
         if day == 10:
-            return Days.YOM_KIPPUR
+            return _Days.YOM_KIPPUR
         if (
             not include_working_days
             and (day in range(17, 22) or (israel and day == 16))
         ):
             return None
         if day in range(15, 22):
-            return Days.SUCCOS
+            return _Days.SUCCOS
         if day == 22:
-            return Days.SHMINI_ATZERES
+            return _Days.SHMINI_ATZERES
         if day == 23 and not israel:
-            return Days.SIMCHAS_TORAH
+            return _Days.SIMCHAS_TORAH
     elif month in [9, 10] and include_working_days:
         kislev_length = _month_length(year, 9)
         if (
             month == 9 and day in range(25, kislev_length + 1)
             or month == 10 and day in range(1, 8 - (kislev_length - 25))
         ):
-            return Days.CHANUKA
+            return _Days.CHANUKA
     elif month == 11 and day == 15 and include_working_days:
-        return Days.TU_BSHVAT
+        return _Days.TU_BSHVAT
     elif month == 12 and include_working_days:
         leap = _is_leap(year)
         if day == 14:
-            return Days.PURIM_KATAN if leap else Days.PURIM
+            return _Days.PURIM_KATAN if leap else _Days.PURIM
         if day == 15 and not leap:
-            return Days.SHUSHAN_PURIM
+            return _Days.SHUSHAN_PURIM
     elif month == 13 and include_working_days:
         if day == 14:
-            return Days.PURIM
+            return _Days.PURIM
         if day == 15:
-            return Days.SHUSHAN_PURIM
+            return _Days.SHUSHAN_PURIM
     elif month == 1:
         if (
             not include_working_days
@@ -335,15 +335,15 @@ def _festival(date, israel=False, include_working_days=True):
         ):
             return None
         if day in range(15, 22 if israel else 23):
-            return Days.PESACH
+            return _Days.PESACH
     elif month == 2 and day == 14 and include_working_days:
-        return Days.PESACH_SHENI
+        return _Days.PESACH_SHENI
     elif month == 2 and day == 18 and include_working_days:
-        return Days.LAG_BAOMER
+        return _Days.LAG_BAOMER
     elif month == 3 and (day == 6 or (not israel and day == 7)):
-        return Days.SHAVUOS
+        return _Days.SHAVUOS
     elif month == 5 and day == 15 and include_working_days:
-        return Days.TU_BAV
+        return _Days.TU_BAV
     return None
 
 
