@@ -30,6 +30,7 @@ PARSHIOS_HEBREW : list of str
 
 from collections import deque, OrderedDict
 from functools import lru_cache
+from enum import Enum
 
 from pyluach.dates import HebrewDate
 from pyluach.utils import _is_leap
@@ -46,6 +47,63 @@ PARSHIOS = [
     'Eikev', "Re'eh", 'Shoftim', 'Ki Seitzei', 'Ki Savo', 'Nitzavim',
     'Vayeilech', 'Haazinu', 'Vezos Haberachah'
 ]
+
+
+class _Parshios_Enum(Enum):
+    BEREISHIS = 'Bereishis'
+    NOACH = 'Noach'
+    LECH_LECHA = 'Lech Lecha'
+    VAYEIRA = 'Vayeira'
+    CHAYEI_SARAH = 'Chayei Sarah'
+    TOLDOS = 'Toldos'
+    VAYEITZEI = 'Vayeitzei'
+    VAYISHLACH = 'Vayishlach'
+    VAYEISHEV = 'Vayeishev'
+    MIKEITZ = 'Mikeitz'
+    VAYIGASH = 'Vayigash'
+    VAYECHI = 'Vayechi'
+    SHEMOS = 'Shemos'
+    VAEIRA = "Va'eira"
+    BO = 'Bo'
+    BESHALACH = 'Beshalach'
+    YISRO = 'Yisro'
+    MISHPATIM = 'Mishpatim'
+    TERUMAH = 'Terumah'
+    TETZAVEH = 'Tetzaveh'
+    KI_SISA = 'Ki Sisa'
+    VAYAKHEL = 'Vayakhel'
+    PEKUDEI = 'Pekudei'
+    VAYIKRA = 'Vayikra'
+    TZAV = 'Tzav'
+    SHEMINI = 'Shemini'
+    TAZRIA = 'Tazria'
+    METZORA = 'Metzora'
+    ACHAREI_MOS = 'Acharei Mos'
+    KEDOSHIM = 'Kedoshim'
+    EMOR = 'Emor'
+    BEHAR = 'Behar'
+    BECHUKOSAI = 'Bechukosai'
+    BAMIDBAR = 'Bamidbar'
+    NASSO = 'Nasso'
+    BEHAALOSCHA = "Beha'aloscha"
+    SHELACH = 'Shelach'
+    KORACH = 'Korach'
+    CHUKAS = 'Chukas'
+    BALAK = 'Balak'
+    PINCHAS = 'Pinchas'
+    MATTOS = 'Mattos'
+    MASEI = 'Masei'
+    DEVARIM = 'Devarim'
+    VAESCHANAN = "Va'eschanan"
+    EIKEV = 'Eikev'
+    REEH = "Re'eh"
+    SHOFTIM = 'Shoftim'
+    KI_SEITZEI = 'Ki Seitzei'
+    KI_SAVO = 'Ki Savo'
+    NITZAVIM = 'Nitzavim'
+    VAYEILECH = 'Vayeilech'
+    HAAZINU = 'Haazinu'
+    VEZOS_HABERACHAH = 'Vezos Haberachah'
 
 
 PARSHIOS_HEBREW = [
