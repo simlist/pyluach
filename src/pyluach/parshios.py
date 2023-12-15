@@ -4,7 +4,7 @@ Examples
 --------
 >>> from pyluach import dates, parshios
 >>> date = dates.HebrewDate(5781, 10, 5)
->>> parshios.getparsha(date)
+>>> parshios.getparsha_string(date)
 'Vayigash'
 >>> parshios.getparsha_string(date, hebrew=True)
 'ויגש'
@@ -22,8 +22,12 @@ pronunciation.
 
 Attributes
 ----------
-PARSHIOS : list of str
-    A list of the parshios transliterated into English.
+PARSHIOS_ASHKENAZ : list of str
+    A list of the parshios transliterated into English, with Ashkenasic pronunciation.
+PARSHIOS_ISRAELI_1 : list of str
+    A list of the parshios transliterated into English, with mixed Israeli pronunciation.
+PARSHIOS_ISRAELI_2 : list of str
+    A list of the parshios transliterated into English, with modern Israeli pronunciation.
 PARSHIOS_HEBREW : list of str
     A list of the parshios in Hebrew.
 """
@@ -32,10 +36,10 @@ from collections import deque, OrderedDict
 from functools import lru_cache
 
 from pyluach.dates import HebrewDate
-from pyluach.utils import _is_leap
+from pyluach.utils import _is_leap, Pronunciation
 
 
-PARSHIOS = [
+PARSHIOS_ASHKENAZ = [
     'Bereishis', 'Noach', 'Lech Lecha', 'Vayeira', 'Chayei Sarah', 'Toldos',
     'Vayeitzei', 'Vayishlach', 'Vayeishev', 'Mikeitz', 'Vayigash', 'Vayechi',
     'Shemos', "Va'eira", 'Bo', 'Beshalach', 'Yisro', 'Mishpatim', 'Terumah',
@@ -47,6 +51,29 @@ PARSHIOS = [
     'Vayeilech', 'Haazinu', 'Vezos Haberachah'
 ]
 
+PARSHIOT_ISRAELI_MIXED = [
+    'Bereishit', 'Noach', 'Lech Lecha', 'Vayeira', 'Chayei Sarah', 'Toldot',
+    'Vayeitzei', 'Vayishlach', 'Vayeishev', 'Mikeitz', 'Vayigash', 'Vayechi',
+    'Shemot', "Va'eira", 'Bo', 'Beshalach', 'Yitro', 'Mishpatim', 'Terumah',
+    'Tetzaveh', 'Ki Tisa', 'Vayakhel', 'Pekudei', 'Vayikra', 'Tzav', 'Shemini',
+    'Tazria', 'Metzora', 'Acharei Mot', 'Kedoshim', 'Emor', 'Behar',
+    'Bechukotai', 'Bamidbar', 'Nasso', "Beha'alotcha", 'Shelach', 'Korach',
+    'Chukat', 'Balak', 'Pinchas', 'Mattot', 'Masei', 'Devarim', "Va'etchanan",
+    'Eikev', "Re'eh", 'Shoftim', 'Ki Teitzei', 'Ki Tavo', 'Nitzavim',
+    'Vayeilech', 'Haazinu', 'Vezot Haberachah'
+]
+
+PARSHIOT_ISRAELI_MODERN = [
+    'Bereshit', 'Noach', 'Lech Lecha', 'Vayera', 'Chayei Sarah', 'Toldot',
+    'Vayetze', 'Vayishlach', 'Vayeshev', 'Miketz', 'Vayigash', 'Vayechi',
+    'Shmot', "Va'era", 'Bo', 'Beshalach', 'Yitro', 'Mishpatim', 'Trumah',
+    'Tetzaveh', 'Ki Tisa', 'Vayakhel', 'Pekudei', 'Vayikra', 'Tzav', 'Shmini',
+    'Tazria', 'Metzora', 'Achrei Mot', "K'doshim", 'Emor', 'Behar',
+    'Bechukotai', 'Bamidbar', 'Nasso', "Beha'alotcha", 'Shlach', 'Korach',
+    'Chukat', 'Balak', 'Pinchas', 'Mattot', 'Masei', 'Dvarim', "Va'etchanan",
+    'Ekev', "Re'eh", 'Shoftim', 'Ki Tetze', 'Ki Tavo', 'Nitzavim',
+    'Vayelech', 'Haazinu', 'Vezot Habracha'
+]
 
 PARSHIOS_HEBREW = [
     'בראשית', 'נח', 'לך לך', 'וירא', 'חיי שרה', 'תולדות', 'ויצא', 'וישלח',
@@ -58,6 +85,9 @@ PARSHIOS_HEBREW = [
     'נצבים', 'וילך', 'האזינו', 'וזאת הברכה'
 ]
 
+PARSHA_NAMES_IN_EN = {Pronunciation.ASHKENAZ: PARSHIOS_ASHKENAZ, 
+                      Pronunciation.MIXED_ISRAELI: PARSHIOT_ISRAELI_MIXED, 
+                      Pronunciation.MODERN_ISRAELI: PARSHIOT_ISRAELI_MODERN}
 
 def _parshaless(date, israel=False):
     if israel and date.tuple()[1:] in [(7, 23), (1, 22), (3, 7)]:
@@ -137,7 +167,7 @@ def getparsha(date, israel=False):
     return table[shabbos]
 
 
-def getparsha_string(date, israel=False, hebrew=False):
+def getparsha_string(date, israel=False, hebrew=False, transliteration=Pronunciation.ASHKENAZ):
     """Return the parsha as a string for the given date.
 
     This function wraps ``getparsha`` returning the parsha name.
@@ -155,6 +185,10 @@ def getparsha_string(date, israel=False, hebrew=False):
       ``True`` if you want the name of the parsha in Hebrew.
       Default is ``False``.
 
+    transliteration : enum, optional
+      Determines which style of pronunciation English spellings should follow
+      Default is ``Pronunciation.ASHKENAZ`` for backward compatibility with the original pyluach implementation
+
     Returns
     -------
     str or None
@@ -166,7 +200,7 @@ def getparsha_string(date, israel=False, hebrew=False):
     if parsha is None:
         return None
     if not hebrew:
-        name = [PARSHIOS[n] for n in parsha]
+        name = [PARSHA_NAMES_IN_EN[transliteration][n] for n in parsha]
     else:
         name = [PARSHIOS_HEBREW[n] for n in parsha]
     return ', '.join(name)
