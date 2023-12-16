@@ -6,7 +6,7 @@ from functools import lru_cache
 from enum import Enum
 
 
-class Pronunciation(Enum):
+class Transliteration(Enum):
     ASHKENAZ = "Ashkenaz"
     MIXED_ISRAELI = "Mixed Israeli"
     MODERN_ISRAELI = "Modern Israeli"
@@ -191,13 +191,13 @@ def _month_length(year, month):
     raise ValueError('Invalid month')
 
 
-def _month_name(year, month, hebrew, transliteration):
+def _month_name(year, month, hebrew, transliteration=Transliteration.ASHKENAZ):
     index = month
     if month < 12 or not _is_leap(year):
         index -= 1
     if hebrew:
         return MONTH_NAMES_HEBREW[index]
-    return MONTH_NAMES[index] if transliteration==Pronunciation.ASHKENAZ else MONTH_NAMES_ISRAELI_EN[index]
+    return MONTH_NAMES[index] if transliteration==Transliteration.ASHKENAZ else MONTH_NAMES_ISRAELI_EN[index]
 
 def _monthslist(year):
     months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
@@ -262,13 +262,13 @@ def _fast_day(date):
     return None
 
 
-def _fast_day_string(date, hebrew=False, transliteration=Pronunciation.ASHKENAZ):
+def _fast_day_string(date, hebrew=False, transliteration=Transliteration.ASHKENAZ):
     fast = _fast_day(date)
     if fast is None:
         return None
     if hebrew:
         return _days_hebrew[fast]
-    return fast.value if transliteration==Pronunciation.ASHKENAZ else _days_israeli_en[fast]
+    return fast.value if transliteration==Transliteration.ASHKENAZ else _days_israeli_en[fast]
 
 
 def _first_day_of_holiday(holiday):
@@ -376,11 +376,11 @@ def _festival_string(
     israel=False,
     hebrew=False,
     include_working_days=True,
-    transliteration=Pronunciation.ASHKENAZ
+    transliteration=Transliteration.ASHKENAZ
 ):
     festival = _festival(date, israel, include_working_days)
     if festival is None:
         return None
     if hebrew:
         return _days_hebrew[festival]
-    return festival.value if transliteration==Pronunciation.ASHKENAZ else _days_israeli_en[festival]
+    return festival.value if transliteration==Transliteration.ASHKENAZ else _days_israeli_en[festival]

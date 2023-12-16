@@ -215,7 +215,7 @@ class BaseDate(abc.ABC):
                 return str(day)
         return ''
 
-    def fast_day(self, hebrew=False, transliteration=utils.Pronunciation.ASHKENAZ):
+    def fast_day(self, hebrew=False, transliteration=utils.Transliteration.ASHKENAZ):
         """Return name of fast day of date.
 
         Parameters
@@ -225,8 +225,8 @@ class BaseDate(abc.ABC):
             is ``False``, which returns the name transliterated into English.
 
         transliteration : enum, optional
-            Determines which style of pronunciation English spellings should follow
-            Default is ``Pronunciation.ASHKENAZ`` for backward compatibility with the original pyluach implementation
+            Determines which style of transliteration English spellings should follow
+            Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
 
         Returns
         -------
@@ -242,7 +242,7 @@ class BaseDate(abc.ABC):
         hebrew=False,
         include_working_days=True,
         prefix_day=False,
-        transliteration=utils.Pronunciation.ASHKENAZ
+        transliteration=utils.Transliteration.ASHKENAZ
     ):
         """Return name of Jewish festival of date.
 
@@ -265,8 +265,8 @@ class BaseDate(abc.ABC):
             ``True`` to prefix multi day festivals with the day of the
             festival. Default is ``False``.
         transliteration : enum, optional
-            Determines which style of pronunciation English spellings should follow
-            Default is ``Pronunciation.ASHKENAZ`` for backward compatibility with the original pyluach implementation
+            Determines which style of transliteration English spellings should follow
+            Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
 
         Returns
         -------
@@ -294,7 +294,7 @@ class BaseDate(abc.ABC):
                 return f'{day} {name}'
         return name
 
-    def holiday(self, israel=False, hebrew=False, prefix_day=False, transliteration=utils.Pronunciation.ASHKENAZ):
+    def holiday(self, israel=False, hebrew=False, prefix_day=False, transliteration=utils.Transliteration.ASHKENAZ):
         """Return name of Jewish holiday of the date.
 
         The holidays include the major and minor religious Jewish
@@ -312,8 +312,8 @@ class BaseDate(abc.ABC):
             ``True`` to prefix multi day holidays with the day of the
             holiday. Default is ``False``.
         transliteration : enum, optional
-            Determines which style of pronunciation English spellings should follow
-            Default is ``Pronunciation.ASHKENAZ`` for backward compatibility with the original pyluach implementation
+            Determines which style of transliteration English spellings should follow
+            Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
 
         Returns
         -------
@@ -764,8 +764,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     %w     1       Weekday as decimal number 1-7 Sunday-Shabbos
     %d     07      Day of the month as a 0-padded 2 digit decimal number
     %-d    7       Day of the month as a decimal number
-    %B     Teves   Month name transliterated into English following Ashkenazi pronunciation
-    %C     Tevet   Month name transliterated into English following Israeli pronunciation
+    %B     Teves   Month name transliterated into English following Ashkenazi transliteration
+    %C     Tevet   Month name transliterated into English following Israeli transliteration
     %m     02      Month as a 0-padded 2 digit decimal number
     %-m    2       Month as a decimal number
     %y     82, 01  Year without century as a zero-padded decimal number
@@ -908,7 +908,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
                     elif curr == 'B':
                         new.append(self.month_name(False))
                     elif curr == 'C':
-                        new.append(self.month_name(False, transliteration=utils.Pronunciation.MODERN_ISRAELI))
+                        new.append(self.month_name(False, transliteration=utils.Transliteration.MODERN_ISRAELI))
                     elif curr == 'm':
                         new.append(format(self.month, '02d'))
                     elif curr.casefold() == 'y':
@@ -1007,7 +1007,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     def to_heb(self):
         return self
 
-    def month_name(self, hebrew=False, transliteration=utils.Pronunciation.ASHKENAZ):
+    def month_name(self, hebrew=False, transliteration=utils.Transliteration.ASHKENAZ):
         """Return the name of the month.
 
         Parameters
@@ -1017,8 +1017,8 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             Default is ``False`` which returns the month name
             transliterated into English.
         transliteration : enum, optional
-            Determines which style of pronunciation English spellings should follow
-            Default is ``Pronunciation.ASHKENAZ`` for backward compatibility with the original pyluach implementation
+            Determines which style of transliteration English spellings should follow
+            Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
 
         Returns
         -------

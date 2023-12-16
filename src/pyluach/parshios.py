@@ -16,18 +16,17 @@ Note
 The algorithm is based on Dr. Irv Bromberg's, University of Toronto at
 http://individual.utoronto.ca/kalendis/hebrew/parshah.htm
 
-All English parsha names are transliterated into the American Ashkenazik
-pronunciation.
+Several options are available for style of transliteration; the default is American Ashkenazik.
 
 
 Attributes
 ----------
 PARSHIOS_ASHKENAZ : list of str
-    A list of the parshios transliterated into English, with Ashkenasic pronunciation.
+    A list of the parshios transliterated into English, with Ashkenasic transliteration.
 PARSHIOS_ISRAELI_1 : list of str
-    A list of the parshios transliterated into English, with mixed Israeli pronunciation.
+    A list of the parshios transliterated into English, with mixed Israeli transliteration.
 PARSHIOS_ISRAELI_2 : list of str
-    A list of the parshios transliterated into English, with modern Israeli pronunciation.
+    A list of the parshios transliterated into English, with modern Israeli transliteration.
 PARSHIOS_HEBREW : list of str
     A list of the parshios in Hebrew.
 """
@@ -36,7 +35,7 @@ from collections import deque, OrderedDict
 from functools import lru_cache
 
 from pyluach.dates import HebrewDate
-from pyluach.utils import _is_leap, Pronunciation
+from pyluach.utils import _is_leap, Transliteration
 
 
 PARSHIOS_ASHKENAZ = [
@@ -85,9 +84,9 @@ PARSHIOS_HEBREW = [
     'נצבים', 'וילך', 'האזינו', 'וזאת הברכה'
 ]
 
-PARSHA_NAMES_IN_EN = {Pronunciation.ASHKENAZ: PARSHIOS_ASHKENAZ, 
-                      Pronunciation.MIXED_ISRAELI: PARSHIOT_ISRAELI_MIXED, 
-                      Pronunciation.MODERN_ISRAELI: PARSHIOT_ISRAELI_MODERN}
+PARSHA_NAMES_IN_EN = {Transliteration.ASHKENAZ: PARSHIOS_ASHKENAZ, 
+                      Transliteration.MIXED_ISRAELI: PARSHIOT_ISRAELI_MIXED, 
+                      Transliteration.MODERN_ISRAELI: PARSHIOT_ISRAELI_MODERN}
 
 def _parshaless(date, israel=False):
     if israel and date.tuple()[1:] in [(7, 23), (1, 22), (3, 7)]:
@@ -167,7 +166,7 @@ def getparsha(date, israel=False):
     return table[shabbos]
 
 
-def getparsha_string(date, israel=False, hebrew=False, transliteration=Pronunciation.ASHKENAZ):
+def getparsha_string(date, israel=False, hebrew=False, transliteration=Transliteration.ASHKENAZ):
     """Return the parsha as a string for the given date.
 
     This function wraps ``getparsha`` returning the parsha name.
@@ -186,8 +185,8 @@ def getparsha_string(date, israel=False, hebrew=False, transliteration=Pronuncia
       Default is ``False``.
 
     transliteration : enum, optional
-      Determines which style of pronunciation English spellings should follow
-      Default is ``Pronunciation.ASHKENAZ`` for backward compatibility with the original pyluach implementation
+      Determines which style of transliteration English spellings should follow
+      Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
 
     Returns
     -------
