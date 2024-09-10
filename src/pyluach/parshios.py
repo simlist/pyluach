@@ -30,7 +30,7 @@ PARSHIOS_HEBREW : list of str
 
 from collections import deque, OrderedDict
 from functools import lru_cache
-from enum import IntEnum, auto
+from enum import Enum, IntEnum, auto
 
 from pyluach.dates import HebrewDate
 from pyluach.utils import _is_leap
@@ -152,15 +152,31 @@ def _gentable(year, israel=False):
             parsha = parshalist.popleft()
             table[shabbos] = [parsha]
             if (
-                (parsha == 21 and (HebrewDate(year, 1, 14) - shabbos) // 7 < 3)
-                or (parsha in [26, 28] and not leap)
+                (
+                    parsha == _Parshios_Enum.VAYAKHEL
+                    and (HebrewDate(year, 1, 14) - shabbos) // 7 < 3
+                )
                 or (
-                    parsha == 31 and not leap
+                    parsha in [
+                        _Parshios_Enum.TAZRIA, _Parshios_Enum.ACHAREI_MOS
+                    ] and not leap
+                )
+                or (
+                    parsha == _Parshios_Enum.BEHAR and not leap
                     and (not israel or pesachday != 7)
                 )
-                or (parsha == 38 and not israel and pesachday == 5)
-                or (parsha == 41 and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2)
-                or (parsha == 50 and HebrewDate(year+1, 7, 1).weekday() > 4)
+                or (
+                    parsha == _Parshios_Enum.CHUKAS
+                    and not israel and pesachday == 5
+                )
+                or (
+                    parsha == _Parshios_Enum.MATTOS
+                    and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2
+                )
+                or (
+                    parsha == _Parshios_Enum.NITZAVIM
+                    and HebrewDate(year+1, 7, 1).weekday() > 4
+                )
             ):
                 #  If any of that then it's a double parsha.
                 table[shabbos].append(parshalist.popleft())
