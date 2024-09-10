@@ -3,10 +3,10 @@ pyluach
 .. image:: https://readthedocs.org/projects/pyluach/badge/?version=stable
   :target: http://pyluach.readthedocs.io/en/latest/?badge=stable
   :alt: Documentation Status
-.. image:: https://github.com/simlist/pyluach/actions/workflows/testing-and-coverage.yml/badge.svg?branch=master
+.. image:: https://github.com/simlist/pyluach/actions/workflows/testing-and-coverage.yml/badge.svg?branch=dev
     :target: https://github.com/simlist/pyluach/actions/workflows/testing-and-coverage.yml
-.. image:: https://coveralls.io/repos/github/simlist/pyluach/badge.svg?branch=master
-    :target: https://coveralls.io/github/simlist/pyluach?branch=master
+.. image:: https://coveralls.io/repos/github/simlist/pyluach/badge.svg?branch=dev
+    :target: https://coveralls.io/github/simlist/pyluach?branch=dev
 
 Pyluach is a Python package for dealing with Hebrew (Jewish) calendar dates.
 
