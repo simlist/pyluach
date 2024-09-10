@@ -106,6 +106,39 @@ class _Parshios_Enum(IntEnum):
     VEZOS_HABERACHAH = auto()
 
 
+class _FourParshiosEnum(Enum):
+    SHEKALIM = auto()
+    ZACHOR = auto()
+    PARAH = auto()
+    HACHODESH = auto()
+
+
+def _get_four_parshios(date):
+    year = date.year
+    if _is_leap(year):
+        adar = 13
+    else:
+        adar = 12
+    shabbos = date.shabbos()
+    rc_adar = HebrewDate(year, adar, 1)
+    rc_nisan = HebrewDate(year, 1, 1)
+    if shabbos == rc_nisan:
+        return _FourParshiosEnum.HACHODESH
+    if shabbos <= rc_adar and rc_adar - shabbos < 7:
+        return _FourParshiosEnum.SHEKALIM
+    if shabbos.month == adar:
+        purim = HebrewDate(year, adar, 14)
+        if shabbos < purim and (purim - shabbos) < 7:
+            return _FourParshiosEnum.ZACHOR
+        if shabbos > purim and (shabbos - purim) in [8, 9]:
+            return _FourParshiosEnum.PARAH
+        if shabbos > purim and shabbos - purim < 7:
+            return _FourParshiosEnum.PARAH
+        if (rc_nisan - date) < 7:
+            return _FourParshiosEnum.HACHODESH
+    return None
+
+
 PARSHIOS_HEBREW = [
     'בראשית', 'נח', 'לך לך', 'וירא', 'חיי שרה', 'תולדות', 'ויצא', 'וישלח',
     'וישב', 'מקץ', 'ויגש', 'ויחי', 'שמות', 'וארא', 'בא', 'בשלח', 'יתרו',

@@ -1,4 +1,5 @@
 from pyluach import parshios, dates
+from pyluach.parshios import _FourParshiosEnum
 
 
 KNOWN_VALUES = {
@@ -71,3 +72,33 @@ def test_get_parshastring_hebrew():
     assert parshios.getparsha_string(date, hebrew=True) == 'קרח'
     date2 = dates.GregorianDate(2021, 7, 10)
     assert parshios.getparsha_string(date2, hebrew=True) == 'מטות, מסעי'
+
+
+def test_shekalim():
+    date = dates.HebrewDate(5785, 11, 25)
+    assert (
+        parshios._get_four_parshios(date) == _FourParshiosEnum.SHEKALIM
+    )
+    assert parshios._get_four_parshios(date - 1) is None
+    assert parshios._get_four_parshios(date + 7) != _FourParshiosEnum.SHEKALIM
+
+
+def test_zachor():
+    date = dates.HebrewDate(5785, 12, 2)
+    assert (
+        parshios._get_four_parshios(date) == _FourParshiosEnum.ZACHOR
+    )
+
+
+def test_parah():
+    date = dates.HebrewDate(5785, 12, 21)
+    assert parshios._get_four_parshios(date) == _FourParshiosEnum.PARAH
+    date = dates.HebrewDate(5784, 13, 14)
+    assert parshios._get_four_parshios(date) == _FourParshiosEnum.PARAH
+    assert parshios._get_four_parshios(date - 1) != _FourParshiosEnum.PARAH
+
+def test_hachodesh():
+    date = dates.HebrewDate(5785, 12, 29)
+    assert parshios._get_four_parshios(date) == _FourParshiosEnum.HACHODESH
+    date = dates.HebrewDate(5782, 1, 1)
+    assert parshios._get_four_parshios(date) == _FourParshiosEnum.HACHODESH
