@@ -96,6 +96,8 @@ def test_parah():
     date = dates.HebrewDate(5784, 13, 14)
     assert parshios.four_parshios(date, hebrew=True) == 'פרה'
     assert parshios.four_parshios(date - 1) != 'Parah'
+    date = dates.GregorianDate(2025, 3, 9)
+    assert parshios.four_parshios(date) == ''
 
 
 def test_hachodesh():

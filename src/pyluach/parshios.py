@@ -159,7 +159,7 @@ def _get_four_parshios(date):
             return _FourParshiosEnum.ZACHOR
         if shabbos > purim and (shabbos - purim) in [8, 9]:
             return _FourParshiosEnum.PARAH
-        if shabbos > purim and shabbos - purim < 7:
+        if shabbos > purim and 2 < (shabbos - purim) < 7:
             return _FourParshiosEnum.PARAH
         if (rc_nisan - date) < 7:
             return _FourParshiosEnum.HACHODESH
