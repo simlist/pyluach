@@ -49,6 +49,17 @@ PARSHIOS = [
 ]
 
 
+PARSHIOS_HEBREW = [
+    'בראשית', 'נח', 'לך לך', 'וירא', 'חיי שרה', 'תולדות', 'ויצא', 'וישלח',
+    'וישב', 'מקץ', 'ויגש', 'ויחי', 'שמות', 'וארא', 'בא', 'בשלח', 'יתרו',
+    'משפטים', 'תרומה', 'תצוה', 'כי תשא', 'ויקהל', 'פקודי', 'ויקרא', 'צו',
+    'שמיני', 'תזריע', 'מצורע', 'אחרי מות', 'קדושים', 'אמור', 'בהר', 'בחוקותי',
+    'במדבר', 'נשא', 'בהעלותך', 'שלח', 'קרח', 'חקת', 'בלק', 'פינחס', 'מטות',
+    'מסעי', 'דברים', 'ואתחנן', 'עקב', 'ראה', 'שופטים', 'כי תצא', 'כי תבא',
+    'נצבים', 'וילך', 'האזינו', 'וזאת הברכה'
+]
+
+
 class _Parshios_Enum(IntEnum):
     BEREISHIS = 0
     NOACH = 1
@@ -113,6 +124,22 @@ class _FourParshiosEnum(Enum):
     HACHODESH = auto()
 
 
+_FOUR_PARSHIOS = {
+    _FourParshiosEnum.ZACHOR: 'Zachor',
+    _FourParshiosEnum.SHEKALIM: 'Shekalim',
+    _FourParshiosEnum.HACHODESH: 'Hachodesh',
+    _FourParshiosEnum.PARAH: 'Parah',
+}
+
+
+_FOUR_PARSHIOS_HEBREW = {
+    _FourParshiosEnum.ZACHOR: 'זכור',
+    _FourParshiosEnum.SHEKALIM: 'שקלים',
+    _FourParshiosEnum.PARAH: 'פרה',
+    _FourParshiosEnum.HACHODESH: 'החודש'
+}
+
+
 def _get_four_parshios(date):
     year = date.year
     if _is_leap(year):
@@ -139,15 +166,31 @@ def _get_four_parshios(date):
     return None
 
 
-PARSHIOS_HEBREW = [
-    'בראשית', 'נח', 'לך לך', 'וירא', 'חיי שרה', 'תולדות', 'ויצא', 'וישלח',
-    'וישב', 'מקץ', 'ויגש', 'ויחי', 'שמות', 'וארא', 'בא', 'בשלח', 'יתרו',
-    'משפטים', 'תרומה', 'תצוה', 'כי תשא', 'ויקהל', 'פקודי', 'ויקרא', 'צו',
-    'שמיני', 'תזריע', 'מצורע', 'אחרי מות', 'קדושים', 'אמור', 'בהר', 'בחוקותי',
-    'במדבר', 'נשא', 'בהעלותך', 'שלח', 'קרח', 'חקת', 'בלק', 'פינחס', 'מטות',
-    'מסעי', 'דברים', 'ואתחנן', 'עקב', 'ראה', 'שופטים', 'כי תצא', 'כי תבא',
-    'נצבים', 'וילך', 'האזינו', 'וזאת הברכה'
-]
+def four_parshios(date, hebrew=False):
+    """Return which of the four parshios is given date's Shabbos.
+
+    Parameters
+    ----------
+    date : ~pyluach.dates.BaseDate
+      Any subclass of ``BaseDate``. This date does not have to be a Shabbos.
+
+    hebrew : bool
+      ``True`` if you want the name of the parsha in Hebrew.
+      Default is ``False``.
+
+    Returns
+    -------
+    str
+      The name of the one of the four parshios or an empty string
+      if that shabbos is not one of them.
+    """
+    date = date.to_heb()
+    special_parsha = _get_four_parshios(date)
+    if special_parsha is None:
+        return ''
+    if hebrew:
+        return _FOUR_PARSHIOS_HEBREW[special_parsha]
+    return _FOUR_PARSHIOS[special_parsha]
 
 
 def _parshaless(date, israel=False):

@@ -92,10 +92,11 @@ def test_zachor():
 
 def test_parah():
     date = dates.HebrewDate(5785, 12, 21)
-    assert parshios._get_four_parshios(date) == _FourParshiosEnum.PARAH
+    assert parshios.four_parshios(date) == 'Parah'
     date = dates.HebrewDate(5784, 13, 14)
-    assert parshios._get_four_parshios(date) == _FourParshiosEnum.PARAH
-    assert parshios._get_four_parshios(date - 1) != _FourParshiosEnum.PARAH
+    assert parshios.four_parshios(date, hebrew=True) == 'פרה'
+    assert parshios.four_parshios(date - 1) != 'Parah'
+
 
 def test_hachodesh():
     date = dates.HebrewDate(5785, 12, 29)
