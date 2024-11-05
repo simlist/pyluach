@@ -6,6 +6,11 @@ from functools import lru_cache
 from enum import Enum
 
 
+class Transliteration(Enum):
+    ASHKENAZ = "Ashkenaz"
+    MIXED_ISRAELI = "Mixed Israeli"
+    MODERN_ISRAELI = "Modern Israeli"
+
 class _Days(Enum):
     ROSH_HASHANA = 'Rosh Hashana'
     YOM_KIPPUR = 'Yom Kippur'
@@ -52,17 +57,33 @@ _days_hebrew = {
     _Days.NINTH_OF_AV: 'ט׳ באב'
 }
 
+_days_israeli_en = {k:k.value for k in _Days}
+_days_israeli_en.update({
+    _Days.SUCCOS: 'Sukkot',
+    _Days.SHMINI_ATZERES: 'Shmini Atzeret',
+    _Days.SIMCHAS_TORAH: 'Simchat Torah',
+    _Days.SHAVUOS: 'Shavuot',
+    _Days.TENTH_OF_TEVES: '10th of Tevet',
+    _Days.TAANIS_ESTHER: "Ta'anit Esther",
+})
 
 MONTH_NAMES = [
     'Nissan', 'Iyar', 'Sivan', 'Tammuz', 'Av', 'Elul', 'Tishrei', 'Cheshvan',
     'Kislev', 'Teves', 'Shevat', 'Adar', 'Adar 1', 'Adar 2']
 
+MONTH_NAMES_ISRAELI_EN = [
+    'Nissan', 'Iyar', 'Sivan', 'Tammuz', 'Av', 'Elul', 'Tishrei', 'Cheshvan',
+    'Kislev', 'Tevet', 'Shvat', 'Adar', 'Adar 1', 'Adar 2']
+
 MONTH_NAMES_HEBREW = [
-    'ניסן', 'אייר', 'סיון', 'תמוז', 'אב', 'אלול', 'תשרי', 'חשון', 'כסלו',
+    'ניסן', 'אייר', 'סיוון', 'תמוז', 'אב', 'אלול', 'תשרי', 'חשוון', 'כסלו',
     'טבת', 'שבט', 'אדר', 'אדר א׳', 'אדר ב׳']
 
 FAST_DAYS = [
     'Tzom Gedalia', '10 of Teves', 'Taanis Esther', '17 of Tamuz', '9 of Av']
+
+FAST_DAYS_ISRAELI_EN = [
+    'Tzom Gedalia', '10th of Tevet', 'Taanit Esther', '17 of Tamuz', '9 of Av']
 
 FAST_DAYS_HEBREW = [
     'צום גדליה', 'י׳ בטבת', 'תענית אסתר', 'י״ז בתמוז', 'ט׳ באב']
@@ -72,6 +93,10 @@ FESTIVALS = [
     'Chanuka', "Tu B'shvat", 'Purim Katan', 'Purim', 'Shushan Purim',
     'Pesach', 'Pesach Sheni', "Lag Ba'omer", 'Shavuos', "Tu B'av"]
 
+FESTIVALS_ISRAELI_EN = [
+    'Rosh Hashana', 'Yom Kippur', 'Sukkot', 'Shmini Atzeret', 'Simchat Torah',
+    'Chanuka', "Tu B'shvat", 'Purim Katan', 'Purim', 'Shushan Purim',
+    'Pesach', 'Pesach Sheni', "Lag Ba'omer", 'Shavuot', "Tu B'av"]
 
 FESTIVALS_HEBREW = [
     'ראש השנה', 'יום כיפור', 'סוכות', 'שמיני עצרת', 'שמחת תורה', 'חנוכה',
@@ -166,14 +191,13 @@ def _month_length(year, month):
     raise ValueError('Invalid month')
 
 
-def _month_name(year, month, hebrew):
+def _month_name(year, month, hebrew, transliteration=Transliteration.ASHKENAZ):
     index = month
     if month < 12 or not _is_leap(year):
         index -= 1
     if hebrew:
         return MONTH_NAMES_HEBREW[index]
-    return MONTH_NAMES[index]
-
+    return MONTH_NAMES[index] if transliteration==Transliteration.ASHKENAZ else MONTH_NAMES_ISRAELI_EN[index]
 
 def _monthslist(year):
     months = [7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6]
@@ -238,13 +262,13 @@ def _fast_day(date):
     return None
 
 
-def _fast_day_string(date, hebrew=False):
+def _fast_day_string(date, hebrew=False, transliteration=Transliteration.ASHKENAZ):
     fast = _fast_day(date)
     if fast is None:
         return None
     if hebrew:
         return _days_hebrew[fast]
-    return fast.value
+    return fast.value if transliteration==Transliteration.ASHKENAZ else _days_israeli_en[fast]
 
 
 def _first_day_of_holiday(holiday):
@@ -352,10 +376,11 @@ def _festival_string(
     israel=False,
     hebrew=False,
     include_working_days=True,
+    transliteration=Transliteration.ASHKENAZ
 ):
     festival = _festival(date, israel, include_working_days)
     if festival is None:
         return None
     if hebrew:
         return _days_hebrew[festival]
-    return festival.value
+    return festival.value if transliteration==Transliteration.ASHKENAZ else _days_israeli_en[festival]
