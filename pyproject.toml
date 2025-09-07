@@ -24,6 +24,7 @@ classifiers=[
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 keywords = [
     'hebrew', 'calendar', 'jewish', 'luach', 'gregorian', 'julian',
@@ -45,3 +46,8 @@ Source = "https://github.com/simlist/pyluach"
 
 [tool.flit.sdist]
 exclude = ["tests", "docs", ".github", "requirements.txt", ".gitignore"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov"
+testpaths = ["tests",]
