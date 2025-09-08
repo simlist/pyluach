@@ -49,4 +49,4 @@ exclude = ["tests", "docs", ".github", "requirements.txt", ".gitignore"]
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--cov=src/pyluach"
-testpaths = ["tests",]
+# testpaths = ["tests",]
