@@ -140,29 +140,34 @@ _FOUR_PARSHIOS_HEBREW = {
 }
 
 
-def _get_four_parshios(date):
+def _get_hachodesh(date):
+    """Return Hachodesh given Hebrew date."""
     year = date.year
+    shabbos = date.shabbos()
+    rc_nissan = HebrewDate(year, 1, 1)
+    if shabbos <= rc_nissan and shabbos - rc_nissan < 7:
+        return _FourParshiosEnum.HACHODESH
+    return None
+
+
+def _get_four_parshios(date):
+    """Return the special parsha given Hebrew date."""
+    year = date.year
+    adar = 12
     if _is_leap(year):
         adar = 13
-    else:
-        adar = 12
     shabbos = date.shabbos()
     rc_adar = HebrewDate(year, adar, 1)
-    rc_nisan = HebrewDate(year, 1, 1)
-    if shabbos == rc_nisan:
-        return _FourParshiosEnum.HACHODESH
     if shabbos <= rc_adar and rc_adar - shabbos < 7:
         return _FourParshiosEnum.SHEKALIM
     if shabbos.month == adar:
         purim = HebrewDate(year, adar, 14)
         if shabbos < purim and (purim - shabbos) < 7:
             return _FourParshiosEnum.ZACHOR
-        if shabbos > purim and (shabbos - purim) in [8, 9]:
+        if _get_hachodesh(date + 7):
             return _FourParshiosEnum.PARAH
-        if shabbos > purim and 2 < (shabbos - purim) < 7:
-            return _FourParshiosEnum.PARAH
-        if (rc_nisan - date) < 7:
-            return _FourParshiosEnum.HACHODESH
+    if _get_hachodesh(date):
+        return _FourParshiosEnum.HACHODESH
     return None
 
 
