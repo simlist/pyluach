@@ -24,20 +24,19 @@ jobs:
     - name: run-tests
       run: |
         pytest --cov-report= --cov=src/pyluach tests/
-    - name: Coveralls Report
-      run: coveralls --service=github
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
-        COVERALLS_PARALLEL: true
+    - name: Coveralls Parallel
+      uses: coverallsapp/github-action@v2
+      with:
+        flag-name: ${{ matrix.python-version }}
+        parallel: true
   finish:
     needs: test
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     container: python:3-slim
     steps:
     - name: Coveralls Finished
-      run: |
-        pip3 install --upgrade coveralls
-        coveralls --service=github --finish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: coverallsapp/github-action@v2
+      with:
+        parallel-finished: true
+        # carryforward: ${{ secrets.GITHUB_TOKEN }}
