@@ -5,12 +5,12 @@ Changelog
 This document records all notable changes to `pyluach <https://github.com/simlist/pyluach>`_.
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
-`2.3.0`_ (2023-02-28)
+`2.3.0`_ (2025-09-08)
 =====================
 * Created ``get_four_parshios`` function in parshios module.
 * Added support for python 3.12, and 3.13.
-* Changed to use IntEnums for parshios to make code more readable.
 * Removed support for python v3.7.
+* Changed to use IntEnum for parshios to make code more readable.
 
 `2.2.0`_ (2023-02-28)
 =====================
@@ -100,6 +100,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Initial public release
 
 
+.. _`2.3.0`: https://github.com/simlist/pyluach/compare/v2.2.0...v2.3.0
 .. _`2.2.0`: https://github.com/simlist/pyluach/compare/v2.1.0...v2.2.0
 .. _`2.1.0`: https://github.com/simlist/pyluach/compare/v2.0.2...v2.1.0
 .. _`2.0.2`: https://github.com/simlist/pyluach/compare/v2.0.1...v2.0.2
