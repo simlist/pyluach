@@ -210,7 +210,7 @@ def _parshaless(date, israel=False):
     return False
 
 
-@lru_cache(maxsize=50)
+@lru_cache(maxsize=10)
 def _gentable(year, israel=False):
     """Return OrderedDict mapping date of Shabbos to list of parsha numbers.
 
