@@ -140,64 +140,6 @@ _FOUR_PARSHIOS_HEBREW = {
 }
 
 
-def _get_hachodesh(date):
-    """Return Hachodesh given Hebrew date."""
-    year = date.year
-    shabbos = date.shabbos()
-    rc_nissan = HebrewDate(year, 1, 1)
-    if shabbos <= rc_nissan and shabbos - rc_nissan < 7:
-        return _FourParshiosEnum.HACHODESH
-    return None
-
-
-def _get_four_parshios(date):
-    """Return the special parsha given Hebrew date."""
-    year = date.year
-    adar = 12
-    if _is_leap(year):
-        adar = 13
-    shabbos = date.shabbos()
-    rc_adar = HebrewDate(year, adar, 1)
-    if shabbos <= rc_adar and rc_adar - shabbos < 7:
-        return _FourParshiosEnum.SHEKALIM
-    if shabbos.month == adar:
-        purim = HebrewDate(year, adar, 14)
-        if shabbos < purim and (purim - shabbos) < 7:
-            return _FourParshiosEnum.ZACHOR
-        if _get_hachodesh(date + 7):
-            return _FourParshiosEnum.PARAH
-    if _get_hachodesh(date):
-        return _FourParshiosEnum.HACHODESH
-    return None
-
-
-def four_parshios(date, hebrew=False):
-    """Return which of the four parshios is given date's Shabbos.
-
-    Parameters
-    ----------
-    date : ~pyluach.dates.BaseDate
-      Any subclass of ``BaseDate``. This date does not have to be a Shabbos.
-
-    hebrew : bool
-      ``True`` if you want the name of the parsha in Hebrew.
-      Default is ``False``.
-
-    Returns
-    -------
-    str
-      The name of the one of the four parshios or an empty string
-      if that shabbos is not one of them.
-    """
-    date = date.to_heb()
-    special_parsha = _get_four_parshios(date)
-    if special_parsha is None:
-        return ''
-    if hebrew:
-        return _FOUR_PARSHIOS_HEBREW[special_parsha]
-    return _FOUR_PARSHIOS[special_parsha]
-
-
 def _parshaless(date, israel=False):
     if israel and date.tuple()[1:] in [(7, 23), (1, 22), (3, 7)]:
         return False
@@ -371,3 +313,61 @@ def parshatable(year, israel=False):
       Shabbos with no parsha.
     """
     return _gentable(year, israel)
+
+
+def _get_hachodesh(date):
+    """Return Hachodesh given Hebrew date."""
+    year = date.year
+    shabbos = date.shabbos()
+    rc_nissan = HebrewDate(year, 1, 1)
+    if shabbos <= rc_nissan and shabbos - rc_nissan < 7:
+        return _FourParshiosEnum.HACHODESH
+    return None
+
+
+def _get_four_parshios(date):
+    """Return the special parsha given Hebrew date."""
+    year = date.year
+    adar = 12
+    if _is_leap(year):
+        adar = 13
+    shabbos = date.shabbos()
+    rc_adar = HebrewDate(year, adar, 1)
+    if shabbos <= rc_adar and rc_adar - shabbos < 7:
+        return _FourParshiosEnum.SHEKALIM
+    if shabbos.month == adar:
+        purim = HebrewDate(year, adar, 14)
+        if shabbos < purim and (purim - shabbos) < 7:
+            return _FourParshiosEnum.ZACHOR
+        if _get_hachodesh(date + 7):
+            return _FourParshiosEnum.PARAH
+    if _get_hachodesh(date):
+        return _FourParshiosEnum.HACHODESH
+    return None
+
+
+def four_parshios(date, hebrew=False):
+    """Return which of the four parshios is given date's Shabbos.
+
+    Parameters
+    ----------
+    date : ~pyluach.dates.BaseDate
+      Any subclass of ``BaseDate``. This date does not have to be a Shabbos.
+
+    hebrew : bool
+      ``True`` if you want the name of the parsha in Hebrew.
+      Default is ``False``.
+
+    Returns
+    -------
+    str
+      The name of the one of the four parshios or an empty string
+      if that shabbos is not one of them.
+    """
+    date = date.to_heb()
+    special_parsha = _get_four_parshios(date)
+    if special_parsha is None:
+        return ''
+    if hebrew:
+        return _FOUR_PARSHIOS_HEBREW[special_parsha]
+    return _FOUR_PARSHIOS[special_parsha]
