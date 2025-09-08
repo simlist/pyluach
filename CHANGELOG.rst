@@ -10,6 +10,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Created ``get_four_parshios`` function in parshios module.
 * Added support for python 3.12, and 3.13.
 * Changed to use IntEnums for parshios to make code more readable.
+* Removed support for python v3.7.
 
 `2.2.0`_ (2023-02-28)
 =====================
