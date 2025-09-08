@@ -33,7 +33,6 @@ jobs:
     needs: test
     if: ${{ always() }}
     runs-on: ubuntu-latest
-    container: python:3-slim
     steps:
     - name: Coveralls Finished
       uses: coverallsapp/github-action@v2
