@@ -23,7 +23,7 @@ jobs:
         pip install ./
     - name: run-tests
       run: |
-        pytest
+        pytest --cov=src/pyluach tests/
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
