@@ -5,6 +5,12 @@ Changelog
 This document records all notable changes to `pyluach <https://github.com/simlist/pyluach>`_.
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
+`2.3.0`_ (2023-02-28)
+=====================
+* Created ``get_four_parshios`` function in parshios module.
+* Added support for python 3.12, and 3.13.
+* Changed to use IntEnums for parshios to make code more readable.
+
 `2.2.0`_ (2023-02-28)
 =====================
 * Added `prefix_day` param to ``festival`` and ``holiday`` methods and
