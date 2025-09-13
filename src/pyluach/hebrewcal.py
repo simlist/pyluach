@@ -386,7 +386,7 @@ class Month:
         """Return month number 1-12 or 13, Tishrei - Elul."""
         return list(Year(self.year)).index(self.month) + 1
 
-    def month_name(self, hebrew=False):
+    def month_name(self, hebrew=False, transliteration=utils.Transliteration.ASHKENAZ):
         """Return the name of the month.
 
         Replaces `name` attribute.
@@ -396,13 +396,17 @@ class Month:
         hebrew : bool, optional
             `True` if the month name should be written with Hebrew letters
             and False to be transliterated into English using the Ashkenazic
-            pronunciation. Default is `False`.
+            Transliteration. Default is `False`.
+
+        transliteration : enum, optional
+            Determines which style of Transliteration English spellings should follow
+            Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
 
         Returns
         -------
         str
         """
-        return utils._month_name(self.year, self.month, hebrew)
+        return utils._month_name(self.year, self.month, hebrew, transliteration=transliteration)
 
     def month_string(self, thousands=False):
         """Return month and year in Hebrew.
@@ -574,6 +578,10 @@ class HebrewCalendar(calendar.Calendar):
     hebrewyear : bool, optional
         ``True`` to show the year in Hebrew numerals. Default is ``False``,
         which shows the year as a decimal number.
+    transliteration : enum, optional
+        Determines which style of Transliteration English spellings should follow
+        Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
+
 
     Attributes
     ----------
@@ -581,6 +589,7 @@ class HebrewCalendar(calendar.Calendar):
     hebrewweekdays : bool
     hebrewmonths : bool
     hebrewyear : bool
+    transliteration: enum
 
     Note
     ----
@@ -591,7 +600,7 @@ class HebrewCalendar(calendar.Calendar):
 
     def __init__(
         self, firstweekday=1, hebrewnumerals=True, hebrewweekdays=False,
-        hebrewmonths=False, hebrewyear=False
+        hebrewmonths=False, hebrewyear=False, transliteration=utils.Transliteration.ASHKENAZ
     ):
         if not 1 <= firstweekday <= 7:
             raise IllegalWeekdayError(firstweekday)
@@ -601,6 +610,7 @@ class HebrewCalendar(calendar.Calendar):
         self.hebrewweekdays = hebrewweekdays
         self.hebrewmonths = hebrewmonths
         self.hebrewyear = hebrewyear
+        self.transliteration = transliteration
 
     @property
     def firstweekday(self):
@@ -866,6 +876,9 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
     rtl : bool, optional
         ``True``  to arrange the months and the days of the month from
         right to left. Default is ``False``.
+    transliteration : enum, optional
+        Determines which style of Transliteration English spellings should follow
+        Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
 
     Attributes
     ----------
@@ -878,7 +891,7 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
 
     def __init__(
         self, firstweekday=1, hebrewnumerals=True, hebrewweekdays=False,
-        hebrewmonths=False, hebrewyear=False, rtl=False
+        hebrewmonths=False, hebrewyear=False, rtl=False, transliteration=utils.Transliteration.ASHKENAZ
     ):
         self.rtl = rtl
         super().__init__(
@@ -886,7 +899,8 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
             hebrewnumerals,
             hebrewweekdays,
             hebrewmonths,
-            hebrewyear
+            hebrewyear,
+            transliteration
         )
 
     def _rtl_str(self):
@@ -969,7 +983,7 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
         ------
         str
         """
-        s = Month(theyear, themonth).month_name(self.hebrewmonths)
+        s = Month(theyear, themonth).month_name(self.hebrewmonths, transliteration=self.transliteration)
         if withyear:
             s = f'{s} {self.formatyearnumber(theyear)}'
         return (
@@ -999,7 +1013,7 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
             f'class="{self.cssclass_month}"{self._rtl_str()}>'
         )
         a('\n')
-        a(self.formatmonthname(theyear, themonth, withyear=withyear))
+        a(self.formatmonthname(theyear, themonth, withyear=withyear, transliteration=self.transliteration))
         a('\n')
         a(self.formatweekheader())
         a('\n')
@@ -1045,7 +1059,7 @@ class HebrewHTMLCalendar(HebrewCalendar, calendar.HTMLCalendar):
             for m in months:
                 a('<td>')
                 a(self.formatmonth(
-                    theyear, yearmonths[m-1], withyear=False
+                    theyear, yearmonths[m-1], withyear=False, transliteration=self.transliteration
                 ))
                 a('</td>')
             a('</tr>')
@@ -1159,7 +1173,7 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
         -------
         str
         """
-        s = Month(theyear, themonth).month_name(self.hebrewmonths)
+        s = Month(theyear, themonth).month_name(self.hebrewmonths, transliteration=self.transliteration)
         if withyear:
             if self.hebrewyear:
                 year = to_hebrew_numeral(theyear)
@@ -1202,7 +1216,7 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
             months = range(m*i+1, min(m*(i+1)+1, len(yearmonths)+1))
             a('\n'*l)
             names = (
-                self.formatmonthname(theyear, yearmonths[k-1], colwidth, False)
+                self.formatmonthname(theyear, yearmonths[k-1], colwidth, False, transliteration=self.transliteration)
                 for k in months
             )
             a(calendar.formatstring(names, colwidth, c).rstrip())
@@ -1224,7 +1238,7 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
         return ''.join(v)
 
 
-def fast_day(date, hebrew=False):
+def fast_day(date, hebrew=False, transliteration=utils.Transliteration.ASHKENAZ):
     """Return name of fast day or None.
 
     Parameters
@@ -1234,6 +1248,9 @@ def fast_day(date, hebrew=False):
     hebrew : bool, optional
         ``True`` if you want the fast_day name in Hebrew letters. Default
         is ``False``, which returns the name transliterated into English.
+    transliteration : enum, optional
+        Determines which style of transliteration English spellings should follow
+        Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation    
 
     Returns
     -------
@@ -1241,7 +1258,7 @@ def fast_day(date, hebrew=False):
         The name of the fast day or ``None`` if the given date is not
         a fast day.
     """
-    return date.fast_day(hebrew)
+    return date.fast_day(hebrew, transliteration=transliteration)
 
 
 def festival(
@@ -1249,7 +1266,8 @@ def festival(
     israel=False,
     hebrew=False,
     include_working_days=True,
-    prefix_day=False
+    prefix_day=False,
+    transliteration=utils.Transliteration.ASHKENAZ
 ):
     """Return Jewish festival of given day.
 
@@ -1274,6 +1292,9 @@ def festival(
     prefix_day : bool, optional
         ``True`` to prefix multi day festivals with the day of the
         festival. Default is ``False``.
+    transliteration : enum, optional
+        Determines which style of transliteration English spellings should follow
+        Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
 
     Returns
     -------
@@ -1293,10 +1314,10 @@ def festival(
     >>> festival(shavuos, israel=True, prefix_day=True)
     'Shavuos'
     """
-    return date.festival(israel, hebrew, include_working_days, prefix_day)
+    return date.festival(israel, hebrew, include_working_days, prefix_day, transliteration=transliteration)
 
 
-def holiday(date, israel=False, hebrew=False, prefix_day=False):
+def holiday(date, israel=False, hebrew=False, prefix_day=False, transliteration=utils.Transliteration.ASHKENAZ):
     """Return Jewish holiday of given date.
 
     The holidays include the major and minor religious Jewish
@@ -1315,6 +1336,9 @@ def holiday(date, israel=False, hebrew=False, prefix_day=False):
     prefix_day : bool, optional
         ``True`` to prefix multi day holidays with the day of the
         holiday. Default is ``False``.
+    transliteration : enum, optional
+        Determines which style of transliteration English spellings should follow
+        Default is ``utils.Transliteration.ASHKENAZ`` for backward compatibility with the original pyluach implementation
 
     Returns
     -------
@@ -1334,4 +1358,4 @@ def holiday(date, israel=False, hebrew=False, prefix_day=False):
     >>> holiday(taanis_esther, prefix_day=True)
     'Taanis Esther'
     """
-    return date.holiday(israel, hebrew, prefix_day)
+    return date.holiday(israel, hebrew, prefix_day, transliteration=transliteration)

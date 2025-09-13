@@ -65,6 +65,9 @@ Examples
     >>> month = hebrewcal.Month(5781, 10)
     >>> month.month_name()
     'Teves'
+    >>> from pyluach.utils import Transliteration
+    >>> month.month_name(transliteration=Transliteration.MODERN_ISRAELI)
+    'Tevet'
     >>> month.month_name(True)
     'טבת'
     >>> month + 3
@@ -73,11 +76,13 @@ Examples
     ...     print(month.month_name())
     Tishrei Cheshvan ...
 
-    >>> date = dates.GregorianDate(2010, 10, 6)
+    >>> date = dates.GregorianDate(2010, 10, 2)
     >>> parshios.getparsha(date)
     [0]
     >>> parshios.getparsha_string(date, israel=True)
-    'Beraishis'
+    'Bereishis'
+    >>> parshios.getparsha_string(date, israel=True, transliteration=Transliteration.MODERN_ISRAELI)
+    'Bereshit'
     >>> parshios.getparsha_string(date, hebrew=True)
     'בראשית'
     >>> new_date = dates.GregorianDate(2021, 3, 10)

@@ -226,8 +226,8 @@ class TestMonth:
 
     def test_month_string(self):
         month = Month(5781, 3)
-        assert month.month_string() == 'סיון תשפ״א'
-        assert month.month_string(True) == 'סיון ה׳תשפ״א'
+        assert month.month_string() == 'סיוון תשפ״א'
+        assert month.month_string(True) == 'סיוון ה׳תשפ״א'
 
     def test_errors(self):
         with raises(ValueError):
