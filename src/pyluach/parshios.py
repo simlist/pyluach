@@ -371,3 +371,117 @@ def four_parshios(date, hebrew=False):
     if hebrew:
         return _FOUR_PARSHIOS_HEBREW[special_parsha]
     return _FOUR_PARSHIOS[special_parsha]
+
+
+### added 12/2025 ###
+
+def _genreversetable(year, israel=False):
+    """Return OrderedDict mapping parsha numbers to date of Shabbos.
+
+    The numbers start with Beraishis as 0. Double parshios are represented
+    twice - either reffering to the same date.
+    """
+    parshalist = deque([51, 52] + list(range(52)))
+    table = OrderedDict()
+    leap = _is_leap(year)
+    pesachday = HebrewDate(year, 1, 15).weekday()
+    rosh_hashana = HebrewDate(year, 7, 1)
+    shabbos = rosh_hashana.shabbos()
+    if rosh_hashana.weekday() > 4:
+        parshalist.popleft()
+
+    while shabbos.year == year:
+        parsha = parshalist.popleft()
+        table[parsha] = [shabbos]
+        if (
+            (
+                parsha == _Parshios_Enum.VAYAKHEL
+                and (HebrewDate(year, 1, 14) - shabbos) // 7 < 3
+            )
+            or (
+                parsha in [
+                    _Parshios_Enum.TAZRIA, _Parshios_Enum.ACHAREI_MOS
+                ] and not leap
+            )
+            or (
+                parsha == _Parshios_Enum.BEHAR and not leap
+                and (not israel or pesachday != 7)
+            )
+            or (
+                parsha == _Parshios_Enum.CHUKAS
+                and not israel and pesachday == 5
+            )
+            or (
+                parsha == _Parshios_Enum.MATTOS
+                and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2
+            )
+            or (
+                parsha == _Parshios_Enum.NITZAVIM
+                and HebrewDate(year+1, 7, 1).weekday() > 4
+            )
+        ):
+            #  If any of that then it's a double parsha.
+            table[parshalist.popleft()].append(shabbos)
+        shabbos += 7
+    return table
+
+DAYS = ["Shabbos", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday", "Sunday"]
+def getDateFromParshaIndex(Parsha: int, year: int, DOW="Shabbos", israel=False):
+    """Return the parsha for a given date.
+
+    Returns the date on or before the given parsha.
+
+    Parameters
+    ----------
+    Parsha : int
+      The number of the parsha to get the date for.
+
+    israel : bool, optional
+      ``True`` if you want the parsha according to the Israel schedule
+      (with only one day of Yom Tov). Defaults to ``False``.
+
+    DOW : str, optional
+      The day of the week to return the date for. Default is "Shabbos".
+
+    Returns
+    -------
+    list of int or None
+      A list of the numbers of the parshios for the Shabbos of the given date,
+      beginning with 0 for Beraishis, or ``None`` if the Shabbos doesn't
+      have a parsha (i.e. it's on Yom Tov).
+    """
+    table = _genreversetable(year, israel)
+    result = table[Parsha]
+    if result is None:
+        return None
+    return result - [DAYS.index(DOW)]
+
+def getDateFromParshaEng(Parsha: str, year, DOW="Shabbos", israel=False):
+    """function overload for getDateFromParshaIndex to accept Parsha name in English."""
+    return getDateFromParshaIndex(PARSHIOS.index(Parsha), year, DOW, israel)
+
+
+def getDateFromParshaHeb(Parsha: str, year, DOW="Shabbos", israel=False):
+    """function overload for getDateFromParshaIndex to accept Parsha name in Hebrew."""
+    return getDateFromParshaIndex(PARSHIOS_HEBREW.index(Parsha), year, DOW, israel)
+
+def reverseparshatable(year, israel=False):
+    """Return a table of all the Shabbosos in the year
+
+    Parameters
+    ----------
+    year : int
+      The Hebrew year to get the parshios for.
+
+    israel : bool, optional
+      ``True`` if you want the parshios according to the Israel
+      schedule (with only one day of Yom Tov). Defaults to ``False``.
+
+    Returns
+    -------
+    ~collections.OrderedDict
+      An ordered dictionary with the ``HebrewDate`` of each Shabbos
+      as the key mapped to the parsha as a list of ints, or ``None`` for a
+      Shabbos with no parsha.
+    """
+    return _genreversetable(year, israel)
