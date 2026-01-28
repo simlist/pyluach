@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class MonthNames(Enum):
+class Months(Enum):
     NISSAN = 'ניסן'
     IYAR = 'אייר'
     SIVAN = 'סיון'
@@ -18,7 +18,7 @@ class MonthNames(Enum):
     ADAR2 = 'אדר ב׳'
 
 
-class ParshiosNames(Enum):
+class Parshios(Enum):
     BEREISHIS = 'בראשית'
     NOACH = 'נח'
     LECH_LECHA = 'לך לך'
@@ -69,20 +69,20 @@ class ParshiosNames(Enum):
     SHOFTIM = 'שופטים'
     KI_SEITZEI = 'כי תצא'
     KI_SAVO = 'כי תבא'
-    NETZAVIM = 'נצבים'
+    NITZAVIM = 'נצבים'
     VAYEILECH = 'וילך'
     HAAZINU = 'האזינו'
     VEZOS_HABERACHA = 'וזאת הברכה'
 
 
-class FourParshiosNames(Enum):
+class FourParshios(Enum):
     ZACHOR = 'זכור'
     SHEKALIM = 'שקלים'
     PARAH = 'פרה'
     HACHODESH = 'החודש'
 
 
-class DaysNames(Enum):
+class Days(Enum):
     ROSH_HASHANA = 'ראש השנה'
     YOM_KIPPUR = 'יום כיפור'
     SUCCOS = 'סוכות'
@@ -101,5 +101,5 @@ class DaysNames(Enum):
     TZOM_GEDALIA = 'צום גדליה'
     TENTH_OF_TEVES = 'י׳ בטבת'
     TAANIS_ESTHER = 'תענית אסתר'
-    SEVENTEENTH_OF_TAMUZ = 'י״ז בתמוז'
+    SEVENTEENTH_OF_TAMMUZ = 'י״ז בתמוז'
     NINTH_OF_AV = 'ט׳ באב'
