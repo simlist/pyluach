@@ -34,6 +34,7 @@ from enum import Enum, IntEnum, auto
 
 from pyluach.dates import HebrewDate
 from pyluach.utils import _is_leap
+from pyluach.names import Parshios
 
 
 PARSHIOS = [
@@ -159,14 +160,16 @@ def _gentable(year, israel=False):
     The numbers start with Beraishis as 0. Double parshios are represented
     as a list of the two numbers. If there is no Parsha the value is None.
     """
-    parshalist = deque([51, 52] + list(range(52)))
+    parshalist = deque(list(Parshios)[:52])
+    parshalist.appendleft(Parshios.HAAZINU)
+    # parshalist = deque([51, 52] + list(range(52)))
     table = OrderedDict()
     leap = _is_leap(year)
     pesachday = HebrewDate(year, 1, 15).weekday()
     rosh_hashana = HebrewDate(year, 7, 1)
     shabbos = rosh_hashana.shabbos()
-    if rosh_hashana.weekday() > 4:
-        parshalist.popleft()
+    if rosh_hashana.weekday() <= 4:
+        parshalist.appendleft(Parshios.VAYEILECH)
 
     while shabbos.year == year:
         if _parshaless(shabbos, israel):
@@ -176,28 +179,28 @@ def _gentable(year, israel=False):
             table[shabbos] = [parsha]
             if (
                 (
-                    parsha == _Parshios_Enum.VAYAKHEL
+                    parsha == Parshios.VAYAKHEL
                     and (HebrewDate(year, 1, 14) - shabbos) // 7 < 3
                 )
                 or (
                     parsha in [
-                        _Parshios_Enum.TAZRIA, _Parshios_Enum.ACHAREI_MOS
+                        Parshios.TAZRIA, Parshios.ACHAREI_MOS
                     ] and not leap
                 )
                 or (
-                    parsha == _Parshios_Enum.BEHAR and not leap
+                    parsha == Parshios.BEHAR and not leap
                     and (not israel or pesachday != 7)
                 )
                 or (
-                    parsha == _Parshios_Enum.CHUKAS
+                    parsha == Parshios.CHUKAS
                     and not israel and pesachday == 5
                 )
                 or (
-                    parsha == _Parshios_Enum.MATTOS
+                    parsha == Parshios.MATTOS
                     and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2
                 )
                 or (
-                    parsha == _Parshios_Enum.NITZAVIM
+                    parsha == Parshios.NITZAVIM
                     and HebrewDate(year+1, 7, 1).weekday() > 4
                 )
             ):
@@ -231,7 +234,11 @@ def getparsha(date, israel=False):
     """
     shabbos = date.to_heb().shabbos()
     table = _gentable(shabbos.year, israel)
-    return table[shabbos]
+    parshios = table[shabbos]
+    if parshios is not None:
+        parshios_list = list(Parshios)
+        return [parshios_list.index(parsha) for parsha in parshios]
+    return None
 
 
 def getparsha_string(date, israel=False, hebrew=False):
