@@ -37,7 +37,7 @@ class ParshiosNames(Enum):
     BESHALACH = 'בשלח'
     YISRO = 'יתרו'
     MISHPATIM = 'משפטים'
-    TERUMA = 'תרומה'
+    TERUMAH = 'תרומה'
     TETZAVEH = 'תצוה'
     KI_SISA = 'כי תשא'
     VAYAKHEL = 'ויקהל'
