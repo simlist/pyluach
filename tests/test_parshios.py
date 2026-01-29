@@ -1,6 +1,5 @@
 from pyluach import parshios, dates
 from pyluach.names import FourParshios
-from pyluach.parshios import _FourParshiosEnum
 
 
 KNOWN_VALUES = {
