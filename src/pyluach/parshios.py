@@ -34,7 +34,8 @@ from enum import Enum, IntEnum, auto
 
 from pyluach.dates import HebrewDate
 from pyluach.utils import _is_leap
-from pyluach.names import Parshios
+from pyluach.names import Parshios, FourParshios
+from pyluach.languages import english_ashkenazic
 
 
 PARSHIOS = [
@@ -179,7 +180,7 @@ def _gentable(year, israel=False):
             table[shabbos] = [parsha]
             if (
                 (
-                    parsha == Parshios.VAYAKHEL
+                    parsha is Parshios.VAYAKHEL
                     and (HebrewDate(year, 1, 14) - shabbos) // 7 < 3
                 )
                 or (
@@ -188,19 +189,19 @@ def _gentable(year, israel=False):
                     ] and not leap
                 )
                 or (
-                    parsha == Parshios.BEHAR and not leap
+                    parsha is Parshios.BEHAR and not leap
                     and (not israel or pesachday != 7)
                 )
                 or (
-                    parsha == Parshios.CHUKAS
+                    parsha is Parshios.CHUKAS
                     and not israel and pesachday == 5
                 )
                 or (
-                    parsha == Parshios.MATTOS
+                    parsha is Parshios.MATTOS
                     and (HebrewDate(year, 5, 9)-shabbos) // 7 < 2
                 )
                 or (
-                    parsha == Parshios.NITZAVIM
+                    parsha is Parshios.NITZAVIM
                     and HebrewDate(year+1, 7, 1).weekday() > 4
                 )
             ):
@@ -241,7 +242,9 @@ def getparsha(date, israel=False):
     return None
 
 
-def getparsha_string(date, israel=False, hebrew=False):
+def getparsha_string(
+    date, israel=False, hebrew=False, language=english_ashkenazic
+):
     """Return the parsha as a string for the given date.
 
     This function wraps ``getparsha`` returning the parsha name.
@@ -266,13 +269,15 @@ def getparsha_string(date, israel=False, hebrew=False):
       double parsha or ``None`` if there is no parsha that Shabbos
       (ie. it's yom tov).
     """
-    parsha = getparsha(date, israel)
+    shabbos = date.to_heb().shabbos()
+    table = _gentable(shabbos.year, israel)
+    parsha = table[shabbos]
     if parsha is None:
         return None
-    if not hebrew:
-        name = [PARSHIOS[n] for n in parsha]
+    if hebrew:
+        name = [p.value for p in parsha]
     else:
-        name = [PARSHIOS_HEBREW[n] for n in parsha]
+        name = [language.get(p, english_ashkenazic[p]) for p in parsha]
     return ', '.join(name)
 
 
@@ -328,7 +333,7 @@ def _get_hachodesh(date):
     shabbos = date.shabbos()
     rc_nissan = HebrewDate(year, 1, 1)
     if shabbos <= rc_nissan and shabbos - rc_nissan < 7:
-        return _FourParshiosEnum.HACHODESH
+        return FourParshios.HACHODESH
     return None
 
 
@@ -341,19 +346,19 @@ def _get_four_parshios(date):
     shabbos = date.shabbos()
     rc_adar = HebrewDate(year, adar, 1)
     if shabbos <= rc_adar and rc_adar - shabbos < 7:
-        return _FourParshiosEnum.SHEKALIM
+        return FourParshios.SHEKALIM
     if shabbos.month == adar:
         purim = HebrewDate(year, adar, 14)
         if shabbos < purim and (purim - shabbos) < 7:
-            return _FourParshiosEnum.ZACHOR
+            return FourParshios.ZACHOR
         if _get_hachodesh(date + 7):
-            return _FourParshiosEnum.PARAH
+            return FourParshios.PARAH
     if _get_hachodesh(date):
-        return _FourParshiosEnum.HACHODESH
+        return FourParshios.HACHODESH
     return None
 
 
-def four_parshios(date, hebrew=False):
+def four_parshios(date, hebrew=False, language=english_ashkenazic):
     """Return which of the four parshios is given date's Shabbos.
 
     Parameters
@@ -376,5 +381,5 @@ def four_parshios(date, hebrew=False):
     if special_parsha is None:
         return ''
     if hebrew:
-        return _FOUR_PARSHIOS_HEBREW[special_parsha]
-    return _FOUR_PARSHIOS[special_parsha]
+        return special_parsha.value
+    return language.get(special_parsha, english_ashkenazic[special_parsha])

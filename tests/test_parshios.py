@@ -1,4 +1,5 @@
 from pyluach import parshios, dates
+from pyluach.names import FourParshios
 from pyluach.parshios import _FourParshiosEnum
 
 
@@ -77,16 +78,16 @@ def test_get_parshastring_hebrew():
 def test_shekalim():
     date = dates.HebrewDate(5785, 11, 25)
     assert (
-        parshios._get_four_parshios(date) == _FourParshiosEnum.SHEKALIM
+        parshios._get_four_parshios(date) is FourParshios.SHEKALIM
     )
     assert parshios._get_four_parshios(date - 1) is None
-    assert parshios._get_four_parshios(date + 7) != _FourParshiosEnum.SHEKALIM
+    assert parshios._get_four_parshios(date + 7) is not FourParshios.SHEKALIM
 
 
 def test_zachor():
     date = dates.HebrewDate(5785, 12, 2)
     assert (
-        parshios._get_four_parshios(date) == _FourParshiosEnum.ZACHOR
+        parshios._get_four_parshios(date) == FourParshios.ZACHOR
     )
 
 
@@ -102,6 +103,6 @@ def test_parah():
 
 def test_hachodesh():
     date = dates.HebrewDate(5785, 12, 29)
-    assert parshios._get_four_parshios(date) == _FourParshiosEnum.HACHODESH
+    assert parshios._get_four_parshios(date) is FourParshios.HACHODESH
     date = dates.HebrewDate(5782, 1, 1)
-    assert parshios._get_four_parshios(date) == _FourParshiosEnum.HACHODESH
+    assert parshios._get_four_parshios(date) is FourParshios.HACHODESH
