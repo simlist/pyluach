@@ -62,86 +62,6 @@ PARSHIOS_HEBREW = [
 ]
 
 
-class _Parshios_Enum(IntEnum):
-    BEREISHIS = 0
-    NOACH = 1
-    LECH_LECHA = auto()
-    VAYEIRA = auto()
-    CHAYEI_SARAH = auto()
-    TOLDOS = auto()
-    VAYEITZEI = auto()
-    VAYISHLACH = auto()
-    VAYEISHEV = auto()
-    MIKEITZ = auto()
-    VAYIGASH = auto()
-    VAYECHI = auto()
-    SHEMOS = auto()
-    VAEIRA = auto()
-    BO = auto()
-    BESHALACH = auto()
-    YISRO = auto()
-    MISHPATIM = auto()
-    TERUMAH = auto()
-    TETZAVEH = auto()
-    KI_SISA = auto()
-    VAYAKHEL = auto()
-    PEKUDEI = auto()
-    VAYIKRA = auto()
-    TZAV = auto()
-    SHEMINI = auto()
-    TAZRIA = auto()
-    METZORA = auto()
-    ACHAREI_MOS = auto()
-    KEDOSHIM = auto()
-    EMOR = auto()
-    BEHAR = auto()
-    BECHUKOSAI = auto()
-    BAMIDBAR = auto()
-    NASSO = auto()
-    BEHAALOSCHA = auto()
-    SHELACH = auto()
-    KORACH = auto()
-    CHUKAS = auto()
-    BALAK = auto()
-    PINCHAS = auto()
-    MATTOS = auto()
-    MASEI = auto()
-    DEVARIM = auto()
-    VAESCHANAN = auto()
-    EIKEV = auto()
-    REEH = auto()
-    SHOFTIM = auto()
-    KI_SEITZEI = auto()
-    KI_SAVO = auto()
-    NITZAVIM = auto()
-    VAYEILECH = auto()
-    HAAZINU = auto()
-    VEZOS_HABERACHAH = auto()
-
-
-class _FourParshiosEnum(Enum):
-    SHEKALIM = auto()
-    ZACHOR = auto()
-    PARAH = auto()
-    HACHODESH = auto()
-
-
-_FOUR_PARSHIOS = {
-    _FourParshiosEnum.ZACHOR: 'Zachor',
-    _FourParshiosEnum.SHEKALIM: 'Shekalim',
-    _FourParshiosEnum.HACHODESH: 'Hachodesh',
-    _FourParshiosEnum.PARAH: 'Parah',
-}
-
-
-_FOUR_PARSHIOS_HEBREW = {
-    _FourParshiosEnum.ZACHOR: 'זכור',
-    _FourParshiosEnum.SHEKALIM: 'שקלים',
-    _FourParshiosEnum.PARAH: 'פרה',
-    _FourParshiosEnum.HACHODESH: 'החודש'
-}
-
-
 def _parshaless(date, israel=False):
     if israel and date.tuple()[1:] in [(7, 23), (1, 22), (3, 7)]:
         return False
@@ -211,6 +131,12 @@ def _gentable(year, israel=False):
     return table
 
 
+def _getparsha_enum(date, israel=False):
+    shabbos = date.to_heb().shabbos()
+    table = _gentable(shabbos.year, israel)
+    return table[shabbos]
+
+
 def getparsha(date, israel=False):
     """Return the parsha for a given date.
 
@@ -233,13 +159,11 @@ def getparsha(date, israel=False):
       beginning with 0 for Beraishis, or ``None`` if the Shabbos doesn't
       have a parsha (i.e. it's on Yom Tov).
     """
-    shabbos = date.to_heb().shabbos()
-    table = _gentable(shabbos.year, israel)
-    parshios = table[shabbos]
-    if parshios is not None:
-        parshios_list = list(Parshios)
-        return [parshios_list.index(parsha) for parsha in parshios]
-    return None
+    parsha = _getparsha_enum(date, israel)
+    if parsha is None:
+        return None
+    parshios_list = list(Parshios)
+    return [parshios_list.index(p) for p in parsha]
 
 
 def getparsha_string(
@@ -269,9 +193,7 @@ def getparsha_string(
       double parsha or ``None`` if there is no parsha that Shabbos
       (ie. it's yom tov).
     """
-    shabbos = date.to_heb().shabbos()
-    table = _gentable(shabbos.year, israel)
-    parsha = table[shabbos]
+    parsha = _getparsha_enum(date, israel)
     if parsha is None:
         return None
     if hebrew:
