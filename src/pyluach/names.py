@@ -60,7 +60,7 @@ class Parshios(Enum):
     CHUKAS = 'חקת'
     BALAK = 'בלק'
     PINCHAS = 'פינחס'
-    MATTOS = 'מטות',
+    MATTOS = 'מטות'
     MASEI = 'מסעי'
     DEVARIM = 'דברים'
     VAESCHANAN = 'ואתחנן'
