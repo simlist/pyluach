@@ -23,6 +23,7 @@ import calendar
 from pyluach.dates import HebrewDate
 from pyluach import utils
 from pyluach.gematria import _num_to_str
+from pyluach.languages import _get_translation
 
 
 class IllegalMonthError(ValueError):
@@ -1249,7 +1250,8 @@ def festival(
     israel=False,
     hebrew=False,
     include_working_days=True,
-    prefix_day=False
+    prefix_day=False,
+    language={}
 ):
     """Return Jewish festival of given day.
 
@@ -1274,6 +1276,9 @@ def festival(
     prefix_day : bool, optional
         ``True`` to prefix multi day festivals with the day of the
         festival. Default is ``False``.
+    language : dict
+      The language to tanslate the festival to if hebrew is False.
+      Default is English Ashkenazic.
 
     Returns
     -------
@@ -1293,7 +1298,14 @@ def festival(
     >>> festival(shavuos, israel=True, prefix_day=True)
     'Shavuos'
     """
-    return date.festival(israel, hebrew, include_working_days, prefix_day)
+    return utils._festival_string(
+        date,
+        israel,
+        hebrew,
+        include_working_days,
+        prefix_day,
+        language
+    )
 
 
 def holiday(date, israel=False, hebrew=False, prefix_day=False):

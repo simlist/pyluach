@@ -34,8 +34,8 @@ from enum import Enum, IntEnum, auto
 
 from pyluach.dates import HebrewDate
 from pyluach.utils import _is_leap
-from pyluach.names import Parshios, FourParshios
-from pyluach.languages import english_ashkenazic
+from pyluach.values import Parshios, FourParshios
+from pyluach.languages import _get_translation
 
 
 PARSHIOS = [
@@ -167,7 +167,7 @@ def getparsha(date, israel=False):
 
 
 def getparsha_string(
-    date, israel=False, hebrew=False, language=english_ashkenazic
+    date, israel=False, hebrew=False, language={}
 ):
     """Return the parsha as a string for the given date.
 
@@ -186,6 +186,8 @@ def getparsha_string(
       ``True`` if you want the name of the parsha in Hebrew.
       Default is ``False``.
 
+    language : dict, optional
+
     Returns
     -------
     str or None
@@ -196,11 +198,7 @@ def getparsha_string(
     parsha = _getparsha_enum(date, israel)
     if parsha is None:
         return None
-    if hebrew:
-        name = [p.value for p in parsha]
-    else:
-        name = [language.get(p, english_ashkenazic[p]) for p in parsha]
-    return ', '.join(name)
+    return ', '.join(_get_translation(p, hebrew, language) for p in parsha)
 
 
 def iterparshios(year, israel=False):
@@ -280,7 +278,7 @@ def _get_four_parshios(date):
     return None
 
 
-def four_parshios(date, hebrew=False, language=english_ashkenazic):
+def four_parshios(date, hebrew=False, language={}):
     """Return which of the four parshios is given date's Shabbos.
 
     Parameters
@@ -292,6 +290,8 @@ def four_parshios(date, hebrew=False, language=english_ashkenazic):
       ``True`` if you want the name of the parsha in Hebrew.
       Default is ``False``.
 
+    language : dict, optional
+
     Returns
     -------
     str
@@ -302,6 +302,4 @@ def four_parshios(date, hebrew=False, language=english_ashkenazic):
     special_parsha = _get_four_parshios(date)
     if special_parsha is None:
         return ''
-    if hebrew:
-        return special_parsha.value
-    return language.get(special_parsha, english_ashkenazic[special_parsha])
+    return _get_translation(special_parsha, hebrew, language)

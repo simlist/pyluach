@@ -189,33 +189,33 @@ class BaseDate(abc.ABC):
         """
         return self + (7 - self.weekday())
 
-    def _day_of_holiday(self, israel, hebrew=False):
-        """Return the day of the holiday.
+    # def _day_of_holiday(self, israel, hebrew=False):
+    #     """Return the day of the holiday.
 
-        Parameters
-        ----------
-        israel : bool, optional
-        hebrew : bool, optional
+    #     Parameters
+    #     ----------
+    #     israel : bool, optional
+    #     hebrew : bool, optional
 
-        Returns
-        -------
-        str
-        """
-        name = utils._festival_string(self, israel)
-        if name is not None:
-            holiday = utils._Days(name)
-            if holiday is utils._Days.SHAVUOS and israel:
-                return ''
-            first_day = utils._first_day_of_holiday(holiday)
-            if first_day:
-                year = self.to_heb().year
-                day = HebrewDate(year, *first_day) - self + 1
-                if hebrew:
-                    day = gematria._num_to_str(day)
-                return str(day)
-        return ''
+    #     Returns
+    #     -------
+    #     str
+    #     """
+    #     name = utils._festival_string(self, israel)
+    #     if name is not None:
+    #         holiday = utils._Days(name)
+    #         if holiday is utils._Days.SHAVUOS and israel:
+    #             return ''
+    #         first_day = utils._first_day_of_holiday(holiday)
+    #         if first_day:
+    #             year = self.to_heb().year
+    #             day = HebrewDate(year, *first_day) - self + 1
+    #             if hebrew:
+    #                 day = gematria._num_to_str(day)
+    #             return str(day)
+    #     return ''
 
-    def fast_day(self, hebrew=False):
+    def fast_day(self, hebrew=False, language={}):
         """Return name of fast day of date.
 
         Parameters
@@ -223,6 +223,7 @@ class BaseDate(abc.ABC):
         hebrew : bool, optional
             ``True`` if you want the fast day name in Hebrew letters. Default
             is ``False``, which returns the name transliterated into English.
+        language: dict, optional
 
         Returns
         -------
@@ -230,14 +231,15 @@ class BaseDate(abc.ABC):
             The name of the fast day or ``None`` if the date is not
             a fast day.
         """
-        return utils._fast_day_string(self, hebrew)
+        return utils._fast_day_string(self, hebrew, language)
 
     def festival(
         self,
         israel=False,
         hebrew=False,
         include_working_days=True,
-        prefix_day=False
+        prefix_day=False,
+        language={}
     ):
         """Return name of Jewish festival of date.
 
@@ -259,6 +261,7 @@ class BaseDate(abc.ABC):
         prefix_day : bool, optional
             ``True`` to prefix multi day festivals with the day of the
             festival. Default is ``False``.
+        language: dict, optional
 
         Returns
         -------
@@ -277,16 +280,35 @@ class BaseDate(abc.ABC):
         >>> shavuos.festival(israel=True, prefix_day=True)
         'Shavuos'
         """
-        name = utils._festival_string(
-            self, israel, hebrew, include_working_days
+        return utils._festival_string(
+            self,
+            israel,
+            hebrew,
+            include_working_days,
+            prefix_day,
+            language
         )
-        if prefix_day and name is not None:
-            day = self._day_of_holiday(israel=israel, hebrew=hebrew)
-            if day:
-                return f'{day} {name}'
-        return name
+        # if prefix_day and name is not None:
+        #     day = self._day_of_holiday(israel=israel, hebrew=hebrew)
+        #     if day:
+        #         return f'{day} {name}'
+        # return name
+        # return utils._festival_string(
+        #     self,
+        #     israel,
+        #     hebrew,
+        #     include_working_days,
+        #     prefix_day,
+        #     language
+        # )
 
-    def holiday(self, israel=False, hebrew=False, prefix_day=False):
+    def holiday(
+            self,
+            israel=False,
+            hebrew=False,
+            prefix_day=False,
+            language={}
+        ):
         """Return name of Jewish holiday of the date.
 
         The holidays include the major and minor religious Jewish
@@ -303,6 +325,7 @@ class BaseDate(abc.ABC):
         prefix_day : bool, optional
             ``True`` to prefix multi day holidays with the day of the
             holiday. Default is ``False``.
+        language: dict, optional
 
         Returns
         -------
@@ -322,8 +345,13 @@ class BaseDate(abc.ABC):
         'Taanis Esther'
         """
         return (
-            self.fast_day(hebrew=hebrew)
-            or self.festival(israel, hebrew, prefix_day=prefix_day)
+            self.fast_day(hebrew=hebrew, language=language) or
+            self.festival(
+                israel=israel,
+                hebrew=hebrew,
+                prefix_day=prefix_day,
+                language=language
+            )
         )
 
 
