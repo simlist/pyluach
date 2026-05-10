@@ -5,6 +5,10 @@ They are to be used internally.
 from functools import lru_cache
 from enum import Enum
 
+from pyluach.values import Months, Days
+from pyluach.languages import _get_translation
+from pyluach import gematria
+
 
 class _Days(Enum):
     ROSH_HASHANA = 'Rosh Hashana'
@@ -51,6 +55,24 @@ _days_hebrew = {
     _Days.SEVENTEENTH_OF_TAMUZ: 'י״ז בתמוז',
     _Days.NINTH_OF_AV: 'ט׳ באב'
 }
+
+
+_MONTH_VALUES = [
+    Months.NISSAN,
+    Months.IYAR,
+    Months.SIVAN,
+    Months.TAMMUZ,
+    Months.AV,
+    Months.ELUL,
+    Months.TISHREI,
+    Months.CHESHVAN,
+    Months.KISLEV,
+    Months.TEVES,
+    Months.SHEVAT,
+    Months.ADAR,
+    Months.ADAR1,
+    Months.ADAR2
+]
 
 
 MONTH_NAMES = [
@@ -166,13 +188,11 @@ def _month_length(year, month):
     raise ValueError('Invalid month')
 
 
-def _month_name(year, month, hebrew):
+def _month_name(year, month, hebrew, language={}):
     index = month
     if month < 12 or not _is_leap(year):
         index -= 1
-    if hebrew:
-        return MONTH_NAMES_HEBREW[index]
-    return MONTH_NAMES[index]
+    return _get_translation(_MONTH_VALUES[index], hebrew, language)
 
 
 def _monthslist(year):
@@ -223,42 +243,67 @@ def _fast_day(date):
 
     if month == 7:
         if (weekday == 1 and day == 4) or (weekday != 7 and day == 3):
-            return _Days.TZOM_GEDALIA
+            return Days.TZOM_GEDALIA
     elif month == 10 and day == 10:
-        return _Days.TENTH_OF_TEVES
+        return Days.TENTH_OF_TEVES
     elif month == adar:
         if (weekday == 5 and day == 11) or weekday != 7 and day == 13:
-            return _Days.TAANIS_ESTHER
+            return Days.TAANIS_ESTHER
     elif month == 4:
         if (weekday == 1 and day == 18) or (weekday != 7 and day == 17):
-            return _Days.SEVENTEENTH_OF_TAMUZ
+            return Days.SEVENTEENTH_OF_TAMMUZ
     elif month == 5:
         if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
-            return _Days.NINTH_OF_AV
+            return Days.NINTH_OF_AV
     return None
 
 
-def _fast_day_string(date, hebrew=False):
+def _fast_day_string(date, hebrew=False, language={}):
     fast = _fast_day(date)
     if fast is None:
         return None
-    if hebrew:
-        return _days_hebrew[fast]
-    return fast.value
+    return _get_translation(fast, hebrew, language)
 
 
-def _first_day_of_holiday(holiday):
-    if holiday is _Days.ROSH_HASHANA:
+def _first_day_of_festival(festival):
+    if festival is Days.ROSH_HASHANA:
         return (7, 1)
-    if holiday is _Days.SUCCOS:
+    if festival is Days.SUCCOS:
         return (7, 15)
-    if holiday is _Days.CHANUKA:
+    if festival is Days.CHANUKA:
         return (9, 25)
-    if holiday is _Days.PESACH:
+    if festival is Days.PESACH:
         return (1, 15)
-    if holiday is _Days.SHAVUOS:
+    if festival is Days.SHAVUOS:
         return (3, 6)
     return None
+
+
+    # def _day_of_festival(date, israel, hebrew=False):
+    #     """Return the day of the holiday.
+
+    #     Parameters
+    #     ----------
+    #     israel : bool, optional
+    #     hebrew : bool, optional
+
+    #     Returns
+    #     -------
+    #     str
+    #     """
+    #     festival = _festival(self, israel)
+    #     if name is not None:
+    #         festival = _Days(name)
+    #         if festival is utils._Days.SHAVUOS and israel:
+    #             return ''
+    #         first_day = utils._first_day_of_festival(festival)
+    #         if first_day:
+    #             year = self.to_heb().year
+    #             day = HebrewDate(year, *first_day) - self + 1
+    #             if hebrew:
+    #                 day = gematria._num_to_str(day)
+    #             return str(day)
+    #     return ''
 
 
 def _festival(date, israel=False, include_working_days=True):
@@ -294,40 +339,40 @@ def _festival(date, israel=False, include_working_days=True):
     day = date.day
     if month == 7:
         if day in [1, 2]:
-            return _Days.ROSH_HASHANA
+            return Days.ROSH_HASHANA
         if day == 10:
-            return _Days.YOM_KIPPUR
+            return Days.YOM_KIPPUR
         if (
             not include_working_days
             and (day in range(17, 22) or (israel and day == 16))
         ):
             return None
         if day in range(15, 22):
-            return _Days.SUCCOS
+            return Days.SUCCOS
         if day == 22:
-            return _Days.SHMINI_ATZERES
+            return Days.SHMINI_ATZERES
         if day == 23 and not israel:
-            return _Days.SIMCHAS_TORAH
+            return Days.SIMCHAS_TORAH
     elif month in [9, 10] and include_working_days:
         kislev_length = _month_length(year, 9)
         if (
             month == 9 and day in range(25, kislev_length + 1)
             or month == 10 and day in range(1, 8 - (kislev_length - 25))
         ):
-            return _Days.CHANUKA
+            return Days.CHANUKA
     elif month == 11 and day == 15 and include_working_days:
-        return _Days.TU_BSHVAT
+        return Days.TU_BSHVAT
     elif month == 12 and include_working_days:
         leap = _is_leap(year)
         if day == 14:
-            return _Days.PURIM_KATAN if leap else _Days.PURIM
+            return Days.PURIM_KATAN if leap else Days.PURIM
         if day == 15 and not leap:
-            return _Days.SHUSHAN_PURIM
+            return Days.SHUSHAN_PURIM
     elif month == 13 and include_working_days:
         if day == 14:
-            return _Days.PURIM
+            return Days.PURIM
         if day == 15:
-            return _Days.SHUSHAN_PURIM
+            return Days.SHUSHAN_PURIM
     elif month == 1:
         if (
             not include_working_days
@@ -335,15 +380,15 @@ def _festival(date, israel=False, include_working_days=True):
         ):
             return None
         if day in range(15, 22 if israel else 23):
-            return _Days.PESACH
+            return Days.PESACH
     elif month == 2 and day == 14 and include_working_days:
-        return _Days.PESACH_SHENI
+        return Days.PESACH_SHENI
     elif month == 2 and day == 18 and include_working_days:
-        return _Days.LAG_BAOMER
+        return Days.LAG_BAOMER
     elif month == 3 and (day == 6 or (not israel and day == 7)):
-        return _Days.SHAVUOS
+        return Days.SHAVUOS
     elif month == 5 and day == 15 and include_working_days:
-        return _Days.TU_BAV
+        return Days.TU_BAV
     return None
 
 
@@ -352,10 +397,24 @@ def _festival_string(
     israel=False,
     hebrew=False,
     include_working_days=True,
+    prefix_day=False,
+    language={}
 ):
     festival = _festival(date, israel, include_working_days)
     if festival is None:
         return None
-    if hebrew:
-        return _days_hebrew[festival]
-    return festival.value
+    festival_string = _get_translation(festival, hebrew, language)
+    if prefix_day and not (festival is Days.SHAVUOS and israel):
+        first_day = _first_day_of_festival(festival)
+        if first_day:
+            date = date.to_heb()
+            first_date = date.replace(
+                year=date.year,
+                month=first_day[0],
+                day=first_day[1]
+            )
+            day = first_date - date + 1
+            if hebrew:
+                day = gematria._num_to_str(day)
+            festival_string = f'{day} {festival_string}'
+    return festival_string
