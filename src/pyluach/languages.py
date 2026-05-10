@@ -1,28 +1,4 @@
-from pyluach.names import Parshios, Months, FourParshios, Days
-
-"""
-class DaysEnum):
-    ROSH_HASHANA = 'ראש השנה'
-    YOM_KIPPUR = 'יום כיפור'
-    SUCCOS = 'סוכות'
-    SHMINI_ATZERES = 'שמיני עצרת'
-    SIMCHAS_TORAH = 'שמחת תורה'
-    CHANUKA = 'חנוכה'
-    TU_BSHVAT = 'ט״ו בשבט'
-    PURIM_KATAN = 'פורים קטן'
-    PURIM = 'פורים'
-    SHUSHAN_PURIM = 'שושן פורים'
-    PESACH = 'פסח'
-    PESACH_SHENI = 'פסח שני'
-    LAG_BAOMER = 'ל״ג בעומר'
-    SHAVUOS = 'שבועות'
-    TU_BAV = 'ט״ו באב'
-    TZOM_GEDALIA = 'צום גדליה'
-    TENTH_OF_TEVES = 'י׳ בטבת'
-    TAANIS_ESTHER = 'תענית אסתר'
-    SEVENTEENTH_OF_TAMUZ = 'י״ז בתמוז'
-    NINTH_OF_AV = 'ט׳ באב'
-"""
+from pyluach.values import Parshios, Months, FourParshios, Days
 
 
 english_ashkenazic = {
@@ -119,3 +95,11 @@ english_ashkenazic = {
     Days.SEVENTEENTH_OF_TAMMUZ: '17 of Tammuz',
     Days.NINTH_OF_AV: '9 of Av'
 }
+
+
+def _get_translation(val, hebrew, language):
+    if hebrew:
+        return val.value
+    if not language:
+        language = english_ashkenazic
+    return language.get(val, english_ashkenazic[val])
