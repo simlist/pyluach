@@ -5,6 +5,15 @@ Changelog
 This document records all notable changes to `pyluach <https://github.com/simlist/pyluach>`_.
 This project adheres to `Semantic Versioning <https://semver.org/>`_.
 
+`2.4.0`_ (2026-05-__)
+=====================
+* Created values module to store enums with values to allow consistent
+  and readable naming scheme to acces values throughout the package.
+* Created language module to store dicts for translating values into
+  different languages.
+* Added `language` parameter to many functions and methods that return a string
+  to allow for translations of the returned string.
+
 `2.3.0`_ (2025-09-08)
 =====================
 * Created ``get_four_parshios`` function in parshios module.
@@ -100,6 +109,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
 * Initial public release
 
 
+.. _`2.4.0`: https://github.com/simlist/pyluach/compare/v2.3.0...v2.4.0
 .. _`2.3.0`: https://github.com/simlist/pyluach/compare/v2.2.0...v2.3.0
 .. _`2.2.0`: https://github.com/simlist/pyluach/compare/v2.1.0...v2.2.0
 .. _`2.1.0`: https://github.com/simlist/pyluach/compare/v2.0.2...v2.1.0
