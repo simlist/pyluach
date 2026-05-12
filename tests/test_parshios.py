@@ -1,5 +1,5 @@
 from pyluach import parshios, dates
-from pyluach.values import FourParshios
+from pyluach.values import FourParshios, Parshios
 
 
 KNOWN_VALUES = {
@@ -105,3 +105,19 @@ def test_hachodesh():
     assert parshios._get_four_parshios(date) is FourParshios.HACHODESH
     date = dates.HebrewDate(5782, 1, 1)
     assert parshios._get_four_parshios(date) is FourParshios.HACHODESH
+
+
+def test_language():
+    date = dates.HebrewDate(5786, 11, 20)
+    assert (
+        parshios.getparsha_string(date, language={Parshios.YISRO: 'Yitro'})
+        == 'Yitro'
+    )
+    date = dates.HebrewDate(5782, 1, 1)
+    assert (
+        parshios.four_parshios(
+            date,
+            language={FourParshios.HACHODESH: 'Hajodesh'}
+        )
+        == 'Hajodesh'
+    )

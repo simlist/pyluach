@@ -5,6 +5,7 @@ import pytest
 
 from pyluach import dates, hebrewcal, utils
 from pyluach.dates import HebrewDate, GregorianDate, JulianDay, Rounding
+from pyluach.values import Days, Months
 
 
 KNOWN_VALUES = {(2009, 8, 21): (5769, 6, 1),
@@ -421,3 +422,25 @@ def test_replace():
     assert date.replace(day=1) == HebrewDate(5782, 4, 1)
     with pytest.raises(ValueError):
         HebrewDate(5783, 12, 20).replace(month=13)
+
+
+def test_date_translations():
+    date = HebrewDate(5786, 3, 6)
+    assert not date.holiday(language={Days.SHAVUOS: 'Shavuot'}) == 'Shavuos'
+    assert date.holiday(language={Days.SHAVUOS: 'Shavuot'}) == 'Shavuot'
+    assert date.festival(language={Days.SHAVUOS: 'Shavuot'}) == 'Shavuot'
+    assert (
+        date.holiday(language={Days.SHAVUOS: 'Shavuot'}, hebrew=True)
+        == 'שבועות'
+    )
+    date = HebrewDate(5786, 7, 3)
+    assert date.fast_day(language={Days.TZOM_GEDALIA: "TGEL"})
+    date = HebrewDate(5786, 4, 17)
+    assert (
+        date.fast_day(language={Days.TZOM_GEDALIA: "TGEL"}) == '17 of Tammuz'
+    )
+    date = HebrewDate(5786, 8, 15)
+    assert (
+        date.month_name(language={Months.CHESHVAN: 'Jeshvan'})
+        == 'Jeshvan'
+    )

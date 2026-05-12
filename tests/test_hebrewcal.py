@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 
 from pyluach import dates, hebrewcal
 from pyluach.hebrewcal import Year, Month, holiday, festival, fast_day
+from pyluach.values import Days, Months
 from pyluach.hebrewcal import HebrewTextCalendar, HebrewHTMLCalendar
 
 
@@ -224,10 +225,34 @@ class TestMonth:
         adar_bais = Month(5782, 13)
         assert adar_bais.month_name() == 'Adar 2'
 
+    def test_month_name_language(self):
+        month = Month(5786, 10)
+        assert month.month_name(language={Months.TEVES: 'Tevet'}) == 'Tevet'
+
+    def test_holiday_language(self):
+        date = dates.HebrewDate(5786, 1, 15)
+        assert(
+            holiday(date, language={Days.PESACH: 'Pesaj'}) == 'Pesaj'
+        )
+
+    def test_festival_language(self):
+        date = dates.HebrewDate(5786, 7, 16)
+        assert(
+            festival(date, language={Days.SUCCOS: 'Sukkot'}) == 'Sukkot'
+        )
+
+    def test_fast_language(self):
+        date = dates.HebrewDate(5786, 12, 13)
+        assert(
+            fast_day(date, language={Days.TAANIS_ESTHER: 'Taanit Esther'})
+            == 'Taanit Esther'
+        )
+
     def test_month_string(self):
         month = Month(5781, 3)
         assert month.month_string() == 'סיון תשפ״א'
         assert month.month_string(True) == 'סיון ה׳תשפ״א'
+
 
     def test_errors(self):
         with raises(ValueError):
