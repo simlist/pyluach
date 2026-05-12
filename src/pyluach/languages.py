@@ -1,3 +1,4 @@
+"""The languages module contains the translations for the months, parshios, and holidays."""
 from pyluach.values import Parshios, Months, FourParshios, Days
 
 
@@ -98,6 +99,24 @@ english_ashkenazic = {
 
 
 def _get_translation(val, hebrew, language):
+    """Return the translation for the given value.
+    Parameters
+    ----------
+    val : Enum
+        The value to translate.
+    hebrew : bool
+        Whether to return name of the value in Hebrew. This takes
+        precedence over the language parameter.
+    language : dict
+        A dict mapping the value (from the values module) to the the desired
+        translation. If not given or if the dict doesn't contain the value,
+        the English Ashkenazic translation will be used.
+
+    Returns
+    -------
+    str
+        The translation of the value.
+    """
     if hebrew:
         return val.value
     if not language:

@@ -1,3 +1,8 @@
+"""The values module contains enums for the months, parshios, and holidays.
+These are used throughout the codebase to refer to these values in a
+consistent way.
+"""
+
 from enum import Enum
 
 
