@@ -224,6 +224,10 @@ class BaseDate(abc.ABC):
             ``True`` if you want the fast day name in Hebrew letters. Default
             is ``False``, which returns the name transliterated into English.
         language: dict, optional
+            A dictionary mapping the value (from the values module)
+            to the the desired translation. If not given or if the
+            dict doesn't contain the value, the English Ashkenazic
+            translation will be used.
 
         Returns
         -------
@@ -262,6 +266,10 @@ class BaseDate(abc.ABC):
             ``True`` to prefix multi day festivals with the day of the
             festival. Default is ``False``.
         language: dict, optional
+            A dictionary mapping the value (from the values module)
+            to the the desired translation. If not given or if the
+            dict doesn't contain the value, the English Ashkenazic
+            translation will be used.
 
         Returns
         -------
@@ -326,6 +334,10 @@ class BaseDate(abc.ABC):
             ``True`` to prefix multi day holidays with the day of the
             holiday. Default is ``False``.
         language: dict, optional
+            A dictionary mapping the value (from the values module)
+            to the the desired translation. If not given or if the
+            dict doesn't contain the value, the English Ashkenazic
+            translation will be used.
 
         Returns
         -------
@@ -428,6 +440,7 @@ class CalendarDateMixin:
             (``GregorianDate``, ````HebrewDate``).
 
         Raises
+        ------
         ValueError
             Raises a ``ValueError`` if the new date does not exist.
         """
@@ -1021,7 +1034,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     def to_heb(self):
         return self
 
-    def month_name(self, hebrew=False):
+    def month_name(self, hebrew=False, language={}):
         """Return the name of the month.
 
         Parameters
@@ -1031,11 +1044,17 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             Default is ``False`` which returns the month name
             transliterated into English.
 
+        language : dict, optional
+            A dictionary mapping the value (from the values module)
+            to the the desired translation. If not given or if the
+            dict doesn't contain the value, the English Ashkenazic
+            translation will be used.
+
         Returns
         -------
         str
         """
-        return utils._month_name(self.year, self.month, hebrew)
+        return utils._month_name(self.year, self.month, hebrew, language)
 
     def hebrew_day(self, withgershayim=True):
         """Return the day of the month in Hebrew letters.

@@ -387,7 +387,7 @@ class Month:
         """Return month number 1-12 or 13, Tishrei - Elul."""
         return list(Year(self.year)).index(self.month) + 1
 
-    def month_name(self, hebrew=False):
+    def month_name(self, hebrew=False, language={}):
         """Return the name of the month.
 
         Replaces `name` attribute.
@@ -398,12 +398,17 @@ class Month:
             `True` if the month name should be written with Hebrew letters
             and False to be transliterated into English using the Ashkenazic
             pronunciation. Default is `False`.
+        language : dict, optional
+            A dict mapping the value (from the values module)
+            to the the desired translation. If not given or if the
+            dict doesn't contain the value, the English Ashkenazic
+            translation will be used.
 
         Returns
         -------
         str
         """
-        return utils._month_name(self.year, self.month, hebrew)
+        return utils._month_name(self.year, self.month, hebrew, language)
 
     def month_string(self, thousands=False):
         """Return month and year in Hebrew.
@@ -1225,7 +1230,7 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
         return ''.join(v)
 
 
-def fast_day(date, hebrew=False):
+def fast_day(date, hebrew=False, language={}):
     """Return name of fast day or None.
 
     Parameters
@@ -1235,6 +1240,10 @@ def fast_day(date, hebrew=False):
     hebrew : bool, optional
         ``True`` if you want the fast_day name in Hebrew letters. Default
         is ``False``, which returns the name transliterated into English.
+    language : dict, optional
+        A dict mapping the value (from the values module) to the desired
+        translation. If not given or if the dict doesn't contain the value,
+        the English Ashkenazic translation will be used.
 
     Returns
     -------
@@ -1242,7 +1251,7 @@ def fast_day(date, hebrew=False):
         The name of the fast day or ``None`` if the given date is not
         a fast day.
     """
-    return date.fast_day(hebrew)
+    return date.fast_day(hebrew, language)
 
 
 def festival(
@@ -1276,9 +1285,10 @@ def festival(
     prefix_day : bool, optional
         ``True`` to prefix multi day festivals with the day of the
         festival. Default is ``False``.
-    language : dict
-      The language to tanslate the festival to if hebrew is False.
-      Default is English Ashkenazic.
+    language : dict, optional
+        A dict mapping the value (from the values module) to the
+        desired translation. If not given or if the dict doesn't contain
+        the value, the English Ashkenazic translation will be used.
 
     Returns
     -------
@@ -1308,7 +1318,7 @@ def festival(
     )
 
 
-def holiday(date, israel=False, hebrew=False, prefix_day=False):
+def holiday(date, israel=False, hebrew=False, prefix_day=False, language={}):
     """Return Jewish holiday of given date.
 
     The holidays include the major and minor religious Jewish
@@ -1327,6 +1337,10 @@ def holiday(date, israel=False, hebrew=False, prefix_day=False):
     prefix_day : bool, optional
         ``True`` to prefix multi day holidays with the day of the
         holiday. Default is ``False``.
+    language : dict, optional
+        A dict mapping the value (from the values module) to the
+        desired translation. If not given or if the dict doesn't contain
+        the value, the English Ashkenazic translation will be used.
 
     Returns
     -------
@@ -1346,4 +1360,4 @@ def holiday(date, israel=False, hebrew=False, prefix_day=False):
     >>> holiday(taanis_esther, prefix_day=True)
     'Taanis Esther'
     """
-    return date.holiday(israel, hebrew, prefix_day)
+    return date.holiday(israel, hebrew, prefix_day, language)
