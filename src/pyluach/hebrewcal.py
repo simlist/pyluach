@@ -23,7 +23,6 @@ import calendar
 from pyluach.dates import HebrewDate
 from pyluach import utils
 from pyluach.gematria import _num_to_str
-from pyluach.languages import _get_translation
 
 
 class IllegalMonthError(ValueError):
