@@ -30,7 +30,6 @@ PARSHIOS_HEBREW : list of str
 
 from collections import deque, OrderedDict
 from functools import lru_cache
-from enum import Enum, IntEnum, auto
 
 from pyluach.dates import HebrewDate
 from pyluach.utils import _is_leap
