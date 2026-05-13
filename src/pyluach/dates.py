@@ -311,12 +311,12 @@ class BaseDate(abc.ABC):
         # )
 
     def holiday(
-            self,
-            israel=False,
-            hebrew=False,
-            prefix_day=False,
-            language={}
-        ):
+        self,
+        israel=False,
+        hebrew=False,
+        prefix_day=False,
+        language={}
+    ):
         """Return name of Jewish holiday of the date.
 
         The holidays include the major and minor religious Jewish
@@ -357,8 +357,8 @@ class BaseDate(abc.ABC):
         'Taanis Esther'
         """
         return (
-            self.fast_day(hebrew=hebrew, language=language) or
-            self.festival(
+            self.fast_day(hebrew=hebrew, language=language)
+            or self.festival(
                 israel=israel,
                 hebrew=hebrew,
                 prefix_day=prefix_day,
@@ -580,7 +580,8 @@ class JulianDay(BaseDate):
             if days_remaining >= utils._month_length(year, month):
                 days_remaining -= utils._month_length(year, month)
             else:
-                return HebrewDate(year, month, days_remaining + 1, self.day)
+                break
+        return HebrewDate(year, month, days_remaining + 1, self.day)
 
     def _to_x(self, type_):
         """Return a date object of the given type."""
