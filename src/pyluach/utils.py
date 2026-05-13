@@ -279,31 +279,31 @@ def _first_day_of_festival(festival):
     return None
 
 
-    # def _day_of_festival(date, israel, hebrew=False):
-    #     """Return the day of the holiday.
+# def _day_of_festival(date, israel, hebrew=False):
+#     """Return the day of the holiday.
 
-    #     Parameters
-    #     ----------
-    #     israel : bool, optional
-    #     hebrew : bool, optional
+#     Parameters
+#     ----------
+#     israel : bool, optional
+#     hebrew : bool, optional
 
-    #     Returns
-    #     -------
-    #     str
-    #     """
-    #     festival = _festival(self, israel)
-    #     if name is not None:
-    #         festival = _Days(name)
-    #         if festival is utils._Days.SHAVUOS and israel:
-    #             return ''
-    #         first_day = utils._first_day_of_festival(festival)
-    #         if first_day:
-    #             year = self.to_heb().year
-    #             day = HebrewDate(year, *first_day) - self + 1
-    #             if hebrew:
-    #                 day = gematria._num_to_str(day)
-    #             return str(day)
-    #     return ''
+#     Returns
+#     -------
+#     str
+#     """
+#     festival = _festival(self, israel)
+#     if name is not None:
+#         festival = _Days(name)
+#         if festival is utils._Days.SHAVUOS and israel:
+#             return ''
+#         first_day = utils._first_day_of_festival(festival)
+#         if first_day:
+#             year = self.to_heb().year
+#             day = HebrewDate(year, *first_day) - self + 1
+#             if hebrew:
+#                 day = gematria._num_to_str(day)
+#             return str(day)
+#     return ''
 
 
 def _festival(date, israel=False, include_working_days=True):
