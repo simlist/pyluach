@@ -1,4 +1,10 @@
-"""The languages module contains the translations for the months, parshios, and holidays."""
+"""The languages module contains translations dictionaries.
+
+These are to be used with functions throughout the package that return
+a string to specify the translation of the string. The dictionary maps
+the values from the values module to the desired translation. If a value
+is not in the dictionary, the English Ashkenazic translation will be used.
+"""
 from pyluach.values import Parshios, Months, FourParshios, Days
 
 
