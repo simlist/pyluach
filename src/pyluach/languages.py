@@ -2,8 +2,20 @@
 
 These are to be used with functions throughout the package that return
 a string to specify the translation of the string. The dictionary maps
-the values from the values module to the desired translation. If a value
-is not in the dictionary, the English Ashkenazic translation will be used.
+the values from the :mod:`~pyluach.values` module to the desired
+translation. If a value is not in the dictionary, the English
+Ashkenazic translation will be used.
+
+Examples
+--------
+>>> from pyluach import values
+>>> from pyluach.hebrewcal import Month
+>>> lang = {values.Months.TEVES: 'Tevet', values.Months.CHESVAN: 'Heshvan'}
+>>> month = Month(5786, 10)
+>>> month.month_name()
+'Teves'
+>>> month.month_name(language=lang)
+'Tevet'
 """
 from pyluach.values import Parshios, Months, FourParshios, Days
 

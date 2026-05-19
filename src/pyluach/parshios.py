@@ -290,6 +290,10 @@ def four_parshios(date, hebrew=False, language={}):
       Default is ``False``.
 
     language : dict, optional
+        A dict mapping the values (from the :mod:`~pyluach.values` module)
+        to the the desired translations. If not given or if the
+        dict doesn't contain the value, the English Ashkenazic
+        translation will be used.
 
     Returns
     -------

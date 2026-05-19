@@ -409,6 +409,29 @@ class Month:
         """
         return utils._month_name(self.year, self.month, hebrew, language)
 
+    # def name(self, hebrew=False, language={}):
+    #     """Return the name of the month.
+
+    #     Replaces `name` attribute.
+
+    #     Parameters
+    #     ----------
+    #     hebrew : bool, optional
+    #         `True` if the month name should be written with Hebrew letters
+    #         and False to be transliterated into English using the Ashkenazic
+    #         pronunciation. Default is `False`.
+    #     language : dict, optional
+    #         A dict mapping the value (from the values module)
+    #         to the the desired translation. If not given or if the
+    #         dict doesn't contain the value, the English Ashkenazic
+    #         translation will be used.
+
+    #     Returns
+    #     -------
+    #     str
+    #     """
+    #     return self.month_name(hebrew, language)
+
     def month_string(self, thousands=False):
         """Return month and year in Hebrew.
 
