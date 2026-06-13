@@ -92,9 +92,13 @@ WEEKDAYS = {
 
 
 def _is_leap(year):
-    if (((7*year) + 1) % 19) < 7:
-        return True
-    return False
+    """Return True if the Hebrew year is a leap year.
+
+    Uses the 19-year Metonic cycle: years 3, 6, 8, 11, 14, 17, 19
+    are leap years. The formula ((7*year + 1) % 19) < 7 encodes
+    this cycle compactly.
+    """
+    return ((7 * year) + 1) % 19 < 7
 
 
 def _elapsed_months(year):
@@ -103,32 +107,64 @@ def _elapsed_months(year):
 
 @lru_cache(maxsize=10)
 def _elapsed_days(year):
+    """Return the number of days from the epoch to the start of the year.
+
+    This implements the Hebrew calendar's dehiyyah (postponement) rules
+    that determine the day of week for Rosh Hashanah.
+    """
     months_elapsed = _elapsed_months(year)
-    parts_elapsed = 204 + 793*(months_elapsed%1080)
+    parts_elapsed = 204 + 793 * (months_elapsed % 1080)
     hours_elapsed = (
-        5 + 12*months_elapsed + 793*(months_elapsed//1080)
-        + parts_elapsed//1080)
-    conjunction_day = 1 + 29*months_elapsed + hours_elapsed//24
-    conjunction_parts = 1080 * (hours_elapsed%24) + parts_elapsed%1080
+        5 + 12 * months_elapsed + 793 * (months_elapsed // 1080)
+        + parts_elapsed // 1080
+    )
+    conjunction_day = 1 + 29 * months_elapsed + hours_elapsed // 24
+    conjunction_parts = 1080 * (hours_elapsed % 24) + parts_elapsed % 1080
 
-    if (
-        (conjunction_parts >= 19440)
-        or (
-            (conjunction_day % 7 == 2) and (conjunction_parts >= 9924)
-            and not _is_leap(year)
-        )
-        or (
-            (conjunction_day % 7 == 1) and conjunction_parts >= 16789
-            and _is_leap(year - 1)
-        )
-    ):
-        alt_day = conjunction_day + 1
-    else:
-        alt_day = conjunction_day
-    if alt_day % 7 in [0, 3, 5]:
-        alt_day += 1
+    adjusted_day = _apply_postponement(conjunction_day, conjunction_parts, year)
 
-    return alt_day
+    # Second postponement: Rosh Hashanah cannot fall on Sunday, Wednesday,
+    # or Friday — push to the next day.
+    if adjusted_day % 7 in (0, 3, 5):
+        adjusted_day += 1
+
+    return adjusted_day
+
+
+def _apply_postponement(conjunction_day, conjunction_parts, year):
+    """Apply the dehiyyah (postponement) rules to the molad.
+
+    The Hebrew calendar has three postponement rules:
+    1. Molad Zakein: if the molad occurs at or after noon (>= 19440 parts),
+       postpone by one day.
+    2. Gatarad: if the molad falls on Tuesday (day 2) at or after 9924 parts
+       in a non-leap year, postpone by one day.
+    3. Betutakafot: if the molad falls on Monday (day 1) at or after 16789
+       parts in a year following a leap year, postpone by one day.
+
+    Parameters
+    ----------
+    conjunction_day : int
+        The raw day of the molad (lunar conjunction).
+    conjunction_parts : int
+        The parts (1/1080 of an hour) of the molad within the day.
+    year : int
+        The Hebrew year being calculated.
+
+    Returns
+    -------
+    int
+        The adjusted day after applying postponement rules.
+    """
+    molad_zakein = conjunction_parts >= 19440
+    gatarad = (conjunction_day % 7 == 2 and conjunction_parts >= 9924
+               and not _is_leap(year))
+    betutakafot = (conjunction_day % 7 == 1 and conjunction_parts >= 16789
+                   and _is_leap(year - 1))
+
+    if molad_zakein or gatarad or betutakafot:
+        return conjunction_day + 1
+    return conjunction_day
 
 
 def _days_in_year(year):
@@ -146,33 +182,42 @@ def _short_kislev(year):
 
 
 def _month_length(year, month):
-    """Months start with Nissan (Nissan is 1 and Tishrei is 7)"""
-    if month in [1, 3, 5, 7, 11]:
+    """Return the number of days in a Hebrew month.
+
+    Months start with Nissan (Nissan is 1 and Tishrei is 7).
+
+    Fixed-length months are looked up directly. Variable-length months
+    (Cheshvan=8, Kislev=9, and Adar=12) depend on the year type.
+    """
+    # Fixed 30-day months: Nissan, Sivan, Av, Tishrei, Shevat
+    _THIRTY_DAY_MONTHS = frozenset({1, 3, 5, 7, 11})
+    # Fixed 29-day months: Iyar, Tammuz, Elul, Teves, Adar II
+    _TWENTY_NINE_DAY_MONTHS = frozenset({2, 4, 6, 10, 13})
+
+    if month in _THIRTY_DAY_MONTHS:
         return 30
-    if month in [2, 4, 6, 10, 13]:
+    if month in _TWENTY_NINE_DAY_MONTHS:
         return 29
     if month == 12:
-        if _is_leap(year):
-            return 30
-        return 29
-    if month == 8:   # if long Cheshvan return 30, else return 29
-        if _long_cheshvan(year):
-            return 30
-        return 29
-    if month == 9:   # if short Kislev return 29, else return 30
-        if _short_kislev(year):
-            return 29
-        return 30
+        return 30 if _is_leap(year) else 29
+    if month == 8:
+        return 30 if _long_cheshvan(year) else 29
+    if month == 9:
+        return 29 if _short_kislev(year) else 30
     raise ValueError('Invalid month')
 
 
 def _month_name(year, month, hebrew):
+    """Return the name of a Hebrew month.
+
+    In a leap year, months >= 12 are shifted by one index position
+    because the names list includes both 'Adar 1' and 'Adar 2'.
+    """
     index = month
     if month < 12 or not _is_leap(year):
         index -= 1
-    if hebrew:
-        return MONTH_NAMES_HEBREW[index]
-    return MONTH_NAMES[index]
+    names = MONTH_NAMES_HEBREW if hebrew else MONTH_NAMES
+    return names[index]
 
 
 def _monthslist(year):
