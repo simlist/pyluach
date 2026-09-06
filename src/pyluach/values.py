@@ -108,3 +108,6 @@ class Days(Enum):
     TAANIS_ESTHER = 'תענית אסתר'
     SEVENTEENTH_OF_TAMMUZ = 'י״ז בתמוז'
     NINTH_OF_AV = 'ט׳ באב'
+    ROSH_CHODESH = 'ראש חודש'
+    YOM_KIPPUR_KATAN = 'יום כיפור קטן'
+

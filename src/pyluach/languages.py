@@ -112,7 +112,9 @@ english_ashkenazic = {
     Days.TENTH_OF_TEVES: '10 of Teves',
     Days.TAANIS_ESTHER: 'Taanis Esther',
     Days.SEVENTEENTH_OF_TAMMUZ: '17 of Tammuz',
-    Days.NINTH_OF_AV: '9 of Av'
+    Days.NINTH_OF_AV: '9 of Av',
+    Days.ROSH_CHODESH: 'Rosh Chodesh',
+    Days.YOM_KIPPUR_KATAN: 'Yom Kippur Katan'
 }
 
 
@@ -208,7 +210,9 @@ english_modern = {
     Days.TENTH_OF_TEVES: '10 of Tevet',
     Days.TAANIS_ESTHER: 'Taanit Esther',
     Days.SEVENTEENTH_OF_TAMMUZ: '17 of Tammuz',
-    Days.NINTH_OF_AV: '9 of Av'
+    Days.NINTH_OF_AV: '9 of Av',
+    Days.ROSH_CHODESH: 'Rosh Chodesh',
+    Days.YOM_KIPPUR_KATAN: 'Yom Kippur Katan'
 }
 
 
