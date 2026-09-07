@@ -282,10 +282,11 @@ class Month:
     def __init__(self, year, month):
         if year < 1:
             raise ValueError('Year must be >= 1.')
-        self.year = year
-        if month < 1 or month > 12 + utils._is_leap(self.year):
+        if month < 1 or month > 12 + utils._is_leap(year):
             raise IllegalMonthError(month)
+        self.year = year
         self.month = month
+        self._month_val = utils._month_val(year, month)
 
     def __repr__(self):
         return f'Month({self.year}, {self.month})'

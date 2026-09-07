@@ -189,10 +189,7 @@ def _month_length(year, month):
 
 
 def _month_name(year, month, hebrew, language={}):
-    index = month
-    if month < 12 or not _is_leap(year):
-        index -= 1
-    return _get_translation(_MONTH_VALUES[index], hebrew, language)
+    return _get_translation(_month_val(year, month), hebrew, language)
 
 
 def _monthslist(year):
@@ -418,3 +415,26 @@ def _festival_string(
                 day = gematria._num_to_str(day)
             festival_string = f'{day} {festival_string}'
     return festival_string
+
+
+def _month_val(year: int, month: int):
+    """Get month enum val from int.
+
+    Parameters
+    ----------
+    year : int
+    month_num : int
+
+    Returns
+    -------
+    Months
+        An instance of the Months enum from the values module.
+    """
+    is_leap = _is_leap(year)
+    if month > 13 or (not is_leap and month == 13):
+        raise ValueError(f'{month} is not a valid month for the year {year}.')
+    months = list(Months)
+    if month < 12 or not is_leap:
+        return months[month - 1]
+    else:
+        return months[month]
