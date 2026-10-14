@@ -53,3 +53,6 @@ exclude = ["tests", "docs", ".github", "requirements.txt", ".gitignore"]
 minversion = "6.0"
 addopts = "--cov=src/pyluach"
 testpaths = ["tests",]
+
+[tool.ruff.lint]
+ignore = ["DTZ011"]
