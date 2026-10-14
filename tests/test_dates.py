@@ -47,9 +47,9 @@ class TestClassesSanity:
 
 class TestClassesConversion:
     def test_from_greg(self):
-        for date in KNOWN_VALUES:
-            heb = dates.GregorianDate(*date).to_heb().tuple()
-            assert KNOWN_VALUES[date] == heb
+        for key, val in KNOWN_VALUES.items():
+            heb = dates.GregorianDate(*key).to_heb().tuple()
+            assert val == heb
 
     def test_from_heb(self):
         for date in KNOWN_VALUES:
@@ -444,3 +444,25 @@ def test_date_translations():
         date.month_name(language={Months.CHESHVAN: 'Jeshvan'})
         == 'Jeshvan'
     )
+
+
+def test_roshchodesh():
+    date = HebrewDate(5783, 7, 1)
+    assert date.rosh_chodesh() is None
+    elul = GregorianDate(2026, 8, 14)
+    assert elul.rosh_chodesh() == 'Rosh Chodesh'
+    assert elul.rosh_chodesh(hebrew=True) == 'ראש חודש'
+    elul_end = HebrewDate(5786, 6, 29)
+    assert elul_end.rosh_chodesh() is None
+    date2 = HebrewDate(5786, 7, 30)
+    assert date2.rosh_chodesh() == 'Rosh Chodesh'
+
+
+def test_yom_kippur_katan():
+    date = HebrewDate(5786, 1, 29)
+    assert date.yom_kippur_katan() is None
+    date2 = HebrewDate(5786, 2, 29)
+    assert date2.yom_kippur_katan() is None
+    assert (date2 - 2).yom_kippur_katan() == 'Yom Kippur Katan'
+    date3 = HebrewDate(5787, 8, 29)
+    assert date3.yom_kippur_katan(hebrew=True) == 'יום כיפור קטן'

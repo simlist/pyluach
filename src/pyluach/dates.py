@@ -22,6 +22,7 @@ from numbers import Number
 from enum import Enum, auto
 
 from pyluach import utils
+from pyluach.values import Days
 from pyluach import gematria
 
 
@@ -365,6 +366,69 @@ class BaseDate(abc.ABC):
                 language=language
             )
         )
+
+    def rosh_chodesh(self, hebrew=False, language={}):
+        """Return if the date is Rosh Chodesh.
+
+        Parameters
+        ----------
+        hebrew : bool, optional
+            ``True`` if you want the holiday name in Hebrew letters. Default is
+            ``False``, which returns the name transliterated into English.
+        language: dict, optional
+            A dictionary mapping the value (from the values module)
+            to the the desired translation. If not given or if the
+            dict doesn't contain the value, the English Ashkenazic
+            translation will be used.
+
+        Returns
+        -------
+        str or None
+            The name of the holiday or ``None`` if the given date is not
+            Rosh Chodesh.
+        """
+        heb = self.to_heb()
+        # If it's Rosh Chodesh and not Rosh Hashanah
+        if heb.day == 30 or (heb.day == 1 and heb.month != 7):
+            return utils._get_translation(
+                Days.ROSH_CHODESH,
+                hebrew,
+                language
+            )
+        return None
+
+    def yom_kippur_katan(self, hebrew=False, language=None):
+        """Return if the date is Yom Kippur Katan.
+
+        Parameters
+        ----------
+        hebrew : bool, optional
+            ``True`` if you want the holiday name in Hebrew letters. Default is
+            ``False``, which returns the name transliterated into English.
+        
+        language : dict, optional
+            A dictionary mapping the value (from the values module)
+            to the the desired translation. If not given or if the
+            dict doesn't contain the value, the English Ashkenazic
+            translation will be used.
+
+        Returns
+        -------
+        str or None
+        """
+        heb = self.to_heb()
+        if heb.month not in [1, 6, 7, 9]:
+            weekday = self.weekday()
+            if (
+                (heb.day == 29 and weekday < 6)
+                or (heb.day in [27, 28] and weekday == 5)
+            ):
+                return utils._get_translation(
+                    Days.YOM_KIPPUR_KATAN,
+                    hebrew,
+                    language
+                )
+        return None
 
 
 class CalendarDateMixin:
