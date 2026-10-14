@@ -431,7 +431,7 @@ def _month_val(year: int, month: int):
         An instance of the Months enum from the values module.
     """
     is_leap = _is_leap(year)
-    if month > 13 or (not is_leap and month == 13):
+    if month > 13 or month < 1 or (not is_leap and month == 13):
         raise ValueError(f'{month} is not a valid month for the year {year}.')
     months = list(Months)
     if month < 12 or not is_leap:
