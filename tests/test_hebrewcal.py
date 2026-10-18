@@ -469,6 +469,54 @@ class TestHoliday:
         assert holiday(tubeav) == "Tu B'av"
         assert festival(tubeav, include_working_days=False) is None
 
+    def test_rosheichodesh(self):
+        nissan = Month(5786, 1)
+        assert nissan.roshei_chodesh() == [dates.HebrewDate(5786, 1, 1)]
+
+    def test_two_days(self):
+        iyar = Month(5786, 2)
+        assert iyar.roshei_chodesh() == [
+            dates.HebrewDate(5786, 1, 30), dates.HebrewDate(5786, 2, 1)
+        ]
+        teves = Month(5786, 10)
+        assert teves.roshei_chodesh() == [
+            dates.HebrewDate(5786, 9, 30), dates.HebrewDate(5786, 10, 1)
+        ]
+
+    def test_tishrei(self):
+        # Elul always has 29 days, so Tishrei has only one day.
+        for year in range(5780, 5800):
+            assert Month(year, 7).roshei_chodesh() == [
+                dates.HebrewDate(year, 7, 1)
+            ]
+
+    def test_leap_year(self):
+        adar_ii = Month(5784, 13)
+        assert adar_ii.roshei_chodesh() == [
+            dates.HebrewDate(5784, 12, 30), dates.HebrewDate(5784, 13, 1)
+        ]
+        adar_i = Month(5784, 12)
+        assert adar_i.roshei_chodesh() == [
+            dates.HebrewDate(5784, 11, 30), dates.HebrewDate(5784, 12, 1)
+        ]
+        # Adar II has 29 days so Nissan has one day.
+        assert Month(5784, 1).roshei_chodesh() == [
+            dates.HebrewDate(5784, 1, 1)
+        ]
+
+    def test_matches_previous_month_length(self):
+        for year in range(5780, 5790):
+            for month in Year(year).itermonths():
+                expected = 2 if len(month - 1) == 30 else 1
+                days = month.roshei_chodesh()
+                assert len(days) == expected
+                assert days[-1] == dates.HebrewDate(
+                    month.year, month.month, 1
+                )
+                assert all(d.month != month.month for d in days[:-1])
+                if expected == 2:
+                    assert days[0].day == 30
+
 
 class TestFasts:
 

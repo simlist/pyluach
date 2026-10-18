@@ -544,6 +544,23 @@ class Month:
             'minutes': minutes, 'parts': parts
         }
 
+    def roshei_chodesh(self):
+        """Return the Rosh Chodesh date(s) for the month.
+
+        Returns
+        -------
+        list of :obj:`pyluach.dates.HebrewDate`
+            A list of the Rosh Chodesh date(s) for the month. If the
+            previous month is 30 days long, there will be two dates in the
+            list, otherwise there will be one date.
+        """
+        roshei_chodesh = []
+        previous = self - 1
+        if len(previous) == 30:
+            roshei_chodesh.append(HebrewDate(self.year, previous.month, 30))
+        roshei_chodesh.append(HebrewDate(self.year, self.month, 1))
+        return roshei_chodesh
+
 
 def _to_pyweekday(weekday):
     if weekday == 1:
