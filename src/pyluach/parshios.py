@@ -28,14 +28,13 @@ PARSHIOS_HEBREW : list of str
     A list of the parshios in Hebrew.
 """
 
-from collections import deque, OrderedDict
+from collections import OrderedDict, deque
 from functools import lru_cache
 
 from pyluach.dates import HebrewDate
-from pyluach.utils import _is_leap
-from pyluach.values import Parshios, FourParshios
 from pyluach.languages import _get_translation
-
+from pyluach.utils import _is_leap
+from pyluach.values import FourParshios, Parshios
 
 PARSHIOS = [
     'Bereishis', 'Noach', 'Lech Lecha', 'Vayeira', 'Chayei Sarah', 'Toldos',
@@ -220,8 +219,7 @@ def iterparshios(year, israel=False):
       own parsha (i.e. it occurs on a yom tov).
     """
     table = _gentable(year, israel)
-    for shabbos in table.values():
-        yield shabbos
+    yield from table.values()
 
 
 def parshatable(year, israel=False):
