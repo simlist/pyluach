@@ -1,6 +1,5 @@
-from pyluach import parshios, dates
+from pyluach import dates, parshios
 from pyluach.values import FourParshios, Parshios
-
 
 KNOWN_VALUES = {
     (2016, 1, 7): [13],
@@ -62,9 +61,8 @@ def test_iterparshios():
     year = 5776
     parshalist = list(parshios.parshatable(year).values())
     index = 0
-    for p in parshios.iterparshios(year):
+    for index, p in enumerate(parshios.iterparshios(year)):
         assert p == parshalist[index]
-        index += 1
 
 
 def test_get_parshastring_hebrew():

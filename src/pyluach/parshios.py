@@ -67,9 +67,7 @@ def _parshaless(date, israel=False):
         return True
     if date.month == 1 and date.day in range(15, 23):
         return True
-    if date.month == 3 and date.day in [6, 7]:
-        return True
-    return False
+    return bool(date.month == 3 and date.day in [6, 7])
 
 
 @lru_cache(maxsize=10)

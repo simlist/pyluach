@@ -16,12 +16,12 @@ Contents
 * :func:`festival`
 * :func:`holiday`
 """
-from numbers import Number
-from itertools import repeat
 import calendar
+from itertools import repeat
+from numbers import Number
 
-from pyluach.dates import HebrewDate
 from pyluach import utils
+from pyluach.dates import HebrewDate
 from pyluach.gematria import _num_to_str
 
 
@@ -191,8 +191,7 @@ class Year:
             An integer beginning with 1 for the the next day of
             the year.
         """
-        for day in range(1, len(self) + 1):
-            yield day
+        yield from range(1, len(self) + 1)
 
     def iterdates(self):
         """Iterate through each Hebrew date of the year.
@@ -295,8 +294,7 @@ class Month:
         return utils._month_length(self.year, self.month)
 
     def __iter__(self):
-        for day in range(1, len(self) + 1):
-            yield day
+        yield from range(1, len(self) + 1)
 
     def __eq__(self, other):
         if isinstance(other, Month):
@@ -1214,7 +1212,7 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
             s = f'{s} {year}'
         return s.center(width)
 
-    def formatyear(self, theyear, w=2, l=1, c=6, m=3):  # noqa: E741
+    def formatyear(self, theyear, w=2, l=1, c=6, m=3):
         """Return a year's calendar as a multi-line string.
 
         Parameters
@@ -1234,7 +1232,7 @@ class HebrewTextCalendar(HebrewCalendar, calendar.TextCalendar):
         str
         """
         w = max(2, w)
-        l = max(1, l)  # noqa: E741
+        l = max(1, l)
         c = max(2, c)
         colwidth = (w + 1) * 7 - 1
         v = []

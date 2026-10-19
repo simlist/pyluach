@@ -17,8 +17,7 @@ Examples
 >>> month.month_name(language=lang)
 'Tevet'
 """
-from pyluach.values import Parshios, Months, FourParshios, Days
-
+from pyluach.values import Days, FourParshios, Months, Parshios
 
 english_ashkenazic = {
     Months.NISSAN: 'Nissan',

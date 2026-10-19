@@ -1,12 +1,11 @@
 import datetime
-from operator import gt, lt, eq, ne, ge, le, add, sub
+from operator import add, eq, ge, gt, le, lt, ne, sub
 
 import pytest
 
 from pyluach import dates, hebrewcal, utils
-from pyluach.dates import HebrewDate, GregorianDate, JulianDay, Rounding
+from pyluach.dates import GregorianDate, HebrewDate, JulianDay, Rounding
 from pyluach.values import Days, Months
-
 
 KNOWN_VALUES = {(2009, 8, 21): (5769, 6, 1),
                 (2009, 9, 30): (5770, 7, 12),
@@ -52,8 +51,8 @@ class TestClassesConversion:
             assert val == heb
 
     def test_from_heb(self):
-        for date in KNOWN_VALUES:
-            greg = dates.HebrewDate(*KNOWN_VALUES[date]).to_greg().tuple()
+        for date, val in KNOWN_VALUES.items():
+            greg = dates.HebrewDate(*val).to_greg().tuple()
             assert date == greg
 
 
@@ -426,7 +425,7 @@ def test_replace():
 
 def test_date_translations():
     date = HebrewDate(5786, 3, 6)
-    assert not date.holiday(language={Days.SHAVUOS: 'Shavuot'}) == 'Shavuos'
+    assert date.holiday(language={Days.SHAVUOS: 'Shavuot'}) != 'Shavuos'
     assert date.holiday(language={Days.SHAVUOS: 'Shavuot'}) == 'Shavuot'
     assert date.festival(language={Days.SHAVUOS: 'Shavuot'}) == 'Shavuot'
     assert (

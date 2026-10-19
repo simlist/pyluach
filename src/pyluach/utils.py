@@ -2,12 +2,12 @@
 
 They are to be used internally.
 """
-from functools import lru_cache
 from enum import Enum
+from functools import lru_cache
 
-from pyluach.values import Months, Days
-from pyluach.languages import _get_translation
 from pyluach import gematria
+from pyluach.languages import _get_translation
+from pyluach.values import Days, Months
 
 
 class _Days(Enum):
@@ -114,9 +114,7 @@ WEEKDAYS = {
 
 
 def _is_leap(year):
-    if (((7*year) + 1) % 19) < 7:
-        return True
-    return False
+    return (7 * year + 1) % 19 < 7
 
 
 def _elapsed_months(year):

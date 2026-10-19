@@ -1,14 +1,21 @@
+import calendar
 import datetime
 from copy import copy
-import calendar
 
-from pytest import fixture, raises
 from bs4 import BeautifulSoup
+from pytest import fixture, raises
 
 from pyluach import dates, hebrewcal
-from pyluach.hebrewcal import Year, Month, holiday, festival, fast_day
+from pyluach.hebrewcal import (
+    HebrewHTMLCalendar,
+    HebrewTextCalendar,
+    Month,
+    Year,
+    fast_day,
+    festival,
+    holiday,
+)
 from pyluach.values import Days, Months
-from pyluach.hebrewcal import HebrewTextCalendar, HebrewHTMLCalendar
 
 
 class TestYear:
@@ -124,13 +131,13 @@ class TestYearComparisons:
 
     def test_errors(self, years):
         with raises(TypeError):
-            years[1] > 5778
+            years[1] > 5778  # noqa: B015
         with raises(TypeError):
-            years[1] >= 0
+            years[1] >= 0  # noqa: B015
         with raises(TypeError):
-            years[1] < '5778'
+            years[1] < '5778'  # noqa: B015
         with raises(TypeError):
-            years[1] <= 10000
+            years[1] <= 10000  # noqa: B015
 
 
 class TestMonth:
@@ -318,7 +325,7 @@ class TestCompareMonth:
 
     def test_month_errors(self, months):
         with raises(TypeError):
-            months[1] > 5
+            months[1] > 5  # noqa: B015
         with raises(TypeError):
             assert months[2] <= '5'
         with raises(TypeError):
@@ -331,12 +338,10 @@ class TestHoliday:
 
     def test_roshhashana(self):
         roshhashana = dates.HebrewDate(5779, 7, 1)
-        assert all([
-            holiday(day, location) == 'Rosh Hashana'
+        assert all(holiday(day, location) == 'Rosh Hashana'
             for day in [roshhashana, roshhashana + 1]
-            for location in [True, False]
-        ])
-        assert all((
+            for location in [True, False])
+        assert all(
             festival(
                 day, location,
                 include_working_days=included_days
@@ -344,7 +349,7 @@ class TestHoliday:
             for day in [roshhashana, roshhashana + 1]
             for location in [True, False]
             for included_days in [True, False]
-        ))
+        )
         assert (
             holiday(roshhashana, hebrew=True, prefix_day=True)
             == 'א׳ ראש השנה'
@@ -454,7 +459,7 @@ class TestHoliday:
     def test_shavuos(self):
         shavuos = dates.HebrewDate(5778, 3, 6)
         assert all(
-            (holiday(day) == 'Shavuos' for day in [shavuos, shavuos + 1]))
+            holiday(day) == 'Shavuos' for day in [shavuos, shavuos + 1])
         assert holiday(shavuos, True) == 'Shavuos'
         assert holiday(shavuos + 1, True) is None
         assert festival(shavuos + 1, include_working_days=False) == 'Shavuos'

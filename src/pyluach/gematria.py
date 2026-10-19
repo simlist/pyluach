@@ -69,6 +69,6 @@ def _num_to_str(num, thousands=False, withgershayim=True):
     if thousands:
         thousand = _get_letters(num // 1000)
         if withgershayim:
-            thousand = ''.join([thousand, '׳'])
-        letters = ''.join([thousand, letters])
+            thousand = f'{thousand}׳'
+        letters = f'{thousand}{letters}'
     return letters

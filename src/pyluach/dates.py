@@ -18,12 +18,11 @@ only. No attributes should be changed once they're created.
 
 import abc
 from datetime import date
-from numbers import Number
 from enum import Enum, auto
+from numbers import Number
 
-from pyluach import utils
+from pyluach import gematria, utils
 from pyluach.values import Days
-from pyluach import gematria
 
 
 class Rounding(Enum):
@@ -705,7 +704,7 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         adding in date validation specific to Gregorian dates.
         """
         if month < 1 or month > 12:
-            raise ValueError(f'{str(month)} is an invalid month.')
+            raise ValueError(f'{month!s} is an invalid month.')
         monthlength = self._monthlength(year, month)
         if day < 1 or day > monthlength:
             raise ValueError(f'Given month has {monthlength} days.')
@@ -791,9 +790,9 @@ class GregorianDate(BaseDate, CalendarDateMixin):
         """Return True if year of date is a leap year, otherwise False."""
         if year < 0:
             year += 1
-        if (year % 4 == 0) and not (year % 100 == 0 and year % 400 != 0):
-            return True
-        return False
+        return bool(
+            year % 4 == 0 and not (year % 100 == 0 and year % 400 != 0)
+        )
 
     def is_leap(self):
         """Return if the date is in a leap year
