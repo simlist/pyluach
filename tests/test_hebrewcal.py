@@ -2,7 +2,7 @@ import datetime
 from copy import copy
 import calendar
 
-from pytest import fixture, raises
+from pytest import fixture, mark, raises
 from bs4 import BeautifulSoup
 
 from pyluach import dates, hebrewcal
@@ -133,6 +133,24 @@ class TestYearComparisons:
 
 
 class TestMonth:
+
+    @mark.parametrize('year,month,offset,expected', [
+        (5783, 7, -1, (5782, 6)),
+        (5783, 6, 1, (5784, 7)),
+        (5784, 1, -13, (5783, 1)),
+        (5783, 12, 13, (5784, 13)),
+    ])
+    def test_signed_month_offsets(self, year, month, offset, expected):
+        start = Month(year, month)
+        target = Month(*expected)
+        assert start + offset == target
+        assert start - (-offset) == target
+        assert target - offset == start
+        assert target + (-offset) == start
+
+    def test_negative_month_offset_before_creation(self):
+        with raises(ValueError):
+            Month(1, 7) + (-1)
 
     def test_reprmonth(self):
         month = Month(5777, 10)

@@ -304,6 +304,8 @@ class Month:
 
     def __add__(self, other):
         try:
+            if other < 0:
+                return self - (-other)
             year, month = utils._add_months(self.year, self.month, other)
             return Month(year, month)
         except (AttributeError, TypeError):
@@ -311,6 +313,8 @@ class Month:
 
     def __sub__(self, other):
         if isinstance(other, Number):
+            if other < 0:
+                return self + (-other)
             year, month = utils._subtract_months(self.year, self.month, other)
             return Month(year, month)
         try:
