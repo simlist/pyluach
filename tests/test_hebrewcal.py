@@ -2,7 +2,7 @@ import datetime
 from copy import copy
 import calendar
 
-from pytest import fixture, raises
+from pytest import fixture, mark, raises
 from bs4 import BeautifulSoup
 
 from pyluach import dates, hebrewcal
@@ -155,6 +155,14 @@ class TestMonth:
             month + month
         with raises(TypeError):
             month + 'str'
+
+    @mark.parametrize('month', [7, 1, 13])
+    def test_long_month_arithmetic(self, month):
+        start = Month(5784, month)
+        target = Month(7684, month)
+        # A 19-year cycle has 235 months, so 100 cycles span 1900 years.
+        assert start + 23500 == target
+        assert target - 23500 == start
 
     def test_subtract_month(self):
         month1 = hebrewcal.Month(5775, 10)

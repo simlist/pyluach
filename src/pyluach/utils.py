@@ -4,6 +4,7 @@ They are to be used internally.
 """
 from functools import lru_cache
 from enum import Enum
+from operator import index
 
 
 class _Days(Enum):
@@ -183,20 +184,28 @@ def _monthslist(year):
 
 
 def _add_months(year, month, num):
-    monthslist = _monthslist(year)
-    index = monthslist.index(month)
-    months_remaining = len(monthslist[index+1:])
-    if num <= months_remaining:
-        return (year, monthslist[index + num])
-    return _add_months(year + 1, 7, num - months_remaining - 1)
+    num = index(num)
+    while True:
+        monthslist = _monthslist(year)
+        month_index = monthslist.index(month)
+        months_remaining = len(monthslist) - month_index - 1
+        if num <= months_remaining:
+            return (year, monthslist[month_index + num])
+        year += 1
+        month = 7
+        num -= months_remaining + 1
 
 
 def _subtract_months(year, month, num):
-    monthslist = _monthslist(year)
-    index = monthslist.index(month)
-    if num <= index:
-        return (year, monthslist[index - num])
-    return _subtract_months(year - 1, 6, num - (index+1))
+    num = index(num)
+    while True:
+        monthslist = _monthslist(year)
+        month_index = monthslist.index(month)
+        if num <= month_index:
+            return (year, monthslist[month_index - num])
+        year -= 1
+        month = 6
+        num -= month_index + 1
 
 
 def _fast_day(date):
