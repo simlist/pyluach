@@ -186,7 +186,7 @@ def _month_length(year, month):
     raise ValueError('Invalid month')
 
 
-def _month_name(year, month, hebrew, language={}):
+def _month_name(year, month, hebrew, language=None):
     return _get_translation(_month_val(year, month), hebrew, language)
 
 
@@ -255,7 +255,7 @@ def _fast_day(date):
     return None
 
 
-def _fast_day_string(date, hebrew=False, language={}):
+def _fast_day_string(date, hebrew=False, language=None):
     fast = _fast_day(date)
     if fast is None:
         return None
@@ -395,7 +395,7 @@ def _festival_string(
     hebrew=False,
     include_working_days=True,
     prefix_day=False,
-    language={}
+    language=None
 ):
     festival = _festival(date, israel, include_working_days)
     if festival is None:

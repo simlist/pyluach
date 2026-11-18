@@ -215,7 +215,7 @@ class BaseDate(abc.ABC):
     #             return str(day)
     #     return ''
 
-    def fast_day(self, hebrew=False, language={}):
+    def fast_day(self, hebrew=False, language=None):
         """Return name of fast day of date.
 
         Parameters
@@ -223,7 +223,7 @@ class BaseDate(abc.ABC):
         hebrew : bool, optional
             ``True`` if you want the fast day name in Hebrew letters. Default
             is ``False``, which returns the name transliterated into English.
-        language: dict, optional
+        language: dict or None, optional
             A dictionary mapping the value (from the values module)
             to the the desired translation. If not given or if the
             dict doesn't contain the value, the English Ashkenazic
@@ -243,7 +243,7 @@ class BaseDate(abc.ABC):
         hebrew=False,
         include_working_days=True,
         prefix_day=False,
-        language={}
+        language=None
     ):
         """Return name of Jewish festival of date.
 
@@ -265,7 +265,7 @@ class BaseDate(abc.ABC):
         prefix_day : bool, optional
             ``True`` to prefix multi day festivals with the day of the
             festival. Default is ``False``.
-        language: dict, optional
+        language: dict or None, optional
             A dictionary mapping the value (from the values module)
             to the the desired translation. If not given or if the
             dict doesn't contain the value, the English Ashkenazic
@@ -315,7 +315,7 @@ class BaseDate(abc.ABC):
         israel=False,
         hebrew=False,
         prefix_day=False,
-        language={}
+        language=None
     ):
         """Return name of Jewish holiday of the date.
 
@@ -333,7 +333,7 @@ class BaseDate(abc.ABC):
         prefix_day : bool, optional
             ``True`` to prefix multi day holidays with the day of the
             holiday. Default is ``False``.
-        language: dict, optional
+        language: dict or None, optional
             A dictionary mapping the value (from the values module)
             to the the desired translation. If not given or if the
             dict doesn't contain the value, the English Ashkenazic
@@ -366,7 +366,7 @@ class BaseDate(abc.ABC):
             )
         )
 
-    def rosh_chodesh(self, hebrew=False, language={}):
+    def rosh_chodesh(self, hebrew=False, language=None):
         """Return if the date is Rosh Chodesh.
 
         Parameters
@@ -374,7 +374,7 @@ class BaseDate(abc.ABC):
         hebrew : bool, optional
             ``True`` if you want the holiday name in Hebrew letters. Default is
             ``False``, which returns the name transliterated into English.
-        language: dict, optional
+        language: dict or None, optional
             A dictionary mapping the value (from the values module)
             to the the desired translation. If not given or if the
             dict doesn't contain the value, the English Ashkenazic
@@ -405,7 +405,7 @@ class BaseDate(abc.ABC):
             ``True`` if you want the holiday name in Hebrew letters. Default is
             ``False``, which returns the name transliterated into English.
         
-        language : dict, optional
+        language : dict or None, optional
             A dictionary mapping the value (from the values module)
             to the the desired translation. If not given or if the
             dict doesn't contain the value, the English Ashkenazic
@@ -1098,7 +1098,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
     def to_heb(self):
         return self
 
-    def month_name(self, hebrew=False, language={}):
+    def month_name(self, hebrew=False, language=None):
         """Return the name of the month.
 
         Parameters
@@ -1108,7 +1108,7 @@ class HebrewDate(BaseDate, CalendarDateMixin):
             Default is ``False`` which returns the month name
             transliterated into English.
 
-        language : dict, optional
+        language : dict or None, optional
             A dictionary mapping the value (from the values module)
             to the the desired translation. If not given or if the
             dict doesn't contain the value, the English Ashkenazic

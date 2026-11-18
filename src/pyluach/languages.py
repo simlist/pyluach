@@ -215,7 +215,7 @@ english_modern = {
 }
 
 
-def _get_translation(val, hebrew, language):
+def _get_translation(val, hebrew, language=None):
     """Return the translation for the given value.
     Parameters
     ----------
@@ -224,7 +224,7 @@ def _get_translation(val, hebrew, language):
     hebrew : bool
         Whether to return name of the value in Hebrew. This takes
         precedence over the language parameter.
-    language : dict
+    language : dict or None, optional
         A dict mapping the value (from the values module) to the the desired
         translation. If not given or if the dict doesn't contain the value,
         the English Ashkenazic translation will be used.

@@ -163,7 +163,7 @@ def getparsha(date, israel=False):
 
 
 def getparsha_string(
-    date, israel=False, hebrew=False, language={}
+    date, israel=False, hebrew=False, language=None
 ):
     """Return the parsha as a string for the given date.
 
@@ -182,7 +182,7 @@ def getparsha_string(
       ``True`` if you want the name of the parsha in Hebrew.
       Default is ``False``.
 
-    language : dict, optional
+    language : dict or None, optional
 
     Returns
     -------
@@ -273,7 +273,7 @@ def _get_four_parshios(date):
     return None
 
 
-def four_parshios(date, hebrew=False, language={}):
+def four_parshios(date, hebrew=False, language=None):
     """Return which of the four parshios is given date's Shabbos.
 
     Parameters
@@ -285,7 +285,7 @@ def four_parshios(date, hebrew=False, language={}):
       ``True`` if you want the name of the parsha in Hebrew.
       Default is ``False``.
 
-    language : dict, optional
+    language : dict or None, optional
         A dict mapping the values (from the :mod:`~pyluach.values` module)
         to the the desired translations. If not given or if the
         dict doesn't contain the value, the English Ashkenazic
