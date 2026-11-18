@@ -247,8 +247,10 @@ def _fast_day(date):
     elif month == 4:
         if (weekday == 1 and day == 18) or (weekday != 7 and day == 17):
             return Days.SEVENTEENTH_OF_TAMMUZ
-    elif month == 5:
-        if (weekday == 1 and day == 10) or (weekday != 7 and day == 9):
+    elif (
+        month == 5
+        and ((weekday == 1 and day == 10) or (weekday != 7 and day == 9))
+    ):
             return Days.NINTH_OF_AV
     return None
 
