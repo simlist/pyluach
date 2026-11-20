@@ -20,10 +20,11 @@ jobs:
       run: uv sync --group test
     - name: run-tests
       run: |
-        uv run pytest --cov=src/pyluach tests/
+        uv run pytest --cov=src/pyluach --cov-report=xml tests/
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
+        file: coverage.xml
         flag-name: ${{ matrix.python-version }}
         parallel: true
   finish:
