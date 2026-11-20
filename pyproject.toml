@@ -56,3 +56,6 @@ testpaths = ["tests",]
 
 [tool.ruff.lint]
 ignore = ["DTZ011"]
+
+[tool.coverage.run]
+relative_files = true
