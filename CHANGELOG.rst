@@ -13,6 +13,7 @@ This project adheres to `Semantic Versioning <https://semver.org/>`_.
   different languages.
 * Added `language` parameter to many functions and methods that return a string
   to allow for translations of the returned string.
+* Dropped support for python below v3.10.
 
 `2.3.0`_ (2025-09-08)
 =====================
