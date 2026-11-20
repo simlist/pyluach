@@ -404,7 +404,7 @@ class BaseDate(abc.ABC):
         hebrew : bool, optional
             ``True`` if you want the holiday name in Hebrew letters. Default is
             ``False``, which returns the name transliterated into English.
-        
+
         language : dict or None, optional
             A dictionary mapping the value (from the values module)
             to the the desired translation. If not given or if the

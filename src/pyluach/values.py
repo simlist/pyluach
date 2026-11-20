@@ -110,4 +110,3 @@ class Days(Enum):
     NINTH_OF_AV = 'ט׳ באב'
     ROSH_CHODESH = 'ראש חודש'
     YOM_KIPPUR_KATAN = 'יום כיפור קטן'
-

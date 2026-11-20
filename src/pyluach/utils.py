@@ -251,7 +251,7 @@ def _fast_day(date):
         month == 5
         and ((weekday == 1 and day == 10) or (weekday != 7 and day == 9))
     ):
-            return Days.NINTH_OF_AV
+        return Days.NINTH_OF_AV
     return None
 
 
