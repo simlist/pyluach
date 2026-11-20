@@ -13,17 +13,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: setup python
-      uses: actions/setup-python@v5
+      uses: astral/setup-uv@v6
       with:
         python-version: ${{matrix.python-version}}
     - name: install
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest pytest-cov beautifulsoup4
-        pip install -e ./
+      run: uv sync --all-extras --dev
     - name: run-tests
       run: |
-        pytest --cov=src/pyluach tests/
+        uv run pytest --cov=src/pyluach tests/
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
